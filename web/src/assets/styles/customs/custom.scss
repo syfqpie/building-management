@@ -1,0 +1,71 @@
+// Padding
+.pl-2 {
+    padding-left: 0.5rem;
+}
+.pr-2 {
+    padding-right: 0.5rem;
+}
+.p-6 {
+    padding: 1.5rem;
+}
+@media (min-width: 1024px) {
+    .lg\:pl-2 {
+        padding-left: 0.5rem;
+    }
+    .lg\:pr-2 {
+        padding-right: 0.5rem;
+    }
+}
+// Margin
+.ml-4 {
+    margin-left: 1rem;
+}
+
+.ml-5 {
+    margin-left: 1.25rem;
+}
+
+.ml-6 {
+    margin-left: 1.50rem;
+}
+
+.ml-7 {
+    margin-left: 1.75rem;
+}
+
+.ml-8 {
+    margin-left: 2rem;
+}
+
+.ml-9 {
+    margin-left: 2.25rem;
+}
+
+// Border
+.rounded-b {
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+// Collapse
+.collapse {
+    &:not(.show) {
+      display: none;
+    }
+}
+
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
+
+.sub-icon {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+    margin-left: auto !important;
+    transition: all 0.2s ease-out !important;
+}
+.sub-icon-rotate {
+    transform: rotate(-90deg)
+}

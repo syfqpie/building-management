@@ -1,0 +1,114 @@
+<div class="pt-12 pb-6">
+    <div class="md:px-12 mx-auto w-full">
+        <div class="flex flex-wrap">
+            <ng-container *ngFor="let stat of stats; let i=index">
+                <div class="w-full lg:w-6/12 xl:w-3/12" [ngClass]="calculateClass(i)">
+                    <div
+                        class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
+                    >
+                        <div class="flex-auto p-4">
+                            <div class="flex flex-wrap">
+                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                    <h5 class="text-gray-500 uppercase font-bold text-xs">
+                                        {{stat.title}}
+                                    </h5>
+                                    <span class="font-semibold text-xl text-gray-800">
+                                        <span *ngIf="stat.tile === 'Pending Payment Amount'">RM</span>
+                                        {{stat.value}}
+                                    </span>
+                                </div>
+    
+                                <div class="relative w-auto pl-4 flex-initial">
+                                    <div
+                                        class="text-green p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-teal-500"
+                                    >
+                                        <i class="{{stat.icon + ' text-white'}}"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div class="flex flex-wrap mb-12">
+    <div class="w-full xl:w-8/12 mb-12 xl:mb-0 pr-2">
+        <div
+            class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+        >
+            <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
+                <div class="flex flex-wrap items-center">
+                    <div class="relative w-full max-w-full flex-grow flex-1">
+                        <h6 class="uppercase text-gray-500 mb-1 text-xs font-semibold">
+                            Accounts
+                        </h6>
+
+                        <h2 class="text-gray-800 text-xl font-semibold">
+                            Total payments
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 flex-auto">
+                <!-- Chart -->
+                <!--<div class="relative" style="height: 350px;">
+                    <canvas id="bar-chart"></canvas>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full xl:w-4/12 pl-2">
+        <div
+            class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+        >
+            <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
+                <div class="flex flex-wrap items-center">
+                    <div class="relative w-full max-w-full flex-grow flex-1">
+                        <h6 class="uppercase text-gray-500 mb-1 text-xs font-semibold">
+                            Overview
+                        </h6>
+
+                        <h2 class="text-gray-800 text-xl font-semibold">
+                            Tenants
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 flex-auto">
+                <!-- Chart -->
+                <!--<div class="relative" style="height: 350px;">
+                    <canvas id="line-chart"></canvas>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full xl:w-12/12 mb-12 xl:mb-0">
+        <div
+            class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+            >
+            <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
+                <div class="flex flex-wrap items-center">
+                <div class="relative w-full max-w-full flex-grow flex-1">
+                    <h6 class="uppercase text-gray-500 mb-1 text-xs font-semibold">
+                        Performance
+                    </h6>
+                    <h2 class="text-gray-800 text-xl font-semibold">
+                        Total reports
+                    </h2>
+                </div>
+                </div>
+            </div>
+            <div class="p-4 flex-auto">
+                <!-- Chart -->
+                <div class="relative" style="height: 350px;">
+                    <canvas id="bar-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

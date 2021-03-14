@@ -1,0 +1,75 @@
+<!-- Navbar -->
+<nav
+	class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-no-wrap md:justify-start flex items-center p-4"
+>
+	<div class="w-full mx-autp items-center flex justify-between md:flex-no-wrap flex-wrap md:px-10 px-4">
+		<!-- Brand -->
+		<a class="text-white text-sm uppercase hidden lg:inline-block font-semibold" href="#pablo">Dashboard</a>
+
+		<!-- User -->
+		<ul class="flex-col md:flex-row list-none items-center hidden md:flex">
+			<div class="relative inline-block text-left">
+				<a
+					class="text-gray-600 block"
+					[routerLink]=""
+					(click)="toggleDropdown($event)"
+					#btnDropdownRef
+				  >
+					<div class="items-center flex">
+						<span
+							class="w-12 h-12 text-sm text-white bg-gray-300 inline-flex items-center justify-center rounded-full"
+						>
+							<img
+								alt="..."
+								class="w-full rounded-full align-middle border-none shadow-lg"
+								src="assets/img/default/avatar.png"
+							/>
+						</span>
+					</div>
+				</a>
+			
+				<!--
+				Dropdown menu, show/hide based on menu state.
+			
+				Entering: "transition ease-out duration-100"
+					From: "transform opacity-0 scale-95"
+					To: "transform opacity-100 scale-100"
+				Leaving: "transition ease-in duration-75"
+					From: "transform opacity-100 scale-100"
+					To: "transform opacity-0 scale-95"
+				-->
+				<div 
+					@collapseTrigger
+					class="origin-top-right bg-white text-base z-50 py-2 list-none absolute right-0 mt-2 w-56 rounded shadow-lg mt-1" 
+					role="menu" 
+					aria-orientation="vertical" 
+					aria-labelledby="options-menu"
+					*ngIf="isCollapsed"
+					style='min-width:12rem'
+					#dropdown
+				>
+					<a type="button" [routerLink]="" (click)="navigatePage('/settings')" class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-gray-800'>
+						Settings
+					</a>
+					<div class='h-0 my-2 border border-solid border-gray-200'></div>
+					<a type="button" [routerLink]="" (click)="navigatePage('/settings')" class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent  text-gray-800'>
+						Logout
+					</a>
+				</div>
+				<!-- <div class='bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1' style='min-width:12rem' #btnDropdownRef>
+					<button type="button" [routerLink]="" onclick="navigatePage('/settings')" class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-gray-800' #btnProfile>
+					  Profile
+					</button>
+					<div class='h-0 my-2 border border-solid border-gray-200'></div>
+					<a href='#pablo' class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent  text-gray-800'>
+					  Logout
+					</a>
+				  </div> -->
+			</div>
+		</ul>
+	</div>
+</nav>
+<!-- Header -->
+<div class="relative bg-teal-500 md:pt-32 pb-16 pt-12">
+</div>
+  

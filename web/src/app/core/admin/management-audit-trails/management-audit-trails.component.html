@@ -1,0 +1,113 @@
+<div class="pt-12 pb-6">
+    <div 
+        class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white"
+    >
+        <div class="rounded-t mb-0 px-4 py-3 border-0">
+            <div class="flex flex-wrap items-center">
+                <div class="relative w-full pr-4 max-w-full flex-grow flex-1 bg-gray">
+                    <h3 class="font-semibold text-lg text-gray-800">
+                        Users
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-b block w-full overflow-x-auto">
+            <div class="border-collapse w-full">
+                <ngx-datatable
+                    class="material"
+                    columnMode="force"
+                    [footerHeight]="50"
+                    [rowHeight]="'auto'"
+                    [limit]="tableEntries != -1 ? tableEntries:undefined"
+                    [rows]="tableTemp"
+                    (activate)="onActivate($event)"
+                >
+                    <ngx-datatable-column
+                        prop="staff_id"
+                    >
+                        <ng-template ngx-datatable-header-template>
+                            <span>ID</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.staff_id}}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column
+                        prop="username"
+                    >
+                        <ng-template ngx-datatable-header-template>
+                            <span>Username</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.username}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    
+                    <ngx-datatable-column
+                        prop="email"
+                    >
+                        <ng-template ngx-datatable-header-template>
+                            <span>Email</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.email}}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column>
+                        <ng-template ngx-datatable-header-template>
+                        <span>Created at</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.created_at}}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column>
+                        <ng-template ngx-datatable-header-template>
+                        <span>Action</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <span 
+                                *ngIf="row.action == 'POST'"
+                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-blue-600 bg-blue-200 uppercase last:mr-0 mr-1"
+                            >
+                                POST
+                            </span>
+                            <span 
+                                *ngIf="row.action == 'GET'"
+                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-green-600 bg-green-200 uppercase last:mr-0 mr-1"
+                            >
+                                GET
+                            </span>
+                            <span 
+                                *ngIf="row.action == 'UPDATE'"
+                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-orange-600 bg-orange-200 uppercase last:mr-0 mr-1"
+                            >
+                                UPDATE
+                            </span>
+                            <span 
+                                *ngIf="row.action == 'DELETE'"
+                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-red-600 bg-red-200 uppercase last:mr-0 mr-1"
+                            >
+                                DELETE
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    
+                    <ngx-datatable-column
+                        prop="description"
+                    >
+                        <ng-template ngx-datatable-header-template>
+                            <span>Description</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.description}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>
