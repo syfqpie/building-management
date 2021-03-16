@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Subscription } from 'rxjs';
-import { MockService } from 'src/app/shared/services/mock/mock.service';
+import { User } from 'src/app/shared/services/users/users.model';
+import { UsersService } from 'src/app/shared/services/users/users.service';
 
 @Component({
   selector: 'app-management-users',
@@ -10,6 +11,9 @@ import { MockService } from 'src/app/shared/services/mock/mock.service';
 })
 export class ManagementUsersComponent implements OnInit {
 
+  // Data
+  users: User[] = []
+  
   // Table
   tableEntries: number = 10;
   tableSelected: any[] = [];
@@ -21,7 +25,7 @@ export class ManagementUsersComponent implements OnInit {
   subscription: Subscription
 
   constructor(
-    private mockService: MockService,
+    private userService: UsersService,
     private loadingBar: LoadingBarService
   ) { 
     this.getData()
@@ -38,11 +42,12 @@ export class ManagementUsersComponent implements OnInit {
 
   getData() {
     this.loadingBar.useRef('http').start()
-    this.subscription = this.mockService.getAll('users/users.data.json').subscribe(
+    this.subscription = this.userService.getAll().subscribe(
       (res) => {
         // Success
         this.loadingBar.useRef('http').complete()
-        this.tableRows = [...res]
+        this.users = this.userService.users
+        this.tableRows = [...this.users]
         this.tableTemp = this.tableRows.map((prop, key) => {
           return {
             ...prop,
@@ -75,8 +80,6 @@ export class ManagementUsersComponent implements OnInit {
       return false;
     });
   }
-
-
 
   onSelect({ selected }) {
     this.tableSelected.splice(0, this.tableSelected.length);

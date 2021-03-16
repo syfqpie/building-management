@@ -55,6 +55,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'simple_history',
 
+    'billings',
+    'complaints',
+    'medias',
+    'proprietors',
+    'units',
     'users'
 ]
 
@@ -156,15 +161,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Django Rest Framework
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
-
 # Allauth
 
 AUTHENTICATION_BACKENDS = [
@@ -192,16 +188,36 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 
 REST_USE_JWT = True
 
-JWT_AUTH_COOKIE = 'PLAYGROUND-AUTH'
+# JWT_AUTH_COOKIE = 'PLAYGROUND-AUTH'
+
+# Django Rest Framework
+
+DEFAULT_RENDERER_CLASSES = (
+    'rest_framework.renderers.JSONRenderer',
+)
+
+DEFAULT_PERMISSION_CLASSES = [
+   'rest_framework.permissions.IsAuthenticated',
+]
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+    DEFAULT_PERMISSION_CLASSES = [
+        'rest_framework.permissions.AllowAny',
+    ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+    'DEFAULT_PERMISSION_CLASSES': DEFAULT_PERMISSION_CLASSES
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -234,8 +250,8 @@ SITE_ID = 1
 
 ACCOUNT_EMAIL_REQUIRED = True
 
-DEFAULT_FROM_EMAIL = 'noreply@pipe.my'
-EMAIL_HOST = 'https://sb.pipe.my'
+DEFAULT_FROM_EMAIL = 'noreply@example.my'
+EMAIL_HOST = 'https://sb.example.my'
 EMAIL_SUBJECT_PREFIX = '[SB]'
 EMAIL_USE_LOCALTIME = True
 

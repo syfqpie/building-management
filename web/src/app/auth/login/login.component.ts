@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
+  cheatUsername = 'matgempak95@gmail.com'
+  cheatPwd = 'test1234##'
+  
   constructor() { }
 
   ngOnInit(): void {

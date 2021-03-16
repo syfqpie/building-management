@@ -27,6 +27,7 @@ from rest_framework import viewsets, status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
+from core.settings import DEBUG
 
 from users.models import (
     CustomUser
@@ -46,10 +47,14 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     ]
 
     def get_permissions(self):
-        if self.action == 'list':
+        if DEBUG:
             permission_classes = [AllowAny]
         else:
-            permission_classes = [AllowAny]
+            permission_classes = [IsAuthenticated]
+        # if self.action == 'list':
+        #     permission_classes = [AllowAny]
+        # else:
+        #     permission_classes = [AllowAny]
 
         return [permission() for permission in permission_classes]    
 
@@ -71,5 +76,25 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             else:
                 queryset = User.objects.filter(company=company.id)
         """
-        return queryset    
+        return queryset
+    
+    # Activate account
+    @action(methods=['GET'], detail=True)
+    def activate(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.is_active = True
+        user.save()
+
+        serializer = CustomUserSerializer(user, many=False)
+        return Response(serializer.data)
+
+    # Deactivate account
+    @action(methods=['GET'], detail=True)
+    def deactivate(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.is_active = False
+        user.save()
+        
+        serializer = CustomUserSerializer(user, many=False)
+        return Response(serializer.data)
 

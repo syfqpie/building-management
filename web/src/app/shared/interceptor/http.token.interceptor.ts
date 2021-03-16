@@ -30,10 +30,12 @@ export class HttpTokenInterceptor implements HttpInterceptor {
             // Server or connection error happened
             if (!navigator.onLine) {
                 // Handle offline error
-                this.handlerNotification.openToastrConnection()
+                let infoTitle = 'Error'
+                let infoMessage = 'No connection'
+                this.handlerNotification.openToastrInfo(infoTitle, infoMessage)
             } else {
                 // Handle Http Error (error.status === 403, 404...)
-                this.handlerNotification.openToastrHttp(error.status, error.statusText)
+                this.handlerNotification.openToastrWarning(error.status, error.statusText)
             }
         } else {
             // Handle Client Error (Angular Error, ReferenceError...)     

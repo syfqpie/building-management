@@ -41,7 +41,7 @@ export class AuthService {
   register(body: any): Observable<any> {
     return this.http.post<any>(this.urlRegister, body).pipe(
       tap((res) => {
-        console.log('Registration: ', res)
+        // console.log('Registration: ', res)
       })
     )
   }

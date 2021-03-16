@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
     user_type = models.CharField(choices=USER_TYPE, max_length=2, default='PB')
 
     # Contact information
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, null=True)
 
     history = HistoricalRecords()
 

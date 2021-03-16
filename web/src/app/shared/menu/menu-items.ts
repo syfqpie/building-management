@@ -38,6 +38,19 @@ export const ROUTES_ADMIN: RouteInfo[] = [
     iconType: 'fas fa-users'
   },
   {
+    path: '/admin/units-management',
+    title: 'Units Management',
+    type: 'sub',
+    iconType: 'fas fa-server',
+    collapse: 'management',
+    isCollapsed: false,
+    isCollapsing: false,
+    children: [
+      { path: 'units', title: 'Units', type: 'link' },
+      { path: 'configurations', title: 'Configurations', type: 'link' }
+    ]
+  },
+  {
     path: '/admin/reports',
     title: 'Reporting',
     type: 'link',

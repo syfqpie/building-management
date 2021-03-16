@@ -10,6 +10,13 @@ import { TenantInformationComponent } from './tenant-information/tenant-informat
 import { ManagementAuditTrailsComponent } from './management-audit-trails/management-audit-trails.component';
 import { ManagementUsersComponent } from './management-users/management-users.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ManagementUnitsComponent } from './management-units/management-units.component';
+import { ManagementUnitsConfigurationsComponent } from './management-units-configurations/management-units-configurations.component';
+import { ConfigurationBlocksComponent } from './components/configuration-blocks/configuration-blocks.component';
+import { ConfigurationFloorsComponent } from './components/configuration-floors/configuration-floors.component';
+import { ConfigurationUnitNumbersComponent } from './components/configuration-unit-numbers/configuration-unit-numbers.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UnitInformationComponent } from './unit-information/unit-information.component';
 
 @NgModule({
   declarations: [
@@ -18,10 +25,18 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     TenantsComponent,
     TenantInformationComponent,
     ManagementAuditTrailsComponent,
-    ManagementUsersComponent
+    ManagementUsersComponent,
+    ManagementUnitsComponent,
+    ManagementUnitsConfigurationsComponent,
+    ConfigurationBlocksComponent,
+    ConfigurationFloorsComponent,
+    ConfigurationUnitNumbersComponent,
+    UnitInformationComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     NgxDatatableModule,
     RouterModule.forChild(AdminRoutes)
   ]

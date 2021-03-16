@@ -46,16 +46,25 @@ export class TenantsComponent implements OnInit {
     
   }
 
-  toggleModal() {
+  toggleModal(type) {
     this.addModal = !this.addModal;
+    if (type === 'open') {
+      
+    }
+    else if (type === 'close') {
+      this.notify.openToastrError('', 'Closed')
+    }
+    else if (type === 'cancel') {
+      this.notify.openToastrError('', 'Canceled')
+    }
   }
 
   create() {
     this.loadingBar.useRef('http').start()
     setTimeout(() => {
       this.loadingBar.useRef('http').complete()
-      this.notify.openToastr('t', 't')
-      this.toggleModal()
+      this.notify.openToastrSuccess('t', 't')
+      this.toggleModal('open')
     }, 1000);
   }
 

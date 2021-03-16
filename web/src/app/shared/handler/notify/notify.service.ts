@@ -10,19 +10,20 @@ export class NotifyService {
     public toastr: ToastrService
   ) { }
 
-  openToastrConnection() {
-    let title = 'Error'
-    let message = 'No connection'
+  openToastrInfo(title: any, message: string) {
     this.toastr.info(message, title)
   }
 
-  openToastrHttp(title: any, message: string) {
+  openToastrWarning(title: any, message: string) {
     this.toastr.warning(message, title)
   }
 
-  openToastr(title: any, message: string) {
+  openToastrSuccess(title: any, message: string) {
     this.toastr.success(message, title)
-    console.log('cendol')
+  }
+
+  openToastrError(title: any, message: string) {
+    this.toastr.error(message, title)
   }
 
 }

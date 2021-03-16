@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -75,6 +75,7 @@ import { HttpTokenInterceptor } from './shared/interceptor/http.token.intercepto
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
     LoadingBarModule,
@@ -88,9 +89,9 @@ import { HttpTokenInterceptor } from './shared/interceptor/http.token.intercepto
   ],
   providers: [
     /* Uncomment this to use interceptor*/
-    {
-      provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true
-    }
+    // {
+    //   provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true
+    // }
   ],
   bootstrap: [AppComponent],
 })

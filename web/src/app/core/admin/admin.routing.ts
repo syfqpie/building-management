@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ManagementAuditTrailsComponent } from './management-audit-trails/management-audit-trails.component';
+import { ManagementUnitsConfigurationsComponent } from './management-units-configurations/management-units-configurations.component';
+import { ManagementUnitsComponent } from './management-units/management-units.component';
 import { ManagementUsersComponent } from './management-users/management-users.component';
 import { ReportsComponent } from './reports/reports.component';
 import { TenantInformationComponent } from './tenant-information/tenant-information.component';
 import { TenantsComponent } from './tenants/tenants.component';
+import { UnitInformationComponent } from './unit-information/unit-information.component';
 
 export const AdminRoutes: Routes = [
     {
@@ -43,7 +46,29 @@ export const AdminRoutes: Routes = [
                         component: TenantInformationComponent
                     }
                 ]
-            }
+            },
+            {
+                path: 'units-management',
+                children: [
+                    {
+                        path: 'units',
+                        children: [
+                            {
+                                path: '',
+                                component: ManagementUnitsComponent
+                            },
+                            {
+                                path: 'information',
+                                component: UnitInformationComponent
+                            }
+                        ]
+                    },
+                    {
+                        path: 'configurations',
+                        component: ManagementUnitsConfigurationsComponent
+                    }
+                ]
+            },
         ]
     }
 ]

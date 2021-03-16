@@ -23,24 +23,24 @@
                     (activate)="onActivate($event)"
                 >
                     <ngx-datatable-column
-                        prop="user_id"
+                        prop="id"
                     >
                         <ng-template ngx-datatable-header-template>
-                            <span>User ID</span>
+                            <span>ID</span>
                         </ng-template>
                         <ng-template let-row="row" ngx-datatable-cell-template>
-                            {{row.user_id}}
+                            {{row.id}}
                         </ng-template>
                     </ngx-datatable-column>
 
                     <ngx-datatable-column
-                        prop="name"
+                        prop="full_name"
                     >
                         <ng-template ngx-datatable-header-template>
                             <span>Name</span>
                         </ng-template>
                         <ng-template let-row="row" ngx-datatable-cell-template>
-                            {{row.name}}
+                            {{row.full_name}}
                         </ng-template>
                     </ngx-datatable-column>
                     
@@ -56,13 +56,13 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column
-                        prop="joined_at"
+                        prop="date_joined"
                     >
                         <ng-template ngx-datatable-header-template>
                             <span>Joined at</span>
                         </ng-template>
                         <ng-template let-row="row" ngx-datatable-cell-template>
-                            {{row.joined_at}}
+                            {{row.date_joined | date: 'd/M/yy, h:mm a'}}
                         </ng-template>
                     </ngx-datatable-column>
 
@@ -73,7 +73,18 @@
                             <span>User type</span>
                         </ng-template>
                         <ng-template let-row="row" ngx-datatable-cell-template>
-                            {{row.user_type}}
+                            <span
+                                *ngIf="row.user_type == 'AD'"
+                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-white bg-indigo-500 uppercase last:mr-0 mr-1"
+                            >
+                                ADMIN
+                            </span>
+                            <span
+                                *ngIf="row.user_type == 'PB'"
+                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-blue-600 bg-blue-200 uppercase last:mr-0 mr-1"
+                            >
+                                PUBLIC
+                            </span>                              
                         </ng-template>
                     </ngx-datatable-column>
 
@@ -85,13 +96,13 @@
                         </ng-template>
                         <ng-template let-row="row" ngx-datatable-cell-template>
                             <span 
-                                *ngIf="row.is_active == 'Active'"
+                                *ngIf="row.is_active"
                                 class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-green-600 bg-green-200 uppercase last:mr-0 mr-1"
                             >
                                 Active
                             </span>
                             <span 
-                                *ngIf="row.is_active == 'Inactive'"
+                                *ngIf="!row.is_active"
                                 class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-orange-600 bg-orange-200 uppercase last:mr-0 mr-1"
                             >
                                 Inactive
