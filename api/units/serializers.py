@@ -17,6 +17,7 @@ from .models import (
 
 from proprietors.serializers import ProprietorSerializer
 from complaints.serializers import ComplaintSerializer
+# from billings.serializers import BillingSerializer
 
 class BlockSerializer(serializers.ModelSerializer):
 
@@ -53,6 +54,7 @@ class UnitExtendedSerializer(serializers.ModelSerializer):
     unit_number = UnitNumberSerializer(many=False, read_only=True)
     proprietor = ProprietorSerializer(many=False, read_only=True)
     unit_complaints = ComplaintSerializer(many=True, read_only=True)
+    # unit_billings = BillingSerializer(many=True, read_only=True)
     
     class Meta:
         model = Unit

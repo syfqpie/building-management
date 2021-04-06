@@ -32,8 +32,8 @@ export const ROUTES_ADMIN: RouteInfo[] = [
     iconType: 'fas fa-home'
   },
   {
-    path: '/admin/tenants',
-    title: 'Tenants',
+    path: '/admin/proprietors',
+    title: 'Proprietors',
     type: 'link',
     iconType: 'fas fa-users'
   },

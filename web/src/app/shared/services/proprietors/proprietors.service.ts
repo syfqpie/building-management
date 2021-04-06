@@ -50,6 +50,16 @@ export class ProprietorsService {
     )
   }
 
+  patch(id: any, body: any): Observable<Proprietor> {
+    let urlTemp = this.urlProprietors + id + '/'
+    return this.http.patch<any>(urlTemp, body).pipe(
+      tap((res) => {
+        this.proprietor = res
+        // console.log('Proprietor: ', this.proprietor)
+      })
+    )
+  }
+
   activate(id: string): Observable<Proprietor> {
     let urlTemp = this.urlProprietors + id + '/activate/'
     return this.http.get<Proprietor>(urlTemp).pipe(

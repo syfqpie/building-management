@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 import uuid
 
-from django.contrib.gis.db import models
+from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from simple_history.models import HistoricalRecords
@@ -60,7 +60,7 @@ class UnitNumber(models.Model):
         ordering = ['-unit_number']
     
     def __str__(self):
-        return self.unit_number
+        return ('%s'%(str(self.unit_number)))
 
 class Unit(models.Model):
 

@@ -4,6 +4,8 @@ import { ManagementAuditTrailsComponent } from './management-audit-trails/manage
 import { ManagementUnitsConfigurationsComponent } from './management-units-configurations/management-units-configurations.component';
 import { ManagementUnitsComponent } from './management-units/management-units.component';
 import { ManagementUsersComponent } from './management-users/management-users.component';
+import { ProprietorInformationComponent } from './proprietor-information/proprietor-information.component';
+import { ProprietorsComponent } from './proprietors/proprietors.component';
 import { ReportsComponent } from './reports/reports.component';
 import { TenantInformationComponent } from './tenant-information/tenant-information.component';
 import { TenantsComponent } from './tenants/tenants.component';
@@ -27,6 +29,19 @@ export const AdminRoutes: Routes = [
                     {
                         path: 'users',
                         component: ManagementUsersComponent
+                    }
+                ]
+            },
+            {
+                path: 'proprietors',
+                children: [
+                    {
+                        path: '',
+                        component: ProprietorsComponent
+                    },
+                    {
+                        path: 'information',
+                        component: ProprietorInformationComponent
                     }
                 ]
             },

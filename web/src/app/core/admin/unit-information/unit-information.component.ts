@@ -4,12 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { forkJoin, Subscription } from 'rxjs';
 import { NotifyService } from 'src/app/shared/handler/notify/notify.service';
+import { FormGroup } from '@angular/forms';
 import { Complaint } from 'src/app/shared/services/complaints/complaints.model';
 import { ComplaintsService } from 'src/app/shared/services/complaints/complaints.service';
 import { Proprietor } from 'src/app/shared/services/proprietors/proprietors.model';
 import { ProprietorsService } from 'src/app/shared/services/proprietors/proprietors.service';
 import { UnitExtended } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { Billing } from 'src/app/shared/services/billings/billings.model';
+import { Status } from 'src/app/shared/codes/status';
 
 @Component({
   selector: 'app-unit-information',
@@ -23,6 +26,34 @@ export class UnitInformationComponent implements OnInit {
   unit: UnitExtended
   proprietors: Proprietor[] = []
   complaints: Complaint[] = []
+  billings: Billing[] = []
+
+  totalPendings: number = 0
+  totalBillings: number = 0
+  totalComplaints: number = 0
+
+  // Predefined
+  statusList = Status
+
+  // Table
+  tableBillingEntries: number = 5;
+  tableBillingSelected: any[] = [];
+  tableBillingTemp = [];
+  tableBillingActiveRow: any;
+  tableBillingRows: any[] = []
+
+  tableComplaintEntries: number = 5;
+  tableComplaintSelected: any[] = [];
+  tableComplaintTemp = [];
+  tableComplaintActiveRow: any;
+  tableComplaintRows: any[] = []
+
+  // Form
+  unitForm: FormGroup
+
+  // Toggler
+  addModal: boolean = false;
+  patchModal: boolean = false
 
   // Subscription
   subscription: Subscription
@@ -76,6 +107,22 @@ export class UnitInformationComponent implements OnInit {
         this.unit = this.unitService.unitExtended
         this.proprietors = this.proprietorService.proprietors
         this.complaints = this.unitService.unitExtended['unit_complaints']
+
+        this.tableBillingRows = [...this.billings]
+        this.tableBillingTemp = this.tableBillingRows.map((prop, key) => {
+          return {
+            ...prop,
+            id_table: key
+          };
+        });
+
+        this.tableComplaintRows = [...this.complaints]
+        this.tableComplaintTemp = this.tableComplaintRows.map((prop, key) => {
+          return {
+            ...prop,
+            id_table: key
+          };
+        });
       },
       () => {
         // Unsuccess

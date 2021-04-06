@@ -51,7 +51,7 @@ export class ManagementUsersComponent implements OnInit {
         this.tableTemp = this.tableRows.map((prop, key) => {
           return {
             ...prop,
-            id: key
+            id_table: key
           };
         });
       },

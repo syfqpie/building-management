@@ -27,7 +27,7 @@ export class SidebarComponent implements OnInit {
   isCollapsed = true;
   menu;
 
-  // Logo
+  // Image
   logo = '/assets/img/default/bums-logo.png'
 
   constructor(

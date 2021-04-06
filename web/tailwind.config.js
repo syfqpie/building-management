@@ -90,6 +90,11 @@ module.exports = {
     "active",
     "visited",
     "disabled",
+    {
+      extend: {
+        opacity: ['disabled'],
+      }
+    }
   ],
   plugins: [require("@tailwindcss/custom-forms")],
 };

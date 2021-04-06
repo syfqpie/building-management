@@ -17,6 +17,8 @@ import { ConfigurationFloorsComponent } from './components/configuration-floors/
 import { ConfigurationUnitNumbersComponent } from './components/configuration-unit-numbers/configuration-unit-numbers.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UnitInformationComponent } from './unit-information/unit-information.component';
+import { ProprietorsComponent } from './proprietors/proprietors.component';
+import { ProprietorInformationComponent } from './proprietor-information/proprietor-information.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { UnitInformationComponent } from './unit-information/unit-information.co
     ConfigurationBlocksComponent,
     ConfigurationFloorsComponent,
     ConfigurationUnitNumbersComponent,
-    UnitInformationComponent
+    UnitInformationComponent,
+    ProprietorsComponent,
+    ProprietorInformationComponent
   ],
   imports: [
     CommonModule,

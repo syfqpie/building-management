@@ -17,3 +17,10 @@ class ProprietorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proprietor
         fields = '__all__'
+
+
+class ProprietorExtendedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Proprietor
+        fields = '__all__'

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 import uuid
 
-from django.contrib.gis.db import models
+from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from simple_history.models import HistoricalRecords
@@ -19,7 +19,8 @@ class Billing(models.Model):
     unit = models.ForeignKey(
         Unit,
         on_delete=models.CASCADE,
-        null=True
+        null=True,
+        related_name='unit_billings'
     )
 
     is_paid = models.BooleanField(default=False)

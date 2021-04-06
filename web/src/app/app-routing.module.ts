@@ -15,6 +15,8 @@ import { LandingComponent } from './views/landing/landing.component';
 import { ProfileComponent } from './views/profile/profile.component';
 
 const routes: Routes = [
+  // Default
+  { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
   // Admin layout
   {
     path: '',
@@ -22,23 +24,22 @@ const routes: Routes = [
     children: [
       { path: 'admin', loadChildren: './core/admin/admin.module#AdminModule'},
       { path: '', loadChildren: './core/global/global.module#GlobalModule'},
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
     ],
   },
-  // auth views
+  // Auth layout
   {
-    path: 'auth',
+    path: '',
     component: AuthComponent,
     children: [
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      // { path: 'login', component: LoginComponent },
+      // { path: 'register', component: RegisterComponent },
+      { path: 'auth', loadChildren: './auth/auth.module#AuthModule'}
     ],
   },
-  // no layout views
+  // No layout 
   { path: 'profile', component: ProfileComponent },
   { path: 'landing', component: LandingComponent },
-  { path: '', component: IndexComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

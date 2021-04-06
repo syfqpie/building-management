@@ -98,3 +98,4 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = CustomUserSerializer(user, many=False)
         return Response(serializer.data)
 
+    

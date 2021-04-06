@@ -42,16 +42,16 @@ class ProprietorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Proprietor.objects.all()
 
-        if self.request.user.is_anonymous:
-            queryset = Proprietor.objects.none()
+        # if self.request.user.is_anonymous:
+        #     queryset = Proprietor.objects.none()
 
-        else:
-            user = self.request.user
+        # else:
+        #     user = self.request.user
             
-            if user.user_type == 'AD':
-                Proprietor.objects.all()
-            else:
-                Proprietor.objects.none()
+        #     if user.user_type == 'AD':
+        #         Proprietor.objects.all()
+        #     else:
+        #         Proprietor.objects.none()
 
         return queryset    
  

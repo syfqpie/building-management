@@ -16,7 +16,7 @@ from medias.serializers import MediaSerializer
 from units.serializers import UnitExtendedSerializer
 
 class BillingSerializer(serializers.ModelSerializer):
-
+    media = MediaSerializer(many=False, read_only=True)
     class Meta:
         model = Billing
         fields = '__all__'
