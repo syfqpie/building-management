@@ -10,8 +10,7 @@
 		<ul class="flex-col md:flex-row list-none items-center hidden md:flex">
 			<div class="relative inline-block text-left">
 				<a
-					class="text-gray-600 block"
-					[routerLink]=""
+					class="text-gray-600 block cursor-pointer"
 					(click)="toggleDropdown($event)"
 					#btnDropdownRef
 				  >
@@ -47,12 +46,13 @@
 					*ngIf="isCollapsed"
 					style='min-width:12rem'
 					#dropdown
+					id="dropdown"
 				>
-					<a type="button" [routerLink]="" (click)="navigatePage('/settings')" class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-gray-800'>
+					<a type="button" (click)="navigatePage('/settings')" class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-gray-800 cursor-pointer'>
 						Settings
 					</a>
 					<div class='h-0 my-2 border border-solid border-gray-200'></div>
-					<a type="button" [routerLink]="" (click)="navigatePage('/settings')" class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent  text-gray-800'>
+					<a type="button" (click)="navigatePage('/settings')" class='text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent  text-gray-800 cursor-pointer'>
 						Logout
 					</a>
 				</div>

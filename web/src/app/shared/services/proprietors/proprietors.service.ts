@@ -80,4 +80,14 @@ export class ProprietorsService {
     )
   }
 
+  search(body: any): Observable<Proprietor[]> {
+    let urlTemp = this.urlProprietors + 'search/'
+    return this.http.post<Proprietor[]>(urlTemp, body).pipe(
+      tap((res) => {
+        this.proprietors = res
+        // console.log('Proprietors: ', this.proprietors)
+      })
+    )
+  }
+
 }

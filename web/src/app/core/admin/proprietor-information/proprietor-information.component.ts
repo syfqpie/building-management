@@ -70,7 +70,6 @@ export class ProprietorInformationComponent implements OnInit {
 
   // Subscriber
   subscription: Subscription
-  subscriptionDialog: Subscription
 
   constructor(
     private proprietorService: ProprietorsService,
@@ -106,10 +105,6 @@ export class ProprietorInformationComponent implements OnInit {
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe()
-    }
-
-    if (this.subscriptionDialog) {
-      this.subscriptionDialog.unsubscribe()
     }
   }
 
@@ -150,7 +145,6 @@ export class ProprietorInformationComponent implements OnInit {
         this.proprietorForm.controls['moved_out_at'].patchValue(this.proprietor['moved_out_at'])
 
         // Disable form
-        this.proprietorForm.controls['name'].disable()
         this.proprietorForm.controls['nric'].disable()
         this.proprietorForm.controls['gender'].disable()
         this.proprietorForm.controls['phone_number'].disable()
@@ -188,7 +182,6 @@ export class ProprietorInformationComponent implements OnInit {
     // Disable form
     if (this.isEdit) {
       this.isEdit = false
-      this.proprietorForm.controls['name'].disable()
       this.proprietorForm.controls['nric'].disable()
       this.proprietorForm.controls['gender'].disable()
       this.proprietorForm.controls['phone_number'].disable()
@@ -199,7 +192,6 @@ export class ProprietorInformationComponent implements OnInit {
     // Enable form
     else {
       this.isEdit = true
-      this.proprietorForm.controls['name'].enable()
       this.proprietorForm.controls['nric'].enable()
       this.proprietorForm.controls['gender'].enable()
       this.proprietorForm.controls['phone_number'].enable()
@@ -229,7 +221,7 @@ export class ProprietorInformationComponent implements OnInit {
 
   save() {
     this.loadingBar.useRef('http').start()
-    this.subscriptionDialog = this.proprietorService.patch(this.id, this.proprietorForm.value).subscribe(
+    this.subscription = this.proprietorService.patch(this.id, this.proprietorForm.value).subscribe(
       () => {
         this.loadingBar.useRef('http').complete()
         this.notify.openToastrSuccess('', 'Updated user information')

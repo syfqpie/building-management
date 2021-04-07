@@ -85,9 +85,9 @@
                         <ng-template let-row="row" ngx-datatable-cell-template>
                             <span
                                 *ngIf="!row.is_maintenance"
-                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-white bg-indigo-500 uppercase last:mr-0 mr-1"
+                                class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-indigo-600 bg-indigo-200 uppercase last:mr-0 mr-1"
                             >
-                                Not In Maintenance
+                                Good condition
                             </span>
                             <span
                                 *ngIf="row.is_maintenance"

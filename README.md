@@ -65,9 +65,19 @@
 	- [ ] Components
 		- [ ] Auth
 			- [ ] Login
+				- [x] Design
+				- [x] Route after success login
+				- [ ] Change background image
 			- [ ] Reset
+				- [x] Design
+				- [ ] Make a successful request
 		- [ ] Admin
 			- [ ] Dashboard
+				- [ ] Statistics
+					- [ ] Total tenants
+					- [ ] Total reports
+					- [ ] Total free parkings
+					- [ ] Pending payment amount
 			- [ ] System management
 				- [ ] Audit trail
 				- [x] Users
@@ -83,7 +93,16 @@
 				- [ ] Units
 					- [x] List
 					- [ ] Information
-						- [ ] Patch
+						- [x] Enable
+						- [x] Disable
+						- [x] Enable maintenance
+						- [x] Disable maintenance
+						- [x] Add proprietor
+							- [x] Search proprietor by NRIC
+						- [x] Change proprietor
+							- [x] Search proprietor by NRIC
+							- [x] Compare proprietors' details
+							- [x] Patch
 						- [ ] Statistics
 						- [x] List complaints
 						- [x] List billings
@@ -107,6 +126,7 @@
 			- [ ] Reporting
 		- [ ] Global
 			- [ ] Settings
+				- [ ] Change sidebar theme
 		- [ ] Public
 			- [ ] Home
 			- [ ] Help

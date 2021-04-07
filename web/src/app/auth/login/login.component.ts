@@ -76,4 +76,11 @@ export class LoginComponent implements OnInit {
     return this.router.navigate([path])
   }
 
+  cheat() {
+    this.loginForm.controls['username'].patchValue(this.cheatUsername)
+    this.loginForm.controls['password'].patchValue(this.cheatPwd)
+
+    this.login()
+  }
+
 }

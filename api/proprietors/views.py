@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.db.models import Q
 
@@ -55,6 +57,7 @@ class ProprietorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return queryset    
  
+    # Activate proprietor
     @action(methods=['GET'], detail=True)
     def activate(self, request, *args, **kwargs):
         proprietor = self.get_object()
@@ -64,7 +67,7 @@ class ProprietorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = ProprietorSerializer(proprietor, many=False)
         return Response(serializer.data)
 
-
+    # Deactivate proprietor
     @action(methods=['GET'], detail=True)
     def deactivate(self, request, *args, **kwargs):
         proprietor = self.get_object()
@@ -73,4 +76,18 @@ class ProprietorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         proprietor.save()
         
         serializer = ProprietorSerializer(proprietor, many=False)
+        return Response(serializer.data)
+    
+    # Search proprietor by NRIC
+    @action(methods=['POST'], detail=False)
+    def search(self, request, *args, **kwargs):
+
+        request_ = json.loads(request.body.decode('utf-8'))
+        request_text_ = request_['text']
+
+        proprietors = Proprietor.objects.filter(
+           nric__icontains=request_text_
+        )[:5]
+        
+        serializer = ProprietorSerializer(proprietors, many=True)
         return Response(serializer.data)
