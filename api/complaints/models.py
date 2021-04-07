@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import uuid
+import pytz
+import datetime
 
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator

@@ -78,6 +78,11 @@
 					- [ ] Total reports
 					- [ ] Total free parkings
 					- [ ] Pending payment amount
+				- [x] Charts
+					- [x] Total payments
+					- [x] Total ownerships
+					- [x] Total complaints
+				
 			- [ ] System management
 				- [ ] Audit trail
 				- [x] Users
@@ -133,4 +138,5 @@
 				- [ ] Introduction
 				- [ ] Help
 				- [ ] Contact
-				- [ ] Complaint
+				- [x] Complaint
+				- [x] Scroll to top

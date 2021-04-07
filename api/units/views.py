@@ -1,5 +1,6 @@
-from django.shortcuts import render
 from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import render
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -177,21 +178,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         queryset = Unit.objects.all()
         return queryset    
  
-
+    # Get extended units
     @action(methods=['GET'], detail=False)
     def extended_all(self, request, *args, **kwargs):
         units = Unit.objects.all()
         serializer = UnitExtendedSerializer(units, many=True)
         return Response(serializer.data)
     
-
+    # Get extended unit
     @action(methods=['GET'], detail=True)
     def extended(self, request, *args, **kwargs):
         unit = self.get_object()
         serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
 
-    
+    # Enable maintenance
     @action(methods=['GET'], detail=True)
     def enable_maintenance(self, request, *args, **kwargs):
         unit = self.get_object()
@@ -201,7 +202,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
 
-
+    # Disable maintenance
     @action(methods=['GET'], detail=True)
     def disable_maintenance(self, request, *args, **kwargs):
         unit = self.get_object()
@@ -211,7 +212,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
 
-    
+    # Activate unit
     @action(methods=['GET'], detail=True)
     def activate(self, request, *args, **kwargs):
         unit = self.get_object()
@@ -221,7 +222,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
 
-
+    # Deactivate unit
     @action(methods=['GET'], detail=True)
     def deactivate(self, request, *args, **kwargs):
         unit = self.get_object()
@@ -230,3 +231,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         
         serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
+    
+    # Get ownership count
+    @action(methods=['GET'], detail=False)
+    def ownership_count(self, request, *args, **kwargs):
+        units = Unit.objects.all()
+
+        data_ = {
+            'labels': [
+                'Owned', 
+                'Available'
+            ],
+            'datas': [
+                units.filter(proprietor__isnull=False).count(), 
+                units.filter(proprietor__isnull=True).count()
+            ]
+        }
+        
+        return JsonResponse(data_)

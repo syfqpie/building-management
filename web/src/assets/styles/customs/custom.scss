@@ -166,3 +166,604 @@
 .bg-sidebar {
     background-color: #1a202e;
 }
+
+// Opacity
+.opacity-0 {
+    opacity: 0;
+}
+  
+.opacity-25 {
+    opacity: 0.25;
+}
+  
+.opacity-50 {
+    opacity: 0.5;
+}
+  
+.opacity-75 {
+    opacity: 0.75;
+}
+  
+.opacity-100 {
+    opacity: 1;
+}
+  
+.group:hover .group-hover\:opacity-0 {
+    opacity: 0;
+}
+  
+.group:hover .group-hover\:opacity-25 {
+    opacity: 0.25;
+}
+  
+.group:hover .group-hover\:opacity-50 {
+    opacity: 0.5;
+}
+  
+.group:hover .group-hover\:opacity-75 {
+    opacity: 0.75;
+}
+  
+.group:hover .group-hover\:opacity-100 {
+    opacity: 1;
+}
+  
+.focus-within\:opacity-0:focus-within {
+    opacity: 0;
+}
+  
+.focus-within\:opacity-25:focus-within {
+    opacity: 0.25;
+}
+  
+.focus-within\:opacity-50:focus-within {
+    opacity: 0.5;
+}
+  
+.focus-within\:opacity-75:focus-within {
+    opacity: 0.75;
+}
+  
+.focus-within\:opacity-100:focus-within {
+    opacity: 1;
+}
+  
+.first\:opacity-0:first-child {
+    opacity: 0;
+}
+  
+.first\:opacity-25:first-child {
+    opacity: 0.25;
+}
+  
+.first\:opacity-50:first-child {
+    opacity: 0.5;
+}
+  
+.first\:opacity-75:first-child {
+    opacity: 0.75;
+}
+  
+.first\:opacity-100:first-child {
+    opacity: 1;
+}
+  
+.last\:opacity-0:last-child {
+    opacity: 0;
+}
+  
+.last\:opacity-25:last-child {
+    opacity: 0.25;
+}
+  
+.last\:opacity-50:last-child {
+    opacity: 0.5;
+}
+  
+.last\:opacity-75:last-child {
+    opacity: 0.75;
+}
+  
+.last\:opacity-100:last-child {
+    opacity: 1;
+}
+  
+.odd\:opacity-0:nth-child(odd) {
+    opacity: 0;
+}
+  
+.odd\:opacity-25:nth-child(odd) {
+    opacity: 0.25;
+}
+  
+.odd\:opacity-50:nth-child(odd) {
+    opacity: 0.5;
+}
+  
+.odd\:opacity-75:nth-child(odd) {
+    opacity: 0.75;
+}
+  
+.odd\:opacity-100:nth-child(odd) {
+    opacity: 1;
+}
+  
+.even\:opacity-0:nth-child(even) {
+    opacity: 0;
+}
+  
+.even\:opacity-25:nth-child(even) {
+    opacity: 0.25;
+}
+  
+.even\:opacity-50:nth-child(even) {
+    opacity: 0.5;
+}
+  
+.even\:opacity-75:nth-child(even) {
+    opacity: 0.75;
+}
+  
+.even\:opacity-100:nth-child(even) {
+    opacity: 1;
+}
+  
+.hover\:opacity-0:hover {
+    opacity: 0;
+}
+  
+.hover\:opacity-25:hover {
+    opacity: 0.25;
+}
+  
+.hover\:opacity-50:hover {
+    opacity: 0.5;
+}
+  
+.hover\:opacity-75:hover {
+    opacity: 0.75;
+}
+  
+.hover\:opacity-100:hover {
+    opacity: 1;
+}
+  
+.focus\:opacity-0:focus {
+    opacity: 0;
+}
+  
+.focus\:opacity-25:focus {
+    opacity: 0.25;
+}
+  
+.focus\:opacity-50:focus {
+    opacity: 0.5;
+}
+  
+.focus\:opacity-75:focus {
+    opacity: 0.75;
+}
+  
+.focus\:opacity-100:focus {
+    opacity: 1;
+}
+  
+.active\:opacity-0:active {
+    opacity: 0;
+}
+  
+.active\:opacity-25:active {
+    opacity: 0.25;
+}
+  
+.active\:opacity-50:active {
+    opacity: 0.5;
+}
+  
+.active\:opacity-75:active {
+    opacity: 0.75;
+}
+  
+.active\:opacity-100:active {
+    opacity: 1;
+}
+  
+.visited\:opacity-0:visited {
+    opacity: 0;
+}
+  
+.visited\:opacity-25:visited {
+    opacity: 0.25;
+}
+  
+.visited\:opacity-50:visited {
+    opacity: 0.5;
+}
+  
+.visited\:opacity-75:visited {
+    opacity: 0.75;
+}
+  
+.visited\:opacity-100:visited {
+    opacity: 1;
+}
+  
+.disabled\:opacity-0:disabled {
+    opacity: 0;
+}
+  
+.disabled\:opacity-25:disabled {
+    opacity: 0.25;
+}
+  
+.disabled\:opacity-50:disabled {
+    opacity: 0.5;
+}
+  
+.disabled\:opacity-75:disabled {
+    opacity: 0.75;
+}
+  
+.disabled\:opacity-100:disabled {
+    opacity: 1;
+}
+
+// Cursor
+.cursor-auto {
+    cursor: auto;
+}  
+  
+  .cursor-default {
+    cursor: default;
+}
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+.cursor-wait {
+    cursor: wait;
+}
+  
+.cursor-text {
+    cursor: text;
+}
+  
+.cursor-move {
+    cursor: move;
+}
+  
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+  
+.group:hover .group-hover\:cursor-auto {
+    cursor: auto;
+}
+  
+.group:hover .group-hover\:cursor-default {
+    cursor: default;
+}
+  
+.group:hover .group-hover\:cursor-pointer {
+    cursor: pointer;
+}
+  
+.group:hover .group-hover\:cursor-wait {
+    cursor: wait;
+}
+  
+.group:hover .group-hover\:cursor-text {
+    cursor: text;
+}
+  
+.group:hover .group-hover\:cursor-move {
+    cursor: move;
+}
+  
+.group:hover .group-hover\:cursor-not-allowed {
+    cursor: not-allowed;
+}
+  
+.focus-within\:cursor-auto:focus-within {
+    cursor: auto;
+}
+  
+.focus-within\:cursor-default:focus-within {
+    cursor: default;
+}
+  
+.focus-within\:cursor-pointer:focus-within {
+    cursor: pointer;
+}
+  
+.focus-within\:cursor-wait:focus-within {
+    cursor: wait;
+}
+  
+.focus-within\:cursor-text:focus-within {
+    cursor: text;
+}
+  
+.focus-within\:cursor-move:focus-within {
+    cursor: move;
+}
+  
+.focus-within\:cursor-not-allowed:focus-within {
+    cursor: not-allowed;
+}
+  
+.first\:cursor-auto:first-child {
+    cursor: auto;
+}
+  
+.first\:cursor-default:first-child {
+    cursor: default;
+}
+  
+.first\:cursor-pointer:first-child {
+    cursor: pointer;
+}
+  
+.first\:cursor-wait:first-child {
+    cursor: wait;
+}
+  
+.first\:cursor-text:first-child {
+    cursor: text;
+}
+  
+.first\:cursor-move:first-child {
+    cursor: move;
+}
+  
+.first\:cursor-not-allowed:first-child {
+    cursor: not-allowed;
+}
+  
+.last\:cursor-auto:last-child {
+    cursor: auto;
+}
+  
+.last\:cursor-default:last-child {
+    cursor: default;
+}
+  
+.last\:cursor-pointer:last-child {
+    cursor: pointer;
+}
+  
+.last\:cursor-wait:last-child {
+    cursor: wait;
+}
+  
+.last\:cursor-text:last-child {
+    cursor: text;
+}
+  
+.last\:cursor-move:last-child {
+    cursor: move;
+}
+  
+.last\:cursor-not-allowed:last-child {
+    cursor: not-allowed;
+}
+  
+.odd\:cursor-auto:nth-child(odd) {
+    cursor: auto;
+}
+  
+.odd\:cursor-default:nth-child(odd) {
+    cursor: default;
+}
+  
+.odd\:cursor-pointer:nth-child(odd) {
+    cursor: pointer;
+}
+  
+.odd\:cursor-wait:nth-child(odd) {
+    cursor: wait;
+}
+  
+.odd\:cursor-text:nth-child(odd) {
+    cursor: text;
+}
+  
+.odd\:cursor-move:nth-child(odd) {
+    cursor: move;
+}
+  
+.odd\:cursor-not-allowed:nth-child(odd) {
+    cursor: not-allowed;
+}
+  
+.even\:cursor-auto:nth-child(even) {
+    cursor: auto;
+}
+  
+.even\:cursor-default:nth-child(even) {
+    cursor: default;
+}
+  
+.even\:cursor-pointer:nth-child(even) {
+    cursor: pointer;
+}
+  
+.even\:cursor-wait:nth-child(even) {
+    cursor: wait;
+}
+  
+.even\:cursor-text:nth-child(even) {
+    cursor: text;
+}
+  
+.even\:cursor-move:nth-child(even) {
+    cursor: move;
+}
+  
+.even\:cursor-not-allowed:nth-child(even) {
+    cursor: not-allowed;
+}
+  
+.hover\:cursor-auto:hover {
+    cursor: auto;
+}
+  
+.hover\:cursor-default:hover {
+    cursor: default;
+}
+  
+.hover\:cursor-pointer:hover {
+    cursor: pointer;
+}
+  
+.hover\:cursor-wait:hover {
+    cursor: wait;
+}
+  
+.hover\:cursor-text:hover {
+    cursor: text;
+}
+  
+.hover\:cursor-move:hover {
+    cursor: move;
+}
+  
+.hover\:cursor-not-allowed:hover {
+    cursor: not-allowed;
+}
+  
+.focus\:cursor-auto:focus {
+    cursor: auto;
+}
+  
+.focus\:cursor-default:focus {
+    cursor: default;
+}
+  
+.focus\:cursor-pointer:focus {
+    cursor: pointer;
+}
+  
+.focus\:cursor-wait:focus {
+    cursor: wait;
+}
+  
+.focus\:cursor-text:focus {
+    cursor: text;
+}
+  
+.focus\:cursor-move:focus {
+    cursor: move;
+}
+  
+.focus\:cursor-not-allowed:focus {
+    cursor: not-allowed;
+}
+  
+.active\:cursor-auto:active {
+    cursor: auto;
+}
+  
+.active\:cursor-default:active {
+    cursor: default;
+}
+  
+.active\:cursor-pointer:active {
+    cursor: pointer;
+}
+  
+.active\:cursor-wait:active {
+    cursor: wait;
+}
+  
+.active\:cursor-text:active {
+    cursor: text;
+}
+  
+.active\:cursor-move:active {
+    cursor: move;
+}
+  
+.active\:cursor-not-allowed:active {
+    cursor: not-allowed;
+}
+  
+.visited\:cursor-auto:visited {
+    cursor: auto;
+}
+  
+.visited\:cursor-default:visited {
+    cursor: default;
+}
+  
+.visited\:cursor-pointer:visited {
+    cursor: pointer;
+}
+  
+.visited\:cursor-wait:visited {
+    cursor: wait;
+}
+  
+.visited\:cursor-text:visited {
+    cursor: text;
+}
+  
+.visited\:cursor-move:visited {
+    cursor: move;
+}
+  
+.visited\:cursor-not-allowed:visited {
+    cursor: not-allowed;
+}
+  
+.disabled\:cursor-auto:disabled {
+    cursor: auto;
+}
+  
+.disabled\:cursor-default:disabled {
+    cursor: default;
+}
+  
+.disabled\:cursor-pointer:disabled {
+    cursor: pointer;
+}
+  
+.disabled\:cursor-wait:disabled {
+    cursor: wait;
+}
+  
+.disabled\:cursor-text:disabled {
+    cursor: text;
+}
+  
+.disabled\:cursor-move:disabled {
+    cursor: move;
+}
+  
+.disabled\:cursor-not-allowed:disabled {
+    cursor: not-allowed;
+}
+
+// Hide scrollbar
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
+  
+  /* Hide scrollbar for IE, Edge add Firefox */
+.scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none; /* Firefox */
+}
+
+// Scroll to top
+button.go-top {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 5px;
+    outline: none;
+}

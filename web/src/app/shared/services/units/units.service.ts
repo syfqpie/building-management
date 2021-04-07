@@ -18,6 +18,8 @@ export class UnitsService {
   units: UnitExtended[] = []
   unitExtended: UnitExtended
 
+  statistics: any
+
   constructor(
     private http: HttpClient
   ) { }
@@ -97,6 +99,17 @@ export class UnitsService {
       tap((res) => {
         this.unitExtended = res
         // console.log('Unit: ', this.unitExtended)
+      })
+    )
+  }
+
+  
+  getOwnershipCount(): Observable<any> {
+    let urlTemp = this.urlUnits + 'ownership_count/'
+    return this.http.get<any>(urlTemp).pipe(
+      tap((res) => {
+        this.statistics = res
+        // console.log('Statistics: ', this.statistics)
       })
     )
   }
