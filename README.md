@@ -129,6 +129,8 @@
 				- [ ] Change sidebar theme
 		- [ ] Public
 			- [ ] Home
-			- [ ] Help
-			- [ ] Contact
-			- [ ] Complaint
+				- [x] Header
+				- [ ] Introduction
+				- [ ] Help
+				- [ ] Contact
+				- [ ] Complaint

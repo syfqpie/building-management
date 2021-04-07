@@ -44,6 +44,7 @@ import { IndexDropdownComponent } from './components/dropdowns/index-dropdown/in
 import { TableDropdownComponent } from './components/dropdowns/table-dropdown/table-dropdown.component';
 import { PagesDropdownComponent } from './components/dropdowns/pages-dropdown/pages-dropdown.component';
 import { NotificationDropdownComponent } from './components/dropdowns/notification-dropdown/notification-dropdown.component';
+import { HomeComponent } from './public/home/home.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { NotificationDropdownComponent } from './components/dropdowns/notificati
     IndexComponent,
     LandingComponent,
     ProfileComponent,
+    HomeComponent,
   ],
   imports: [
     AppRoutingModule,

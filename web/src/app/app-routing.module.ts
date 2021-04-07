@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 // layouts
 import { AdminComponent } from './layouts/admin/admin.component';
 import { AuthComponent } from './layouts/auth/auth.component';
+import { HomeComponent } from './public/home/home.component';
 
 // auth views
 import { LoginComponent } from './views/auth/login/login.component';
@@ -38,6 +39,7 @@ const routes: Routes = [
     ],
   },
   // No layout 
+  { path: 'home', component: HomeComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'landing', component: LandingComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
