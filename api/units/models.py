@@ -66,7 +66,8 @@ class Unit(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
     unit_no = models.CharField(max_length=100, null=True)
-    
+    square_feet = models.IntegerField(default=0)
+
     block = models.ForeignKey(
         Block,
         on_delete=models.CASCADE,

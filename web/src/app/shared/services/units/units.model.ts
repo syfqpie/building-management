@@ -8,6 +8,7 @@ export class Unit {
     constructor(
         public id: number,
         public unit_no: string,
+        public square_feet: number,
         public block: number,
         public floor: number,
         public unit_number: number,
@@ -23,6 +24,7 @@ export class UnitExtended {
     constructor(
         public id: number,
         public unit_no: string,
+        public square_feet: number,
         public block: Block,
         public floor: Floor,
         public unit_number: UnitNumber,
