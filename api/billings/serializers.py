@@ -9,7 +9,8 @@ from rest_framework import serializers
 from django.utils.timezone import now
 
 from .models import (
-    Billing
+    Billing,
+    MaintenanceBaseFee
 )
 
 from medias.serializers import MediaSerializer
@@ -29,4 +30,10 @@ class BillingExtendedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Billing
+        fields = '__all__'
+
+class MaintenanceBaseFeeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MaintenanceBaseFee
         fields = '__all__'

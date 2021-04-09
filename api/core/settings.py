@@ -106,12 +106,24 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
+DEFAULT_DB = {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': config('DATABASE_NAME'),
+    'USER': config('DATABASE_USER'),
+    'PASSWORD': config('DATABASE_PASSWORD'),
+    'HOST': config('DATABASE_HOST'),
+    'PORT': config('DATABASE_PORT'),
+}
+
+if DEBUG:
+    DEFAULT_DB = {
         'ENGINE': 'django.db.backends.sqlite3',#'django_multitenant.backends.postgresql',#'django.contrib.gis.db.backends.postgis',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'DISABLE_SERVER_SIDE_CURSORS': True
     }
+
+DATABASES = {
+    'default': DEFAULT_DB
 }
 
 # db_from_env = dj_database_url.config(default=config('DATABASE_URL'), conn_max_age=500)
@@ -160,6 +172,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Allauth
 

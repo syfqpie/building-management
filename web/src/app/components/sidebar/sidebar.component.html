@@ -91,7 +91,7 @@
 					<a 
 						[routerLink]="[menuItem.path]"
 						routerLinkActive 
-						class="text-xs uppercase py-3 font-bold block"
+						class="text-xs uppercase py-3 font-bold block cursor-pointer"
 						*ngIf="menuItem.type === 'link'"
 						#itemLink="routerLinkActive" 
 						[ngClass]="itemLink.isActive? 'text-teal-500 hover:text-teal-600': 'text-gray-300 hover:text-teal-100'"
@@ -107,7 +107,7 @@
 					<!-- Submenu -->
 					<a 
 						routerLinkActive
-						class="text-xs uppercase py-3 font-bold block flex"
+						class="text-xs uppercase py-3 font-bold block flex cursor-pointer"
 						*ngIf="menuItem.type === 'sub'"
 						(click)="menuItem.isCollapsed = !menuItem.isCollapsed"
 						[class.active]="!menuItem.isCollapsed"
@@ -131,7 +131,7 @@
 					<div 
 						@collapseTrigger
 						id="{{menuItem.collapse}}"
-						class="ml-7 text-xs uppercase py-1 font-bold block"
+						class="ml-7 text-xs uppercase py-1 font-bold block cursor-pointer"
 						*ngIf="menuItem.type === 'sub' && menuItem.isCollapsed"
 					>
 						<ul class="nav nav-sm flex-column">
@@ -140,7 +140,7 @@
 								<a
 									routerLinkActive
 									[routerLink]="[menuItem.path, childItem.path]"
-									class="text-xs uppercase py-3 font-bold block"
+									class="text-xs uppercase py-3 font-bold block cursor-pointer"
 									*ngIf="childItem.type === 'link'"
 									#itemSubLink="routerLinkActive"
 									[ngClass]="itemSubLink.isActive? 'text-teal-500 hover:text-teal-600': 'text-gray-300 hover:text-teal-100'"
@@ -152,7 +152,7 @@
 									routerLinkActive
 									(click)="childItem.isCollapsed = !childItem.isCollapsed"
 									*ngIf="childItem.type === 'sub'"
-									class="text-xs uppercase py-3 font-bold block flex"
+									class="text-xs uppercase py-3 font-bold block flex cursor-pointer"
 									[class.active]="!childItem.isCollapsed"
 									#itemSubLink="routerLinkActive"
 									[ngClass]="itemSubLink.isActive? 'text-teal-500 hover:text-teal-600': 'text-gray-300 hover:text-teal-100'"
@@ -175,7 +175,7 @@
 											<a 
 												routerLinkActive
 												[routerLink]="[menuitem.path, childItem.path, item.path]" 
-												class="text-xs uppercase py-3 font-bold block"
+												class="text-xs uppercase py-3 font-bold block cursor-pointer"
 												#itemSubChildLink="routerLinkActive"
 												[ngClass]="itemSubChildLink.isActive? 'text-teal-500 hover:text-teal-500': 'text-gray-800 hover:text-gray-600'"
 											>

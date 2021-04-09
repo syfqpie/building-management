@@ -49,7 +49,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         queryset = Block.objects.all()
         return queryset
     
-
+    # Activate block
     @action(methods=['GET'], detail=True)
     def activate(self, request, *args, **kwargs):
         block = self.get_object()
@@ -59,7 +59,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = BlockSerializer(block, many=False)
         return Response(serializer.data)
 
-
+    # Deactivate block
     @action(methods=['GET'], detail=True)
     def deactivate(self, request, *args, **kwargs):
         block = self.get_object()
@@ -92,7 +92,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         queryset = Floor.objects.all()
         return queryset
     
-
+    # Activate floor
     @action(methods=['GET'], detail=True)
     def activate(self, request, *args, **kwargs):
         floor = self.get_object()
@@ -102,7 +102,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = FloorSerializer(floor, many=False)
         return Response(serializer.data)
 
-
+    # Deactivate block
     @action(methods=['GET'], detail=True)
     def deactivate(self, request, *args, **kwargs):
         floor = self.get_object()
@@ -135,7 +135,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         queryset = UnitNumber.objects.all()
         return queryset
     
-
+    # Activate unit number
     @action(methods=['GET'], detail=True)
     def activate(self, request, *args, **kwargs):
         unit_number = self.get_object()
@@ -145,7 +145,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = UnitNumberSerializer(unit_number, many=False)
         return Response(serializer.data)
 
-
+    # Deactivate unit number
     @action(methods=['GET'], detail=True)
     def deactivate(self, request, *args, **kwargs):
         unit_number = self.get_object()

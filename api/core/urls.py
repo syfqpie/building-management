@@ -25,10 +25,14 @@ router = NestedDefaultRouter()
 
 # Billings
 from billings.views import (
-    BillingViewSet
+    BillingViewSet,
+    MaintenanceBaseFeeViewSet
 )
 billings_router = router.register(
     'billings', BillingViewSet
+)
+maintenance_base_fees_router = router.register(
+    'maintenance-base-fees', MaintenanceBaseFeeViewSet
 )
 
 # Complaints

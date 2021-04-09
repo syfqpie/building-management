@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UnitInformationComponent } from './unit-information/unit-information.component';
 import { ProprietorsComponent } from './proprietors/proprietors.component';
 import { ProprietorInformationComponent } from './proprietor-information/proprietor-information.component';
+import { ManagementBuildingsComponent } from './management-buildings/management-buildings.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ProprietorInformationComponent } from './proprietor-information/proprie
     ConfigurationUnitNumbersComponent,
     UnitInformationComponent,
     ProprietorsComponent,
-    ProprietorInformationComponent
+    ProprietorInformationComponent,
+    ManagementBuildingsComponent
   ],
   imports: [
     CommonModule,

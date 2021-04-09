@@ -18,9 +18,14 @@
     - [x] Create project starter from django-admin
 	- [ ] App
 		- [ ] Billings
+			- [ ] Billings
+			- [x] Base maintenance fees
 		- [x] Complaints
 		- [x] Medias
 		- [ ] Parkings
+			- [ ] Parking units
+			- [ ] Parking lots
+			- [ ] Parking owners
 		- [x] Proprietors
 		- [x] Units
 			- [x] Blocks
@@ -82,6 +87,10 @@
 					- [x] Total payments
 					- [x] Total ownerships
 					- [x] Total complaints
+				- [ ] Latest - display 5 only on each 
+					- [ ] Payments
+					- [ ] Complaints
+					- [ ] Activity feed
 				
 			- [ ] System management
 				- [ ] Audit trail

@@ -42,7 +42,7 @@ class ComplaintViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         queryset = Complaint.objects.all()
         return queryset
     
-
+    # Get extended complaints
     @action(methods=['GET'], detail=False)
     def extended_all(self, request, *args, **kwargs):
         complaints = Complaint.objects.all()
@@ -50,7 +50,7 @@ class ComplaintViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = ComplaintExtendedSerializer(complaints, many=True)
         return Response(serializer.data)
     
-
+    # Get extended complaint
     @action(methods=['GET'], detail=True)
     def extended(self, request, *args, **kwargs):
         complaint = self.get_object()
@@ -58,7 +58,7 @@ class ComplaintViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = ComplaintExtendedSerializer(complaint, many=False)
         return Response(serializer.data)
     
-
+    # Close complaint
     @action(methods=['GET'], detail=True)
     def close(self, request, *args, **kwargs):
         complaint = self.get_object()

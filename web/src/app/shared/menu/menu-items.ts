@@ -39,9 +39,23 @@ export const ROUTES_ADMIN: RouteInfo[] = [
   },
   {
     path: '/admin/units-management',
+    title: 'Billings Management',
+    type: 'sub',
+    iconType: 'fas fa-file-invoice',
+    collapse: 'billing',
+    isCollapsed: false,
+    isCollapsing: false,
+    children: [
+      { path: 'billings', title: 'Billings', type: 'link' },
+      { path: 'invoices', title: 'Invoices', type: 'link' },
+      { path: 'configurations', title: 'Configurations', type: 'link' }
+    ]
+  },
+  {
+    path: '/admin/units-management',
     title: 'Units Management',
     type: 'sub',
-    iconType: 'fas fa-server',
+    iconType: 'fas fa-building',
     collapse: 'management',
     isCollapsed: false,
     isCollapsing: false,
