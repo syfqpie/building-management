@@ -24,7 +24,6 @@ class ComplaintSerializer(serializers.ModelSerializer):
 class ComplaintExtendedSerializer(serializers.ModelSerializer):
 
     # unit = UnitExtendedSerializer(many=False, read_only=True)
-    
     class Meta:
         model = Complaint
         fields = '__all__'

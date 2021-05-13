@@ -11,16 +11,14 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from django_filters.rest_framework import DjangoFilterBackend
 from core.settings import DEBUG
 
-from .models import (
-    Billing,
-    MaintenanceBaseFee
-)
+from .models import Billing, MaintenanceBaseFee
 
 from .serializers import (
     BillingSerializer,
     BillingExtendedSerializer,
-    MaintenanceBaseFeeSerializer
+    MaintenanceBaseFeeSerializer,
 )
+
 
 class BillingViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Billing.objects.all()
@@ -37,40 +35,40 @@ class BillingViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         # else:
         #     permission_classes = [AllowAny]
 
-        return [permission() for permission in permission_classes]    
+        return [permission() for permission in permission_classes]
 
-    
     def get_queryset(self):
         queryset = Billing.objects.all()
         return queryset
-    
+
     # Get extended billing
-    @action(methods=['GET'], detail=True)
+    @action(methods=["GET"], detail=True)
     def extended(self, request, *args, **kwargs):
         billing = self.get_object()
-        
+
         serializer = BillingExtendedSerializer(billing, many=False)
         return Response(serializer.data)
-    
+
     # Get extended billings
-    @action(methods=['GET'], detail=False)
+    @action(methods=["GET"], detail=False)
     def extended_all(self, request, *args, **kwargs):
         billings = Billing.objects.all()
-        
+
         serializer = BillingExtendedSerializer(billings, many=True)
         return Response(serializer.data)
 
     # Verify payment
-    @action(methods=['GET'], detail=True)
+    @action(methods=["GET"], detail=True)
     def verify_payment(self, request, *args, **kwargs):
         billing = self.get_object()
         billing.is_paid = True
         billing.paid_at = datetime.now()
         # PDF generation
         billing.save()
-        
+
         serializer = BillingExtendedSerializer(Billing, many=False)
         return Response(serializer.data)
+
 
 class MaintenanceBaseFeeViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = MaintenanceBaseFee.objects.all()
@@ -87,9 +85,8 @@ class MaintenanceBaseFeeViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         # else:
         #     permission_classes = [AllowAny]
 
-        return [permission() for permission in permission_classes]    
+        return [permission() for permission in permission_classes]
 
-    
     def get_queryset(self):
         queryset = MaintenanceBaseFee.objects.all()
         return queryset

@@ -11,9 +11,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from django_filters.rest_framework import DjangoFilterBackend
 from core.settings import DEBUG
 
-from .models import (
-    Complaint
-)
+from .models import Complaint
 
 from .serializers import (
     ComplaintSerializer,
@@ -26,18 +24,17 @@ class ComplaintViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
 
     def get_permissions(self):
-        permission_classes = [AllowAny]
-        if self.action == 'list':
-            if DEBUG:
-                permission_classes = [AllowAny]
-            else:
-                permission_classes = [IsAuthenticated]
-        else:
+        if DEBUG:
             permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated]
+        # if self.action == 'list':
+        #     permission_classes = [IsAuthenticated]
+        # else:
+        #     permission_classes = [AllowAny]
 
         return [permission() for permission in permission_classes]    
 
-    
     def get_queryset(self):
         queryset = Complaint.objects.all()
         return queryset
