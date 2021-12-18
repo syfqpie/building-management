@@ -2,7 +2,7 @@
 **/.env.local
 **/.env.*.local
 
-# Django #
+## Django
 **/*.log
 **/*.pot
 **/*.pyc
@@ -36,15 +36,16 @@
 **/env.bak/ 
 **/venv.bak/ 
 
-##
-# compiled output
+## Angular
+# Compiled output
 */dist
 */tmp
 */out-tsc
+
 # Only exists if Bazel was run
 */bazel-out
 
-# dependencies
+# Dependencies
 */node_modules
 
 # IDE - VSCode
