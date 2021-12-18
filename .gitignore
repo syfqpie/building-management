@@ -1,0 +1,70 @@
+# local env files
+**/.env.local
+**/.env.*.local
+
+# Django #
+**/*.log
+**/*.pot
+**/*.pyc
+**/__pycache__
+**/db.sqlite3
+**/media
+
+# Misc
+**/misc
+
+# Backup files # 
+**/*.bak 
+
+# Installer logs 
+**/pip-log.txt 
+**/pip-delete-this-directory.txt 
+
+# pyenv 
+**/.python-version 
+
+# celery 
+**/celerybeat-schedule.* 
+
+# Environments 
+**/.env 
+**/.venv
+**/env
+**/env/ 
+**/venv/ 
+**/ENV/ 
+**/env.bak/ 
+**/venv.bak/ 
+
+##
+# compiled output
+*/dist
+*/tmp
+*/out-tsc
+# Only exists if Bazel was run
+*/bazel-out
+
+# dependencies
+*/node_modules
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+*/.sass-cache
+*/connect.lock
+*/coverage
+*/libpeerconnection.log
+*/npm-debug.log
+*/yarn-error.log
+*/testem.log
+*/typings
+
+# System Files
+.DS_Store
+Thumbs.db
