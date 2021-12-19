@@ -1,0 +1,17 @@
+<ngx-loading-bar color="#2c7a7b" height="4px"></ngx-loading-bar>
+<div>
+  <!-- <app-sidebar></app-sidebar> -->
+  <div class="h-screen bg-slate-50">
+    <app-user-navbar></app-user-navbar>
+    <div class="w-full min-h-full flex">
+      <div class="lg:flex lg:flex-col w-1/5 bg-white text-white p-8 items-start justify-between relative shadow-lg">
+        <app-user-sidebar></app-user-sidebar>
+      </div>
+      <div class="w-full lg:w-1/2 p-8 lg:p-24 flex flex-col items-center justify-center">
+
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+    <!-- <app-footer-admin></app-footer-admin> -->
+  </div>
+</div>

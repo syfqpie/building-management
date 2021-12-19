@@ -1,0 +1,90 @@
+<div class="w-full min-h-full flex">
+    <div class="hidden lg:flex lg:flex-col w-1/2 text-white p-8 items-start justify-between relative bg-login">
+
+    </div>
+    <div class="w-full lg:w-1/2 p-8 lg:p-24 flex flex-col items-center justify-center">
+        <div class="shadow-lg sm:rounded-md sm:overflow-hidden">
+            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                <div>
+                    <img class="mx-auto h-12 w-auto" [src]="logo" alt="Building Management">
+                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        Sign in to your account
+                    </h2>
+                </div>
+
+                <form class="mt-8 space-y-6" [formGroup]="loginForm">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">
+                            Email
+                        </label>
+                        <div class="mt-1">
+                            <input id="email" name="email" type="email"
+                                autocomplete="email"
+                                class="shadow-sm mt-1 flex-1 px-3 py-3 block w-full sm:text-sm border border-gray-300 rounded-md focus:outline focus:outline-2 focus:outline-teal-500"
+                                placeholder="you@example.com"
+                                formControlName="email" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">
+                            Password
+                        </label>
+                        <div class="mt-1">
+                            <input id="password" name="password" type="password"
+                                class="shadow-sm mt-1 flex-1 px-3 py-3 block w-full sm:text-sm border border-gray-300 rounded-md focus:outline focus:outline-2 focus:outline-teal-500"
+                                placeholder="you@example.com"
+                                formControlName="password"
+                                [ngClass]="{
+                                    'invalid:border-pink-500 invalid:text-pink-600': 
+                                    loginForm.controls.password.touched &&
+                                    loginForm.controls.password.errors,
+                                    'valid:border-teal-500 valid:text-teal-600':
+                                    loginForm.controls.password.touched &&
+                                    !loginForm.controls.password.errors
+                                }" />
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox"
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                [(ngModel)]="isRememberMe"
+                                [ngModelOptions]="{standalone: true}">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                                Remember me
+                            </label>
+                        </div>
+        
+                        <div class="text-sm">
+                            <a class="font-medium text-teal-600 hover:text-teal-500" [routerLink]="'/auth/reset'"
+                                [routerLinkActive]="['active']">
+                                Forgot your password?
+                            </a>
+                        </div>
+                    </div>
+        
+                    <div>
+                        <button type="submit" (click)="login()" [disabled]="!loginForm.valid"
+                            [ngClass]="!loginForm.valid 
+                                ? 'disabled:bg-gray-300 disabled:text-gray-500 disabled:border-gray-300 disabled:shadow-none'
+                                : 'text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500'"
+                            class="group relative w-full flex justify-center py-3 px-3 border border-transparent text-sm font-medium rounded-md">
+                            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                <!-- Heroicon name: solid/lock-closed -->
+                                <svg class="h-5 w-5 text-teal-500 group-hover:text-teal-400" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                            Sign in
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
