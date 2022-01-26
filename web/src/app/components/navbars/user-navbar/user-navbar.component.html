@@ -1,8 +1,10 @@
-<nav class="navbar navbar-expand-lg bg-dark border-bottom border-dark navbar-dark border-3 border-tx shadow-lg px-3">
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-dark navbar-dark border-3 shadow-lg px-3">
 	<div class="container-fluid">
 		<a class="navbar-brand"
-			target="_blank">
-			<i class="fas fa-angle-right text-white"></i>
+			(click)="toggleMenu()"
+			[title]="isMenuOpen ? 'Close menu' : 'Open menu'">
+			<i class="fas text-white"
+				[ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
 		</a>
 		<button 
 			class="navbar-toggler" 
