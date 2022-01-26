@@ -1,1 +1,30 @@
-<p>user-sidebar works!</p>
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark mt-0 h-100 shadow-lg position-fixed" style="width: 200px">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                [routerLink]="'/dashboard'"
+                [routerLinkActive]="['active']" >
+                <i class="fas fa-house-user fa-fw"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                [routerLink]="'/settings'"
+                [routerLinkActive]="['active']" >
+                <i class="fas fa-cogs fa-fw"></i>
+                Settings
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                [routerLink]="'/test'"
+                [routerLinkActive]="['active']" >
+                <i class="fas fa-flask fa-fw"></i>
+                Test
+            </a>
+        </li>
+    </ul>
+</div>

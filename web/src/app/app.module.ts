@@ -1,32 +1,30 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-// Angular
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-import { HttpTokenInterceptor } from './shared/interceptor/http.token.interceptor';
-
-// 3rd part
-import { LoadingBarModule } from '@ngx-loading-bar/core';
-import { ToastrModule } from 'ngx-toastr';
-
-// Components
+// Default
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthComponent } from './layouts/auth/auth.component';
-import { SystemComponent } from './layouts/system/system.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+// Layout
 import { UserNavbarComponent } from './components/navbars/user-navbar/user-navbar.component';
 import { UserSidebarComponent } from './components/sidebars/user-sidebar/user-sidebar.component';
+import { UserFooterComponent } from './components/footers/user-footer/user-footer.component';
+import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
+import { RouterModule } from '@angular/router';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AuthComponent,
-    SystemComponent,
     UserNavbarComponent,
-    UserSidebarComponent
+    UserSidebarComponent,
+    UserFooterComponent,
+    UserLayoutComponent,
+    PublicLayoutComponent
   ],
   imports: [
     AppRoutingModule,
@@ -36,20 +34,17 @@ import { UserSidebarComponent } from './components/sidebars/user-sidebar/user-si
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule,
-    // 3rd party
-    LoadingBarModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-top-right',
-      preventDuplicates: true,
-      resetTimeoutOnDuplicate: true,
-      timeOut: 5000
-    }),
+    // 3rd
+    LoadingBarModule
   ],
   providers: [
+    /*
     {
       provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true
     }
+    */
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

@@ -1,0 +1,39 @@
+<div>
+    <!-- Loading bar -->
+    <!-- <ngx-loading-bar 
+        [color]="barConfig.color" 
+        [includeSpinner]="barConfig.includeSpinner"
+        [height]="barConfig.height"
+        [ref]="barConfig.ref"
+    ></ngx-loading-bar> -->
+    <!-- <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner> -->
+    <div class="w-100" (window:resize)="isMobile()">
+        <!-- Top navbar -->
+        <app-user-navbar></app-user-navbar>
+        <!-- Sidebar -->
+        <app-user-sidebar
+            [ngClass]="{ 'sidenav fixed-left': isMobileResolution === false }">
+        </app-user-sidebar>
+
+        <div class="w-100" style="margin-left: 200px;">
+            asdasasdlkjaslkdjlaskdljasasdaslkdlksajdlkasjdlkaslkdjlkasjdklaskldaslkjdklasjdlkasjdlkaskldaslkjdlkasjdlkaslkdaslkdjlkasdlkasdlkaslkdlkasj
+        </div>
+        <!-- <div class="">
+            <div class="py-4">
+                <router-outlet></router-outlet>
+            </div>
+            <app-user-footer></app-user-footer>
+        </div> -->
+        <!-- <div class="row bg-them">
+            <div class="col-auto col-md-3 col-xl-2 p-0 m-0">
+                <app-user-sidebar></app-user-sidebar>
+            </div>
+            <div class="col col-md-9 col-xl-10 p-0 m-0">
+                <div class="py-4">
+                    <router-outlet></router-outlet>
+                </div>
+                <app-user-footer></app-user-footer>
+            </div>
+        </div> -->
+    </div>
+</div>

@@ -1,30 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthComponent } from './layouts/auth/auth.component';
-import { SystemComponent } from './layouts/system/system.component';
+import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 
 const routes: Routes = [
   // Default
-  { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
-  // Auth
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   {
-    path: '',
-    component: AuthComponent,
-    children: [
-      {
-        path: 'auth',
-        loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-      }
-    ]
+      path: '',
+      component: UserLayoutComponent,
+      children: [
+        {
+          path: '',
+          data: { roles: [1, 2, 3] },
+          loadChildren: () => import('./core/user/user.module').then(m => m.UserModule)}
+      ]
   },
-  // System
   {
-    path: '',
-    component: SystemComponent,
+    path: 'auth',
     children: [
       {
         path: '',
-        loadChildren: () => import('./core/user/user.module').then(m => m.UserModule)
+        loadChildren: () => import('./core/auth/auth.module').then(m => m.AuthModule)
       }
     ]
   }
