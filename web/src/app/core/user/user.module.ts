@@ -9,12 +9,16 @@ import { UserRoutes } from './user.routing';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TestComponent } from './test/test.component';
+import { UnitsComponent } from './units/units.component';
+import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     SettingsComponent,
-    TestComponent
+    TestComponent,
+    UnitsComponent,
+    UnitsConfigurationComponent
   ],
   imports: [
     CommonModule,

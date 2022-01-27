@@ -1,8 +1,8 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark mt-0 shadow-lg min-vh-100" style="width: 200px">
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark mt-0 shadow-lg min-vh-100" style="width: 16rem">
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
             <a class="nav-link cursor-pointer" 
-                [routerLink]="'/dashboard'"
+                routerLink="/dashboard"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-house-user fa-fw"></i>
                 Dashboard
@@ -11,7 +11,7 @@
 
         <li class="nav-item">
             <a class="nav-link cursor-pointer" 
-                [routerLink]="'/settings'"
+                routerLink="/settings"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-cogs fa-fw"></i>
                 Settings
@@ -20,11 +20,67 @@
 
         <li class="nav-item">
             <a class="nav-link cursor-pointer" 
-                [routerLink]="'/test'"
+                routerLink="/management/units"
+                [routerLinkActiveOptions]="{exact: true}"
+                [routerLinkActive]="['active']" >
+                <i class="fas fa-building fa-fw"></i>
+                Units Management
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                routerLink="/management/units/configuration"
+                [routerLinkActiveOptions]="{exact: true}"
+                [routerLinkActive]="['active']" >
+                <i class="fas fa-building fa-fw"></i>
+                Units Configuration
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                routerLink="/test"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-flask fa-fw"></i>
                 Test
             </a>
         </li>
+
+        <!-- <li class="nav-item">
+            <a href="#unitsSubmenu"
+                [routerLinkActiveOptions]="{exact:false}"
+                [routerLinkActive]="['active-sub']"
+                class="nav-link cursor-pointer"
+                data-bs-toggle="collapse">
+                <i class="fas fa-building fa-fw"></i>
+                Units Management
+                <i class="fas fa-angle-right fa-fw"></i>
+            </a>
+            <ul class="collapse nav flex-column ms-1" [routerLinkActive]="['show']" id="unitsSubmenu">
+                <li class="w-100">
+                    <a class="nav-link"
+                        [routerLink]="'/management/units'"
+                        [routerLinkActive]="['active']">
+                        <span class="d-none d-sm-inline">Units</span> 1 
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link cursor-pointer">
+                <i class="fas fa-cogs fa-fw"></i>
+                <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+            </a>
+            <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                <li class="w-100">
+                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
+                </li>
+            </ul>
+        </li> -->
     </ul>
 </div>
