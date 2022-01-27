@@ -11,6 +11,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { TestComponent } from './test/test.component';
 import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { UnitsConfigurationComponent } from './units-configuration/units-configu
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild(UserRoutes)
+    RouterModule.forChild(UserRoutes),
+    NgxDatatableModule
   ]
 })
 export class UserModule { }

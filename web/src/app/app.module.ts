@@ -15,7 +15,10 @@ import { UserFooterComponent } from './components/footers/user-footer/user-foote
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { RouterModule } from '@angular/router';
+
+// 3rd party
 import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,8 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
     ReactiveFormsModule,
     RouterModule,
     // 3rd
-    LoadingBarModule
+    LoadingBarModule,
+    NgxDatatableModule
   ],
   providers: [
     /*
