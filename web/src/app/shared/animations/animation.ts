@@ -11,9 +11,9 @@ import {
 export const slideLeftRightAnimation = trigger('slideLeftRight', [
   transition(':enter', [
     style({transform: 'translateX(-100%)'}),
-    animate('200ms ease-in', style({transform: 'translateY(0%)'}))
+    animate('0.3s ease-in', style({transform: 'translateY(0%)'}))
   ]),
   transition(':leave', [
-    animate('200ms ease-in', style({transform: 'translateX(-100%)'}))
+    animate('0.3s ease-in', style({transform: 'translateX(-100%)'}))
   ])
 ])

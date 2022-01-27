@@ -13,27 +13,44 @@
         (toggleMenuEvent)="receiveToggle()">
     </app-user-navbar>
 
-    <div class="container-fluid bg-theme">
+    <!-- Sidebar -->
+    <div class="border-end border-dark shadow-sm"
+        @slideLeftRight
+        *ngIf="isMenuOpen">
+        <app-user-sidebar class="flex-column"
+            [ngClass]="{
+                'position-fixed': isMobileResolution === false
+            }">
+        </app-user-sidebar>
+    </div>
+
+    <!-- Pages and footer -->
+    <div style="transition: 0.3s ease-in;"
+        [ngStyle]="isMenuOpen ? {'margin-left': '200px'} : {'margin-left': '0'}">
+        <div class="py-4">
+            <router-outlet></router-outlet>
+        </div>
+        <app-user-footer></app-user-footer>
+    </div>
+
+    <!-- <div class="container-fluid bg-theme">
         <div class="row flex-nowrap">
             <div class="col-auto px-0">
-                <!-- Sidebar -->
                 <div *ngIf="isMenuOpen"
                     @slideLeftRight
                     class="border-end border-dark shadow-sm">
                     <app-user-sidebar [ngClass]="{
-                            'sidenav fixed-left': isMobileResolution === false
+                            'fixed': isMobileResolution === false
                         }">
                     </app-user-sidebar>
                 </div>
             </div>
             <main class="col p-0 pt-2">
-                <!-- Pages -->
                 <div class="py-4">
                     <router-outlet></router-outlet>
                 </div>
-                <!-- Footer -->
                 <app-user-footer></app-user-footer>
             </main>
         </div>
-    </div>
+    </div> -->
 </div>
