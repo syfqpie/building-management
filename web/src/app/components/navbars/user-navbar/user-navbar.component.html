@@ -1,23 +1,44 @@
 <nav class="navbar navbar-expand-lg sticky-top bg-dark border-bottom border-dark navbar-dark border-3 shadow-lg px-3">
 	<div class="container-fluid">
-		<a class="navbar-brand"
+		<a class="navbar-brand cursor-pointer"
 			(click)="toggleMenu()"
 			[title]="isMenuOpen ? 'Close menu' : 'Open menu'">
 			<i class="fas text-white"
-				[ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+				[ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'">
+			</i>
 		</a>
-		<button 
-			class="navbar-toggler" 
-			type="button" 
-			data-bs-toggle="collapse" 
-			data-bs-target="#navbarSupportedContent"
-			aria-controls="navbarSupportedContent" 
-			aria-expanded="false" 
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
 
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<div id="navbarSupportedContent"
+			class="collapse navbar-collapse">
+			<div class="dropdown ms-auto me-0">
+				<a class="dropdown-toggle"
+					href="#" role="button"
+					id="profileDropdownLink"
+					data-bs-toggle="dropdown"
+					aria-expanded="false">
+					<img class="rounded-circle"
+						style="width: 2.5rem"
+						alt="..."
+						src="/assets/images/default/avatar.jpg" >
+				</a>
+			  
+				<ul aria-labelledby="profileDropdownLink"
+					class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+					<li>
+						<a class="dropdown-item cursor-pointer"
+							[routerLink]="'/settings'"
+							[routerLinkActive]="['active']">
+							Settings
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item cursor-pointer"
+							(click)="logout()">
+							Logout
+						</a>
+					</li>
+				</ul>
+			</div>
 			<!-- <div class="dropdown mb-2 mb-lg-0">
 				<button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="avatarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 					<span *ngIf="user; else noUser">

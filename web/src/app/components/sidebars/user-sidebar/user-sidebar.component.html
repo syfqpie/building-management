@@ -1,7 +1,8 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark mt-0 shadow-lg min-vh-100" style="width: 16rem">
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark mt-0 shadow-lg overflow-y-scroll vh-100"
+    style="width: 17rem;">
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
+            <a class="nav-link cursor-pointer nav-link-theme" 
                 routerLink="/dashboard"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-house-user fa-fw"></i>
@@ -10,7 +11,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
+            <a class="nav-link cursor-pointer nav-link-theme" 
                 routerLink="/settings"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-cogs fa-fw"></i>
@@ -18,7 +19,7 @@
             </a>
         </li>
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link cursor-pointer" 
                 routerLink="/management/units"
                 [routerLinkActiveOptions]="{exact: true}"
@@ -26,9 +27,9 @@
                 <i class="fas fa-building fa-fw"></i>
                 Units Management
             </a>
-        </li>
+        </li> -->
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link cursor-pointer" 
                 routerLink="/management/units/configuration"
                 [routerLinkActiveOptions]="{exact: true}"
@@ -36,10 +37,10 @@
                 <i class="fas fa-building fa-fw"></i>
                 Units Configuration
             </a>
-        </li>
+        </li> -->
 
         <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
+            <a class="nav-link cursor-pointer nav-link-theme" 
                 routerLink="/test"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-flask fa-fw"></i>
@@ -47,28 +48,46 @@
             </a>
         </li>
 
-        <!-- <li class="nav-item">
-            <a href="#unitsSubmenu"
-                [routerLinkActiveOptions]="{exact:false}"
-                [routerLinkActive]="['active-sub']"
-                class="nav-link cursor-pointer"
-                data-bs-toggle="collapse">
+        <li class="nav-item">
+            <a href="#submenuUnits"
+                routerLinkActive
+                #itemLink="routerLinkActive"
+                class="nav-link cursor-pointer nav-link-theme"
+                data-bs-toggle="collapse" >
                 <i class="fas fa-building fa-fw"></i>
                 Units Management
-                <i class="fas fa-angle-right fa-fw"></i>
+                <i class="fas"
+                    [ngClass]="(unitLink.isActive || unitConfigurationLink.isActive)
+                    ? 'fa-angle-down'
+                    : 'fa-angle-right'">
+                </i>
             </a>
-            <ul class="collapse nav flex-column ms-1" [routerLinkActive]="['show']" id="unitsSubmenu">
+            <ul  style="transition: all 0.05s ease-in 0.05s; margin-left: 2rem;" id="submenuUnits"
+                class="collapse nav flex-column"
+                [routerLinkActive]="['show']" >
                 <li class="w-100">
-                    <a class="nav-link"
-                        [routerLink]="'/management/units'"
-                        [routerLinkActive]="['active']">
-                        <span class="d-none d-sm-inline">Units</span> 1 
+                    <a #unitLink="routerLinkActive"
+                        class="nav-link nav-link-theme"
+                        [routerLink]="['/management', 'units']"
+                        [routerLinkActive]="['active']"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <span class="d-none d-sm-inline">Units</span> 
+                    </a>
+                </li>
+
+                <li class="w-100">
+                    <a #unitConfigurationLink="routerLinkActive"
+                        class="nav-link nav-link-theme"
+                        [routerLink]="['/management', 'units', 'configuration']"
+                        [routerLinkActive]="['active']"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <span class="d-none d-sm-inline">Configuration</span> 
                     </a>
                 </li>
             </ul>
         </li>
 
-        <li>
+        <!-- <li>
             <a href="#submenu1" data-bs-toggle="collapse" class="nav-link cursor-pointer">
                 <i class="fas fa-cogs fa-fw"></i>
                 <span class="ms-1 d-none d-sm-inline">Dashboard</span>

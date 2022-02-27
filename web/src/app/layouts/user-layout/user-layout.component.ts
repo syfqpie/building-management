@@ -27,26 +27,28 @@ export class UserLayoutComponent implements OnInit {
     private loadingBar: LoadingBarService
   ) {
     if (window.innerWidth < 1200) {
-      this.isMobileResolution = true;
+      this.isMobileResolution = true
     } else {
-      this.isMobileResolution = false;
+      this.isMobileResolution = false
     }
   }
 
   ngOnInit(): void {
     this.isMenuOpen = true
+    console.log(this.isMenuOpen, this.isMobileResolution)
   }
 
   @HostListener('window:resize', ['$event'])
   isMobile() {
     if (window.innerWidth < 1200) {
-      this.isMobileResolution = true;
+      this.isMobileResolution = true
     } else {
-      this.isMobileResolution = false;
+      this.isMobileResolution = false
     }
   }
 
   receiveToggle() {
+    console.log('Toggle clicked')
     return this.isMenuOpen = !this.isMenuOpen
   }
 

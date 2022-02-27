@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,8 +6,21 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
 
-  constructor() { }
+  // Data
 
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  login() {}
+
+  logout() {}
+
+  requestReset() {}
+
+  confirmReset() {}
+
+  changePassword() {}
   // login(body: any): Observable<LoginResponse> {
   //   const urlTemp = `${ environment.baseUrl }auth/login/`
   //   return this.http.post<LoginResponse>(urlTemp, body).pipe(

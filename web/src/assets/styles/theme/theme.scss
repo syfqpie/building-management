@@ -1,10 +1,45 @@
 // Theme body
+.mobile-sidebar {
+    padding-top: 3.67rem;
+    z-index: 1019 !important;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
 
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
+
+.nav-link-theme {
+    color: #6c757d !important;
+}
+
+.nav-link-theme:hover {
+    color: #bdbdbd !important;
+}
+
+.nav-pills .nav-link-theme.active {
+    color: #fff !important;
+    background-color: #3c4146 !important;
+}
+
 .bg-theme {
     background: #edf1f7 !important;
+}
+
+a {
+    color: #6c757d !important;
+}
+a:hover {
+    color: #bdbdbd !important;
+}
+
+.dropdown-menu-dark .dropdown-item.active,
+.dropdown-menu-dark .dropdown-item:active {
+    color: #fff !important;
+    background-color: #3c4146 !important;
 }
 
 // Margin
@@ -52,6 +87,10 @@
 
 .min-w-300px {
     min-width: 300px;
+}
+
+.min-vh-full {
+    min-height: calc(100vh - 7.3rem);
 }
 
 .h-50px {

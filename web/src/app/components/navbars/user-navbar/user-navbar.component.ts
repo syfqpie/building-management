@@ -20,4 +20,8 @@ export class UserNavbarComponent implements OnInit {
     return this.toggleMenuEvent.emit()
   }
 
+  logout() {
+    return console.log('Logout user')
+  }
+
 }

@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
 
+  // Data
+  currentTab: string // details | password
+
   constructor() { }
 
   ngOnInit(): void {
+    this.currentTab = 'details'
   }
 
 }
