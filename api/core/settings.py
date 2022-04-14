@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vwax7%u@i1am7g^ro$3+po39nt8^x^82%-mv4*5erxptjsx!%t'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost'
+]
 
 
 # Application definition
@@ -37,16 +43,31 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'corsheaders',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'django_filters',
+    'rest_framework',
+    'rest_framework.authtoken',
+
+    'users'
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -73,11 +94,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+DEFAULT_DB = {
+    'ENGINE': 'django.db.backends.sqlite3', #'django_multitenant.backends.postgresql',#'django.contrib.gis.db.backends.postgis',
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'DISABLE_SERVER_SIDE_CURSORS': True
+}
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': DEFAULT_DB
 }
 
 
@@ -116,8 +140,139 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# Misc
+AUTH_USER_MODEL = 'users.CustomUser'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
+
+DEFAULT_FROM_EMAIL = ''
+EMAIL_SUBJECT_PREFIX = ''
+EMAIL_USE_LOCALTIME = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_USE_TLS = True
+
+# Django Rest Framework
+# https://www.django-rest-framework.org/
+
+SITE_ID = 1
+
+DEFAULT_RENDERER_CLASSES = (
+    # 'rest_framework.renderers.JSONRenderer',
+    'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+)
+
+DEFAULT_PERMISSION_CLASSES = [
+   'rest_framework.permissions.IsAuthenticated',
+]
+
+# if DEBUG:
+#     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+#         'rest_framework.renderers.BrowsableAPIRenderer',
+#     )
+#     DEFAULT_PERMISSION_CLASSES = [
+#         'rest_framework.permissions.AllowAny',
+#     ]
+
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+    'DEFAULT_PERMISSION_CLASSES': DEFAULT_PERMISSION_CLASSES,
+    'DEFAULT_PARSER_CLASSES': (
+        # If you use MultiPartFormParser or FormParser, we also have a camel case version
+        'djangorestframework_camel_case.parser.CamelCaseFormParser',
+        'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        # Any other parsers
+    ),
+}
+
+
+# Dj Rest Auth
+# https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
+
+REST_USE_JWT = True
+REST_AUTH_SERIALIZERS = {
+    'JWT_TOKEN_CLAIMS_SERIALIZER': 'users.auth.MyTokenObtainPairSerializer'
+}
+# JWT_AUTH_COOKIE = 'jwt-auth'
+
+# CORS headers
+# https://github.com/adamchainz/django-cors-headers
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1',
+    'http://localhost'
+]
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://127.0.0.1',
+    'http://localhost'
+]
+CORS_EXPOSE_HEADERS = ['Content-Disposition']
+
+# Simple JWT
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': config('SECRET_KEY'),
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+# drf-yasg (Swagger generator)
+# https://drf-yasg.readthedocs.io/en/stable/readme.html
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'in': 'header',
+            'name': 'Authorization',
+            'type': 'apiKey',
+        }
+
+    }
+}
