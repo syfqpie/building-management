@@ -1,17 +1,55 @@
 <div class="container-fluid">
-    <ul class="nav nav-tabs shadow mb-2">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page">Active</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link">Link</a>
-        </li>
-    </ul>
+	<div class="row">
+		<div class="col-sm-12 col-md-2">
+			<div class="card shadow">
+				<ul class="nav flex-column">
+					<li class="nav-item">
+						<a class="nav-link active"
+							id="home-tab"
+							data-bs-toggle="tab"
+							data-bs-target="#home"
+							type="button"
+							role="tab"
+							aria-controls="home"
+							aria-selected="true">
+							Account
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link"
+							id="profile-tab"
+							data-bs-toggle="tab"
+							data-bs-target="#profile"
+							type="button"
+							role="tab"
+							aria-controls="profile"
+							aria-selected="false">
+							Password
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-    <div class="card shadow">
-        <div class="card-body min-h-300px"></div>
-    </div>
+		<div class="col-sm-12 col-md-10">
+			<div class="card shadow">
+				<div class="card-body">
+					<div class="tab-content" id="myTabContent">
+						<div class="tab-pane fade show active"
+							id="home"
+							role="tabpanel"
+							aria-labelledby="home-tab">
+							Account tab
+						</div>
+						<div class="tab-pane fade"
+							id="profile"
+							role="tabpanel"
+							aria-labelledby="profile-tab">
+							Password tab
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
