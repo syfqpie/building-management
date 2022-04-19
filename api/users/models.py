@@ -27,4 +27,4 @@ class CustomUser(AbstractUser):
         ordering = ['full_name']
 
     def __str__(self):
-        return ('%s'%(self.name))
+        return ('%s'%(self.full_name))

@@ -8,10 +8,12 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 
 from .serializers import (
-    CustomResendVerificationSerializer
+    CustomResendVerificationSerializer,
+    CustomSetPasswordSerializer,
+    CustomVerifyEmailRenterSerializer,
 )
 from rest_framework.decorators import action, api_view
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -21,6 +23,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
+from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.utils.decorators import method_decorator
@@ -38,15 +41,12 @@ from dj_rest_auth.views import (
 )
 
 from dj_rest_auth.registration.views import (
-    RegisterView,
     VerifyEmailView
 )
 
 from django.contrib.auth.forms import (
     PasswordResetForm
 )
-
-from django.contrib.auth import get_user_model
 
 from core.helpers import (
     DjangoFilterDescriptionInspector,
@@ -349,3 +349,81 @@ class MyResendVerificationView(GenericAPIView):
                 return Response({'detail': _('This email address is verified')}, status=status.HTTP_400_BAD_REQUEST)
         except EmailAddress.DoesNotExist:
             return Response({'detail': _('E-mail is not registered')}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @method_decorator(
+#     name='post', 
+#     decorator=swagger_auto_schema(
+#         operation_id='Verify registration email for renter',
+#         filter_inspectors=[DjangoFilterDescriptionInspector],
+#         tags=['Authentication']
+#     )
+# )
+class MyVerifyRenterEmailView(VerifyEmailView):
+    """
+    Verify a new registered account
+    
+    Verify a new registered account in the system
+
+    Accepts the following POST parameters: key,
+        newPassword1, newPassword2
+    
+    Returns status detail.
+    """
+    parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
+    
+    @swagger_auto_schema(
+        request_body=CustomVerifyEmailRenterSerializer,
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Return detail',
+                examples={
+                    "application/json": {
+                        'detail': 'string'
+                    }
+                }
+            )
+        },
+        tags=['Authentication'])
+    def post(self, request, *args, **kwargs):
+        serializers = CustomVerifyEmailRenterSerializer(data=request.data)
+        serializers.is_valid(raise_exception=True)
+
+        verify_email_serializer = VerifyEmailSerializer(data={'key': request.data['key']})        
+        verify_email_serializer.is_valid(raise_exception=True)
+        self.kwargs['key'] = verify_email_serializer.validated_data['key']
+        confirmation = self.get_object()
+
+        if confirmation.email_address.verified:
+            return Response({'detail': _('This email address is verified')}, status=status.HTTP_400_BAD_REQUEST)
+        
+        User = get_user_model()
+        user = User.objects.get(email=confirmation.email_address.email)
+        user.activated_at = datetime.now(timezone.utc)
+
+        set_password_serializer = CustomSetPasswordSerializer(
+            data={
+                'new_password1': request.data['new_password1'],
+                'new_password2': request.data['new_password2']
+            },
+            context={
+                'request': {
+                    'user': user
+                }
+            }
+        )
+        set_password_serializer.is_valid(raise_exception=True)
+
+        confirmation.confirm(self.request)
+        user.save()
+        set_password_serializer.save()
+
+        return Response({'detail': _('ok')}, status=status.HTTP_200_OK)
+
+
+class IsSuperAdmin(IsAdminUser):
+    """
+    Allows access only to admin users.
+    """
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.user_type == UserType.ADMIN)

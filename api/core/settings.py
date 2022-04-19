@@ -33,7 +33,6 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,14 +51,16 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'django_filters',
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
 
+    'renters',
     'users'
 ]
 
 MIDDLEWARE = [
-     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,7 +76,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -153,9 +156,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Misc
 AUTH_USER_MODEL = 'users.CustomUser'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
+
+
 
 DEFAULT_FROM_EMAIL = ''
 EMAIL_SUBJECT_PREFIX = ''
@@ -173,10 +175,11 @@ EMAIL_USE_TLS = True
 
 SITE_ID = 1
 
-DEFAULT_RENDERER_CLASSES = (
+DEFAULT_RENDERER_CLASSES = [
     # 'rest_framework.renderers.JSONRenderer',
+    # 'rest_framework.renderers.BrowsableAPIRenderer',
     'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-)
+]
 
 DEFAULT_PERMISSION_CLASSES = [
    'rest_framework.permissions.IsAuthenticated',
@@ -192,11 +195,13 @@ DEFAULT_PERMISSION_CLASSES = [
 
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
-    'DEFAULT_PERMISSION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
-    'DEFAULT_PERMISSION_CLASSES': DEFAULT_PERMISSION_CLASSES,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_PARSER_CLASSES': (
         # If you use MultiPartFormParser or FormParser, we also have a camel case version
         'djangorestframework_camel_case.parser.CamelCaseFormParser',
@@ -206,15 +211,27 @@ REST_FRAMEWORK = {
     ),
 }
 
+# Allauth
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    # 'allauth.account.auth_backends.AuthenticationBackend',
+]
+ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 # Dj Rest Auth
 # https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
 
-REST_USE_JWT = True
 REST_AUTH_SERIALIZERS = {
     'JWT_TOKEN_CLAIMS_SERIALIZER': 'users.auth.MyTokenObtainPairSerializer'
 }
-# JWT_AUTH_COOKIE = 'jwt-auth'
+REST_USE_JWT = True
 
 # CORS headers
 # https://github.com/adamchainz/django-cors-headers
