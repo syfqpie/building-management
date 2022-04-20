@@ -45,7 +45,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]    
 
     def get_queryset(self):
-        queryset = Block.objects.all()
+        queryset = self.queryset
         return queryset
     
     def perform_create(self, serializer):
@@ -109,7 +109,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]    
     
     def get_queryset(self):
-        queryset = Floor.objects.all()
+        queryset = self.queryset
         return queryset
 
     def perform_create(self, serializer):
@@ -173,7 +173,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]    
 
     def get_queryset(self):
-        queryset = UnitNumber.objects.all()
+        queryset = self.queryset
         return queryset
 
     def perform_create(self, serializer):
@@ -238,7 +238,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     
     def get_queryset(self):
-        queryset = Unit.objects.all()
+        queryset = self.queryset
         return queryset    
     
 
@@ -342,9 +342,9 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
     
     # Get ownership count
-    @action(methods=['GET'], detail=False)
+    @action(methods=['GET'], detail=False, url_path='ownership-count')
     def ownership_count(self, request, *args, **kwargs):
-        units = Unit.objects.all()
+        units = self.get_queryset()
 
         data_ = {
             'labels': [

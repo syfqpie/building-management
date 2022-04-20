@@ -100,7 +100,6 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
     
-
     def get_serializer_class(self):
         user = self.request.user
 
@@ -108,7 +107,6 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return self.serializer_class_public.get(self.action, self.serializer_class)
         
         return super(RenterViewSet, self).get_serializer_class()
-
 
     def get_queryset(self):
         user = self.request.user
@@ -120,16 +118,13 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return queryset
 
-
     def perform_create(self, serializer):
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
-
     def perform_update(self, serializer):
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
-
 
     # Activate renter
     @action(methods=['GET'], detail=True)
