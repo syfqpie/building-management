@@ -1,4 +1,5 @@
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -12,8 +13,6 @@ from drf_yasg.utils import swagger_auto_schema
 from django.utils.decorators import method_decorator
 
 from django_filters.rest_framework import DjangoFilterBackend
-
-from core.settings import DEBUG
 
 from core.helpers import (
     DjangoFilterDescriptionInspector,
@@ -83,7 +82,6 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     ]
 
     def get_permissions(self):
-        print('hello')
         permission_classes = [IsAuthenticated]
 
         if self.action == 'activate':
@@ -92,11 +90,10 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             permission_classes.append(IsSuperAdmin)
 
         return [permission() for permission in permission_classes]    
-
     
-    # def get_queryset(self):
-    #     queryset = self.queryset
-    #     return queryset
+    def get_queryset(self):
+        queryset = self.queryset
+        return queryset
     
     def perform_update(self, serializer):
         serializer.save(last_modified_at=datetime.datetime.utcnow())
@@ -109,11 +106,20 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         tags=['Users'])
     def activate(self, request, *args, **kwargs):
         user = self.get_object()
+
+        if user.is_active is True:
+            raise PermissionDenied(detail='User is already activated')
+        
         user.is_active = True
         user.save()
 
         serializer = CustomUserSerializer(user, many=False)
-        return Response(serializer.data)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            { 'detail': 'User activated' },
+            status=status.HTTP_200_OK,
+            headers=headers
+        )
 
     # Deactivate account
     @action(methods=['GET'], detail=True)
@@ -123,10 +129,19 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         tags=['Users'])
     def deactivate(self, request, *args, **kwargs):
         user = self.get_object()
+
+        if user.is_active is False:
+            raise PermissionDenied(detail='User is already deactivated')
+        
         user.is_active = False
         user.save()
-        
+
         serializer = CustomUserSerializer(user, many=False)
-        return Response(serializer.data)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            { 'detail': 'Block deactivated' },
+            status=status.HTTP_200_OK,
+            headers=headers
+        )
 
     

@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class UserType(models.IntegerChoices):
     ADMIN = 1, 'Admin'
     PUBLIC = 2, 'Public'
+
 
 class CustomUser(AbstractUser):
     
