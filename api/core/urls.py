@@ -48,6 +48,14 @@ class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
 
 router = NestedDefaultRouter()
 
+# Medias
+from medias.views import (
+    MediaViewSet
+)
+medias_router = router.register(
+    r'medias', MediaViewSet
+)
+
 # Renters
 from renters.views import (
     RenterViewSet,
