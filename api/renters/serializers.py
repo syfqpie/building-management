@@ -8,11 +8,25 @@ from rest_framework import serializers
 
 from .models import Renter, TitleType
 
+
 class RenterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Renter
         fields = '__all__'
+        read_only_fields = ('email', 'id')
+
+
+class RenterPublicSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Renter
+        exclude = [
+            'moved_out_at',
+            'deactivated_at',
+            'created_by',
+            'is_active',
+        ]
         read_only_fields = ('email', 'id')
 
 

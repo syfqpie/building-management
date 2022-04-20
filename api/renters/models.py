@@ -68,7 +68,7 @@ class Renter(models.Model):
             
         super(Renter, self).save(*args, **kwargs)
     
-    class meta:
+    class Meta:
         ordering = ['-renter_no']
     
     def __str__(self):

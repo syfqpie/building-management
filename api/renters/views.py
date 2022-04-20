@@ -31,8 +31,9 @@ from .models import (
 )
 
 from .serializers import (
-    RenterCustomRegisterSerializer,
-    RenterSerializer
+    RenterSerializer,
+    RenterPublicSerializer,
+    RenterCustomRegisterSerializer
 )
 
 @method_decorator(
@@ -79,6 +80,9 @@ from .serializers import (
 class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Renter.objects.all()
     serializer_class = RenterSerializer
+    serializer_class_public = {
+        'list': RenterPublicSerializer
+    }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = [
         'gender',
@@ -86,9 +90,6 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     ]
 
     def get_permissions(self):
-        # if DEBUG:
-        #     permission_classes = [AllowAny]
-        # else:
         permission_classes = [IsAuthenticated]
 
         if self.action == 'activate':
@@ -96,14 +97,23 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         elif self.action == 'deactivate':
             permission_classes.append(IsSuperAdmin)
 
-        return [permission() for permission in permission_classes]    
-
+        return [permission() for permission in permission_classes]
     
+
+    def get_serializer_class(self):
+        user = self.request.user
+
+        if user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
+            return self.serializer_class_public.get(self.action, self.serializer_class)
+        
+        return super(RenterViewSet, self).get_serializer_class()
+
+
     def get_queryset(self):
         user = self.request.user
 
         if user.user_type == UserType.PUBLIC:
-            queryset = self.queryset.filter(id=user.id)
+            queryset = self.queryset.filter(renter_user=user)
         else:
             queryset = self.queryset
 
