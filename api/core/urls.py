@@ -57,6 +57,26 @@ renters_router = router.register(
     r'renters', RenterViewSet
 )
 
+# Units
+from units.views import (
+    UnitViewSet,
+    BlockViewSet,
+    FloorViewSet,
+    UnitNumberViewSet
+)
+units_router = router.register(
+    r'units', UnitViewSet
+)
+blocks_router = router.register(
+    r'blocks', BlockViewSet
+)
+floors_router = router.register(
+    r'floors', FloorViewSet
+)
+unit_numbers_router = router.register(
+    r'unit-numbers', UnitNumberViewSet
+)
+
 # Users
 from users.views import (
     CustomUserViewSet

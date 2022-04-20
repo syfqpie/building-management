@@ -41,7 +41,7 @@ class Renter(models.Model):
         related_name='user_of'
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    last_modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
         CustomUser, 
         on_delete=models.SET_NULL,
