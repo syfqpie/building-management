@@ -8,6 +8,7 @@ from core.helpers import PathAndRename
 from renters.models import Renter
 from users.models import CustomUser, UserType
 
+
 class Block(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
@@ -37,6 +38,7 @@ class Block(models.Model):
     
     def __str__(self):
         return ('%s'%(self.block))
+
 
 class Floor(models.Model):
 
@@ -68,6 +70,7 @@ class Floor(models.Model):
     def __str__(self):
         return ('%s'%(self.floor))
 
+
 class UnitNumber(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
@@ -97,6 +100,7 @@ class UnitNumber(models.Model):
     
     def __str__(self):
         return ('%s'%(str(self.unit_number)))
+
 
 class Unit(models.Model):
 

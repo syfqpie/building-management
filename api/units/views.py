@@ -94,6 +94,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
+
 class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
@@ -156,6 +157,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
             headers=headers
         )
+
 
 class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = UnitNumber.objects.all()
