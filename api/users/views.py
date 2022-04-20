@@ -95,9 +95,6 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         queryset = self.queryset
         return queryset
     
-    def perform_update(self, serializer):
-        serializer.save(last_modified_at=datetime.datetime.utcnow())
-    
     # Activate account
     @action(methods=['GET'], detail=True)
     @swagger_auto_schema(
