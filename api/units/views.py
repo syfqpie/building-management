@@ -266,7 +266,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
 
     # Enable maintenance
-    @action(methods=['GET'], detail=True)
+    @action(methods=['GET'], detail=True, url_path='enable-maintenance')
     def enable_maintenance(self, request, *args, **kwargs):
         unit = self.get_object()
         
@@ -285,7 +285,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
 
     # Disable maintenance
-    @action(methods=['GET'], detail=True)
+    @action(methods=['GET'], detail=True, url_path='disable-maintenance')
     def disable_maintenance(self, request, *args, **kwargs):
         unit = self.get_object()
 

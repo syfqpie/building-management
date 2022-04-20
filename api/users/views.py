@@ -88,6 +88,8 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             permission_classes.append(IsSuperAdmin)
         elif self.action == 'deactivate':
             permission_classes.append(IsSuperAdmin)
+        elif self.action == 'destroy':
+            permission_classes.append(IsSuperAdmin)
 
         return [permission() for permission in permission_classes]    
     
