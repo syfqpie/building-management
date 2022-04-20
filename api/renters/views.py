@@ -36,6 +36,7 @@ from .serializers import (
     RenterCustomRegisterSerializer
 )
 
+
 @method_decorator(
     name='list', 
     decorator=swagger_auto_schema(

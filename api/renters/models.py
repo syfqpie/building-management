@@ -4,14 +4,17 @@ from users.models import CustomUser, UserType
 
 from core.helpers import PathAndRename
 
+
 class TitleType(models.IntegerChoices):
     MR = 1, 'Mr.'
     MRS = 2, 'Mrs.'
     MS = 3, 'Ms.'
 
+
 class GenderType(models.IntegerChoices):
     FEMALE = 1, 'Female'
     MALE = 2, 'Male'
+
 
 class Renter(models.Model):
 
