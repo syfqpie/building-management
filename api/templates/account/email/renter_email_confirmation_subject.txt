@@ -1,0 +1,4 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}Congratulations! Your account has been created{% endblocktrans %}
+{% endautoescape %}

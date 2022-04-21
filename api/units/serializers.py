@@ -1,9 +1,3 @@
-from datetime import datetime
-from calendar import timegm
-import json
-
-from django.contrib.auth.forms import PasswordResetForm
-from django.conf import settings
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 from django.utils.timezone import now
@@ -15,9 +9,8 @@ from .models import (
     Unit
 )
 
-from proprietors.serializers import ProprietorSerializer
-from complaints.serializers import ComplaintSerializer
-# from billings.serializers import BillingSerializer
+from renters.serializers import RenterSerializer
+
 
 class BlockSerializer(serializers.ModelSerializer):
 
@@ -52,9 +45,7 @@ class UnitExtendedSerializer(serializers.ModelSerializer):
     block = BlockSerializer(many=False, read_only=True)
     floor = FloorSerializer(many=False, read_only=True)
     unit_number = UnitNumberSerializer(many=False, read_only=True)
-    proprietor = ProprietorSerializer(many=False, read_only=True)
-    unit_complaints = ComplaintSerializer(many=True, read_only=True)
-    # unit_billings = BillingSerializer(many=True, read_only=True)
+    renter = RenterSerializer(many=False, read_only=True)
     
     class Meta:
         model = Unit

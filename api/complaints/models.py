@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import uuid
 import pytz
 import datetime
 
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
-
-from simple_history.models import HistoricalRecords
-
-from core.helpers import PathAndRename
 
 from units.models import Unit
+from users.models import CustomUser, UserType
+
+
+class ComplaintStatus(models.IntegerChoices):
+    OPENED = 1, 'Opened'
+    CLOSED = 2, 'Closed'
+
 
 class Complaint(models.Model):
 
@@ -26,16 +27,25 @@ class Complaint(models.Model):
         related_name='unit_complaints'
     )
 
-    STATUS = [
-        ('OP', 'OPEN'),
-        ('CL', 'CLOSED')
-    ]
-    status = models.CharField(choices=STATUS, max_length=2, default='OP')
+    status = models.IntegerField(choices=ComplaintStatus.choices, default=ComplaintStatus.OPENED)
     complaint = models.TextField()
 
     closed_at = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    last_modified_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='complaints_created'
+    )
+    last_modified_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'user_type': UserType.ADMIN},
+        related_name='complaints_modified'
+    )
 
     def save(self,*args, **kwargs):
         timezone_ = pytz.timezone('Asia/Kuala_Lumpur')
@@ -50,7 +60,7 @@ class Complaint(models.Model):
             
         super(Complaint, self).save(*args, **kwargs)
     
-    class meta:
+    class Meta:
         ordering = ['complaint_no']
     
     def __str__(self):

@@ -14,6 +14,7 @@
 **/misc
 
 # Backup files # 
+api_old
 **/*.bak 
 
 # Installer logs 
