@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'building-management';
+   public barConfig = {
+    color: '#000',
+    includeSpinner: false,
+    height: '5px',
+    ref: 'http'
+  }
 }

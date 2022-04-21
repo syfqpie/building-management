@@ -19,6 +19,7 @@ import { RouterModule } from '@angular/router';
 // 3rd party
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     RouterModule,
     // 3rd
     LoadingBarModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     /*

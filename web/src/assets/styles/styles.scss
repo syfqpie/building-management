@@ -2,6 +2,7 @@
 
 // Theme
 @import './theme/theme.scss';
+@import './theme/toastr.scss';
 
 // Icons
 @import '~@fortawesome/fontawesome-free/css/fontawesome.css';
@@ -18,3 +19,7 @@
 @import '~@swimlane/ngx-datatable/index.css';
 @import '~@swimlane/ngx-datatable/themes/bootstrap.scss';
 @import '~@swimlane/ngx-datatable/assets/icons.css';
+
+// Toastr
+// @import '~ngx-toastr/toastr.css';
+// @import '~ngx-toastr/toastr-bs4-alert.scss';
