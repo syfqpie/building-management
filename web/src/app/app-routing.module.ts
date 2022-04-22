@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+import { AuthGuard } from './shared/handlers/guards/auth.guard';
 
 const routes: Routes = [
   // Default
@@ -11,6 +12,7 @@ const routes: Routes = [
       children: [
         {
           path: '',
+          canActivate: [AuthGuard],
           data: { roles: [1, 2, 3] },
           loadChildren: () => import('./core/user/user.module').then(m => m.UserModule)}
       ]

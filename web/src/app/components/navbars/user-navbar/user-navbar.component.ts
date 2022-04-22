@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-user-navbar',
@@ -11,7 +12,9 @@ export class UserNavbarComponent implements OnInit {
   @Input()isMenuOpen: boolean
   @Output() toggleMenuEvent = new EventEmitter<string>()
 
-  constructor() { }
+  constructor(
+    private authSvc: AuthService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -21,7 +24,7 @@ export class UserNavbarComponent implements OnInit {
   }
 
   logout() {
-    return console.log('Logout user')
+    return this.authSvc.logout()
   }
 
 }

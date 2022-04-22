@@ -1,6 +1,11 @@
-import { Component, HostListener, OnInit, } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { Subscription } from 'rxjs';
 import { slideLeftRightAnimation } from 'src/app/shared/animations/animation';
+import { JwtService } from 'src/app/shared/handlers/jwt/jwt.service';
+import { User } from 'src/app/shared/services/users/users.model';
+import { UsersService } from 'src/app/shared/services/users/users.service';
 
 @Component({
   selector: 'app-user-layout',
@@ -9,7 +14,10 @@ import { slideLeftRightAnimation } from 'src/app/shared/animations/animation';
   ],
   animations: [slideLeftRightAnimation]
 })
-export class UserLayoutComponent implements OnInit {
+export class UserLayoutComponent implements OnInit, OnDestroy {
+
+  // Data
+  currentUser: User
 
   // Checker
   isMobileResolution: boolean
@@ -23,8 +31,13 @@ export class UserLayoutComponent implements OnInit {
     ref: 'http'
   }
 
+  // Subscriber
+  subscription: Subscription
+
   constructor(
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private userSvc: UsersService,
+    private jwtSvc: JwtService
   ) {
     if (window.innerWidth < 1200) {
       this.isMobileResolution = true
@@ -35,7 +48,17 @@ export class UserLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.isMenuOpen = true
-    console.log(this.isMenuOpen, this.isMobileResolution)
+
+    this.currentUser = this.userSvc.currentUser
+    if (!this.currentUser) {
+      this.getData()
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe()
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -48,8 +71,27 @@ export class UserLayoutComponent implements OnInit {
   }
 
   receiveToggle() {
-    console.log('Toggle clicked')
     return this.isMenuOpen = !this.isMenuOpen
+  }
+
+  getData() {
+    // Get token
+    const token = this.jwtSvc.getToken('accessToken')
+    const helper = new JwtHelperService()
+    const decodedToken = helper.decodeToken(token)
+
+    this.loadingBar.useRef('http').start()
+    this.subscription = this.userSvc.get(decodedToken.user_id).subscribe(
+      () => {
+        this.loadingBar.useRef('http').complete()
+      },
+      (err) => {
+        this.loadingBar.useRef('http').stop()
+      },
+      () => {
+        this.currentUser = this.userSvc.currentUser
+      }
+    )
   }
 
 }

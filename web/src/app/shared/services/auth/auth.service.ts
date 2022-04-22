@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -15,13 +16,14 @@ export class AuthService {
 
   // Data
   loginRes: LoginResponse
-  user: LoginUser
+  user: LoginUser | null
   accessToken: string
   refreshToken: string
 
   constructor(
     private http: HttpClient,
     private jwtSvc: JwtService,
+    private router: Router
   ) { }
 
   login(body: any): Observable<LoginResponse> {
@@ -40,7 +42,15 @@ export class AuthService {
     )
   }
 
-  logout() {}
+  logout() {
+    this.jwtSvc.destroyToken()
+    this.user = null
+    this.router.navigate(
+      ['/auth/login'],
+      { queryParams: { returnUrl: this.router.url }}
+    )
+    return window.location.reload()
+  }
 
   requestReset() {}
 
