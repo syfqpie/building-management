@@ -2,15 +2,15 @@ export class LoginResponse {
     constructor(
         public accessToken: string,
         public refreshToken: string,
-        public user: User
+        public user: LoginUser
     ) {}
 }
 
-export class User {
+export class LoginUser {
     constructor(
         public firstName: string,
         public lastName: string,
-        public pk: string,
+        public pk: number,
         public username: string,
         public email: string
     ) {}
