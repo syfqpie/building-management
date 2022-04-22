@@ -20,6 +20,7 @@ import { RouterModule } from '@angular/router';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ToastrModule } from 'ngx-toastr';
+import { HttpTokenInterceptor } from './shared/interceptors/http.token.interceptor';
 
 @NgModule({
   declarations: [
@@ -44,11 +45,9 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot()
   ],
   providers: [
-    /*
     {
       provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true
     }
-    */
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
