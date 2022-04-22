@@ -60,11 +60,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.loginForm = this.fb.group({
-      username: new FormControl('matgempak95@gmail.com', Validators.compose([
+      username: new FormControl(null, Validators.compose([
         Validators.required,
         Validators.email
       ])),
-      password: new FormControl('half2340', Validators.compose([
+      password: new FormControl(null, Validators.compose([
         Validators.required,
         Validators.minLength(8)
       ]))
