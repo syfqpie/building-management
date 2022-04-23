@@ -6,6 +6,7 @@ export class Unit {
         public block: number,
         public floor: number,
         public unitNumber: number,
+        public isMaintenance: number,
         public isActive: boolean,
         public createdAt: string,
         public createdBy: number,

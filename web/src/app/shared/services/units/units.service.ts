@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Unit } from './units.model';
 
+const BASE_URL = `${ environment.baseUrl }v1/units/`
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,22 +20,22 @@ export class UnitsService {
     private http: HttpClient
   ) { }
 
-  get(): Observable<Unit[]> {
-    const urlTemp = `${ environment.baseUrl }v1/units/`
+  getAll(): Observable<Unit[]> {
+    const urlTemp = `${ BASE_URL }`
     return this.http.get<Unit[]>(urlTemp).pipe(
       tap((res: Unit[]) => {
         this.units = res
-        // console.log('Units:', this.units)
+        console.log('Units:', this.units)
       })
     )
   }
 
   getOne(id: string | undefined): Observable<Unit> {
-    const urlTemp = `${ environment.baseUrl }v1/units/${ id }/`
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Unit>(urlTemp).pipe(
       tap((res: Unit) => {
         this.unit = res
-        // console.log('Unit:', this.unit)
+        console.log('Unit:', this.unit)
       })
     )
   }
