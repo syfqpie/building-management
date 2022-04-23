@@ -37,83 +37,28 @@
                                 Active
                                 <p-sortIcon field="isActive"></p-sortIcon>
                             </th>
-                            <!-- <th pSortableColumn="user.dateJoined">
-                                Joined date
-                                <p-sortIcon field="user.dateJoined"></p-sortIcon>
-                                <p-columnFilter type="date"
-                                    field="user.dateJoined"
-                                    display="menu"
-                                    class="ms-auto">
-                                </p-columnFilter>
-                            </th>
-                            <th>
-                                Source
-                                <p-columnFilter field="user.candidateUser.utm.0.utmSource"
-                                    matchMode="equals"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    display="menu"
-                                    class="ms-auto">
-                                    <ng-template pTemplate="filter"
-                                        let-value
-                                        let-filter="filterCallback">
-                                        <p-dropdown
-                                            [ngModel]="value"
-                                            [options]="utmSources"
-                                            (onChange)="filter($event.value)"
-                                            placeholder="Any">
-                                            <ng-template let-option pTemplate="item">
-                                                <span> {{ option }} </span>
-                                            </ng-template>
-                                        </p-dropdown>
-                                    </ng-template>
-                                </p-columnFilter>
-                            </th>
-                            <th pSortableColumn="verified">
-                                Verified
-                                <p-sortIcon field="verified"></p-sortIcon>
-                                <p-columnFilter type="boolean"
-                                    field="verified"
-                                    display="menu"
-                                    class="ms-auto">
-                                </p-columnFilter>
-                            </th>
-                            <th>
-                                Action
-                            </th> -->
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-unit>
                         <tr [pSelectableRow]="unit">
-                            <td>{{ unit.unitNo }}</td>
-                            <td>{{ unit.squareFeet }}</td>
-                            <td>{{ unit.block }}</td>
-                            <td>{{ unit.floor }}</td>
-                            <td>{{ unit.isActive }}</td>
-                            <!-- <td>{{ candidate.user.dateJoined | date: 'dd/MM/yyyy' }}</td>
                             <td>
-                                <span *ngIf="candidate.user.candidateUser.utm.length !== 0; else noSource">
-                                    {{ candidate.user.candidateUser.utm[0].utmSource }}
-                                </span>
-                                <ng-template #noSource>
-                                    -
-                                </ng-template>
+                                {{ unit.unitNo }}
                             </td>
                             <td>
-                                <span class="rounded-0"
-                                    [ngClass]="candidate.verified ? 'badge-emerald' : 'badge-amber'">
-                                    {{ candidate.verified | verifiedPipe }}
-                                </span>
+                                {{ unit.squareFeet }}
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-sm rounded-0"
-                                    (click)="resendVerificationEmail(candidate.email)"
-                                    [disabled]="candidate.verified">
-                                    <i class="far fa-paper-plane me-2"></i>
-                                    Resend verification email
-                                </button>
-                            </td> -->
+                                {{ unit.block }}
+                            </td>
+                            <td>
+                                {{ unit.floor }}
+                            </td>
+                            <td>
+                                <span class="status-badge"
+                                    [ngClass]="unit.isActive ? 'status-badge-success' : 'status-badge-warning'">
+                                    {{ unit.isActive | isActivePipe }}
+                                </span>
+                            </td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="loadingbody" let-columns="columns">

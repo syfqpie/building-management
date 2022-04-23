@@ -15,6 +15,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { TestComponent } from './test/test.component';
 import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
+import { IsActivePipe } from 'src/app/shared/handlers/pipes/is-active.pipe';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,10 @@ import { UnitsConfigurationComponent } from './units-configuration/units-configu
     SettingsComponent,
     TestComponent,
     UnitsComponent,
-    UnitsConfigurationComponent
+    UnitsConfigurationComponent,
+
+    // Pipe
+    IsActivePipe
   ],
   imports: [
     CommonModule,
