@@ -81,7 +81,7 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
     const decodedToken = helper.decodeToken(token)
 
     this.loadingBar.useRef('http').start()
-    this.subscription = this.userSvc.get(decodedToken.user_id).subscribe(
+    this.subscription = this.userSvc.getOne(decodedToken.user_id).subscribe(
       () => {
         this.loadingBar.useRef('http').complete()
       },
