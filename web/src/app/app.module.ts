@@ -18,7 +18,6 @@ import { RouterModule } from '@angular/router';
 
 // 3rd party
 import { LoadingBarModule } from '@ngx-loading-bar/core';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpTokenInterceptor } from './shared/interceptors/http.token.interceptor';
 
@@ -41,7 +40,6 @@ import { HttpTokenInterceptor } from './shared/interceptors/http.token.intercept
     RouterModule,
     // 3rd
     LoadingBarModule,
-    NgxDatatableModule,
     ToastrModule.forRoot()
   ],
   providers: [
