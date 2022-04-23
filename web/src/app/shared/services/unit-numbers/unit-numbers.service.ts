@@ -5,35 +5,37 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { UnitNumber } from './unit-numbers.model';
 
+const BASE_URL = `${ environment.baseUrl }v1/unit-numbers/`
+
 @Injectable({
   providedIn: 'root'
 })
 export class UnitNumbersService {
 
   // Data
-  public unit: UnitNumber
-  public units: UnitNumber[] = []
+  public unitNumber: UnitNumber
+  public unitNumbers: UnitNumber[] = []
 
   constructor(
     private http: HttpClient
   ) { }
 
-  get(): Observable<UnitNumber[]> {
-    const urlTemp = `${ environment.baseUrl }v1/unit-numbers/`
+  getAll(): Observable<UnitNumber[]> {
+    const urlTemp = `${ BASE_URL }`
     return this.http.get<UnitNumber[]>(urlTemp).pipe(
       tap((res: UnitNumber[]) => {
-        this.units = res
-        // console.log('Unit numbers:', this.units)
+        this.unitNumbers = res
+        console.log('Unit numbers:', this.unitNumbers)
       })
     )
   }
 
   getOne(id: string | undefined): Observable<UnitNumber> {
-    const urlTemp = `${ environment.baseUrl }v1/unit-numbers/${ id }/`
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<UnitNumber>(urlTemp).pipe(
       tap((res: UnitNumber) => {
-        this.unit = res
-        // console.log('Unit number:', this.unit)
+        this.unitNumber = res
+        console.log('UnitNumber:', this.unitNumber)
       })
     )
   }

@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Block } from './blocks.model';
 
+const BASE_URL = `${ environment.baseUrl }v1/blocks/`
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,22 +20,22 @@ export class BlocksService {
     private http: HttpClient
   ) { }
 
-  get(): Observable<Block[]> {
-    const urlTemp = `${ environment.baseUrl }v1/blocks/`
+  getAll(): Observable<Block[]> {
+    const urlTemp = `${ BASE_URL }`
     return this.http.get<Block[]>(urlTemp).pipe(
       tap((res: Block[]) => {
         this.blocks = res
-        // console.log('Blocks:', this.blocks)
+        console.log('Blocks:', this.blocks)
       })
     )
   }
 
   getOne(id: string | undefined): Observable<Block> {
-    const urlTemp = `${ environment.baseUrl }v1/blocks/${ id }/`
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Block>(urlTemp).pipe(
       tap((res: Block) => {
         this.block = res
-        // console.log('Floor:', this.floor)
+        console.log('Block:', this.block)
       })
     )
   }

@@ -1,0 +1,51 @@
+<p-table #blocksTable
+    [value]="blocks"
+    [rows]="5"
+    [paginator]="true"
+    [loading]="isLoadingData && blocks.length === 0"
+    [resizableColumns]="true"
+    styleClass="rounded-bottom">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="block">
+                Block
+                <p-sortIcon field="block"></p-sortIcon>
+            </th>
+            <th pSortableColumn="isActive">
+                Active
+                <p-sortIcon field="isActive"></p-sortIcon>
+            </th>
+            <th pSortableColumn="lastModifiedAt">
+                Last modified
+                <p-sortIcon field="lastModifiedAt"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-block>
+        <tr [pSelectableRow]="block">
+            <td>
+                {{ block.block }}
+            </td>
+            <td>
+                <span class="status-badge"
+                    [ngClass]="block.isActive ? 'status-badge-success' : 'status-badge-warning'">
+                    {{ block.isActive | isActivePipe }}
+                </span>
+            </td>
+            <td>
+                {{ block.lastModifiedAt | date : 'dd/MM/yyyy' }}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="loadingbody" let-columns="columns">
+        <tr *ngFor="let loadingRow of [0, 1, 2]">
+            <td *ngFor="let loadingRow of [0, 1, 2]">
+                <div style="flex: 1">
+                    <p-skeleton width="100%"
+                        styleClass="my-1">
+                    </p-skeleton>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
