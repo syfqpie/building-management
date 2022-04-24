@@ -1,69 +1,15 @@
 <div class="container-fluid">
     <p-tabView styleClass="tabview-custom">
         <p-tabPanel header="Blocks">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title mb-0">
-                        Available blocks
-                    </h5>
-                </div>
-                <app-blocks-table></app-blocks-table>
-            </div>
+            <app-blocks-table></app-blocks-table>
         </p-tabPanel>
+
         <p-tabPanel header="Floors">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title mb-0">
-                        Available floors
-                    </h5>
-                </div>
-                <app-floors-table></app-floors-table>
-            </div>
+            <app-floors-table></app-floors-table>
         </p-tabPanel>
+
         <p-tabPanel header="Unit numbers">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title mb-0">
-                        Available unit numbers
-                    </h5>
-                </div>
-                <app-unit-numbers-table></app-unit-numbers-table>
-            </div>
+            <app-unit-numbers-table></app-unit-numbers-table>
         </p-tabPanel>
     </p-tabView>
-
-    <!-- <div class="row g-3 mb-3">
-        <div class="col-sm-12 col-lg-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title mb-0">
-                        Blocks
-                    </h5>
-                </div>
-                <app-blocks-table></app-blocks-table>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title mb-0">
-                        Floors
-                    </h5>
-                </div>
-                <app-floors-table></app-floors-table>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title mb-0">
-                        Unit Numbers
-                    </h5>
-                </div>
-                <app-unit-numbers-table></app-unit-numbers-table>
-            </div>
-        </div>
-    </div> -->
 </div>
