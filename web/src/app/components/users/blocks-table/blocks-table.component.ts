@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Subscription } from 'rxjs';
 
@@ -14,6 +15,10 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
 
   // Data
   blocks: Block[] = []
+  selectedBlock: Block
+
+  // Form
+  blockForm: FormGroup
 
   // Checker
   isLoadingData: boolean = false
@@ -22,11 +27,13 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   subscription: Subscription
 
   constructor(
+    private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private blockSvc: BlocksService
   ) { }
 
   ngOnInit(): void {
+    this.initForm()
     this.getData()
   }
 
@@ -34,6 +41,18 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
+  }
+
+  initForm() {
+    this.blockForm = this.fb.group({
+      block: new FormControl(null, Validators.compose([
+        Validators.required,
+        Validators.maxLength(5)
+      ])),
+      isActive: new FormControl(null, Validators.compose([
+        Validators.required
+      ]))
+    })
   }
 
   getData() {
@@ -53,6 +72,14 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
         this.blocks = this.blockSvc.blocks
       }
     )
+  }
+
+  onSelectRow(selected: Block) {
+    this.selectedBlock = selected
+  }
+
+  create() {
+    // this.subscription = this.blockSvc.
   }
 
 }

@@ -22,6 +22,8 @@ import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitNumbersTableComponent } from '../../components/users/unit-numbers-table/unit-numbers-table.component';
 import { IsActivePipe } from 'src/app/shared/handlers/pipes/is-active.pipe';
+import { UserModalComponent } from 'src/app/components/users/user-modal/user-modal.component';
+
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { IsActivePipe } from 'src/app/shared/handlers/pipes/is-active.pipe';
     UnitsComponent,
     UnitsConfigurationComponent,
     UnitNumbersTableComponent,
+
+    UserModalComponent,
 
     // Pipe
     IsActivePipe

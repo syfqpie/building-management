@@ -21,7 +21,6 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpTokenInterceptor } from './shared/interceptors/http.token.interceptor';
 
-
 @NgModule({
   declarations: [
     AppComponent,
