@@ -29,14 +29,15 @@ export class AuthService {
 
   login(body: any): Observable<LoginResponse> {
     const urlTemp = `${ BASE_URL }login/`
-    console.log('url', urlTemp)
     return this.http.post<LoginResponse>(urlTemp, body).pipe(
       tap((res: LoginResponse) => {
+        // Save response
         this.loginRes = res
         this.user = this.loginRes.user
         this.accessToken = res.accessToken
         this.refreshToken = res.refreshToken
-        console.log('Login', this.loginRes)
+
+        // Save token to local storage
         this.jwtSvc.saveToken('accessToken', this.accessToken)
         this.jwtSvc.saveToken('refreshToken', this.refreshToken)
       })
@@ -44,8 +45,11 @@ export class AuthService {
   }
 
   logout() {
+    // Remove all token in local storage
     this.jwtSvc.destroyToken()
+    // Nullify user
     this.user = null
+    // Navigate to login page
     this.router.navigate(
       ['/auth/login'],
       { queryParams: { returnUrl: this.router.url }}

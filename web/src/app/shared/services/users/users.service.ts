@@ -37,13 +37,13 @@ export class UsersService {
     return this.http.get<User>(urlTemp).pipe(
       tap((res: User) => {
         this.user = res
-        console.log('User: ', this.user)
+        // console.log('User: ', this.user)
       })
     )
   }
 
-  getSelfDetails(): Observable<User> {
-    const urlTemp = `${ BASE_URL }get-self-details/`
+  getAccountInfo(): Observable<User> {
+    const urlTemp = `${ BASE_URL }get-account-info/`
     return this.http.get<User>(urlTemp).pipe(
       tap((res: User) => {
         this.currentUser = res
