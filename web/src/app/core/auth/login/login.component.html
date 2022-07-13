@@ -2,79 +2,77 @@
     <div class="row h-100">
         <div class="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center bg-white">
             <!-- Form -->
-            <div class="">
-                <form [formGroup]="loginForm"
-                    class="need-validation">
-                    <div class="mb-3 position-relative">
-                        <label for="formEmail" class="form-label">
-                            Email
-                        </label>
-                        <input id="formEmail"
-                            type="email"
-                            class="form-control"
-                            placeholder="example@test.com"
-                            formControlName="username"
-                            [ngClass]="{
-                                'is-invalid': loginForm.controls['username'].touched &&
-                                loginForm.controls['username'].errors,
-                                'is-valid': loginForm.controls['username'].touched &&
-                                !loginForm.controls['username'].errors
-                            }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
-                            *ngIf="loginForm.controls['username'].errors &&
-                            (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
-                            <ng-container *ngFor="let message of loginFormMessages['username']">
-                                <span *ngIf="loginForm.get('username')?.hasError(message.type) &&
-                                    (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)">
-                                    • {{ message.message }}
-                                </span>
-                            </ng-container>
-                        </div>
-                    </div>
-    
-                    <div class="mb-3 position-relative">
-                        <label for="formPassword" class="form-label">
-                            Password
-                        </label>
-                        <input
-                            id="formPassword"
-                            type="password"
-                            class="form-control"
-                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                            formControlName="password"
-                            [ngClass]="{
-                                'is-invalid': loginForm.controls['password'].touched &&
-                                loginForm.controls['password'].errors,
-                                'is-valid': loginForm.controls['password'].touched &&
-                                !loginForm.controls['password'].errors
-                            }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
-                            *ngIf="loginForm.controls['password'].errors &&
-                            (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
-                            <ng-container *ngFor="let message of loginFormMessages['password']">
-                                <span *ngIf="loginForm.get('password')?.hasError(message.type) &&
-                                    (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
-                                    • {{ message.message }}
-                                </span>
-                            </ng-container>
-                        </div>
-                    </div>
-    
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary"
-                            type="button"
-                            (click)="login()"
-                            [disabled]="isProcessing || !loginForm.valid" >
-                            <span *ngIf="!isProcessing; else isLoading">
-                                Login
+            <form [formGroup]="loginForm"
+                class="need-validation row justify-content-center">
+                <div class="col-7 mb-3 position-relative">
+                    <label for="formEmail" class="form-label">
+                        Email
+                    </label>
+                    <input id="formEmail"
+                        type="email"
+                        class="form-control"
+                        placeholder="example@test.com"
+                        formControlName="username"
+                        [ngClass]="{
+                            'is-invalid': loginForm.controls['username'].touched &&
+                            loginForm.controls['username'].errors,
+                            'is-valid': loginForm.controls['username'].touched &&
+                            !loginForm.controls['username'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="loginForm.controls['username'].errors &&
+                        (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
+                        <ng-container *ngFor="let message of loginFormMessages['username']">
+                            <span *ngIf="loginForm.get('username')?.hasError(message.type) &&
+                                (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)">
+                                • {{ message.message }}
                             </span>
-                            <ng-template #isLoading>
-                                <i class="fas fa-spinner fa-spin"></i>
-                            </ng-template>
-                        </button>
+                        </ng-container>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="col-7 mb-3 position-relative">
+                    <label for="formPassword" class="form-label">
+                        Password
+                    </label>
+                    <input
+                        id="formPassword"
+                        type="password"
+                        class="form-control"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        formControlName="password"
+                        [ngClass]="{
+                            'is-invalid': loginForm.controls['password'].touched &&
+                            loginForm.controls['password'].errors,
+                            'is-valid': loginForm.controls['password'].touched &&
+                            !loginForm.controls['password'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="loginForm.controls['password'].errors &&
+                        (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+                        <ng-container *ngFor="let message of loginFormMessages['password']">
+                            <span *ngIf="loginForm.get('password')?.hasError(message.type) &&
+                                (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
+                                • {{ message.message }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-7 d-grid gap-2">
+                    <button class="btn btn-primary"
+                        type="button"
+                        (click)="login()"
+                        [disabled]="isProcessing || !loginForm.valid" >
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Login
+                        </span>
+                        <ng-template #isLoading>
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </ng-template>
+                    </button>
+                </div>
+            </form>
         </div>
 
         <div class="col-lg-8">
