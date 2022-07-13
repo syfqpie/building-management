@@ -12,19 +12,6 @@
     overflow-y: scroll;
 }
 
-.nav-link-theme {
-    // color: #6c757d !important;
-}
-
-.nav-link-theme:hover {
-    // color: #bdbdbd !important;
-}
-
-// .nav-pills .nav-link-theme.active {
-//     color: #fff !important;
-//     background-color: #3c4146 !important;
-// }
-
 .bg-theme {
     background: #edf1f7 !important;
 }
@@ -35,12 +22,6 @@ a:not(.active) {
 a:hover:not(.active) {
     color: #bdbdbd !important;
 }
-
-// .dropdown-menu-dark .dropdown-item.active,
-// .dropdown-menu-dark .dropdown-item:active {
-//     color: #fff !important;
-//     background-color: #3c4146 !important;
-// }
 
 // Margin
 .ms-50px {
