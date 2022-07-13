@@ -13,6 +13,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
   currentTab: string = 'details' // details | password
 
   // Form
+  informationForm: FormGroup = new FormGroup({
+    fullName: new FormControl(null)
+  })
+  informationFormMessages = {
+    fullName: [
+      { type: 'required', message: 'Email address is required' },
+      { type: 'minlength', message: 'Password is too short. It must contain at least 5 character.' }
+    ]
+  }
   changeForm: FormGroup = new FormGroup({
     password1: new FormControl(null),
     password2: new FormControl(null)
@@ -57,6 +66,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
       password2: new FormControl(null, Validators.compose([
         Validators.required,
         Validators.minLength(8)
+      ]))
+    })
+
+    this.informationForm = this.fb.group({
+      fullName: new FormControl('John Doe', Validators.compose([
+        Validators.required,
+        Validators.minLength(5)
       ]))
     })
   }

@@ -39,10 +39,11 @@
                                 'show active': currentTab === 'details'
                             }">
                             <h5 class="card-title">
-                                Account password
+                                Account information
                             </h5>
 
-                            <form class="need-validation row">
+                            <form [formGroup]="informationForm"
+                                class="need-validation row">
                                 <div class="mb-3 col-sm-12 col-md-4">
                                     <label class="form-label">
                                         Email
@@ -51,6 +52,34 @@
                                         class="form-control"
                                         value="NA"
                                         disabled />
+                                </div>
+
+                                <div class="d-none d-md-block"></div>
+                                
+                                <div class="mb-3 col-sm-12 col-md-4 position-relative">
+                                    <label class="form-label">
+                                        Full name
+                                    </label>
+                                    <input type="text"
+                                        class="form-control"
+                                        placeholder="Full name"
+                                        formControlName="fullName"
+                                        [ngClass]="{
+                                            'is-invalid': informationForm.controls['fullName'].touched &&
+                                            informationForm.controls['fullName'].errors,
+                                            'is-valid': informationForm.controls['fullName'].touched &&
+                                            !informationForm.controls['fullName'].errors
+                                        }" />
+                                    <div class="invalid-tooltip"
+                                        *ngIf="informationForm.controls['fullName'].errors &&
+                                        (informationForm.controls['fullName'].dirty || informationForm.controls['fullName'].touched)">
+                                        <ng-container *ngFor="let message of informationFormMessages['fullName']">
+                                            <span *ngIf="informationForm.get('fullName')?.hasError(message.type) &&
+                                                (informationForm.get('fullName')?.dirty || informationForm.get('fullName')?.touched)">
+                                                • {{ message.message }}
+                                            </span>
+                                        </ng-container>
+                                    </div>
                                 </div>
 
                                 <div class="d-none d-md-block"></div>
@@ -63,6 +92,23 @@
                                         class="form-control"
                                         value="21/12/21"
                                         disabled />
+                                </div>
+
+                                <div class="d-none d-md-block"></div>
+
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="d-grid gap-2">
+                                        <button type="button"
+                                            class="btn btn-primary"
+                                            [disabled]="isProcessing" >
+                                            <span *ngIf="!isProcessing; else isLoading">
+                                                Update
+                                            </span>
+                                            <ng-template #isLoading>
+                                                <i class="fas fa-spinner fa-spin"></i>
+                                            </ng-template>
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
 						</div>
