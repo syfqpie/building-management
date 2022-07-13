@@ -13,34 +13,34 @@
 }
 
 .nav-link-theme {
-    color: #6c757d !important;
+    // color: #6c757d !important;
 }
 
 .nav-link-theme:hover {
-    color: #bdbdbd !important;
+    // color: #bdbdbd !important;
 }
 
-.nav-pills .nav-link-theme.active {
-    color: #fff !important;
-    background-color: #3c4146 !important;
-}
+// .nav-pills .nav-link-theme.active {
+//     color: #fff !important;
+//     background-color: #3c4146 !important;
+// }
 
 .bg-theme {
     background: #edf1f7 !important;
 }
 
-a {
+a:not(.active) {
     color: #6c757d !important;
 }
-a:hover {
+a:hover:not(.active) {
     color: #bdbdbd !important;
 }
 
-.dropdown-menu-dark .dropdown-item.active,
-.dropdown-menu-dark .dropdown-item:active {
-    color: #fff !important;
-    background-color: #3c4146 !important;
-}
+// .dropdown-menu-dark .dropdown-item.active,
+// .dropdown-menu-dark .dropdown-item:active {
+//     color: #fff !important;
+//     background-color: #3c4146 !important;
+// }
 
 // Margin
 .ms-50px {

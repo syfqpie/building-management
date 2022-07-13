@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
+import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitsComponent } from './units/units.component';
@@ -35,5 +37,13 @@ export const UserRoutes: Routes = [
                 ]
             }
         ]
+    },
+    {
+        path: 'system-admin',
+        component: SystemAdminComponent
+    },
+    {
+        path: 'about-system',
+        component: AboutSystemComponent
     }
 ]

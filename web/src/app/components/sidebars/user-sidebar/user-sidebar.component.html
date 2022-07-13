@@ -2,7 +2,7 @@
     style="width: 17rem;">
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a class="nav-link cursor-pointer nav-link-theme" 
+            <a class="nav-link cursor-pointer" 
                 routerLink="/dashboard"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-house-user fa-fw"></i>
@@ -10,16 +10,8 @@
             </a>
         </li>
 
+        
         <li class="nav-item">
-            <a class="nav-link cursor-pointer nav-link-theme" 
-                routerLink="/settings"
-                [routerLinkActive]="['active']" >
-                <i class="fas fa-cogs fa-fw"></i>
-                Settings
-            </a>
-        </li>
-
-        <!-- <li class="nav-item">
             <a class="nav-link cursor-pointer" 
                 routerLink="/management/units"
                 [routerLinkActiveOptions]="{exact: true}"
@@ -27,20 +19,20 @@
                 <i class="fas fa-building fa-fw"></i>
                 Units Management
             </a>
-        </li> -->
+        </li>
 
-        <!-- <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link cursor-pointer" 
                 routerLink="/management/units/configuration"
                 [routerLinkActiveOptions]="{exact: true}"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-building fa-fw"></i>
-                Units Configuration
+                Units Config
             </a>
-        </li> -->
+        </li>
 
         <li class="nav-item">
-            <a class="nav-link cursor-pointer nav-link-theme" 
+            <a class="nav-link cursor-pointer" 
                 routerLink="/test"
                 [routerLinkActive]="['active']" >
                 <i class="fas fa-flask fa-fw"></i>
@@ -48,11 +40,38 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                routerLink="/settings"
+                [routerLinkActive]="['active']" >
+                <i class="fas fa-cogs fa-fw"></i>
+                Settings
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                routerLink="/system-admin"
+                [routerLinkActive]="['active']" >
+                <i class="fa-solid fa-user-shield"></i>
+                System Admin
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link cursor-pointer" 
+                routerLink="/about-system"
+                [routerLinkActive]="['active']" >
+                <i class="fa-solid fa-circle-info"></i>
+                About
+            </a>
+        </li>
+
         <!-- <li class="nav-item">
             <a href="#submenuUnits"
                 routerLinkActive
                 #itemLink="routerLinkActive"
-                class="nav-link cursor-pointer nav-link-theme"
+                class="nav-link cursor-pointer"
                 data-bs-toggle="collapse" >
                 <i class="fas fa-building fa-fw"></i>
                 Units Management
@@ -67,7 +86,7 @@
                 [routerLinkActive]="['show']" >
                 <li class="w-100">
                     <a #unitLink="routerLinkActive"
-                        class="nav-link nav-link-theme"
+                        class="nav-link"
                         [routerLink]="['/management', 'units']"
                         [routerLinkActive]="['active']"
                         [routerLinkActiveOptions]="{exact: true}">
@@ -77,7 +96,7 @@
 
                 <li class="w-100">
                     <a #unitConfigurationLink="routerLinkActive"
-                        class="nav-link nav-link-theme"
+                        class="nav-link"
                         [routerLink]="['/management', 'units', 'configuration']"
                         [routerLinkActive]="['active']"
                         [routerLinkActiveOptions]="{exact: true}">
