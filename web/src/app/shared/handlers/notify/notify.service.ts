@@ -14,7 +14,7 @@ export class NotifyService {
       easing: 'ease-out',
       progressBar: true,
       positionClass: 'toast-top-right',
-      timeOut: 50000000
+      timeOut: 5000
     })
   }
 
@@ -24,7 +24,7 @@ export class NotifyService {
       easing: 'ease-out',
       progressBar: true,
       positionClass: 'toast-top-right',
-      timeOut: 50000000
+      timeOut: 5000
     })
   }
 
@@ -34,7 +34,7 @@ export class NotifyService {
       easing: 'ease-out',
       progressBar: true,
       positionClass: 'toast-top-right',
-      timeOut: 50000000
+      timeOut: 5000
     })
   }
 
@@ -44,7 +44,7 @@ export class NotifyService {
       easing: 'ease-out',
       progressBar: true,
       positionClass: 'toast-top-right',
-      timeOut: 50000000
+      timeOut: 5000
     })
   }
 
