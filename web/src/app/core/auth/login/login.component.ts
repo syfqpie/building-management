@@ -19,7 +19,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   returnUrl: string | null
 
   // Form
-  loginForm: FormGroup
+  loginForm: FormGroup = new FormGroup({
+    username: new FormControl(null),
+    password: new FormControl(null)
+  })
   loginFormMessages = {
     username: [
       { type: 'required', message: 'Email address is required' },
@@ -35,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isProcessing: boolean = false
 
   // Subscriber
-  subscription: Subscription
+  subscription: Subscription | undefined
 
   constructor(
     private fb: FormBuilder,
@@ -74,24 +77,27 @@ export class LoginComponent implements OnInit, OnDestroy {
   login() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.authSvc.login(this.loginForm.value).subscribe(
-      () => {
+    this.subscription = this.authSvc.login(this.loginForm.value).subscribe({
+      next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
         this.notifySvc.success('Success', 'Successfully login')
       },
-      (err) => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
         console.log('Failed', err)
-        let errorMsg = ''
-        errorMsg = err.error.nonFieldErrors[0]
-        this.notifySvc.error('Error', errorMsg)
+        
+        if (err.status !== 0) {
+          let errorMsg = ''
+          errorMsg = err.error.nonFieldErrors[0]
+          this.notifySvc.error('Error', errorMsg)
+        }
       },
-      () => {
+      complete: () => {
         this.router.navigate(['/dashboard'])
       }
-    )
+    })
   }
 
 }

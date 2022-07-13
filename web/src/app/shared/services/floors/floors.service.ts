@@ -13,7 +13,7 @@ const BASE_URL = `${ environment.baseUrl }v1/floors/`
 export class FloorsService {
 
   // Data
-  public floor: Floor
+  public floor: Floor | undefined
   public floors: Floor[] = []
 
   constructor(

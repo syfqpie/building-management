@@ -1,51 +1,154 @@
 <div class="container-fluid">
-	<div class="row">
+	<div class="row g-3">
 		<div class="col-sm-12 col-md-2">
-			<div class="card shadow">
-				<ul class="nav flex-column">
+			<div class="card shadow border-0">
+				<ul class="nav nav-pills flex-column">
 					<li class="nav-item">
-						<a class="nav-link active"
-							id="home-tab"
-							data-bs-toggle="tab"
-							data-bs-target="#home"
+						<button class="nav-link w-100 rounded-0 rounded-top"
 							type="button"
 							role="tab"
-							aria-controls="home"
-							aria-selected="true">
+							[ngClass]="{
+                                'active': currentTab === 'details'
+                            }"
+                            (click)="changeTab('details')">
 							Account
-						</a>
+						</button>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link"
-							id="profile-tab"
-							data-bs-toggle="tab"
-							data-bs-target="#profile"
+						<button class="nav-link w-100 rounded-0 rounded-bottom"
 							type="button"
 							role="tab"
-							aria-controls="profile"
-							aria-selected="false">
+							[ngClass]="{
+                                'active': currentTab === 'password'
+                            }"
+                            (click)="changeTab('password')">
 							Password
-						</a>
+						</button>
 					</li>
 				</ul>
 			</div>
 		</div>
 
 		<div class="col-sm-12 col-md-10">
-			<div class="card shadow">
+			<div class="card shadow border-0">
 				<div class="card-body">
-					<div class="tab-content" id="myTabContent">
-						<div class="tab-pane fade show active"
-							id="home"
-							role="tabpanel"
-							aria-labelledby="home-tab">
-							Account tab
-						</div>
+					<div class="tab-content">
 						<div class="tab-pane fade"
-							id="profile"
+                            role="tabpanel"
+							[ngClass]="{
+                                'show active': currentTab === 'details'
+                            }">
+                            <h5 class="card-title">
+                                Account password
+                            </h5>
+
+                            <form class="need-validation row">
+                                <div class="mb-3 col-sm-12 col-md-4">
+                                    <label class="form-label">
+                                        Email
+                                    </label>
+                                    <input type="text"
+                                        class="form-control"
+                                        value="NA"
+                                        disabled />
+                                </div>
+
+                                <div class="d-none d-md-block"></div>
+
+                                <div class="mb-3 col-sm-12 col-md-4">
+                                    <label class="form-label">
+                                        Joined at
+                                    </label>
+                                    <input type="text"
+                                        class="form-control"
+                                        value="21/12/21"
+                                        disabled />
+                                </div>
+                            </form>
+						</div>
+
+						<div class="tab-pane fade"
 							role="tabpanel"
-							aria-labelledby="profile-tab">
-							Password tab
+							[ngClass]="{
+                                'show active': currentTab === 'password'
+                            }">
+							<h5 class="card-title">
+                                Change password
+                            </h5>
+
+                            <form [formGroup]="changeForm"
+                                class="need-validation row">
+                                <div class="mb-3 col-sm-12 col-md-4 position-relative">
+                                    <label class="form-label">
+                                        Password
+                                    </label>
+                                    <input type="password"
+                                        class="form-control"
+                                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                                        formControlName="password1"
+                                        [ngClass]="{
+                                            'is-invalid': changeForm.controls['password1'].touched &&
+                                            changeForm.controls['password1'].errors,
+                                            'is-valid': changeForm.controls['password1'].touched &&
+                                            !changeForm.controls['password1'].errors
+                                        }" />
+                                    <div class="invalid-tooltip"
+                                        *ngIf="changeForm.controls['password1'].errors &&
+                                        (changeForm.controls['password1'].dirty || changeForm.controls['password1'].touched)">
+                                        <ng-container *ngFor="let message of changeFormMessages['password1']">
+                                            <span *ngIf="changeForm.get('password1')?.hasError(message.type) &&
+                                                (changeForm.get('password1')?.dirty || changeForm.get('password1')?.touched)">
+                                                • {{ message.message }}
+                                            </span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+
+                                <div class="d-none d-md-block"></div>
+
+                                <div class="mb-3 col-sm-12 col-md-4 position-relative">
+                                    <label class="form-label">
+                                        Confirm password
+                                    </label>
+                                    <input type="password"
+                                        class="form-control"
+                                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                                        formControlName="password2"
+                                        [ngClass]="{
+                                            'is-invalid': changeForm.controls['password2'].touched &&
+                                            changeForm.controls['password2'].errors,
+                                            'is-valid': changeForm.controls['password2'].touched &&
+                                            !changeForm.controls['password2'].errors
+                                        }" />
+                                    <div class="invalid-tooltip"
+                                        *ngIf="changeForm.controls['password2'].errors &&
+                                        (changeForm.controls['password2'].dirty || changeForm.controls['password2'].touched)">
+                                        <ng-container *ngFor="let message of changeFormMessages['password2']">
+                                            <span *ngIf="changeForm.get('password2')?.hasError(message.type) &&
+                                                (changeForm.get('password2')?.dirty || changeForm.get('password2')?.touched)">
+                                                • {{ message.message }}
+                                            </span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+
+                                <div class="d-none d-md-block"></div>
+
+                                <div class="mb-3 col-sm-12 col-md-4">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary"
+                                            type="button"
+                                            [disabled]="isProcessing || !changeForm.valid" >
+                                            <span *ngIf="!isProcessing; else isLoading">
+                                                Change
+                                            </span>
+                                            <ng-template #isLoading>
+                                                <i class="fas fa-spinner fa-spin"></i>
+                                            </ng-template>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
 						</div>
 					</div>
 				</div>

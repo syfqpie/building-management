@@ -1,29 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-units-configuration',
   templateUrl: './units-configuration.component.html',
   styleUrls: ['./units-configuration.component.scss']
 })
-export class UnitsConfigurationComponent implements OnInit, OnDestroy {
-
-  // Data
-
-  // Form
-
-  // Subscriber
-  subscription: Subscription
+export class UnitsConfigurationComponent implements OnInit {
 
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe()
-    }
   }
 
 }

@@ -14,8 +14,8 @@ const BASE_URL = `${ environment.baseUrl }v1/users/`
 export class UsersService {
 
   // Data
-  currentUser: User
-  user: User
+  currentUser: User | undefined
+  user: User | undefined
   users: User[] = []
 
   constructor(

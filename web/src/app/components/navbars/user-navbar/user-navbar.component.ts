@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 export class UserNavbarComponent implements OnInit {
 
   // Data
-  @Input()isMenuOpen: boolean
+  @Input() isMenuOpen: boolean = true
   @Output() toggleMenuEvent = new EventEmitter<string>()
 
   constructor(

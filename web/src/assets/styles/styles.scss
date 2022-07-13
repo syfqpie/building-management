@@ -3,8 +3,10 @@
 // Variables
 
 // Theme
-@import './theme/theme.scss';
-@import './theme/toastr.scss';
+@import './theme/theme';
+@import './theme/toastr';
+@import './theme/typography';
+@import './theme/variables';
 
 
 // Bootstrap
@@ -24,6 +26,6 @@
 @import './prime/p-tab-view';
 
 // Prime
-@import '~primeicons/primeicons.css';
-@import '~primeng-lts/resources/primeng.min.css';
-@import '~primeng-lts/resources/themes/bootstrap4-light-blue/theme.css';
+// @import '~primeicons/primeicons.css';
+// @import '~primeng-lts/resources/primeng.min.css';
+// @import '~primeng-lts/resources/themes/bootstrap4-light-blue/theme.css';

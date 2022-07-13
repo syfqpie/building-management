@@ -13,7 +13,7 @@ const BASE_URL = `${ environment.baseUrl }v1/unit-numbers/`
 export class UnitNumbersService {
 
   // Data
-  public unitNumber: UnitNumber
+  public unitNumber: UnitNumber | undefined
   public unitNumbers: UnitNumber[] = []
 
   constructor(

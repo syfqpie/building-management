@@ -17,11 +17,11 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 export class UserLayoutComponent implements OnInit, OnDestroy {
 
   // Data
-  currentUser: User
+  currentUser: User | undefined
 
   // Checker
-  isMobileResolution: boolean
-  isMenuOpen: boolean
+  isMobileResolution: boolean = false
+  isMenuOpen: boolean = true
 
   // Loading bar
   barConfig = {
@@ -32,7 +32,7 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
   }
 
   // Subscriber
-  subscription: Subscription
+  subscription: Subscription | undefined
 
   constructor(
     private loadingBar: LoadingBarService,
@@ -51,7 +51,7 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
 
     this.currentUser = this.userSvc.currentUser
     if (!this.currentUser) {
-      this.getData()
+      // this.getData()
     }
   }
 
@@ -81,17 +81,17 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
     const decodedToken = helper.decodeToken(token)
 
     this.loadingBar.useRef('http').start()
-    this.subscription = this.userSvc.getOne(decodedToken.user_id).subscribe(
-      () => {
+    this.subscription = this.userSvc.getOne(decodedToken.user_id).subscribe({
+      next: () => {
         this.loadingBar.useRef('http').complete()
       },
-      (err) => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
       },
-      () => {
+      complete: () => {
         this.currentUser = this.userSvc.currentUser
       }
-    )
+    })
   }
 
 }
