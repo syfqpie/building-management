@@ -51,7 +51,7 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
 
     this.currentUser = this.userSvc.currentUser
     if (!this.currentUser) {
-      // this.getData()
+      this.getData()
     }
   }
 

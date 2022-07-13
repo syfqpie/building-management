@@ -18,6 +18,7 @@ import { PublicLayoutComponent } from './layouts/public-layout/public-layout.com
 // 3rd party
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { ToastrModule } from 'ngx-toastr';
+import { HttpTokenInterceptor } from './shared/interceptors/http.token.interceptor';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,11 @@ import { ToastrModule } from 'ngx-toastr';
     LoadingBarModule,
     ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
