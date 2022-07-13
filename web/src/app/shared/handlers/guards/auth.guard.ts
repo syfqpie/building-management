@@ -25,15 +25,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       const user = this.authSvc.user
       const token = this.jwtSvc.getToken('accessToken')
 
-      // console.log('decoded', token)
-
       if (token) {
         // decode token to get user type
         const helper = new JwtHelperService()
         const decodedToken = helper.decodeToken(token)
 
         // check if route is restricted by role
-        if (route.data.roles && route.data.roles.indexOf(decodedToken.userType) === -1) {
+        if (route.data['roles'] && route.data['roles'].indexOf(decodedToken.userType) === -1) {
           // role not authorised so redirect to home page
           return this.notAuthorizedUser(state)
         }
