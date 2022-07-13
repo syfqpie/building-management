@@ -1,0 +1,31 @@
+// Import all styles
+
+// Variables
+
+// Theme
+@import './theme/theme';
+@import './theme/toastr';
+@import './theme/typography';
+@import './theme/variables';
+
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap.scss';
+
+// Icons
+@import '~@fortawesome/fontawesome-free/css/fontawesome.css';
+@import '~@fortawesome/fontawesome-free/css/regular.css';
+@import '~@fortawesome/fontawesome-free/css/solid.css';
+@import '~@fortawesome/fontawesome-free/css/brands.css';
+// @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+// @import '~@fortawesome/fontawesome-free/scss/regular.scss';
+// @import '~@fortawesome/fontawesome-free/scss/solid.scss';
+// @import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+// Prime custom
+@import './prime/p-tab-view';
+
+// Prime
+// @import '~primeicons/primeicons.css';
+// @import '~primeng-lts/resources/primeng.min.css';
+// @import '~primeng-lts/resources/themes/bootstrap4-light-blue/theme.css';

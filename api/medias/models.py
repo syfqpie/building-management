@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import uuid
-
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
-
-from simple_history.models import HistoricalRecords
 
 from core.helpers import PathAndRename
+
+from users.models import CustomUser
 
 class Media(models.Model):
 
@@ -17,9 +14,21 @@ class Media(models.Model):
     attachment = models.FileField(null=True, upload_to=PathAndRename('medias'))
 
     created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    last_modified_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='medias_created'
+    )
+    last_modified_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='medias_modified'
+    )
     
-    class meta:
+    class Meta:
         ordering = ['filename']
     
     def __str__(self):

@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg sticky-top bg-dark border-bottom border-dark navbar-dark border-3 shadow-lg px-3">
+	<div class="container-fluid">
+		<a class="navbar-brand cursor-pointer"
+			(click)="toggleMenu()"
+			[title]="isMenuOpen ? 'Close menu' : 'Open menu'">
+			<i class="fas text-white"
+				[ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'">
+			</i>
+		</a>
+
+		<div id="navbarSupportedContent"
+			class="collapse navbar-collapse">
+			<div class="dropdown ms-auto me-0">
+				<button id="profileDropdownLink"
+					class="btn btn-outline-primary rounded-circle"
+					role="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false">
+					<i class="fa-solid fa-user-astronaut text-light"></i>
+				</button>
+			  
+				<ul aria-labelledby="profileDropdownLink"
+					class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+					<li>
+						<a class="dropdown-item cursor-pointer"
+							[routerLink]="'/settings'"
+							[routerLinkActive]="['active']">
+							Settings
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item cursor-pointer"
+							(click)="logout()">
+							Logout
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>

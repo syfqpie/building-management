@@ -1,15 +1,23 @@
-export class TokenResponse {
+export class LoginResponse {
     constructor(
-        public refresh: string,
-        public access: string
+        public accessToken: string,
+        public refreshToken: string,
+        public user: LoginUser
     ) {}
 }
 
-export class Registration {
+export class LoginUser {
     constructor(
+        public firstName: string,
+        public lastName: string,
+        public pk: number,
         public username: string,
-        public email: string,
-        public password1: string,
-        public password2: string
+        public email: string
+    ) {}
+}
+
+export class ResponseDetail {
+    constructor(
+        public detail: string
     ) {}
 }
