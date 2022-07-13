@@ -15,6 +15,7 @@
 
 # Backup files # 
 api_old
+web_old
 **/*.bak 
 
 # Installer logs 
