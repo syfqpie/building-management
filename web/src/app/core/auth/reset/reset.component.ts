@@ -19,6 +19,7 @@ export class ResetComponent implements OnInit, OnDestroy {
   // Data
   uid: string | null = null
   token: string | null = null
+  redirectTimeout: ReturnType<typeof setTimeout> | null = null
 
   // Form
   requestForm: FormGroup = new FormGroup({
@@ -97,6 +98,11 @@ export class ResetComponent implements OnInit, OnDestroy {
     // To unsubscribe confirm subscription
     if (this.confirmSubscription) {
       this.confirmSubscription.unsubscribe()
+    }
+
+    // Clear timeout
+    if (this.redirectTimeout) {
+      clearTimeout(this.redirectTimeout)
     }
   }
 
@@ -182,6 +188,13 @@ export class ResetComponent implements OnInit, OnDestroy {
       complete: () => {
         // Set checker
         this.isConfirmResetSubmitted = true
+
+        // Set timeout for redirection
+        this.redirectTimeout = setTimeout(
+          () => {
+            this.router.navigate(['/auth/login'])
+          }, 5000
+        )
       }
     })
   }
