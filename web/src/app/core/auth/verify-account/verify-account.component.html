@@ -1,1 +1,111 @@
-<p>verify-account works!</p>
+<div class="container-fluid bg-dark vh-100">
+    <div class="row h-100">
+        <div class="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center bg-white">
+            <!-- Form -->
+            <form [formGroup]="verifyForm"
+                class="need-validation row justify-content-center">
+                <div class="col-7">
+                    <p class="text-muted">
+                        <span *ngIf="!isProcessing; else isLoading">
+                            <span *ngIf="isVerified; else isNotVerified">
+                                Your account has been verified
+                            </span>
+                            <ng-template #isNotVerified>
+                                Account verification
+                            </ng-template>
+                        </span>
+                        <ng-template #isLoading>
+                            <span>
+                                Verifying your account...
+                            </span>
+                        </ng-template>
+                    </p>
+                </div>
+
+                <div class="col-7 mb-3 position-relative">
+                    <label for="formNewPassword1" class="form-label">
+                        Password
+                    </label>
+                    <input id="formNewPassword1"
+                        type="password"
+                        class="form-control"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        formControlName="newPassword1"
+                        [ngClass]="{
+                            'is-invalid': verifyForm.controls['newPassword1'].touched &&
+                            verifyForm.controls['newPassword1'].errors,
+                            'is-valid': verifyForm.controls['newPassword1'].touched &&
+                            !verifyForm.controls['newPassword1'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="verifyForm.controls['newPassword1'].errors &&
+                        (verifyForm.controls['newPassword1'].dirty || verifyForm.controls['newPassword1'].touched)">
+                        <ng-container *ngFor="let message of verifyFormMessages['newPassword1']">
+                            <span *ngIf="verifyForm.get('newPassword1')?.hasError(message.type) &&
+                                (verifyForm.get('newPassword1')?.dirty || verifyForm.get('newPassword1')?.touched)">
+                                • {{ message.message }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-7 mb-3 position-relative">
+                    <label for="formNewPassword2" class="form-label">
+                        Confirm password
+                    </label>
+                    <input id="formNewPassword2"
+                        type="password"
+                        class="form-control"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        formControlName="newPassword2"
+                        [ngClass]="{
+                            'is-invalid': verifyForm.controls['newPassword2'].touched &&
+                            verifyForm.controls['newPassword2'].errors,
+                            'is-valid': verifyForm.controls['newPassword2'].touched &&
+                            !verifyForm.controls['newPassword2'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="verifyForm.controls['newPassword2'].errors &&
+                        (verifyForm.controls['newPassword2'].dirty || verifyForm.controls['newPassword2'].touched)">
+                        <ng-container *ngFor="let message of verifyFormMessages['newPassword2']">
+                            <span *ngIf="verifyForm.get('newPassword2')?.hasError(message.type) &&
+                                (verifyForm.get('newPassword1')?.dirty || verifyForm.get('newPassword1')?.touched)">
+                                • {{ message.message }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-7 d-grid gap-0">
+                    <button class="btn btn-primary"
+                        type="button"
+                        (click)="verify()"
+                        [disabled]="isProcessing || !verifyForm.valid || isVerified" >
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Confirm verification
+                        </span>
+                        <ng-template #isLoading>
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </ng-template>
+                    </button>
+
+                    <hr class="my-3" />
+
+                    <p class="mb-3">
+                        <small class="text-muted">
+                            Forgot password?
+                            <a [routerLink]="'/auth/reset'"
+                                class="link-primary">
+                                Reset
+                            </a>
+                        </small>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Image -->
+        </div>
+    </div>
+</div>
