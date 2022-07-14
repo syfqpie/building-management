@@ -33,7 +33,7 @@ export class UsersService {
   }
 
   getOne(id: number): Observable<User> {
-    const urlTemp = `${ BASE_URL }${ id }`
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<User>(urlTemp).pipe(
       tap((res: User) => {
         this.user = res
