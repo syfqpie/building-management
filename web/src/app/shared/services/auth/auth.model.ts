@@ -16,7 +16,7 @@ export class LoginUser {
     ) {}
 }
 
-export class ResponseDetail {
+export class DetailResponse {
     constructor(
         public detail: string
     ) {}
