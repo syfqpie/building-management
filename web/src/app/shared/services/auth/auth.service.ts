@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { JwtService } from '../../handlers/jwt/jwt.service';
 
-import { LoginResponse, LoginUser } from './auth.model';
+import { DetailResponse, LoginResponse, LoginUser } from './auth.model';
 
 const BASE_URL = `${ environment.baseUrl }auth/`
 
@@ -57,10 +57,49 @@ export class AuthService {
     return window.location.reload()
   }
 
-  requestReset() {}
+  requestReset(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }password/reset/`
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Request reset', res)
+      })
+    )
+  }
 
-  confirmReset() {}
+  confirmReset(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }password/reset/confirm/`
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Confirm reset', res)
+      })
+    )
+  }
 
-  changePassword() {}
+  changePassword(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }password/change/`
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        console.log('Change password', res)
+      })
+    )
+  }
+
+  verifyAccount(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }registration/verify-email-renter/`
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Verify account', res)
+      })
+    )
+  }
+
+  resendVerification(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }registration/resend-verification/`
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Resend verification', res)
+      })
+    )
+  }
 
 }
