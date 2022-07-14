@@ -86,7 +86,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
-        console.log('Failed', err)
         
         if (err.status !== 0) {
           let errorMsg = ''
