@@ -14,6 +14,7 @@ export default class PasswordValidation {
                 controls.get(checkControlName)?.setErrors({ matching: true });
                 return { matching: true };
             } else {
+                controls.get(checkControlName)?.setErrors(null);
                 return null;
             }
         }
