@@ -21,15 +21,19 @@ from core.helpers import (
     ResultsPagination
 )
 
-from .auth import IsSuperAdmin
-
 from .models import (
+    UserType,
     CustomUser
 )
-
 from .serializers import (
-    CustomUserSerializer
+    CustomUserSerializer,
+    CustomUserNotSuperAdminSerializer
 )
+from .permissions import (
+    IsAdminStaff,
+    IsSuperAdmin,
+    IsCustomUserOwnerOrAdmin
+) 
 
 @method_decorator(
     name='list', 
@@ -75,6 +79,10 @@ from .serializers import (
 class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    serializer_class_by_action = {
+        'update': CustomUserNotSuperAdminSerializer,
+        'partial_update': CustomUserNotSuperAdminSerializer
+    }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = [
         'user_type',
@@ -85,17 +93,32 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         permission_classes = [IsAuthenticated]
 
         if self.action == 'activate':
-            permission_classes.append(IsSuperAdmin)
+            permission_classes.append(IsAdminStaff)
         elif self.action == 'deactivate':
-            permission_classes.append(IsSuperAdmin)
+            permission_classes.append(IsAdminStaff)
         elif self.action == 'destroy':
             permission_classes.append(IsSuperAdmin)
+        elif self.action == 'partial_update':
+            permission_classes.append(IsCustomUserOwnerOrAdmin)
 
         return [permission() for permission in permission_classes]    
     
+    # Override get_queryset
     def get_queryset(self):
         queryset = self.queryset
         return queryset
+    
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Get request user
+        user = self.request.user
+
+        # Check serializer class by action and if user is not superuser
+        if hasattr(self, 'serializer_class_by_action') and not user.is_superuser:
+            return self.serializer_class_by_action.get(self.action, self.serializer_class)
+
+        # Return original class
+        return super(CustomUserViewSet, self).get_serializer_class()
     
     # Activate account
     @action(methods=['GET'], detail=True)
