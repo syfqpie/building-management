@@ -5,6 +5,7 @@ export class User {
         public fullName: string,
         public userType: number,
         public isActive: boolean,
+        public isStaff: boolean,
         public isSuperuser: boolean,
         public lastLogin: string,
         public dateJoined: string,
