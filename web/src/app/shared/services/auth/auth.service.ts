@@ -79,7 +79,7 @@ export class AuthService {
     const urlTemp = `${ BASE_URL }password/change/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
-        console.log('Change password', res)
+        // console.log('Change password', res)
       })
     )
   }
