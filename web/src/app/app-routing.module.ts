@@ -5,6 +5,7 @@ import { AuthGuard } from './shared/handlers/guards/auth.guard';
 import { CurrentUserResolver } from './shared/handlers/resolvers/current-user.resolver';
 
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+import { NotFoundComponent } from './components/errors/not-found/not-found.component';
 
 const routes: Routes = [
   // Default
@@ -30,6 +31,11 @@ const routes: Routes = [
         loadChildren: () => import('./core/auth/auth.module').then(m => m.AuthModule)
       }
     ]
+  },
+  // Wildcard for error
+  {
+    path: '**',
+    component: NotFoundComponent
   }
 ];
 
