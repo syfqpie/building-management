@@ -119,7 +119,7 @@ urlpatterns = [
     path('auth/logout/', MyLogoutView.as_view(), name='rest_logout'),
     path('auth/password/change/', MyPasswordChangeView.as_view(), name='password_change'),
     path('auth/password/reset/', MyPasswordResetView.as_view(), name='rest_password_reset'),
-    path('auth/password/reset/confirm/', MyPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path(r'auth/password/reset/confirm/', MyPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 
     re_path(r'v1/', include(router.urls)),
     # path('v1/renters/register/', RenterCustomRegisterView.as_view(), name='renter_register'),

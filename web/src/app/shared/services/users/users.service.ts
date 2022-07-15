@@ -33,7 +33,7 @@ export class UsersService {
   }
 
   getOne(id: number): Observable<User> {
-    const urlTemp = `${ BASE_URL }${ id }`
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<User>(urlTemp).pipe(
       tap((res: User) => {
         this.user = res
@@ -42,12 +42,12 @@ export class UsersService {
     )
   }
 
-  getSelfDetails(): Observable<User> {
-    const urlTemp = `${ BASE_URL }get-self-details/`
+  getAccountInfo(): Observable<User> {
+    const urlTemp = `${ BASE_URL }get-account-info/`
     return this.http.get<User>(urlTemp).pipe(
       tap((res: User) => {
         this.currentUser = res
-        console.log('Current user: ', this.currentUser)
+        // console.log('Current user: ', this.currentUser)
       })
     )
   }

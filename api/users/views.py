@@ -100,14 +100,14 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     # Activate account
     @action(methods=['GET'], detail=True)
     @swagger_auto_schema(
-        operation_description='Activate an account',
-        operation_id='Activate account',
+        operation_description='Activate a user account',
+        operation_id='Activate user account',
         tags=['Users'])
     def activate(self, request, *args, **kwargs):
         user = self.get_object()
 
         if user.is_active is True:
-            raise PermissionDenied(detail='User is already activated')
+            raise PermissionDenied(detail='User account is already activated')
         
         user.is_active = True
         user.save()
@@ -115,7 +115,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = CustomUserSerializer(user, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
-            { 'detail': 'User activated' },
+            { 'detail': 'User account activated' },
             status=status.HTTP_200_OK,
             headers=headers
         )
@@ -123,14 +123,14 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     # Deactivate account
     @action(methods=['GET'], detail=True)
     @swagger_auto_schema(
-        operation_description='Deactivate an account',
-        operation_id='Deactivate account',
+        operation_description='Deactivate a user account',
+        operation_id='Deactivate user account',
         tags=['Users'])
     def deactivate(self, request, *args, **kwargs):
         user = self.get_object()
 
         if user.is_active is False:
-            raise PermissionDenied(detail='User is already deactivated')
+            raise PermissionDenied(detail='User account is already deactivated')
         
         user.is_active = False
         user.save()
@@ -138,9 +138,21 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = CustomUserSerializer(user, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
-            { 'detail': 'Block deactivated' },
+            { 'detail': 'User account deactivated' },
             status=status.HTTP_200_OK,
             headers=headers
         )
+
+    # Get account information
+    @action(methods=['GET'], detail=False, url_path='get-account-info')
+    @swagger_auto_schema(
+        operation_description='Get self account information',
+        operation_id='Get account information',
+        tags=['Users'])
+    def get_account_information(self, request, *args, **kwargs):
+        user = request.user
+
+        serializer = CustomUserSerializer(user, many=False)
+        return Response(serializer.data)
 
     

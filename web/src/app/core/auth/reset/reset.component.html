@@ -1,0 +1,166 @@
+<div class="container-fluid bg-dark vh-100">
+    <div class="row h-100">
+        <div class="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center bg-white">
+            <!-- Confirm reset form -->
+            <div *ngIf="isConfirmReset; else isNotConfirmReset">
+                <form [formGroup]="confirmForm"
+                    class="need-validation row justify-content-center">
+                    <div class="col-7">
+                        <p class="text-muted">
+                            Confirm to reset password
+                        </p>
+                    </div>
+                    <div class="col-7 mb-3 position-relative">
+                        <label for="formNewPassword1" class="form-label">
+                            Password
+                        </label>
+                        <input id="formNewPassword1"
+                            type="password"
+                            class="form-control"
+                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                            formControlName="newPassword1"
+                            [ngClass]="{
+                                'is-invalid': confirmForm.controls['newPassword1'].touched &&
+                                confirmForm.controls['newPassword1'].errors,
+                                'is-valid': confirmForm.controls['newPassword1'].touched &&
+                                !confirmForm.controls['newPassword1'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="confirmForm.controls['newPassword1'].errors &&
+                            (confirmForm.controls['newPassword1'].dirty || confirmForm.controls['newPassword1'].touched)">
+                            <ng-container *ngFor="let message of confirmFormMessages['newPassword1']">
+                                <span *ngIf="confirmForm.get('newPassword1')?.hasError(message.type) &&
+                                    (confirmForm.get('newPassword1')?.dirty || confirmForm.get('newPassword1')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="col-7 mb-3 position-relative">
+                        <label for="formNewPassword2" class="form-label">
+                            Confirm password
+                        </label>
+                        <input id="formNewPassword2"
+                            type="password"
+                            class="form-control"
+                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                            formControlName="newPassword2"
+                            [ngClass]="{
+                                'is-invalid': confirmForm.controls['newPassword2'].touched &&
+                                confirmForm.controls['newPassword2'].errors,
+                                'is-valid': confirmForm.controls['newPassword2'].touched &&
+                                !confirmForm.controls['newPassword2'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="confirmForm.controls['newPassword2'].errors &&
+                            (confirmForm.controls['newPassword2'].dirty || confirmForm.controls['newPassword2'].touched)">
+                            <ng-container *ngFor="let message of confirmFormMessages['newPassword2']">
+                                <span *ngIf="confirmForm.get('newPassword2')?.hasError(message.type) &&
+                                    (confirmForm.get('newPassword1')?.dirty || confirmForm.get('newPassword1')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="col-7 d-grid gap-0">
+                        <button class="btn btn-primary"
+                            type="button"
+                            (click)="reset()"
+                            [disabled]="isProcessing || !confirmForm.valid" >
+                            <span *ngIf="!isProcessing; else isLoading">
+                                Confirm
+                            </span>
+                            <ng-template #isLoading>
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </ng-template>
+                        </button>
+
+                        <hr class="my-3" />
+
+                        <p class="mb-3 text-start">
+                            <small>
+                                Back to
+                                <a [routerLink]="'/auth/login'"
+                                    class="link-primary">
+                                    Login
+                                </a>
+                            </small>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Reset form -->
+            <ng-template #isNotConfirmReset>
+                <form [formGroup]="requestForm"
+                    class="need-validation row justify-content-center">
+                    <div class="col-7">
+                        <p class="text-muted">
+                            Please enter the account that
+                            you want to reset the password
+                        </p>
+                    </div>
+
+                    <div class="col-7 mb-3 position-relative">
+                        <label for="formEmail" class="form-label">
+                            Email
+                        </label>
+                        <input id="formEmail"
+                            type="email"
+                            class="form-control"
+                            placeholder="example@test.com"
+                            formControlName="email"
+                            [ngClass]="{
+                                'is-invalid': requestForm.controls['email'].touched &&
+                                requestForm.controls['email'].errors,
+                                'is-valid': requestForm.controls['email'].touched &&
+                                !requestForm.controls['email'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="requestForm.controls['email'].errors &&
+                            (requestForm.controls['email'].dirty || requestForm.controls['email'].touched)">
+                            <ng-container *ngFor="let message of requestFormMessages['email']">
+                                <span *ngIf="requestForm.get('email')?.hasError(message.type) &&
+                                    (requestForm.get('email')?.dirty || requestForm.get('email')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="col-7 d-grid gap-0">
+                        <button class="btn btn-primary"
+                            type="button"
+                            (click)="request()"
+                            [disabled]="isProcessing || !requestForm.valid" >
+                            <span *ngIf="!isProcessing; else isLoading">
+                                Request
+                            </span>
+                            <ng-template #isLoading>
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </ng-template>
+                        </button>
+
+                        <hr class="my-3" />
+
+                        <p class="mb-3 text-start">
+                            <small>
+                                Back to
+                                <a [routerLink]="'/auth/login'"
+                                    class="link-primary">
+                                    Login
+                                </a>
+                            </small>
+                        </p>
+                    </div>
+                </form>
+            </ng-template>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Image -->
+        </div>
+    </div>
+</div>

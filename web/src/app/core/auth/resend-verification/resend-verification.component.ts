@@ -9,28 +9,20 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-resend-verification',
+  templateUrl: './resend-verification.component.html',
+  styleUrls: ['./resend-verification.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
-
-  // Data
-  returnUrl: string | null
+export class ResendVerificationComponent implements OnInit, OnDestroy {
 
   // Form
-  loginForm: FormGroup = new FormGroup({
-    username: new FormControl(null),
-    password: new FormControl(null)
+  resendForm: FormGroup = new FormGroup({
+    email: new FormControl(null)
   })
-  loginFormMessages = {
-    username: [
+  resendFormMessages = {
+    email: [
       { type: 'required', message: 'Email address is required' },
       { type: 'email', message: 'Enter a valid email address' }
-    ],
-    password: [
-      { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' }
     ]
   }
 
@@ -47,9 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private authSvc: AuthService
-  ) {
-    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl')
-  }
+  ) { }
 
   ngOnInit(): void {
     this.initForm()
@@ -62,40 +52,40 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    this.loginForm = this.fb.group({
-      username: new FormControl(null, Validators.compose([
+    this.resendForm = this.fb.group({
+      email: new FormControl(null, Validators.compose([
         Validators.required,
         Validators.email
-      ])),
-      password: new FormControl(null, Validators.compose([
-        Validators.required,
-        Validators.minLength(8)
       ]))
     })
   }
 
-  login() {
+  resend() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.authSvc.login(this.loginForm.value).subscribe({
+    this.subscription = this.authSvc.resendVerification(this.resendForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
-        this.notifySvc.success('Success', 'Successfully login')
+        this.notifySvc.success('Success', 'Verification e-mail sent')
       },
       error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
         
+        let errorMsg = ''
+
         if (err.status !== 0) {
-          let errorMsg = ''
-          errorMsg = err.error.nonFieldErrors[0]
-          this.notifySvc.error('Error', errorMsg)
+          if ('nonFieldErrors' in err.error) {
+            errorMsg = err.error.nonFieldErrors[0]
+          } else if ('detail' in err.error) {
+            errorMsg = err.error.detail
+          }
         }
+
+        this.notifySvc.error('Error', errorMsg)
       },
-      complete: () => {
-        this.router.navigate(['/dashboard'])
-      }
+      complete: () => {}
     })
   }
 

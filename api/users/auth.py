@@ -1,21 +1,24 @@
 from datetime import datetime, timezone
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import (
+    PasswordResetForm
+)
+from django.core.mail import EmailMultiAlternatives
+from django.template import loader
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
+
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
 from allauth.account.views import ConfirmEmailView
-from dj_rest_auth.registration.serializers import VerifyEmailSerializer
-from drf_yasg import openapi
-from rest_framework.generics import GenericAPIView
-from rest_framework.views import APIView
 
-from .serializers import (
-    CustomResendVerificationSerializer,
-    CustomSetPasswordSerializer,
-    CustomVerifyEmailRenterSerializer,
-)
-from rest_framework.decorators import action, api_view
+from rest_framework import serializers, status
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
-from rest_framework import serializers, status
+from rest_framework.views import APIView
+
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -23,15 +26,13 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
-from django.contrib.auth import get_user_model
-from django.core.mail import EmailMultiAlternatives
-from django.template import loader
-from django.utils.decorators import method_decorator
-from django.utils.translation import gettext_lazy as _
-from drf_yasg.utils import swagger_auto_schema
-
-from .models import CustomUser, UserType
-
+from dj_rest_auth.registration.serializers import VerifyEmailSerializer
+from dj_rest_auth.registration.views import (
+    VerifyEmailView
+)
+from dj_rest_auth.serializers import (
+    PasswordResetSerializer
+)
 from dj_rest_auth.views import (
     LoginView,
     LogoutView,
@@ -40,18 +41,21 @@ from dj_rest_auth.views import (
     PasswordChangeView,
 )
 
-from dj_rest_auth.registration.views import (
-    VerifyEmailView
-)
-
-from django.contrib.auth.forms import (
-    PasswordResetForm
-)
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from core.helpers import (
     DjangoFilterDescriptionInspector,
     NoTitleAutoSchema,
     NoUnderscoreBeforeNumberCamelCaseJSONParser
+)
+
+from .forms import MyResetPasswordForm
+from .models import CustomUser, UserType
+from .serializers import (
+    CustomResendVerificationSerializer,
+    CustomSetPasswordSerializer,
+    CustomVerifyEmailRenterSerializer,
 )
 
 
@@ -176,6 +180,15 @@ class MyPasswordChangeView(PasswordChangeView):
     """
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
 
+
+class MyPasswordResetSerializer(PasswordResetSerializer):
+    """
+    Override PasswordResetSerializer
+    """
+    @property
+    def password_reset_form_class(self):
+        return MyResetPasswordForm
+
 @method_decorator(
     name='post', 
     decorator=swagger_auto_schema(
@@ -194,7 +207,7 @@ class MyPasswordResetView(PasswordResetView):
 
     Returns the success/fail message.
     """
-    pass
+    serializer_class = MyPasswordResetSerializer
 
 @method_decorator(
     name='post', 

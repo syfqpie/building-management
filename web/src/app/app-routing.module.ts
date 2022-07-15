@@ -1,6 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { AuthGuard } from './shared/handlers/guards/auth.guard';
+import { CurrentUserResolver } from './shared/handlers/resolvers/current-user.resolver';
+
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+import { NotFoundComponent } from './components/errors/not-found/not-found.component';
 
 const routes: Routes = [
   // Default
@@ -8,12 +13,14 @@ const routes: Routes = [
   {
     path: '',
     component: UserLayoutComponent,
+    resolve: { CurrentUserResolver },
     children: [
       {
         path: '',
-        // canActivate: [AuthGuard],
-        data: { roles: [1, 2, 3] },
-        loadChildren: () => import('./core/user/user.module').then(m => m.UserModule)}
+        canActivate: [AuthGuard],
+        data: { roles: [1, 2] },
+        loadChildren: () => import('./core/user/user.module').then(m => m.UserModule)
+      }
     ]
   },
   {
@@ -24,6 +31,11 @@ const routes: Routes = [
         loadChildren: () => import('./core/auth/auth.module').then(m => m.AuthModule)
       }
     ]
+  },
+  // Wildcard for error
+  {
+    path: '**',
+    component: NotFoundComponent
   }
 ];
 

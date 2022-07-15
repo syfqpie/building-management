@@ -21,14 +21,13 @@ class MyAccountAdapter(DefaultAccountAdapter):
             'activate_url': activate_url,
             'current_site': current_site,
             'key': emailconfirmation.key,
-            'verification_url': '{}verify-email?key={}'.format(current_site.domain, emailconfirmation.key)
+            'verification_url': 'https://{}auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
         }
 
         print(current_user.user_type)
 
         if current_user.user_type == UserType.PUBLIC:
-            # sponsored_job_application = JobApplication.objects.filter(candidate__user__id=current_user.id).values('sponsored_employer__company__name', 'position__title')[0]
-            ctx['verification_url'] = '{}verify-email-renter?key={}'.format(current_site.domain, emailconfirmation.key)
+            ctx['verification_url'] = 'https://{}auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
             if signup:
                 email_template = "account/email/renter_email_confirmation_signup"
             else:

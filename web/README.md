@@ -23,6 +23,7 @@ Run dev server
 ## References
 
 [Angular Command Reference](https://angular.io/cli)
+[Themeisle Illustrations](https://themeisle.com/illustrations/)
 
 ## Task List
 - [x] Edit angular.json
