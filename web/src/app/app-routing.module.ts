@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './shared/handlers/guards/auth.guard';
+import { CurrentUserResolver } from './shared/handlers/resolvers/current-user.resolver';
+
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 
 const routes: Routes = [
@@ -10,6 +12,7 @@ const routes: Routes = [
   {
     path: '',
     component: UserLayoutComponent,
+    resolve: { CurrentUserResolver },
     children: [
       {
         path: '',
