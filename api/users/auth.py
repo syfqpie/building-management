@@ -13,9 +13,9 @@ from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
 from allauth.account.views import ConfirmEmailView
 
-from rest_framework import serializers, status
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -51,7 +51,7 @@ from core.helpers import (
 )
 
 from .forms import MyResetPasswordForm
-from .models import CustomUser, UserType
+from .models import CustomUser
 from .serializers import (
     CustomResendVerificationSerializer,
     CustomSetPasswordSerializer,
@@ -433,10 +433,3 @@ class MyVerifyRenterEmailView(VerifyEmailView):
 
         return Response({'detail': _('ok')}, status=status.HTTP_200_OK)
 
-
-class IsSuperAdmin(IsAdminUser):
-    """
-    Allows access only to admin users.
-    """
-    def has_permission(self, request, view):
-        return bool(request.user and request.user.user_type == UserType.ADMIN)
