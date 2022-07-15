@@ -1,16 +1,18 @@
 <div class="container-fluid bg-dark vh-100">
     <div class="row h-100">
-        <div class="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center bg-white">
+        <div class="col-sm-12 col-md-4 d-flex align-items-center justify-content-center bg-white">
             <!-- Form -->
             <form [formGroup]="loginForm"
                 class="need-validation row justify-content-center">
-                <div class="col-7">
+                <div class="col-10 col-md-7">
+                    <img src="assets/images/illustrations/building-town.png"
+                        class="w-100 d-block d-md-none" />
                     <p class="text-muted">
                         Welcome back! Log in to your account
                     </p>
                 </div>
                 
-                <div class="col-7 mb-3 position-relative">
+                <div class="col-10 col-md-7 mb-3 position-relative">
                     <label for="formEmail" class="form-label">
                         Email
                     </label>
@@ -37,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="col-7 mb-3 position-relative">
+                <div class="col-10 col-md-7 mb-3 position-relative">
                     <label for="formPassword" class="form-label">
                         Password
                     </label>
@@ -65,7 +67,7 @@
                     </div>
                 </div>
 
-                <div class="col-7 d-grid gap-0">
+                <div class="col-10 col-md-7 d-grid gap-0">
                     <button class="btn btn-primary"
                         type="button"
                         (click)="login()"
@@ -102,7 +104,7 @@
             </form>
         </div>
 
-        <div class="col-lg-8 d-flex align-items-center justify-content-center">
+        <div class="col-md-8 d-md-flex align-items-center justify-content-center d-none">
             <!-- Image -->
             <img src="assets/images/illustrations/building-town.png"
                 style="height: 25rem;" />

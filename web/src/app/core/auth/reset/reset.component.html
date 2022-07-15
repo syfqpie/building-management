@@ -1,16 +1,18 @@
 <div class="container-fluid bg-dark vh-100">
     <div class="row h-100">
-        <div class="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center bg-white">
+        <div class="col-sm-12 col-md-4 d-flex align-items-center justify-content-center bg-white">
             <!-- Confirm reset form -->
             <div *ngIf="isConfirmReset; else isNotConfirmReset">
                 <form [formGroup]="confirmForm"
                     class="need-validation row justify-content-center">
-                    <div class="col-7">
+                    <div class="col-10 col-md-7">
+                        <img src="assets/images/illustrations/reset-password.png"
+                            class="w-100 d-block d-md-none" />
                         <p class="text-muted">
                             Confirm to reset password
                         </p>
                     </div>
-                    <div class="col-7 mb-3 position-relative">
+                    <div class="col-10 col-md-7 mb-3 position-relative">
                         <label for="formNewPassword1" class="form-label">
                             Password
                         </label>
@@ -37,7 +39,7 @@
                         </div>
                     </div>
 
-                    <div class="col-7 mb-3 position-relative">
+                    <div class="col-10 col-md-7 mb-3 position-relative">
                         <label for="formNewPassword2" class="form-label">
                             Confirm password
                         </label>
@@ -64,7 +66,7 @@
                         </div>
                     </div>
 
-                    <div class="col-7 d-grid gap-0">
+                    <div class="col-10 col-md-7 d-grid gap-0">
                         <button class="btn btn-primary"
                             type="button"
                             (click)="reset()"
@@ -105,14 +107,16 @@
             <ng-template #isNotConfirmReset>
                 <form [formGroup]="requestForm"
                     class="need-validation row justify-content-center">
-                    <div class="col-7">
+                    <div class="col-10 col-md-7">
+                        <img src="assets/images/illustrations/request-reset-password.png"
+                            class="w-100 d-block d-md-none" />
                         <p class="text-muted">
                             Please enter the account that
                             you want to reset the password
                         </p>
                     </div>
 
-                    <div class="col-7 mb-3 position-relative">
+                    <div class="col-10 col-md-7 mb-3 position-relative">
                         <label for="formEmail" class="form-label">
                             Email
                         </label>
@@ -139,7 +143,7 @@
                         </div>
                     </div>
 
-                    <div class="col-7 d-grid gap-0">
+                    <div class="col-10 col-md-7 d-grid gap-0">
                         <button class="btn btn-primary"
                             type="button"
                             (click)="request()"
@@ -177,7 +181,7 @@
             </ng-template>
         </div>
 
-        <div class="col-lg-8 d-flex align-items-center justify-content-center">
+        <div class="col-md-8 d-md-flex align-items-center justify-content-center d-none">
             <!-- Image -->
             <img *ngIf="isConfirmReset; else isNotConfirmResetImg"
                 src="assets/images/illustrations/reset-password.png"
