@@ -143,4 +143,16 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
+    # Get account information
+    @action(methods=['GET'], detail=False, url_path='get-account-info')
+    @swagger_auto_schema(
+        operation_description='Get self account information',
+        operation_id='Get account information',
+        tags=['Users'])
+    def get_account_information(self, request, *args, **kwargs):
+        user = request.user
+
+        serializer = CustomUserSerializer(user, many=False)
+        return Response(serializer.data)
+
     
