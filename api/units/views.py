@@ -13,7 +13,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from django_filters.rest_framework import DjangoFilterBackend
 from core.settings import DEBUG
 
-from users.auth import IsSuperAdmin
+from users.permissions import IsSuperAdmin
 
 from .models import (
     Block,
