@@ -80,7 +80,7 @@
 
                     <hr class="my-3" />
 
-                    <p class="mb-3">
+                    <p class="mb-0">
                         <small class="text-muted">
                             Forgot password?
                             <a [routerLink]="'/auth/reset'"
@@ -89,12 +89,23 @@
                             </a>
                         </small>
                     </p>
+                    <p class="mb-3">
+                        <small class="text-muted">
+                            No verification email?
+                            <a [routerLink]="'/auth/resend-verification'"
+                                class="link-primary">
+                                Resend
+                            </a>
+                        </small>
+                    </p>
                 </div>
             </form>
         </div>
 
-        <div class="col-lg-8">
+        <div class="col-lg-8 d-flex align-items-center justify-content-center">
             <!-- Image -->
+            <img src="assets/images/illustrations/building-town.png"
+                style="height: 25rem;" />
         </div>
     </div>
 </div>

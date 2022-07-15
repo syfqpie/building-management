@@ -79,12 +79,21 @@
 
                         <hr class="my-3" />
 
-                        <p class="mb-3 text-start">
-                            <small>
+                        <p class="mb-0">
+                            <small class="text-muted">
                                 Back to
                                 <a [routerLink]="'/auth/login'"
                                     class="link-primary">
                                     Login
+                                </a>
+                            </small>
+                        </p>
+                        <p class="mb-3">
+                            <small class="text-muted">
+                                No verification email?
+                                <a [routerLink]="'/auth/resend-verification'"
+                                    class="link-primary">
+                                    Resend
                                 </a>
                             </small>
                         </p>
@@ -145,12 +154,21 @@
 
                         <hr class="my-3" />
 
-                        <p class="mb-3 text-start">
-                            <small>
+                        <p class="mb-0">
+                            <small class="text-muted">
                                 Back to
                                 <a [routerLink]="'/auth/login'"
                                     class="link-primary">
                                     Login
+                                </a>
+                            </small>
+                        </p>
+                        <p class="mb-3">
+                            <small class="text-muted">
+                                No verification email?
+                                <a [routerLink]="'/auth/resend-verification'"
+                                    class="link-primary">
+                                    Resend
                                 </a>
                             </small>
                         </p>
@@ -159,8 +177,15 @@
             </ng-template>
         </div>
 
-        <div class="col-lg-8">
+        <div class="col-lg-8 d-flex align-items-center justify-content-center">
             <!-- Image -->
+            <img *ngIf="isConfirmReset; else isNotConfirmResetImg"
+                src="assets/images/illustrations/reset-password.png"
+                style="height: 25rem;" />
+            <ng-template #isNotConfirmResetImg>
+                <img src="assets/images/illustrations/request-reset-password.png"
+                    style="height: 25rem;" />
+            </ng-template>
         </div>
     </div>
 </div>

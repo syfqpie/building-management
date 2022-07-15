@@ -91,6 +91,15 @@
 
                     <hr class="my-3" />
 
+                    <p class="mb-0">
+                        <small class="text-muted">
+                            Back to
+                            <a [routerLink]="'/auth/login'"
+                                class="link-primary">
+                                Login
+                            </a>
+                        </small>
+                    </p>
                     <p class="mb-3">
                         <small class="text-muted">
                             Forgot password?
@@ -104,8 +113,10 @@
             </form>
         </div>
 
-        <div class="col-lg-8">
+        <div class="col-lg-8 d-flex align-items-center justify-content-center">
             <!-- Image -->
+            <img src="assets/images/illustrations/verify-account.png"
+                style="height: 25rem;" />
         </div>
     </div>
 </div>
