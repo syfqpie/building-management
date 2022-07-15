@@ -5,14 +5,17 @@ import { RouterModule } from '@angular/router';
 
 // Components
 import { UserRoutes } from './user.routing';
+import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
 import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
-import { AboutSystemComponent } from './about-system/about-system.component';
-import { SystemAdminComponent } from './system-admin/system-admin.component';
 
+// Child components
+import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
+import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { SystemAdminComponent } from './system-admin/system-admin.component';
     UnitsComponent,
     UnitsConfigurationComponent,
     AboutSystemComponent,
-    SystemAdminComponent
+    SystemAdminComponent,
+    // Child components
+    AccountSettingsComponent,
+    PasswordSettingsComponent
   ],
   imports: [
     CommonModule,

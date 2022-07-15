@@ -24,7 +24,7 @@ from core.helpers import (
     ResultsPagination
 )
 
-from users.auth import IsSuperAdmin
+from users.permissions import IsSuperAdmin
 
 from .models import (
     Renter

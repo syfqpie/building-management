@@ -52,4 +52,14 @@ export class UsersService {
     )
   }
 
+  patchAccount(body: any, id: number): Observable<User> {
+    const urlTemp = `${ BASE_URL }${id}/`
+    return this.http.patch<User>(urlTemp, body).pipe(
+      tap((res: User) => {
+        this.currentUser = res
+        // console.log('Current user: ', this.currentUser)
+      })
+    )
+  }
+
 }
