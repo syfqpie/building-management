@@ -19,13 +19,38 @@ class CustomUserSerializer(serializers.ModelSerializer):
 		    'user_type',
 		    'email',
 		    'is_active',
+            'is_staff',
             'is_superuser',
             'last_login',
             'date_joined',
             'created_at',
 		    'last_modified_at',
         ]
-        read_only_fields = ('email', 'id')
+        read_only_fields = ['email']
+
+
+class CustomUserNotSuperAdminSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id',
+		    'full_name',
+		    'user_type',
+		    'email',
+		    'is_active',
+            'is_staff',
+            'is_superuser',
+            'last_login',
+            'date_joined',
+            'created_at',
+		    'last_modified_at',
+        ]
+        read_only_fields = [
+            'user_type', 'email',
+            'is_active', 'is_staff',
+            'is_superuser'
+        ]
 
 
 class CustomResendVerificationSerializer(serializers.Serializer):
