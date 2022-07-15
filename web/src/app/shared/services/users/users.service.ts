@@ -37,7 +37,7 @@ export class UsersService {
     return this.http.get<User>(urlTemp).pipe(
       tap((res: User) => {
         this.user = res
-        // console.log('User: ', this.user)
+        console.log('User: ', this.user)
       })
     )
   }
@@ -47,7 +47,7 @@ export class UsersService {
     return this.http.get<User>(urlTemp).pipe(
       tap((res: User) => {
         this.currentUser = res
-        console.log('Current user: ', this.currentUser)
+        // console.log('Current user: ', this.currentUser)
       })
     )
   }
