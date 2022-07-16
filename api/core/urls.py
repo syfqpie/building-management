@@ -87,7 +87,8 @@ unit_numbers_router = router.register(
 
 # Users
 from users.views import (
-    CustomUserViewSet
+    CustomUserViewSet,
+    AdminCustomRegisterView
 )
 users_router = router.register(
     r'users', CustomUserViewSet
@@ -108,6 +109,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/registration/admin/', AdminCustomRegisterView.as_view(), name='admin_register'),
     path('auth/registration/renter/', RenterCustomRegisterView.as_view(), name='renter_register'),
     path('auth/registration/verify-email/', MyVerifyEmailView.as_view(), name='account_email_verification_sent'),
     path('auth/registration/verify-email-renter/', MyVerifyRenterEmailView.as_view(), name='account_renter_email_verification_sent'),

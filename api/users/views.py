@@ -11,7 +11,7 @@ import datetime
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from django.utils.decorators import method_decorator
-
+from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
 from core.helpers import (
@@ -28,7 +28,8 @@ from .models import (
 from .serializers import (
     CustomUserSerializer,
     CustomUserNotSuperAdminSerializer,
-    CustomUserVerificationSerializer
+    CustomUserVerificationSerializer,
+    AdminCustomRegisterSerializer
 )
 from .permissions import (
     IsAdminStaff,
@@ -193,4 +194,38 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         serializer = CustomUserVerificationSerializer(users, many=True)
         return Response(serializer.data)
-    
+
+
+@method_decorator(
+    name='post', 
+    decorator=swagger_auto_schema(
+        operation_id='Register new account for renter',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        tags=['Renters']
+    )
+)
+class AdminCustomRegisterView(RegisterView):
+    parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
+    serializer_class = AdminCustomRegisterSerializer
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsSuperAdmin
+        ]
+
+        return [permission() for permission in permission_classes]  
+
+    def create(self, request, *args, **kwargs):
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        admin_user = self.perform_create(serializer)
+        response_msg = {
+            'Success':  f'Admin user created, an email has been sent to {admin_user.email}'
+        }
+        return Response(
+            response_msg,
+            status=status.HTTP_201_CREATED
+        )

@@ -5,9 +5,11 @@ from django.utils.translation import gettext as _
 from allauth.account import app_settings
 from allauth.account.models import EmailAddress
 from allauth.account.adapter import get_adapter
+from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
+from decouple import config
 
-from .models import CustomUser
+from .models import CustomUser, UserType
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -118,3 +120,30 @@ class CustomSetPasswordSerializer(serializers.Serializer):
 
     def save(self):
         self.set_password_form.save()
+
+
+class AdminCustomRegisterSerializer(RegisterSerializer):
+    admin_user = serializers.PrimaryKeyRelatedField(read_only=True)
+    full_name = serializers.CharField()
+    is_superuser = serializers.BooleanField(required=False)
+    password1 = serializers.HiddenField(required=False, default=config('REGISTER_DEF_PWD', ''))
+    password2 = serializers.HiddenField(required=False, default=config('REGISTER_DEF_PWD', ''))
+
+    def get_cleaned_data(self):
+        # Get extra parameter
+        data = {
+            'username': self.validated_data.get('username', None),
+            'password1': self.validated_data.get('password1', None),
+            'password2': self.validated_data.get('password2', None),
+            'email': self.validated_data.get('username', None),
+            'full_name': self.validated_data.get('full_name', None),
+            'is_superuser': self.validated_data.get('is_superuser', False),
+            'user_type': UserType.ADMIN,
+            'is_staff': True
+        }
+
+        return data
+
+    def validate_email(self, email):
+        email = get_adapter().clean_email(email)
+        return email
