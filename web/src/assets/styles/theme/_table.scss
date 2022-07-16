@@ -1,0 +1,54 @@
+.ngx-datatable.bootstrap {
+    .datatable-header {
+        background: #212529 !important;
+        color: #ededed !important;
+
+        .datatable-header-cell {
+            &.sortable:hover {
+                .datatable-header-cell-wrapper {
+                    color: rgb(86, 97, 217, 0.5) !important;
+                }
+            }
+            &.sort-active {
+                .datatable-header-cell-wrapper .datatable-header-cell-label,
+                .sort-btn.sort-asc,
+                .sort-btn.sort-desc {
+                    color: #5661d9 !important;
+                    text-decoration: underline !important;
+                }
+            }
+        }
+    }
+
+    .datatable-body {
+        .datatable-body-row.active {
+            background-color: rgba(86, 97, 217, 0.25) !important;
+            color: #000 !important;
+        }
+    }
+
+    .datatable-footer {
+        background: #212529 !important;
+        .datatable-pager {
+            ul {
+                li {
+                  margin: 10px 0px;
+                  &:not(.disabled) {
+                    &:hover {
+                      a {
+                        background-color: rgb(86, 97, 217, 0.5) !important;
+                        color: #fff !important;
+                      }
+                    }
+                    &.active {
+                        a {
+                            background-color: #5661d9 !important;
+                            color: #fff !important;
+                        }
+                    }
+                  }
+                }
+            }
+        }
+    }
+}

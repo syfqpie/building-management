@@ -17,6 +17,8 @@ import { UnitsConfigurationComponent } from './units-configuration/units-configu
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -35,6 +37,8 @@ import { PasswordSettingsComponent } from 'src/app/components/settings/password-
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(UserRoutes),
+    // 3rd party
+    NgxDatatableModule
   ]
 })
 export class UserModule { }
