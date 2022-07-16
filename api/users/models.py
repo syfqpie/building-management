@@ -26,7 +26,7 @@ class CustomUser(AbstractUser):
     # history = HistoricalRecords()
 
     class Meta:
-        ordering = ['full_name']
+        ordering = ['id']
 
     def __str__(self):
         return ('%s'%(self.full_name))
