@@ -1,1 +1,124 @@
-<p>system-admin works!</p>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-transparent">
+            <h5 class="card-title mb-0">List of users</h5>
+        </div>
+        <div class="card-body">
+            <ngx-datatable
+                class="bootstrap rounded-2"
+                [rows]="rows"
+                [loadingIndicator]="loadingIndicator"
+                [columnMode]="ColumnMode.flex"
+                [limit]="5"
+                rowHeight="auto"
+                [footerHeight]="50"
+                [messages]="tableMessages"
+                [selected]="selected"
+                [selectionType]="SelectionType.single"
+                (select)="onSelect($event)"
+                [cssClasses]="tableClass">
+                <ngx-datatable-column name="Id"
+                    prop="id"
+                    [flexGrow]="1">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <p class="mb-0">
+                            {{ value }}
+                        </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Email"
+                    prop="email"
+                    [flexGrow]="2">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <p class="mb-0">
+                            {{ value }}
+                        </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="User type"
+                    prop="userType"
+                    [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        <p class="mb-0">
+                            <small [ngClass]="{
+                                    'bg-primary text-primary
+                                        border-primary': row.userType === 1 && row.isStaff && row.isSuperuser,
+                                    'bg-info text-info
+                                        border-info': row.userType === 1 && row.isStaff && !row.isSuperuser,
+                                    'bg-secondary text-secondary
+                                        border-secondary': row.userType === 2 && !row.isStaff && !row.isSuperuser
+                                }"
+                                class="d-inline-flex px-2 py-1 bg-opacity-10
+                                    border border-opacity-10 rounded-2">
+                                <span *ngIf="row.userType === 1; else isNotAdmin">
+                                    <span *ngIf="row.isStaff && row.isSuperuser; else isNotSuperuser">
+                                        <i class="fa-solid fa-user-astronaut my-auto"></i>
+                                        Superadmin
+                                    </span>
+                                    <ng-template #isNotSuperuser>
+                                        <span>
+                                            <i class="fa-solid fa-user-shield my-auto"></i>
+                                            Admin
+                                        </span>
+                                    </ng-template>
+                                </span>
+                                <ng-template #isNotAdmin>
+                                    <span>
+                                        <i class="fa-solid fa-user-check my-auto"></i>
+                                        Public
+                                    </span>
+                                </ng-template>
+                            </small>
+                        </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Verified"
+                    prop="verification"
+                    [flexGrow]="2"
+                    [comparator]="companyComparator">
+                    <!-- <ng-template let-column="column" ngx-datatable-header-template>
+                        
+                    </ng-template> -->
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <p class="mb-0">
+                            <small [ngClass]="{
+                                'bg-success text-success border-success':  value[0].verified === true,
+                                'bg-danger text-danger border-danger': value[0].verified === false
+                            }"
+                                class="d-inline-flex px-2 py-1 bg-opacity-10
+                                    border border-opacity-10 rounded-2">
+                                <span *ngIf="value[0].verified; else isNoVerification">
+                                    <i class="fa-regular fa-circle-check my-auto"></i>
+                                    Verified
+                                </span>
+                                <ng-template #isNoVerification>
+                                    <span>
+                                        <i class="fa-solid fa-circle-exclamation my-auto"></i>
+                                        Not verified
+                                    </span>
+                                </ng-template>
+                            </small>
+                        </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Last login at"
+                    prop="lastLogin"
+                    [flexGrow]="5">
+                    <!-- <ng-template let-column="column" ngx-datatable-header-template>
+                        
+                    </ng-template> -->
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <p class="mb-0">
+                            {{ value | date : 'dd/MM/yyyy' }}
+                        </p>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
