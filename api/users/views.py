@@ -27,7 +27,8 @@ from .models import (
 )
 from .serializers import (
     CustomUserSerializer,
-    CustomUserNotSuperAdminSerializer
+    CustomUserNotSuperAdminSerializer,
+    CustomUserVerificationSerializer
 )
 from .permissions import (
     IsAdminStaff,
@@ -100,6 +101,8 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             permission_classes.append(IsSuperAdmin)
         elif self.action == 'partial_update':
             permission_classes.append(IsCustomUserOwnerOrAdmin)
+        elif self.action == 'get_users_verification':
+            permission_classes.append(IsSuperAdmin)
 
         return [permission() for permission in permission_classes]    
     
@@ -177,5 +180,17 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         serializer = CustomUserSerializer(user, many=False)
         return Response(serializer.data)
+    
 
+    # Get all users with verification status
+    @action(methods=['GET'], detail=False, url_path='get-users-verification')
+    @swagger_auto_schema(
+        operation_description='Get all users verification',
+        operation_id='Get all users with verification',
+        tags=['Users'])
+    def get_users_verification(self, request, *args, **kwargs):
+        users = self.get_queryset()
+
+        serializer = CustomUserVerificationSerializer(users, many=True)
+        return Response(serializer.data)
     

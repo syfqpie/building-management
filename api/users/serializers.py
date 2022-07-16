@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext as _
 
 from allauth.account import app_settings
+from allauth.account.models import EmailAddress
 from allauth.account.adapter import get_adapter
 from rest_framework import serializers
 
@@ -29,6 +30,16 @@ class CustomUserSerializer(serializers.ModelSerializer):
         read_only_fields = ['email']
 
 
+class EmailAddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EmailAddress
+        fields = [
+            'email',
+            'verified'
+        ]
+
+
 class CustomUserNotSuperAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -51,6 +62,28 @@ class CustomUserNotSuperAdminSerializer(serializers.ModelSerializer):
             'is_active', 'is_staff',
             'is_superuser'
         ]
+
+
+class CustomUserVerificationSerializer(serializers.ModelSerializer):
+    verification = EmailAddressSerializer(source='emailaddress_set', read_only=True, many=True)
+    
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id',
+		    'full_name',
+		    'user_type',
+		    'email',
+		    'is_active',
+            'is_staff',
+            'is_superuser',
+            'last_login',
+            'date_joined',
+            'created_at',
+		    'last_modified_at',
+            'verification'
+        ]
+        read_only_fields = ['email']
 
 
 class CustomResendVerificationSerializer(serializers.Serializer):
