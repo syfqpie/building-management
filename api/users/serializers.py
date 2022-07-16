@@ -126,6 +126,7 @@ class AdminCustomRegisterSerializer(RegisterSerializer):
     admin_user = serializers.PrimaryKeyRelatedField(read_only=True)
     full_name = serializers.CharField()
     is_superuser = serializers.BooleanField(required=False)
+    email = serializers.EmailField(required=False, source='username')
     password1 = serializers.HiddenField(required=False, default=config('REGISTER_DEF_PWD', ''))
     password2 = serializers.HiddenField(required=False, default=config('REGISTER_DEF_PWD', ''))
 
@@ -147,3 +148,17 @@ class AdminCustomRegisterSerializer(RegisterSerializer):
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
         return email
+    
+    def save(self, request):
+        # Call default first
+        renter_user = super(AdminCustomRegisterSerializer, self).save(request)
+
+        # To save this values
+        renter_user.full_name = self.cleaned_data.get('full_name')
+        renter_user.is_superuser = self.cleaned_data.get('is_superuser')
+        renter_user.user_type = self.cleaned_data.get('user_type')
+        renter_user.is_staff = self.cleaned_data.get('is_staff')
+
+        renter_user.save()
+
+        return renter_user
