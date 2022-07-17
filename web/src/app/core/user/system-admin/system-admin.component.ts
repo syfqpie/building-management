@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ContentChild, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
+import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
 import { UserVerification } from 'src/app/shared/services/users/users.model';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 
@@ -40,8 +41,13 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
 
   // Checker
   isProcessing: boolean = false
+  isRegisterAdmin: boolean = false
 
   subscription: Subscription | undefined
+
+  // Event
+  @ViewChild(SysRegisterAdminComponent) registerModal: SysRegisterAdminComponent | undefined
+  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
     private userSvc: UsersService
@@ -52,9 +58,9 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      if (this.subscription) {
-        this.subscription.unsubscribe()
-      }
+    if (this.subscription) {
+      this.subscription.unsubscribe()
+    }
   }
 
   getData() {
@@ -70,7 +76,7 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
 
   // Table on select row
   onSelect(selected: UserVerification[]) {
-    console.log('Select Event', selected);
+    console.log('Select Event', selected)
   }
 
   // Sort by verification
@@ -81,6 +87,12 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
       return 1
     }
     return 0
+  }
+
+  toggleModal() {
+    this.isRegisterAdmin = !this.isRegisterAdmin
+    this.registerModal?.toggleModal()
+    this.changedEvent.emit(true)
   }
 
 }

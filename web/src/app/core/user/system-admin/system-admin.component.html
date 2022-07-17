@@ -1,9 +1,22 @@
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-header bg-transparent">
-            <h5 class="card-title mb-0">List of users</h5>
+    <app-sys-register-admin></app-sys-register-admin>
+    <div class="row mb-3">
+        <div class="col text-end">
+            <button class="btn btn-outline-primary btn-sm"
+            (click)="toggleModal()">
+                <i class="fa-solid fa-user-plus"></i>
+                Admin
+            </button>
         </div>
+    </div>
+    <div class="card">
         <div class="card-body">
+            <h5 class="card-title">
+                List of users
+            </h5>
+            <h6 class="card-subtitle mb-3 text-muted">
+                Manage users here
+            </h6>
             <ngx-datatable
                 class="bootstrap rounded-2"
                 [rows]="rows"
@@ -19,7 +32,9 @@
                 [cssClasses]="tableClass">
                 <ngx-datatable-column name="Id"
                     prop="id"
-                    [flexGrow]="1">
+                    [flexGrow]="1"
+                    [draggable]="false"
+                    [resizeable]="false">
                     <ng-template let-value="value" ngx-datatable-cell-template>
                         <p class="mb-0">
                             {{ value }}
@@ -29,7 +44,9 @@
 
                 <ngx-datatable-column name="Email"
                     prop="email"
-                    [flexGrow]="2">
+                    [flexGrow]="2"
+                    [draggable]="false"
+                    [resizeable]="false">
                     <ng-template let-value="value" ngx-datatable-cell-template>
                         <p class="mb-0">
                             {{ value }}
@@ -39,7 +56,9 @@
 
                 <ngx-datatable-column name="User type"
                     prop="userType"
-                    [flexGrow]="2">
+                    [flexGrow]="2"
+                    [draggable]="false"
+                    [resizeable]="false">
                     <ng-template let-row="row" ngx-datatable-cell-template>
                         <p class="mb-0">
                             <small [ngClass]="{
@@ -78,7 +97,9 @@
                 <ngx-datatable-column name="Verified"
                     prop="verification"
                     [flexGrow]="2"
-                    [comparator]="companyComparator">
+                    [comparator]="companyComparator"
+                    [draggable]="false"
+                    [resizeable]="false">
                     <!-- <ng-template let-column="column" ngx-datatable-header-template>
                         
                     </ng-template> -->
@@ -105,10 +126,11 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-
                 <ngx-datatable-column name="Last login at"
                     prop="lastLogin"
-                    [flexGrow]="5">
+                    [flexGrow]="4"
+                    [draggable]="false"
+                    [resizeable]="false">
                     <!-- <ng-template let-column="column" ngx-datatable-header-template>
                         
                     </ng-template> -->
