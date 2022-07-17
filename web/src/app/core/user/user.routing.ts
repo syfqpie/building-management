@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -45,5 +46,9 @@ export const UserRoutes: Routes = [
     {
         path: 'about-system',
         component: AboutSystemComponent
+    },
+    {
+        path: 'not-authorized',
+        component: NotAuthorizedComponent
     }
 ]

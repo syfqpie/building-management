@@ -15,6 +15,7 @@ import { UnitsConfigurationComponent } from './units-configuration/units-configu
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
+import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
 
@@ -33,6 +34,7 @@ import { BaseModalComponent } from 'src/app/components/custom/base-modal/base-mo
     SystemAdminComponent,
     // Child components
     AccountSettingsComponent,
+    NotAuthorizedComponent,
     PasswordSettingsComponent,
     SysRegisterAdminComponent,
     // Reusable components
