@@ -92,7 +92,7 @@ class CustomResendVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=app_settings.EMAIL_MAX_LENGTH)
 
 
-class CustomVerifyEmailRenterSerializer(serializers.Serializer):
+class CustomVerifyEmailSerializer(serializers.Serializer):
     key = serializers.CharField()
     new_password1 = serializers.CharField(max_length=128)
     new_password2 = serializers.CharField(max_length=128)

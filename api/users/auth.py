@@ -55,7 +55,7 @@ from .models import CustomUser
 from .serializers import (
     CustomResendVerificationSerializer,
     CustomSetPasswordSerializer,
-    CustomVerifyEmailRenterSerializer,
+    CustomVerifyEmailSerializer,
 )
 
 
@@ -232,26 +232,26 @@ class MyPasswordResetConfirmView(PasswordResetConfirmView):
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
 
 
-@method_decorator(
-    name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Verify registration email',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
-)
-class MyVerifyEmailView(VerifyEmailView):
-    """
-    Verify a new registered account
+# @method_decorator(
+#     name='post', 
+#     decorator=swagger_auto_schema(
+#         operation_id='Verify registration email',
+#         filter_inspectors=[DjangoFilterDescriptionInspector],
+#         tags=['Authentication']
+#     )
+# )
+# class MyVerifyEmailView(VerifyEmailView):
+#     """
+#     Verify a new registered account
     
-    Verify a new registered account in the system
+#     Verify a new registered account in the system
 
-    Accepts the following POST parameters: key,
-        newPassword1, newPassword2
+#     Accepts the following POST parameters: key,
+#         newPassword1, newPassword2
     
-    Returns status detail.
-    """
-    parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
+#     Returns status detail.
+#     """
+#     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     
 
 class MyPasswordResetForm(PasswordResetForm):
@@ -372,7 +372,7 @@ class MyResendVerificationView(GenericAPIView):
 #         tags=['Authentication']
 #     )
 # )
-class MyVerifyRenterEmailView(VerifyEmailView):
+class MyVerifyEmailView(VerifyEmailView):
     """
     Verify a new registered account
     
@@ -386,7 +386,7 @@ class MyVerifyRenterEmailView(VerifyEmailView):
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     
     @swagger_auto_schema(
-        request_body=CustomVerifyEmailRenterSerializer,
+        request_body=CustomVerifyEmailSerializer,
         responses={
             status.HTTP_200_OK: openapi.Response(
                 description='Return detail',
@@ -399,7 +399,7 @@ class MyVerifyRenterEmailView(VerifyEmailView):
         },
         tags=['Authentication'])
     def post(self, request, *args, **kwargs):
-        serializers = CustomVerifyEmailRenterSerializer(data=request.data)
+        serializers = CustomVerifyEmailSerializer(data=request.data)
         serializers.is_valid(raise_exception=True)
 
         verify_email_serializer = VerifyEmailSerializer(data={'key': request.data['key']})        
