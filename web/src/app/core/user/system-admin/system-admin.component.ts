@@ -1,4 +1,5 @@
-import { Component, ContentChild, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ContentChild, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
@@ -16,12 +17,6 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   users: UserVerification[] = []
 
   rows: UserVerification[] = []
-  columns = [
-    { name: 'Id', prop: 'id' },
-    { name: 'Email', prop: 'email' },
-    { name: 'Last login at', prop: 'lastLogin' },
-    { name: 'Verification', prop: 'verification[0].verified' }
-  ]
   loadingIndicator: boolean = true
   reorderable: boolean = true
   ColumnMode = ColumnMode
@@ -38,6 +33,8 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
     pagerPrevious: 'fa-solid fa-angles-left ms-1 small',
     pagerNext: 'fa-solid fa-angles-right ms-1 small'
   }
+  @ViewChild('isEmptyCell')
+  isEmptyCell: TemplateRef<any> | undefined
 
   // Checker
   isProcessing: boolean = false
@@ -50,6 +47,7 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
+    private loadingBar: LoadingBarService,
     private userSvc: UsersService
   ) { }
 
@@ -64,9 +62,17 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   }
 
   getData() {
+    this.loadingBar.useRef('http').start()
+    this.isProcessing = true
     this.subscription = this.userSvc.getAllVerification().subscribe({
-      next: () => {},
-      error: () => {},
+      next: () => {
+        this.loadingBar.useRef('http').complete()
+        this.isProcessing = false
+      },
+      error: () => {
+        this.loadingBar.useRef('http').stop()
+        this.isProcessing = false
+      },
       complete: () => {
         this.users = this.userSvc.userVerifications
         this.rows = [...this.users]
