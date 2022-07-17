@@ -1,0 +1,12 @@
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <ng-container *ngTemplateOutlet="tplRef"></ng-container>
+    </div>
+</div>
+
+<div class="modal-backdrop show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+</div>

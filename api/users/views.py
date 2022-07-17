@@ -11,7 +11,7 @@ import datetime
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from django.utils.decorators import method_decorator
-
+from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
 from core.helpers import (
@@ -27,7 +27,9 @@ from .models import (
 )
 from .serializers import (
     CustomUserSerializer,
-    CustomUserNotSuperAdminSerializer
+    CustomUserNotSuperAdminSerializer,
+    CustomUserVerificationSerializer,
+    AdminCustomRegisterSerializer
 )
 from .permissions import (
     IsAdminStaff,
@@ -100,6 +102,8 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             permission_classes.append(IsSuperAdmin)
         elif self.action == 'partial_update':
             permission_classes.append(IsCustomUserOwnerOrAdmin)
+        elif self.action == 'get_users_verification':
+            permission_classes.append(IsSuperAdmin)
 
         return [permission() for permission in permission_classes]    
     
@@ -177,5 +181,51 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         serializer = CustomUserSerializer(user, many=False)
         return Response(serializer.data)
-
     
+
+    # Get all users with verification status
+    @action(methods=['GET'], detail=False, url_path='get-users-verification')
+    @swagger_auto_schema(
+        operation_description='Get all users verification',
+        operation_id='Get all users with verification',
+        tags=['Users'])
+    def get_users_verification(self, request, *args, **kwargs):
+        users = self.get_queryset()
+
+        serializer = CustomUserVerificationSerializer(users, many=True)
+        return Response(serializer.data)
+
+
+@method_decorator(
+    name='post', 
+    decorator=swagger_auto_schema(
+        operation_id='Register new account for renter',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        tags=['Renters']
+    )
+)
+class AdminCustomRegisterView(RegisterView):
+    parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
+    serializer_class = AdminCustomRegisterSerializer
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsSuperAdmin
+        ]
+
+        return [permission() for permission in permission_classes]  
+
+    def create(self, request, *args, **kwargs):
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        admin_user = self.perform_create(serializer)
+        response_msg = {
+            'Success':  f'Admin user created, an email has been sent to {admin_user.email}'
+        }
+        return Response(
+            response_msg,
+            status=status.HTTP_201_CREATED
+        )

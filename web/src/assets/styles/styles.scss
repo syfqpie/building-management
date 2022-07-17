@@ -3,6 +3,7 @@
 // Variables
 
 // Theme
+@import './theme/table';
 @import './theme/theme';
 @import './theme/toastr';
 @import './theme/typography';
@@ -21,6 +22,11 @@
 // @import '~@fortawesome/fontawesome-free/scss/regular.scss';
 // @import '~@fortawesome/fontawesome-free/scss/solid.scss';
 // @import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+// Table
+@import '~@swimlane/ngx-datatable/index.css';
+@import '~@swimlane/ngx-datatable/themes/bootstrap.scss';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
 
 // Prime custom
 @import './prime/p-tab-view';

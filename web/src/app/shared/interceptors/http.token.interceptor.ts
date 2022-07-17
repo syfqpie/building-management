@@ -20,7 +20,8 @@ export class HttpTokenInterceptor implements HttpInterceptor {
   constructor(
     private jwtSvc: JwtService,
     private notify: NotifyService,
-    private authSvc: AuthService
+    private authSvc: AuthService,
+    private router: Router
   ) { }
 
   private handleError(error: HttpErrorResponse) {
@@ -38,10 +39,15 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         if (
           error.status === 401 &&
           error.error.code === 'token_not_valid'
-          ) {
-            this.notify.error('Session ended', 'Please try to login again')
-            this.authSvc.logout()
-          }
+        ) {
+          this.notify.error('Session ended', 'Please try to login again')
+          this.authSvc.logout()
+        } else if (
+          error.status === 403 &&
+          error.error?.detail === 'You do not have permission to perform this action.'
+        ) {
+          this.router.navigate(['/not-authorized'])
+        }
       }
     } else {
       // Handle Client Error (Angular Error, ReferenceError...)

@@ -1,6 +1,7 @@
 from django.conf import settings
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account import app_settings
+from allauth.utils import build_absolute_uri
 from django.contrib.sites.shortcuts import get_current_site
 from decouple import config
 from django.utils.encoding import force_str
@@ -24,14 +25,17 @@ class MyAccountAdapter(DefaultAccountAdapter):
             'verification_url': 'https://{}auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
         }
 
-        print(current_user.user_type)
-
         if current_user.user_type == UserType.PUBLIC:
             ctx['verification_url'] = 'https://{}auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
             if signup:
                 email_template = "account/email/renter_email_confirmation_signup"
             else:
                 email_template = "account/email/renter_email_confirmation"
+        elif current_user.user_type == UserType.ADMIN:
+            if signup:
+                email_template = "account/email/admin_email_confirmation_signup"
+            else:
+                email_template = "account/email/admin_email_confirmation"
         else:
             if signup:
                 email_template = 'account/email/email_confirmation_signup'

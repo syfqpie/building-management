@@ -85,7 +85,7 @@ export class AuthService {
   }
 
   verifyAccount(body: any): Observable<DetailResponse> {
-    const urlTemp = `${ BASE_URL }registration/verify-email-renter/`
+    const urlTemp = `${ BASE_URL }registration/verify-email/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
         // console.log('Verify account', res)
@@ -95,6 +95,15 @@ export class AuthService {
 
   resendVerification(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }registration/resend-verification/`
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Resend verification', res)
+      })
+    )
+  }
+
+  registerAdmin(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }registration/admin/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
         // console.log('Resend verification', res)

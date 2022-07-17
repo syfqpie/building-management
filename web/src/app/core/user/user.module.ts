@@ -15,7 +15,13 @@ import { UnitsConfigurationComponent } from './units-configuration/units-configu
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
+import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
+import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
+
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { BaseModalComponent } from 'src/app/components/custom/base-modal/base-modal.component';
+
 
 @NgModule({
   declarations: [
@@ -28,13 +34,19 @@ import { PasswordSettingsComponent } from 'src/app/components/settings/password-
     SystemAdminComponent,
     // Child components
     AccountSettingsComponent,
-    PasswordSettingsComponent
+    NotAuthorizedComponent,
+    PasswordSettingsComponent,
+    SysRegisterAdminComponent,
+    // Reusable components
+    BaseModalComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(UserRoutes),
+    // 3rd party
+    NgxDatatableModule
   ]
 })
 export class UserModule { }
