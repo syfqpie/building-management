@@ -31,6 +31,7 @@ from .models import (
 )
 
 from .serializers import (
+    RenterAdminSerializer,
     RenterSerializer,
     RenterPublicSerializer,
     RenterCustomRegisterSerializer
@@ -81,6 +82,9 @@ from .serializers import (
 class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Renter.objects.all()
     serializer_class = RenterSerializer
+    serializer_class_admin = {
+        'list': RenterAdminSerializer
+    }
     serializer_class_public = {
         'list': RenterPublicSerializer
     }
@@ -103,7 +107,9 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_class(self):
         user = self.request.user
 
-        if user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
+        if user.user_type == UserType.ADMIN and hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
+        elif user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
             return self.serializer_class_public.get(self.action, self.serializer_class)
         
         return super(RenterViewSet, self).get_serializer_class()

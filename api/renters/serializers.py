@@ -17,6 +17,22 @@ class RenterSerializer(serializers.ModelSerializer):
         read_only_fields = ('email', 'id')
 
 
+class RenterAdminSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Renter
+        fields = [
+            'id',
+            'renter_no',
+            'name',
+            'phone_number',
+            'email',
+            'is_active',
+            'created_at'
+        ]
+        read_only_fields = ('email', 'id')
+
+
 class RenterPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
