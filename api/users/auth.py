@@ -230,28 +230,6 @@ class MyPasswordResetConfirmView(PasswordResetConfirmView):
     Returns the success/fail message.
     """
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
-
-
-# @method_decorator(
-#     name='post', 
-#     decorator=swagger_auto_schema(
-#         operation_id='Verify registration email',
-#         filter_inspectors=[DjangoFilterDescriptionInspector],
-#         tags=['Authentication']
-#     )
-# )
-# class MyVerifyEmailView(VerifyEmailView):
-#     """
-#     Verify a new registered account
-    
-#     Verify a new registered account in the system
-
-#     Accepts the following POST parameters: key,
-#         newPassword1, newPassword2
-    
-#     Returns status detail.
-#     """
-#     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     
 
 class MyPasswordResetForm(PasswordResetForm):
