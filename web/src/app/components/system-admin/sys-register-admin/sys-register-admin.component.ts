@@ -104,12 +104,15 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
             errorMsg = 'Not found'
           } else if ('nonFieldErrors' in err.error) {
             errorMsg = err.error.nonFieldErrors[0]
-          } 
+          } else if ('username' in err.error) {
+            errorMsg = err.error.username[0]
+          }
         }
         this.notifySvc.error(errorTitle, errorMsg)
       },
       complete: () => {
         this.registerForm.reset()
+        this.initForm()
       }
     })
   }
