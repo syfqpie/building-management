@@ -46,18 +46,18 @@ Run the django rest framework
 - [ ] App
 - [ ] Billings
 	- [ ] Billings
-	- [x] Base maintenance fees
+	- [ ] Base maintenance fees
 - [x] Complaints
 - [x] Medias
 - [ ] Parkings
 	- [ ] Parking units
 	- [ ] Parking lots
 	- [ ] Parking owners
-- [x] Proprietors
-- [x] Units
-	- [x] Blocks
-	- [x] Floors
-	- [x] Unit numbers
-	- [x] Units
+- [x] Renters
+- [ ] Units
+	- [ ] Blocks
+	- [ ] Floors
+	- [ ] Unit numbers
+	- [ ] Units
 - [x] Users
 - [ ] Tracking
