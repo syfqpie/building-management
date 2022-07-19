@@ -18,11 +18,14 @@ import { AccountSettingsComponent } from 'src/app/components/settings/account-se
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 import { RentersComponent } from './renters/renters.component';
+import { RenterDetailComponent } from './renter-detail/renter-detail.component';
+import { RenterRegistrationComponent } from 'src/app/components/renters/renter-registration/renter-registration.component';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
+// Basic components
 import { BaseModalComponent } from 'src/app/components/custom/base-modal/base-modal.component';
-import { RenterDetailComponent } from './renter-detail/renter-detail.component';
 
 // Pipes
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
@@ -37,6 +40,7 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
     UnitsConfigurationComponent,
     AboutSystemComponent,
     RentersComponent,
+    RenterRegistrationComponent,
     SystemAdminComponent,
     // Child components
     AccountSettingsComponent,
