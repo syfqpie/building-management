@@ -5,8 +5,9 @@ from django.utils.translation import gettext as _
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
+from decouple import config
 
-from .models import Renter, TitleType
+from .models import GenderType, Renter, TitleType
 
 
 class RenterSerializer(serializers.ModelSerializer):
@@ -49,24 +50,28 @@ class RenterPublicSerializer(serializers.ModelSerializer):
 class RenterCustomRegisterSerializer(RegisterSerializer):
     renter_user = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
-    title = serializers.ChoiceField(choices=TitleType.choices)
+    title = serializers.ChoiceField(required=False, choices=TitleType.choices)
+    gender = serializers.ChoiceField(required=False, choices=GenderType.choices)
     nric = serializers.CharField()
     phone_number = serializers.CharField()
-    email = serializers.EmailField()
+    email = serializers.EmailField(required=False, source='username')
+    password1 = serializers.HiddenField(required=False, default=config('REGISTER_DEF_PWD', ''))
+    password2 = serializers.HiddenField(required=False, default=config('REGISTER_DEF_PWD', ''))
 
     def get_cleaned_data(self):
-        data = super(RenterCustomRegisterSerializer, self).get_cleaned_data()
-
         # Get extra parameter
-        extra_data = {
+        data = {
+            'username': self.validated_data.get('username', None),
+            'password1': self.validated_data.get('password1', None),
+            'password2': self.validated_data.get('password2', None),
+            'email': self.validated_data.get('username', None),
             'name': self.validated_data.get('name', None),
             'title': self.validated_data.get('title', None),
+            'gender': self.validated_data.get('gender', None),
             'nric': self.validated_data.get('nric', None),
-            'phone_number': self.validated_data.get('phone_number', None),
-            'email': self.validated_data.get('email', None)
+            'phone_number': self.validated_data.get('phone_number', None)
         }
 
-        data.update(extra_data)
         return data
 
     def validate_email(self, email):
@@ -74,16 +79,17 @@ class RenterCustomRegisterSerializer(RegisterSerializer):
         return email
 
     def save(self, request):
-        renter_user = super(RenterCustomRegisterSerializer, self).save(request)
-        renter_user.username = renter_user.email
-
-        # Instatiate Creator
+        # Call default first
+        renter_user = super().save(request)
+        
+        # Instatiate creator
         creator =  request.user
 
         # Instantiate Renter instance
         renter = Renter(
             name=self.cleaned_data.get('name'),
             title=self.cleaned_data.get('title'),
+            gender=self.cleaned_data.get('gender'),
             nric=self.cleaned_data.get('nric'),
             phone_number=self.cleaned_data.get('phone_number'),
             renter_user=renter_user,
@@ -91,7 +97,6 @@ class RenterCustomRegisterSerializer(RegisterSerializer):
             created_by=creator
         )
 
-        renter_user.save()
         renter.save()
 
         return renter_user

@@ -93,6 +93,14 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         'gender',
         'is_active'
     ]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
@@ -112,7 +120,7 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         elif user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
             return self.serializer_class_public.get(self.action, self.serializer_class)
         
-        return super(RenterViewSet, self).get_serializer_class()
+        return super().get_serializer_class()
 
     def get_queryset(self):
         user = self.request.user
@@ -143,7 +151,7 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user.is_active = True
         user.save()
 
-        serializer = RenterSerializer(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         return Response(serializer.data)
 
     # Deactivate renter
@@ -157,7 +165,7 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user.is_active = False
         user.save()
         
-        serializer = RenterSerializer(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         return Response(serializer.data)
 
 
@@ -187,11 +195,11 @@ class RenterCustomRegisterView(RegisterView):
         serializer.is_valid(raise_exception=True)
 
         renter_user = self.perform_create(serializer)
-        renter = Renter.objects.get(renter_user=renter_user)
-
-        serializer = RenterSerializer(renter, many=False)
+        response_msg = {
+            'Success':  f'Renter user created, an email has been sent to {renter_user.email}'
+        }
             
         return Response(
-            serializer.data,
+            response_msg,
             status=status.HTTP_201_CREATED
         )
