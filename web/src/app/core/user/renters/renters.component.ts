@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
+import { RenterRegistrationComponent } from 'src/app/components/renters/renter-registration/renter-registration.component';
 
 import { Renter } from 'src/app/shared/services/renters/renters.model';
 import { RentersService } from 'src/app/shared/services/renters/renters.service';
@@ -36,9 +37,14 @@ export class RentersComponent implements OnInit, OnDestroy {
 
   // Checker
   isProcessing: boolean = false
+  isRegisterNew: boolean = false
   
   // Subscription
   subscription: Subscription | undefined
+
+  // Event
+  @ViewChild(RenterRegistrationComponent) registerModal: RenterRegistrationComponent | undefined
+  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
     private loadingBar: LoadingBarService,
@@ -89,10 +95,10 @@ export class RentersComponent implements OnInit, OnDestroy {
   //   return 0
   // }
 
-  // toggleModal() {
-  //   this.isRegisterAdmin = !this.isRegisterAdmin
-  //   this.registerModal?.toggleModal()
-  //   this.changedEvent.emit(true)
-  // }
+  toggleModal() {
+    this.isRegisterNew = !this.isRegisterNew
+    this.registerModal?.toggleModal()
+    this.changedEvent.emit(true)
+  }
 
 }
