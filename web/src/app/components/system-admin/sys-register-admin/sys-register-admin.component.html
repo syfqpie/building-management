@@ -10,24 +10,56 @@
             </div>
             <div class="modal-body">
                 <form [formGroup]="registerForm">
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label class="form-label">
                             Email
                         </label>
-                        <input class="email"
+                        <input type="email"
                             class="form-control"
                             formControlName="username"
-                            placeholder="example@test.com" />
+                            placeholder="example@test.com"
+                            [ngClass]="{
+                                'is-invalid': registerForm.controls['username'].touched &&
+                                registerForm.controls['username'].errors,
+                                'is-valid': registerForm.controls['username'].touched &&
+                                !registerForm.controls['username'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="registerForm.controls['username'].errors &&
+                            (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
+                            <ng-container *ngFor="let message of registerFormMessages['username']">
+                                <span *ngIf="registerForm.get('username')?.hasError(message.type) &&
+                                    (registerForm.get('username')?.dirty || registerForm.get('username')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
                     </div>
         
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label class="form-label">
                             Full name
                         </label>
-                        <input class="email"
+                        <input type="email"
                             class="form-control"
                             formControlName="fullName"
-                            placeholder="John Doe" />
+                            placeholder="John Doe"
+                            [ngClass]="{
+                                'is-invalid': registerForm.controls['fullName'].touched &&
+                                registerForm.controls['fullName'].errors,
+                                'is-valid': registerForm.controls['fullName'].touched &&
+                                !registerForm.controls['fullName'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="registerForm.controls['fullName'].errors &&
+                            (registerForm.controls['fullName'].dirty || registerForm.controls['fullName'].touched)">
+                            <ng-container *ngFor="let message of registerFormMessages['fullName']">
+                                <span *ngIf="registerForm.get('fullName')?.hasError(message.type) &&
+                                    (registerForm.get('fullName')?.dirty || registerForm.get('fullName')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
                     </div>
         
                     <div class="mb-3">

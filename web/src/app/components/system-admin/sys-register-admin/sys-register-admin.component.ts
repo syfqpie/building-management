@@ -33,7 +33,7 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
       { type: 'required', message: 'Full name is required' }
     ],
     isSuperuser: [
-      { type: 'required', message: 'Tfield is required' }
+      { type: 'required', message: 'Field is required' }
     ]
   }
 
@@ -52,7 +52,6 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    console.log('onInit SysRegAdmin')
     this.initForm()
   }
 
@@ -113,6 +112,7 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
       complete: () => {
         this.registerForm.reset()
         this.initForm()
+        this.toggleModal()
       }
     })
   }
