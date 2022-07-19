@@ -44,7 +44,6 @@ export class RentersComponent implements OnInit, OnDestroy {
 
   // Event
   @ViewChild(RenterRegistrationComponent) registerModal: RenterRegistrationComponent | undefined
-  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
     private loadingBar: LoadingBarService,
@@ -98,7 +97,6 @@ export class RentersComponent implements OnInit, OnDestroy {
   toggleModal() {
     this.isRegisterNew = !this.isRegisterNew
     this.registerModal?.toggleModal()
-    this.changedEvent.emit(true)
   }
 
 }
