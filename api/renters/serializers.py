@@ -50,8 +50,8 @@ class RenterPublicSerializer(serializers.ModelSerializer):
 class RenterCustomRegisterSerializer(RegisterSerializer):
     renter_user = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
-    title = serializers.ChoiceField(required=False, choices=TitleType.choices)
-    gender = serializers.ChoiceField(required=False, choices=GenderType.choices)
+    title = serializers.ChoiceField(choices=TitleType.choices, allow_null=True)
+    gender = serializers.ChoiceField(choices=GenderType.choices, allow_null=True)
     nric = serializers.CharField()
     phone_number = serializers.CharField()
     email = serializers.EmailField(required=False, source='username')
