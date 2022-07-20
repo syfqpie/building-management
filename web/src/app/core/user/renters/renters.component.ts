@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
+import { ColumnMode } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
 import { RenterRegistrationComponent } from 'src/app/components/renters/renter-registration/renter-registration.component';
 
@@ -24,8 +25,6 @@ export class RentersComponent implements OnInit, OnDestroy {
   tableMessages = {
     totalMessage: 'total of renters'
   }
-  tableSelected: Renter[] = []
-  SelectionType = SelectionType
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
     sortDescending: 'fa-solid fa-angle-down ms-1 small',
@@ -47,6 +46,7 @@ export class RentersComponent implements OnInit, OnDestroy {
 
   constructor(
     private loadingBar: LoadingBarService,
+    private router: Router,
     private renterSvc: RentersService
   ) { }
 
@@ -80,19 +80,9 @@ export class RentersComponent implements OnInit, OnDestroy {
   }
 
   // Table on select row
-  onSelect(selected: Renter[]) {
-    console.log('Select Event', selected)
+  onSelect(selected: number) {
+    this.router.navigate(['management/renters/detail', selected])
   }
-
-  // Sort by verification
-  // companyComparator(propA: any, propB: any) {
-  //   if (propA[0].verified < propB[0].verified) {
-  //     return -1;
-  //   } else if (propA[0].verified > propB[0].verified) {
-  //     return 1
-  //   }
-  //   return 0
-  // }
 
   toggleModal() {
     this.isRegisterNew = !this.isRegisterNew

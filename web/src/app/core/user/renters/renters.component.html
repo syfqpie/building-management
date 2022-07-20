@@ -27,9 +27,6 @@
                     rowHeight="auto"
                     [footerHeight]="50"
                     [messages]="tableMessages"
-                    [selected]="tableSelected"
-                    [selectionType]="SelectionType.single"
-                    (select)="onSelect($event)"
                     [cssClasses]="tableClass">
                     <ngx-datatable-column name="Id"
                         prop="renterNo"
@@ -119,6 +116,20 @@
                             <p class="mb-0">
                                 {{ value | date : 'dd/MM/yyyy' }}
                             </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Action"
+                        prop="id"
+                        [flexGrow]="2"
+                        [sortable]="false"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <button class="btn btn-outline-primary btn-sm"
+                                (click)="onSelect(value)">
+                                View
+                            </button>
                         </ng-template>
                     </ngx-datatable-column>
                 </ngx-datatable>
