@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { User, UserVerification } from './users.model';
+import { User, EmailVerification } from './users.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/users/`
 
@@ -17,7 +17,7 @@ export class UsersService {
   currentUser: User | undefined
   user: User | undefined
   users: User[] = []
-  userVerifications: UserVerification[] = []
+  emailVerifications: EmailVerification[] = []
 
   constructor(
     private http: HttpClient
@@ -63,12 +63,12 @@ export class UsersService {
     )
   }
 
-  getAllVerification(): Observable<UserVerification[]> {
+  getAllVerification(): Observable<EmailVerification[]> {
     const urlTemp = `${ BASE_URL }get-users-verification/`
-    return this.http.get<UserVerification[]>(urlTemp).pipe(
-      tap((res: UserVerification[]) => {
-        this.userVerifications = res
-        // console.log('Users: ', this.userVerifications)
+    return this.http.get<EmailVerification[]>(urlTemp).pipe(
+      tap((res: EmailVerification[]) => {
+        this.emailVerifications = res
+        // console.log('Users: ', this.emailVerifications)
       })
     )
   }
