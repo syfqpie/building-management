@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -43,6 +43,9 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
 
   // Subscription
   subscription: Subscription | undefined
+
+  // Event
+  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
     private fb: FormBuilder,
@@ -113,6 +116,7 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
         this.registerForm.reset()
         this.initForm()
         this.toggleModal()
+        this.changedEvent.emit(true)
       }
     })
   }
