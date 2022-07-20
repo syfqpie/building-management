@@ -81,6 +81,7 @@ class RenterCustomRegisterSerializer(RegisterSerializer):
     def save(self, request):
         # Call default first
         renter_user = super().save(request)
+        renter_user.full_name = self.cleaned_data.get('name')
         
         # Instatiate creator
         creator =  request.user
@@ -97,6 +98,8 @@ class RenterCustomRegisterSerializer(RegisterSerializer):
             created_by=creator
         )
 
+        # Saving all instances
+        renter_user.save()
         renter.save()
 
         return renter_user
