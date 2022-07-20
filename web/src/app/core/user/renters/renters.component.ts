@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
