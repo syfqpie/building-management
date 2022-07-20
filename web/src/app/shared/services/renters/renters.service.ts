@@ -36,7 +36,27 @@ export class RentersService {
     return this.http.get<Renter>(urlTemp).pipe(
       tap((res: Renter) => {
         this.renter = res
-        console.log('Renter: ', this.renter)
+        // console.log('Renter: ', this.renter)
+      })
+    )
+  }
+
+  activate(id: number): Observable<Renter> {
+    const urlTemp = `${ BASE_URL }${ id }/activate/`
+    return this.http.get<Renter>(urlTemp).pipe(
+      tap((res: Renter) => {
+        this.renter = res
+        // console.log('Renter: ', this.renter)
+      })
+    )
+  }
+
+  deactivate(id: number): Observable<Renter> {
+    const urlTemp = `${ BASE_URL }${ id }/deactivate/`
+    return this.http.get<Renter>(urlTemp).pipe(
+      tap((res: Renter) => {
+        this.renter = res
+        // console.log('Renter: ', this.renter)
       })
     )
   }
