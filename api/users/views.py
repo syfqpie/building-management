@@ -8,6 +8,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 import datetime
 
+from allauth.account.models import EmailAddress
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from django.utils.decorators import method_decorator
@@ -28,7 +29,7 @@ from .models import (
 from .serializers import (
     CustomUserSerializer,
     CustomUserNotSuperAdminSerializer,
-    CustomUserVerificationSerializer,
+    EmailVerificationSerializer,
     AdminCustomRegisterSerializer
 )
 from .permissions import (
@@ -190,9 +191,9 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_id='Get all users with verification',
         tags=['Users'])
     def get_users_verification(self, request, *args, **kwargs):
-        users = self.get_queryset()
+        email_address = EmailAddress.objects.all()
 
-        serializer = CustomUserVerificationSerializer(users, many=True)
+        serializer = EmailVerificationSerializer(email_address, many=True)
         return Response(serializer.data)
 
 

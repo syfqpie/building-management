@@ -32,16 +32,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         read_only_fields = ['email']
 
 
-class EmailAddressSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = EmailAddress
-        fields = [
-            'email',
-            'verified'
-        ]
-
-
 class CustomUserNotSuperAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -66,26 +56,16 @@ class CustomUserNotSuperAdminSerializer(serializers.ModelSerializer):
         ]
 
 
-class CustomUserVerificationSerializer(serializers.ModelSerializer):
-    verification = EmailAddressSerializer(source='emailaddress_set', read_only=True, many=True)
-    
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+
     class Meta:
-        model = CustomUser
+        model = EmailAddress
         fields = [
-            'id',
-		    'full_name',
-		    'user_type',
-		    'email',
-		    'is_active',
-            'is_staff',
-            'is_superuser',
-            'last_login',
-            'date_joined',
-            'created_at',
-		    'last_modified_at',
-            'verification'
+            'email',
+            'verified',
+            'user'
         ]
-        read_only_fields = ['email']
 
 
 class CustomResendVerificationSerializer(serializers.Serializer):
