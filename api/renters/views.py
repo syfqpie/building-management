@@ -1,4 +1,5 @@
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -147,11 +148,14 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_id='Activate renter',
         tags=['Renters'])
     def activate(self, request, *args, **kwargs):
-        user = self.get_object()
-        user.is_active = True
-        user.save()
+        renter = self.get_object()
 
-        serializer = self.get_serializer(user, many=False)
+        if renter.is_active is True:
+            raise PermissionDenied(detail='Renter is already activated')
+        renter.is_active = True
+        renter.save()
+
+        serializer = self.get_serializer(renter, many=False)
         return Response(serializer.data)
 
     # Deactivate renter
@@ -161,11 +165,14 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_id='Deactivate renter',
         tags=['Renters'])
     def deactivate(self, request, *args, **kwargs):
-        user = self.get_object()
-        user.is_active = False
-        user.save()
-        
-        serializer = self.get_serializer(user, many=False)
+        renter = self.get_object()
+
+        if renter.is_active is False:
+            raise PermissionDenied(detail='Renter is already deactivated')
+        renter.is_active = False
+        renter.save()
+
+        serializer = self.get_serializer(renter, many=False)
         return Response(serializer.data)
 
 
