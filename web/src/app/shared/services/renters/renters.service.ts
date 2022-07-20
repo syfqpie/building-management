@@ -26,7 +26,7 @@ export class RentersService {
     return this.http.get<Renter[]>(urlTemp).pipe(
       tap((res: Renter[]) => {
         this.renters = res
-        console.log('Renters: ', this.renters)
+        // console.log('Renters: ', this.renters)
       })
     )
   }

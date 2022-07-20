@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <app-renter-registration
-        (changedEvent)="getData()"></app-renter-registration>
+        (changedEvent)="getData()">
+    </app-renter-registration>
     <div class="row mb-3">
         <div class="col text-end">
             <button class="btn btn-outline-primary btn-sm"
@@ -109,9 +110,6 @@
                         [flexGrow]="3"
                         [draggable]="false"
                         [resizeable]="false">
-                        <!-- <ng-template let-column="column" ngx-datatable-header-template>
-                            
-                        </ng-template> -->
                         <ng-template let-value="value" ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value | date : 'dd/MM/yyyy' }}
