@@ -178,8 +178,16 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = UnitNumber.objects.all()
     serializer_class = UnitNumberSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
-
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
+    
     def get_permissions(self):
         permission_classes = [
             IsAuthenticated,
@@ -211,7 +219,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit_number.is_active = True
         unit_number.save()
 
-        serializer = UnitNumberSerializer(unit_number, many=False)
+        serializer = self.get_serializer(unit_number, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit number activated' },
@@ -230,7 +238,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit_number.is_active = False
         unit_number.save()
 
-        serializer = UnitNumberSerializer(unit_number, many=False)
+        serializer = self.get_serializer(unit_number, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit number deactivated' },
