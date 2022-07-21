@@ -35,6 +35,14 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [
