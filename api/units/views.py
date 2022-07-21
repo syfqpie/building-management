@@ -2,16 +2,16 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
-from core.settings import DEBUG
 
 from users.permissions import IsSuperAdmin
 
@@ -34,7 +34,7 @@ from .serializers import (
 class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
     def get_permissions(self):
         permission_classes = [
@@ -67,7 +67,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         block.is_active = True
         block.save()
 
-        serializer = BlockSerializer(block, many=False)
+        serializer = self.get_serializer(block, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Block activated' },
@@ -86,7 +86,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         block.is_active = False
         block.save()
 
-        serializer = BlockSerializer(block, many=False)
+        serializer = self.get_serializer(block, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Block deactivated' },
