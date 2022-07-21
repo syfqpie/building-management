@@ -106,7 +106,15 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -139,7 +147,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         floor.is_active = True
         floor.save()
 
-        serializer = FloorSerializer(floor, many=False)
+        serializer = self.get_serializer(floor, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Floor activated' },
@@ -158,7 +166,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         floor.is_active = False
         floor.save()
 
-        serializer = FloorSerializer(floor, many=False)
+        serializer = self.get_serializer(floor, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Floor deactivated' },
