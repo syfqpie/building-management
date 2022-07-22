@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card shadow border-0">
     <div class="card-body">
         <h5 class="card-title">
             List of unit numbers
@@ -49,7 +49,7 @@
                             <ng-template #isNotActive>
                                 <span>
                                     <i class="fa-regular fa-circle-xmark my-auto"></i>
-                                    Not maintenance
+                                    Inactive
                                 </span>
                             </ng-template>
                         </p>
@@ -62,9 +62,9 @@
                     [sortable]="false"
                     [draggable]="false"
                     [resizeable]="false">
-                    <ng-template let-value="value" ngx-datatable-cell-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
                         <button class="btn btn-outline-primary btn-sm"
-                            (click)="onSelect(value)">
+                            (click)="onSelect(row)">
                             Update
                         </button>
                     </ng-template>
@@ -81,4 +81,144 @@
             </div>
         </ng-template>
     </div>
+</div>
+
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isAddModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add new unit number
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addForm">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Unit number
+                        </label>
+                        <input type="text"
+                            class="form-control"
+                            formControlName="unitNumber"
+                            placeholder="1"
+                            [ngClass]="{
+                                'is-invalid': addForm.controls['unitNumber'].touched &&
+                                addForm.controls['unitNumber'].errors,
+                                'is-valid': addForm.controls['unitNumber'].touched &&
+                                !addForm.controls['unitNumber'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="addForm.controls['unitNumber'].errors &&
+                            (addForm.controls['unitNumber'].dirty || addForm.controls['unitNumber'].touched)">
+                            <ng-container *ngFor="let message of formMessages['unitNumber']">
+                                <span *ngIf="addForm.get('unitNumber')?.hasError(message.type) &&
+                                    (addForm.get('unitNumber')?.dirty || addForm.get('unitNumber')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="addUnitNumber()"
+                    [disabled]="isProcessing || !addForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Add
+                    </span>
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleAddModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isUpdateModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Update unit number
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="updateForm">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Unit number
+                        </label>
+                        <input type="text"
+                            class="form-control"
+                            formControlName="unitNumber"
+                            placeholder="1"
+                            [ngClass]="{
+                                'is-invalid': updateForm.controls['unitNumber'].touched &&
+                                updateForm.controls['unitNumber'].errors,
+                                'is-valid': updateForm.controls['unitNumber'].touched &&
+                                !updateForm.controls['unitNumber'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="updateForm.controls['unitNumber'].errors &&
+                            (updateForm.controls['unitNumber'].dirty || updateForm.controls['unitNumber'].touched)">
+                            <ng-container *ngFor="let message of formMessages['unitNumber']">
+                                <span *ngIf="updateForm.get('unitNumber')?.hasError(message.type) &&
+                                    (updateForm.get('unitNumber')?.dirty || updateForm.get('unitNumber')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                id="checkboxAdmin"
+                                formControlName="isActive">
+                            <label class="form-check-label"
+                                for="checkboxAdmin">
+                                {{ updateForm.value.isActive ? 'Active' : 'Inactive' }}
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="patchUnitNumber()"
+                    [disabled]="isProcessing || !updateForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Update
+                    </span>
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleUpdateModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show d-block"
+    role="dialog"
+    *ngIf="isAddModalOpen || isUpdateModalOpen">
 </div>
