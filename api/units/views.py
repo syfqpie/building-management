@@ -50,11 +50,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
-
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset
+        return [permission() for permission in permission_classes]
     
     def perform_create(self, serializer):
         request = serializer.context['request']
@@ -122,11 +118,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
-    
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         request = serializer.context['request']
@@ -194,11 +186,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
-
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         request = serializer.context['request']
@@ -275,11 +263,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
-
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset
+        return [permission() for permission in permission_classes]
 
     # Override get_serializer_class for default action
     def get_serializer_class(self):
