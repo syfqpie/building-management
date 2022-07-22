@@ -35,7 +35,7 @@ export class FloorsService {
     return this.http.get<Floor[]>(urlTemp).pipe(
       tap((res: Floor[]) => {
         this.floors = res
-        console.log('Floors:', this.floors)
+        // console.log('Floors:', this.floors)
       })
     )
   }
@@ -45,7 +45,7 @@ export class FloorsService {
     return this.http.get<Floor>(urlTemp).pipe(
       tap((res: Floor) => {
         this.floor = res
-        console.log('Floor:', this.floor)
+        // console.log('Floor:', this.floor)
       })
     )
   }
