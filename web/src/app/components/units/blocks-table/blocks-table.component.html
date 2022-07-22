@@ -114,7 +114,7 @@
                         <div class="invalid-tooltip invalid-tooltip-right"
                             *ngIf="addForm.controls['block'].errors &&
                             (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
-                            <ng-container *ngFor="let message of addFormMessages['block']">
+                            <ng-container *ngFor="let message of formMessages['block']">
                                 <span *ngIf="addForm.get('block')?.hasError(message.type) &&
                                     (addForm.get('block')?.dirty || addForm.get('block')?.touched)">
                                     • {{ message.message }}
@@ -175,9 +175,9 @@
                         <div class="invalid-tooltip invalid-tooltip-right"
                             *ngIf="updateForm.controls['block'].errors &&
                             (updateForm.controls['block'].dirty || updateForm.controls['block'].touched)">
-                            <ng-container *ngFor="let message of addFormMessages['block']">
-                                <span *ngIf="addForm.get('block')?.hasError(message.type) &&
-                                    (addForm.get('block')?.dirty || addForm.get('block')?.touched)">
+                            <ng-container *ngFor="let message of formMessages['block']">
+                                <span *ngIf="updateForm.get('block')?.hasError(message.type) &&
+                                    (updateForm.get('block')?.dirty || updateForm.get('block')?.touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>

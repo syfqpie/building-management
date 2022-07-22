@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -28,7 +28,7 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
     block: new FormControl(null),
     isActive: new FormControl(null)
   })
-  addFormMessages = {
+  formMessages = {
     block: [
       { type: 'required', message: 'This field is required' }
     ]
@@ -60,9 +60,6 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   subscription: Subscription | undefined
   addSubscription: Subscription  | undefined
   updateSubscription: Subscription  | undefined
-
-  // Event
-  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
     private fb: FormBuilder,
@@ -184,9 +181,6 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
       complete: () => {
         // Toggle and reset
         this.toggleUpdateModal()
-        this.selectedBlock = undefined
-        this.updateForm.reset()
-        this.initForm()
 
         // Update table
         this.getData()
@@ -199,7 +193,14 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   }
 
   toggleUpdateModal() {
-    return this.isUpdateModalOpen = !this.isUpdateModalOpen
+    this.isUpdateModalOpen = !this.isUpdateModalOpen
+
+    // Reset
+    if (this.isUpdateModalOpen === false) {
+      this.selectedBlock = undefined
+      this.updateForm.reset()
+      this.initForm()
+    }
   }
 
 }
