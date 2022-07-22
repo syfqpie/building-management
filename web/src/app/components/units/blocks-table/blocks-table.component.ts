@@ -1,11 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ColumnMode } from '@swimlane/ngx-datatable';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+
+import { ColumnMode } from '@swimlane/ngx-datatable';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { Block } from 'src/app/shared/services/blocks/blocks.model';
 import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
+import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 @Component({
   selector: 'app-blocks-table',
@@ -16,7 +18,23 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
 
   // Data
   blocks: Block[] = []
+  selectedBlock: Block | undefined
 
+  // Form
+  addForm: FormGroup = new FormGroup({
+    block: new FormControl(null)
+  })
+  updateForm: FormGroup = new FormGroup({
+    block: new FormControl(null),
+    isActive: new FormControl(null)
+  })
+  addFormMessages = {
+    block: [
+      { type: 'required', message: 'This field is required' }
+    ]
+  }
+
+  // Table
   tableRows: Block[] = []
   tableLoadingIndicator: boolean = true
   tableReorderable: boolean = true
@@ -35,27 +53,39 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
 
   // Checker
   isProcessing: boolean = false
-  isRegisterNew: boolean = false
+  isAddModalOpen: boolean = false
+  isUpdateModalOpen: boolean = false
   
   // Subscription
   subscription: Subscription | undefined
+  addSubscription: Subscription  | undefined
+  updateSubscription: Subscription  | undefined
 
   // Event
-  // @ViewChild(RenterRegistrationComponent) registerModal: RenterRegistrationComponent | undefined
+  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
+    private fb: FormBuilder,
     private loadingBar: LoadingBarService,
-    private router: Router,
+    private notifySvc: NotifyService,
     private blockSvc: BlocksService
   ) { }
 
   ngOnInit(): void {
+    this.initForm()
     this.getData()
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe subscriptions
     if (this.subscription) {
       this.subscription.unsubscribe()
+    }
+    if (this.addSubscription) {
+      this.addSubscription.unsubscribe()
+    }
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe()
     }
   }
 
@@ -78,13 +108,98 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
     })
   }
 
-  // Table on select row
-  onSelect(selected: number) {
-    this.router.navigate(['management/blocks/detail', selected])
+  initForm() {
+    this.addForm = this.fb.group({
+      block: new FormControl(null, Validators.compose([
+        Validators.required
+      ]))
+    })
+    this.updateForm = this.fb.group({
+      block: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      isActive: new FormControl(null, Validators.compose([
+        Validators.required
+      ]))
+    })
   }
 
-  toggleModal() {
-    // this.registerModal?.toggleModal()
+  // Table on select row
+  onSelect(selected: Block) {
+    this.selectedBlock = selected
+    this.updateForm.controls['block'].setValue(this.selectedBlock.block)
+    this.updateForm.controls['isActive'].setValue(this.selectedBlock.isActive)
+    this.toggleUpdateModal()
+  }
+
+  addBlock() {
+    this.loadingBar.useRef('http').start()
+    this.isProcessing = true
+    this.addSubscription = this.blockSvc.create(
+      this.addForm.value
+    ).subscribe({
+      next: () => {
+        this.loadingBar.useRef('http').complete()
+        this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'New block has been added'
+        )
+      },
+      error: () => {
+        this.loadingBar.useRef('http').stop()
+        this.isProcessing = false
+      },
+      complete: () => {
+        // Toggle and reset
+        this.toggleAddModal()
+        this.addForm.reset()
+        this.initForm()
+
+        // Update table
+        this.getData()
+      }
+    })
+  }
+
+  patchBlock() {
+    this.loadingBar.useRef('http').start()
+    this.isProcessing = true
+    this.addSubscription = this.blockSvc.patch(
+      this.selectedBlock?.id!,
+      this.updateForm.value
+    ).subscribe({
+      next: () => {
+        this.loadingBar.useRef('http').complete()
+        this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Block has been updated'
+        )
+      },
+      error: () => {
+        this.loadingBar.useRef('http').stop()
+        this.isProcessing = false
+      },
+      complete: () => {
+        // Toggle and reset
+        this.toggleUpdateModal()
+        this.selectedBlock = undefined
+        this.updateForm.reset()
+        this.initForm()
+
+        // Update table
+        this.getData()
+      }
+    })
+  }
+
+  toggleAddModal() {
+    return this.isAddModalOpen = !this.isAddModalOpen
+  }
+
+  toggleUpdateModal() {
+    return this.isUpdateModalOpen = !this.isUpdateModalOpen
   }
 
 }
