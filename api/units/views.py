@@ -187,7 +187,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         'options',
         'trace',
     ]
-    
+
     def get_permissions(self):
         permission_classes = [
             IsAuthenticated,
@@ -250,7 +250,24 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Unit.objects.all()
     serializer_class = UnitSerializer
+    serializer_class_admin = {
+        'list_ext': UnitExtendedSerializer,
+        'retrieve_ext': UnitExtendedSerializer
+    }
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    http_method_names = [
+        "get",
+        "post",
+        "patch",
+        "delete",
+        "head",
+        "options",
+        "trace",
+    ]
+    filterset_fields = [
+        'is_active',
+        'is_maintenance'
+    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -260,33 +277,39 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]    
 
-    
     def get_queryset(self):
         queryset = self.queryset
-        return queryset    
-    
+        return queryset
 
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Check serializer class by action
+        if hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
+
+        # Return original class
+        return super().get_serializer_class()
+    
     def perform_create(self, serializer):
         request = serializer.context['request']
         serializer.save(created_by=request.user)
-
 
     def perform_update(self, serializer):
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
  
     # Get extended units
-    @action(methods=['GET'], detail=False)
-    def extended_all(self, request, *args, **kwargs):
-        units = Unit.objects.all()
-        serializer = UnitExtendedSerializer(units, many=True)
+    @action(methods=['GET'], detail=False, url_path='extended')
+    def list_ext(self, request, *args, **kwargs):
+        units = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(units, many=True)
         return Response(serializer.data)
     
     # Get extended unit
-    @action(methods=['GET'], detail=True)
-    def extended(self, request, *args, **kwargs):
+    @action(methods=['GET'], detail=True, url_path='extended')
+    def retrieve_ext(self, request, *args, **kwargs):
         unit = self.get_object()
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         return Response(serializer.data)
 
     # Enable maintenance
@@ -300,7 +323,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_maintenance = True
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit maintenance enabled' },
@@ -319,7 +342,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_maintenance = False
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit maintenance disabled' },
@@ -338,7 +361,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_active = True
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit activated' },
@@ -357,7 +380,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_active = False
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit deactivated' },
