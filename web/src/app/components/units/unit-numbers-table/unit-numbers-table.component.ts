@@ -40,7 +40,7 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
   tableReorderable: boolean = true
   ColumnMode = ColumnMode
   tableMessages = {
-    totalMessage: 'total of unit numbers'
+    totalMessage: 'total of records'
   }
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',

@@ -18,7 +18,7 @@
                 [cssClasses]="tableClass">
                 <ngx-datatable-column name="Floor"
                     prop="floor"
-                    [flexGrow]="2"
+                    [flexGrow]="4"
                     [draggable]="false"
                     [resizeable]="false">
                     <ng-template let-value="value" ngx-datatable-cell-template>
@@ -49,7 +49,7 @@
                             <ng-template #isNotActive>
                                 <span>
                                     <i class="fa-regular fa-circle-xmark my-auto"></i>
-                                    Not maintenance
+                                    Inactive
                                 </span>
                             </ng-template>
                         </p>
@@ -58,7 +58,7 @@
 
                 <ngx-datatable-column name="Action"
                     prop="id"
-                    [flexGrow]="2"
+                    [flexGrow]="1"
                     [sortable]="false"
                     [draggable]="false"
                     [resizeable]="false">
@@ -103,7 +103,7 @@
                         <input type="text"
                             class="form-control"
                             formControlName="floor"
-                            placeholder="A"
+                            placeholder="1"
                             [ngClass]="{
                                 'is-invalid': addForm.controls['floor'].touched &&
                                 addForm.controls['floor'].errors,

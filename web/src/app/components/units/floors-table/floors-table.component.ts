@@ -40,7 +40,7 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
   tableReorderable: boolean = true
   ColumnMode = ColumnMode
   tableMessages = {
-    totalMessage: 'total of floors'
+    totalMessage: 'total of records'
   }
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
