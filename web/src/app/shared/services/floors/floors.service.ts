@@ -20,6 +20,16 @@ export class FloorsService {
     private http: HttpClient
   ) { }
 
+  create(body: any): Observable<Floor> {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.post<Floor>(urlTemp, body).pipe(
+      tap((res: Floor) => {
+        this.floor = res
+        // console.log('Floor:', this.floor)
+      })
+    )
+  }
+
   getAll(): Observable<Floor[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<Floor[]>(urlTemp).pipe(
@@ -36,6 +46,16 @@ export class FloorsService {
       tap((res: Floor) => {
         this.floor = res
         console.log('Floor:', this.floor)
+      })
+    )
+  }
+
+  patch(id: number, body: any): Observable<Floor> {
+    const urlTemp = `${ BASE_URL }${ id }/`
+    return this.http.patch<Floor>(urlTemp, body).pipe(
+      tap((res: Floor) => {
+        this.floor = res
+        // console.log('Floor:', this.floor)
       })
     )
   }
