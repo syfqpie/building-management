@@ -20,12 +20,22 @@ export class UnitNumbersService {
     private http: HttpClient
   ) { }
 
+  create(body: any): Observable<UnitNumber> {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.post<UnitNumber>(urlTemp, body).pipe(
+      tap((res: UnitNumber) => {
+        this.unitNumber = res
+        // console.log('Unit number:', this.unitNumber)
+      })
+    )
+  }
+
   getAll(): Observable<UnitNumber[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<UnitNumber[]>(urlTemp).pipe(
       tap((res: UnitNumber[]) => {
         this.unitNumbers = res
-        console.log('Unit numbers:', this.unitNumbers)
+        // console.log('Unit numbers:', this.unitNumbers)
       })
     )
   }
@@ -35,7 +45,17 @@ export class UnitNumbersService {
     return this.http.get<UnitNumber>(urlTemp).pipe(
       tap((res: UnitNumber) => {
         this.unitNumber = res
-        console.log('UnitNumber:', this.unitNumber)
+        // console.log('Unit number:', this.unitNumber)
+      })
+    )
+  }
+
+  patch(id: number, body: any): Observable<UnitNumber> {
+    const urlTemp = `${ BASE_URL }${ id }/`
+    return this.http.patch<UnitNumber>(urlTemp, body).pipe(
+      tap((res: UnitNumber) => {
+        this.unitNumber = res
+        // console.log('Unit number:', this.unitNumber)
       })
     )
   }
