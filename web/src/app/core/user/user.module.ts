@@ -23,6 +23,7 @@ import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 import { RenterRegistrationComponent } from 'src/app/components/renters/renter-registration/renter-registration.component';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
+import { UnitAddComponent } from '../../components/units/unit-add/unit-add.component';
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
 
 // Basic components
@@ -34,7 +35,6 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { UnitsAddComponent } from '../../components/units/units-add/units-add.component';
 
 @NgModule({
   declarations: [
@@ -55,12 +55,12 @@ import { UnitsAddComponent } from '../../components/units/units-add/units-add.co
     NotAuthorizedComponent,
     PasswordSettingsComponent,
     SysRegisterAdminComponent,
+    UnitAddComponent,
     UnitNumbersTableComponent,
     // Reusable components
     BaseModalComponent,
     GenderTypePipe,
-    TitleTypePipe,
-    UnitsAddComponent
+    TitleTypePipe
   ],
   imports: [
     CommonModule,
