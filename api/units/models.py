@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from rest_framework.exceptions import ValidationError
 
 from core.helpers import PathAndRename
 
@@ -12,7 +13,7 @@ from users.models import CustomUser, UserType
 class Block(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    block = models.CharField(max_length=10, null=True)
+    block = models.CharField(max_length=10, unique=True)
 
     # Logs
     is_active = models.BooleanField(default=True)
@@ -34,7 +35,7 @@ class Block(models.Model):
     )
     
     class Meta:
-        ordering = ['-block']
+        ordering = ['block']
     
     def __str__(self):
         return ('%s'%(self.block))
@@ -43,7 +44,7 @@ class Block(models.Model):
 class Floor(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    floor = models.CharField(max_length=10, null=True)
+    floor = models.CharField(max_length=10, unique=True)
 
     # Logs
     is_active = models.BooleanField(default=True)
@@ -65,7 +66,7 @@ class Floor(models.Model):
     )
 
     class Meta:
-        ordering = ['-floor']
+        ordering = ['floor']
     
     def __str__(self):
         return ('%s'%(self.floor))
@@ -96,7 +97,7 @@ class UnitNumber(models.Model):
     )
     
     class Meta:
-        ordering = ['-unit_number']
+        ordering = ['unit_number']
     
     def __str__(self):
         return ('%s'%(str(self.unit_number)))
@@ -152,11 +153,24 @@ class Unit(models.Model):
             self.unit_no = str(self.block.block) + '-' + str(self.floor.floor) + '-' + str(self.unit_number.unit_number)
         else:
             pass
+        
+        # Check if relation already exist
+        unit_exist = Unit.objects.filter(
+            unit_no=self.unit_no,
+            block=self.block,
+            floor=self.floor,
+            unit_number=self.unit_number
+        )
+
+        if unit_exist.exists():
+            raise ValidationError({
+                'detail': 'Unit already exists'
+            })
             
-        super(Unit, self).save(*args, **kwargs)
-    
+        super().save(*args, **kwargs)
+        
     class Meta:
-        ordering = ['-unit_no']
+        ordering = ['unit_no']
     
     def __str__(self):
         return ('%s'%(self.unit_no))
