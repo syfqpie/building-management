@@ -13,7 +13,13 @@ from users.models import CustomUser, UserType
 class Block(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    block = models.CharField(max_length=10, unique=True)
+    block = models.CharField(
+        max_length=10,
+        unique=True,
+        error_messages={
+            'unique': 'Block already exists'
+        }
+    )
 
     # Logs
     is_active = models.BooleanField(default=True)
@@ -44,7 +50,13 @@ class Block(models.Model):
 class Floor(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    floor = models.CharField(max_length=10, unique=True)
+    floor = models.CharField(
+        max_length=10,
+        unique=True,
+        error_messages={
+            'unique': 'Floor already exists'
+        }
+    )
 
     # Logs
     is_active = models.BooleanField(default=True)
@@ -75,7 +87,13 @@ class Floor(models.Model):
 class UnitNumber(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    unit_number = models.IntegerField(default=0)
+    unit_number = models.CharField(
+        max_length=10,
+        unique=True,
+        error_messages={
+            'unique': 'Unit number already exists'
+        }
+    )
 
     # Logs
     is_active = models.BooleanField(default=True)
