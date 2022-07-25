@@ -14,6 +14,7 @@ import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
 import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
+import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
@@ -38,16 +39,17 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [
-    DashboardComponent,
-    SettingsComponent,
-    TestComponent,
-    UnitsComponent,
-    UnitsConfigurationComponent,
     AboutSystemComponent,
+    DashboardComponent,
     RentersComponent,
     RenterDetailComponent,
     RenterRegistrationComponent,
+    SettingsComponent,
     SystemAdminComponent,
+    TestComponent,
+    UnitsComponent,
+    UnitsConfigurationComponent,
+    UnitDetailComponent,
     // Child components
     AccountSettingsComponent,
     BlocksTableComponent,
