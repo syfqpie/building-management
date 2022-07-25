@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -6,6 +6,9 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
+import { Floor } from 'src/app/shared/services/floors/floors.model';
+import { Block } from 'src/app/shared/services/blocks/blocks.model';
+import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
 
 @Component({
   selector: 'app-unit-add',
@@ -13,6 +16,10 @@ import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
   styleUrls: ['./unit-add.component.scss']
 })
 export class UnitAddComponent implements OnInit, OnDestroy {
+  
+  @Input() blocks: Block[] = []
+  @Input() floors: Floor[] = []
+  @Input() unitNumbers: UnitNumber[] = []
 
   // Form
   addForm: FormGroup = new FormGroup({
@@ -66,8 +73,7 @@ export class UnitAddComponent implements OnInit, OnDestroy {
   initForm() {
     this.addForm = this.fb.group({
       squareFeet: new FormControl(null, Validators.compose([
-        Validators.required,
-        Validators.email
+        Validators.required
       ])),
       block: new FormControl(null, Validators.compose([
         Validators.required
@@ -96,18 +102,33 @@ export class UnitAddComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
+
+        let errorTitle = 'Error'
+        if (err.status === 400) {
+          if ('detail' in err.error) {
+            // Display toastr
+            this.notifySvc.error(
+              errorTitle,
+              err.error.detail
+            )
+          }
+        }
       },
       complete: () => {
         this.toggleModal()
-        this.addForm.reset()
-        this.initForm()
         this.changedEvent.emit(true)
       }
     })
   }
 
   toggleModal() {
-    return this.isModalOpen = !this.isModalOpen
+    this.isModalOpen = !this.isModalOpen
+
+    // Reset
+    if (this.isModalOpen === false) {
+      this.addForm.reset()
+      this.initForm()
+    }
   }
 
 }
