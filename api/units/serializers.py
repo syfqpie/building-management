@@ -1,5 +1,6 @@
 from django.utils.translation import gettext as _
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from django.utils.timezone import now
 
 from .models import (
@@ -38,6 +39,17 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Unit.objects.all(),
+                fields=[
+                    'block',
+                    'floor',
+                    'unit_number'
+                ],
+                message='Block, floor, and unit number combination already exists'
+            )
+        ]
 
 
 class UnitExtendedSerializer(serializers.ModelSerializer):

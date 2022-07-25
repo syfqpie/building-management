@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from rest_framework.exceptions import ValidationError
 
 from core.helpers import PathAndRename
 
@@ -166,24 +165,11 @@ class Unit(models.Model):
         related_name='units_modified'
     )
 
-    def save(self,*args, **kwargs):
+    def save(self, *args, **kwargs):
         if not self.unit_no:
             self.unit_no = str(self.block.block) + '-' + str(self.floor.floor) + '-' + str(self.unit_number.unit_number)
         else:
             pass
-        
-        # Check if relation already exist
-        unit_exist = Unit.objects.filter(
-            unit_no=self.unit_no,
-            block=self.block,
-            floor=self.floor,
-            unit_number=self.unit_number
-        )
-
-        if unit_exist.exists():
-            raise ValidationError({
-                'detail': 'Unit already exists'
-            })
             
         super().save(*args, **kwargs)
         
