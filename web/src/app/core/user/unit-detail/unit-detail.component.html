@@ -1,1 +1,135 @@
-<p>unit-detail works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-end">
+            <button class="btn btn-outline-primary btn-sm me-2"
+                *ngIf="currentUnit?.isActive; else isNotActiveBtn"
+                (click)="deactivate()">
+                <i class="fa-solid fa-lock"></i>
+                Deactivate
+            </button>
+            <ng-template #isNotActiveBtn>
+                <button class="btn btn-outline-primary btn-sm me-2"
+                    (click)="activate()">         
+                    <i class="fa-solid fa-lock-open"></i>
+                    Activate
+                </button>
+            </ng-template>
+
+            <button class="btn btn-outline-primary btn-sm"
+                *ngIf="currentUnit?.isMaintenance; else isNotMaintenanceBtn"
+                (click)="disableMaintenance()">
+                <i class="fa-solid fa-lock-open"></i>
+                Disable maintenance
+            </button>
+            <ng-template #isNotMaintenanceBtn>
+                <button class="btn btn-outline-primary btn-sm"
+                    (click)="enableMaintenance()">         
+                    <i class="fa-solid fa-lock"></i>
+                    Enable maintenance
+                </button>
+            </ng-template>
+        </div>
+        <div class="col-sm-12 col-md-3">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Unit information
+                    </h5>
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Unit no.: 
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.unitNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Square feet:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.squareFeet }} sf
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small d-block">
+                            Maintenance:
+                        </label>
+                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2 my-1"
+                            [ngClass]="{
+                                'bg-success text-success
+                                    border-success': !currentUnit?.isMaintenance,
+                                'bg-danger text-danger
+                                    border-danger': currentUnit?.isMaintenance
+                            }">
+                            <span *ngIf="currentUnit?.isMaintenance; else isNotMaintenance">
+                                <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                Maintenance
+                            </span>
+                            <ng-template #isNotMaintenance>
+                                <span>
+                                    <i class="fa-regular fa-circle-check my-auto"></i>
+                                    Not maintenance
+                                </span>
+                            </ng-template>
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small d-block">
+                            Active:
+                        </label>
+                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2 my-1"
+                            [ngClass]="{
+                                'bg-success text-success
+                                    border-success': currentUnit?.isActive,
+                                'bg-danger text-danger
+                                    border-danger': !currentUnit?.isActive
+                            }">
+                            <span *ngIf="currentUnit?.isActive; else isNotActive">
+                                <i class="fa-regular fa-circle-check my-auto"></i>
+                                Active
+                            </span>
+                            <ng-template #isNotActive>
+                                <span>
+                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                    Inactive
+                                </span>
+                            </ng-template>
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Created at:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.createdAt | date : 'dd/MM/yyyy, h:mm a'}}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Last modified at:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.lastModifiedAt| date : 'dd/MM/yyyy, h:mm a' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8">
+            <div class="text-center">
+                <img src="assets/images/illustrations/no-information.png"
+                    style="height: 14rem;">
+                <p class="text-muted">No information yet</p>
+            </div>
+        </div>
+    </div>
+</div>
