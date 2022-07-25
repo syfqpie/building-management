@@ -30,7 +30,8 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
   })
   formMessages = {
     floor: [
-      { type: 'required', message: 'This field is required' }
+      { type: 'required', message: 'This field is required' },
+      { type: 'unique', message: 'Floor already exists' }
     ]
   }
 
@@ -143,9 +144,27 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
           'New floor has been added'
         )
       },
-      error: () => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
+        
+        let errorTitle = 'Error'
+        if (err.status === 400) {
+          if ('floor' in err.error) {
+            for (let floorErr of err.error['floor']) {
+              // Set error
+              this.addForm.get('floor')?.setErrors({
+                unique: floorErr
+              })
+
+              // Display toastr
+              this.notifySvc.error(
+                errorTitle,
+                floorErr
+              )
+            }
+          }
+        }
       },
       complete: () => {
         // Toggle and reset
@@ -174,9 +193,27 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
           'Floor has been updated'
         )
       },
-      error: () => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
+
+        let errorTitle = 'Error'
+        if (err.status === 400) {
+          if ('floor' in err.error) {
+            for (let floorErr of err.error['floor']) {
+              // Set error
+              this.updateForm.get('floor')?.setErrors({
+                unique: floorErr
+              })
+
+              // Display toastr
+              this.notifySvc.error(
+                errorTitle,
+                floorErr
+              )
+            }
+          }
+        }
       },
       complete: () => {
         // Toggle and reset
@@ -189,7 +226,13 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
   }
 
   toggleAddModal() {
-    return this.isAddModalOpen = !this.isAddModalOpen
+    this.isAddModalOpen = !this.isAddModalOpen
+
+    // Reset
+    if (this.isAddModalOpen === false) {
+      this.addForm.reset()
+      this.initForm()
+    }
   }
 
   toggleUpdateModal() {

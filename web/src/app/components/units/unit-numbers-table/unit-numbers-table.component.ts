@@ -30,7 +30,8 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
   })
   formMessages = {
     unitNumber: [
-      { type: 'required', message: 'This field is required' }
+      { type: 'required', message: 'This field is required' },
+      { type: 'unique', message: 'Unit number already exists' }
     ]
   }
 
@@ -144,9 +145,27 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
           'New unit number has been added'
         )
       },
-      error: () => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
+
+        let errorTitle = 'Error'
+        if (err.status === 400) {
+          if ('unitNumber' in err.error) {
+            for (let unitNumberErr of err.error['unitNumber']) {
+              // Set error
+              this.addForm.get('unitNumber')?.setErrors({
+                unique: unitNumberErr
+              })
+
+              // Display toastr
+              this.notifySvc.error(
+                errorTitle,
+                unitNumberErr
+              )
+            }
+          }
+        }
       },
       complete: () => {
         // Toggle and reset
@@ -175,9 +194,27 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
           'Unit number has been updated'
         )
       },
-      error: () => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
+
+        let errorTitle = 'Error'
+        if (err.status === 400) {
+          if ('unitNumber' in err.error) {
+            for (let unitNumberErr of err.error['unitNumber']) {
+              // Set error
+              this.updateForm.get('unitNumber')?.setErrors({
+                unique: unitNumberErr
+              })
+
+              // Display toastr
+              this.notifySvc.error(
+                errorTitle,
+                unitNumberErr
+              )
+            }
+          }
+        }
       },
       complete: () => {
         // Toggle and reset
@@ -190,7 +227,13 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
   }
 
   toggleAddModal() {
-    return this.isAddModalOpen = !this.isAddModalOpen
+    this.isAddModalOpen = !this.isAddModalOpen
+
+    // Reset
+    if (this.isAddModalOpen === false) {
+      this.addForm.reset()
+      this.initForm()
+    }
   }
 
   toggleUpdateModal() {

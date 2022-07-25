@@ -30,7 +30,8 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   })
   formMessages = {
     block: [
-      { type: 'required', message: 'This field is required' }
+      { type: 'required', message: 'This field is required' },
+      { type: 'unique', message: 'Block already exists' }
     ]
   }
 
@@ -143,9 +144,27 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
           'New block has been added'
         )
       },
-      error: () => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
+
+        let errorTitle = 'Error'
+        if (err.status === 400) {
+          if ('block' in err.error) {
+            for (let blockErr of err.error['block']) {
+              // Set error
+              this.addForm.get('block')?.setErrors({
+                unique: blockErr
+              })
+
+              // Display toastr
+              this.notifySvc.error(
+                errorTitle,
+                blockErr
+              )
+            }
+          }
+        }
       },
       complete: () => {
         // Toggle and reset
@@ -174,9 +193,27 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
           'Block has been updated'
         )
       },
-      error: () => {
+      error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
+
+        let errorTitle = 'Error'
+        if (err.status === 400) {
+          if ('block' in err.error) {
+            for (let blockErr of err.error['block']) {
+              // Set error
+              this.updateForm.get('block')?.setErrors({
+                unique: blockErr
+              })
+
+              // Display toastr
+              this.notifySvc.error(
+                errorTitle,
+                blockErr
+              )
+            }
+          }
+        }
       },
       complete: () => {
         // Toggle and reset
@@ -189,7 +226,13 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   }
 
   toggleAddModal() {
-    return this.isAddModalOpen = !this.isAddModalOpen
+    this.isAddModalOpen = !this.isAddModalOpen
+
+    // Reset
+    if (this.isAddModalOpen === false) {
+      this.addForm.reset()
+      this.initForm()
+    }
   }
 
   toggleUpdateModal() {
