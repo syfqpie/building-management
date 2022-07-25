@@ -105,11 +105,11 @@ export class UnitAddComponent implements OnInit, OnDestroy {
 
         let errorTitle = 'Error'
         if (err.status === 400) {
-          if ('detail' in err.error) {
+          if ('nonFieldErrors' in err.error) {
             // Display toastr
             this.notifySvc.error(
               errorTitle,
-              err.error.detail
+              err.error.nonFieldErrors
             )
           }
         }
