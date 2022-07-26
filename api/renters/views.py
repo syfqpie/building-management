@@ -94,6 +94,11 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         'gender',
         'is_active'
     ]
+    search_fields = [
+        'renter_no',
+        'name',
+        'email'
+    ]
     http_method_names = [
         'get',
         'post',
