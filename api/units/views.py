@@ -1,10 +1,13 @@
+import datetime
+
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -371,6 +374,52 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
             headers=headers
         )
+
+    # Deactivate unit
+    @action(methods=['POST'], detail=True, url_path='assign-renter')
+    def assign_renter(self, request, *args, **kwargs):
+        unit = self.get_object()
+
+        is_replace = request.data.get('replace', False)
+        moved_in_at = request.data.get('moved_in_at', None)
+
+        # Check if unit already have a renter and not replacing
+        if unit.renter and is_replace == False:
+            raise PermissionDenied(detail='Unit already have a renter. You should replace instead')
+
+        # Unit value validation
+        try:
+            renter_id = request.data['renter']
+        except Exception as e:
+            raise PermissionDenied(detail='Renter is required')
+        
+        unit_serializer = self.get_serializer(
+            unit,
+            data={ 'renter': renter_id },
+            partial=True
+        )
+        unit_serializer.is_valid(raise_exception=True)
+
+        # Renter value validation
+        if moved_in_at:
+            try:
+                parsed_datetime = datetime.datetime.fromisoformat(moved_in_at)
+            except ValueError:
+                raise ValidationError(detail={
+                    'moved_in_at': 'Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
+                })
+        else:
+            parsed_datetime = timezone.now()
+
+        renter = unit_serializer.validated_data['renter']
+        renter.moved_in_at = parsed_datetime
+
+        # Saving
+        self.perform_update(unit_serializer)
+        renter.save()
+
+        serializer = self.get_serializer(unit, many=False)
+        return Response(serializer.data)
     
     # Get ownership count
     @action(methods=['GET'], detail=False, url_path='ownership-count')
