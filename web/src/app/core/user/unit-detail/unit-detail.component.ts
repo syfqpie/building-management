@@ -25,12 +25,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   isSearching: boolean = false
 
   // Subscription
-  subscription: Subscription | undefined
-  activateSubscription: Subscription | undefined
-  deactivateSubscription: Subscription | undefined
-  enableMaintenanceSubscription: Subscription | undefined
-  disableMaintenanceSubscription: Subscription | undefined
-  searchSubscription: Subscription | undefined
+  svcSubscription: Subscription = new Subscription
   routeSubscription: Subscription | undefined
   eventSubscription: Subscription | undefined
 
@@ -56,30 +51,17 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe
-    if (this.subscription) {
-      this.subscription.unsubscribe()
+    // Unsubscribe services subscription
+    if (this.svcSubscription) {
+      this.svcSubscription.unsubscribe()
     }
+    // Unsubscribe route subscription
     if (this.routeSubscription) {
       this.routeSubscription.unsubscribe()
     }
-    if (this.activateSubscription) {
-      this.activateSubscription.unsubscribe()
-    }
-    if (this.deactivateSubscription) {
-      this.deactivateSubscription.unsubscribe()
-    }
-    if (this.enableMaintenanceSubscription) {
-      this.enableMaintenanceSubscription.unsubscribe()
-    }
-    if (this.disableMaintenanceSubscription) {
-      this.disableMaintenanceSubscription.unsubscribe()
-    }
+    // Unsubscribe event subscription
     if (this.eventSubscription) {
       this.eventSubscription.unsubscribe()
-    }
-    if (this.searchSubscription) {
-      this.searchSubscription.unsubscribe()
     }
   }
 
@@ -87,7 +69,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   getData(id: number) {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.unitSvc.getOne(id).subscribe({
+    this.svcSubscription.add(this.unitSvc.getOne(id).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -99,13 +81,13 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.currentUnit = this.unitSvc.unit
       }
-    })
+    }))
   }
 
   activate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.activateSubscription = this.unitSvc.activate(this.currentUnit?.id!).subscribe({
+    this.svcSubscription.add(this.unitSvc.activate(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -117,13 +99,13 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.getData(this.currentUnit?.id!)
       }
-    })
+    }))
   }
 
   deactivate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.deactivateSubscription = this.unitSvc.deactivate(this.currentUnit?.id!).subscribe({
+    this.svcSubscription.add(this.unitSvc.deactivate(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -135,13 +117,13 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.getData(this.currentUnit?.id!)
       }
-    })
+    }))
   }
 
   enableMaintenance() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.enableMaintenanceSubscription = this.unitSvc.enableMaintenance(this.currentUnit?.id!).subscribe({
+    this.svcSubscription.add(this.unitSvc.enableMaintenance(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -153,13 +135,13 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.getData(this.currentUnit?.id!)
       }
-    })
+    }))
   }
 
   disableMaintenance() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.disableMaintenanceSubscription = this.unitSvc.disableMaintenance(this.currentUnit?.id!).subscribe({
+    this.svcSubscription.add(this.unitSvc.disableMaintenance(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -171,7 +153,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.getData(this.currentUnit?.id!)
       }
-    })
+    }))
   }
 
   toggleAssignRenter() {
@@ -182,8 +164,6 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
           this.startSearchPipe()
         }, 500
       )
-    } else {
-
     }
   }
 
@@ -200,7 +180,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     ).subscribe(
       (text: string) => {
         this.isSearching = true
-        this.searchSubscription = this.renterSvc.search(text).subscribe({
+        this.svcSubscription.add(this.renterSvc.search(text).subscribe({
           next: () => {
             this.isSearching = false
           },
@@ -210,7 +190,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
           complete: () => {
             this.searchedRenters = this.renterSvc.renters
           }
-        })
+        }))
       }
     )
   }
