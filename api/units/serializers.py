@@ -1,7 +1,6 @@
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from django.utils.timezone import now
 
 from .models import (
     Block,
@@ -53,10 +52,6 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class UnitExtendedSerializer(serializers.ModelSerializer):
-
-    block = BlockSerializer(many=False, read_only=True)
-    floor = FloorSerializer(many=False, read_only=True)
-    unit_number = UnitNumberSerializer(many=False, read_only=True)
     renter = RenterSerializer(many=False, read_only=True)
     
     class Meta:
