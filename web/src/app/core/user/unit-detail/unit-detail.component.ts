@@ -1,7 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, fromEvent, map, Subscription } from 'rxjs';
+import { Renter } from 'src/app/shared/services/renters/renters.model';
+import { RentersService } from 'src/app/shared/services/renters/renters.service';
 import { Unit } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
@@ -14,9 +16,13 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
 
   // Data
   currentUnit: Unit | undefined
+  searchedRenters: Renter[] = []
+  selectedRenter: Renter | undefined
 
   // Checker
   isProcessing: boolean = false
+  isAssignRenter: boolean = false
+  isSearching: boolean = false
 
   // Subscription
   subscription: Subscription | undefined
@@ -24,12 +30,18 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   deactivateSubscription: Subscription | undefined
   enableMaintenanceSubscription: Subscription | undefined
   disableMaintenanceSubscription: Subscription | undefined
+  searchSubscription: Subscription | undefined
   routeSubscription: Subscription | undefined
+  eventSubscription: Subscription | undefined
+
+  // Event
+  @ViewChild('renterSearchInput', { static: false }) renterSearchInput: ElementRef | undefined
 
   constructor(
     private loadingBar: LoadingBarService,
     private route: ActivatedRoute,
-    private unitSvc: UnitsService
+    private unitSvc: UnitsService,
+    private renterSvc: RentersService
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +74,12 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     }
     if (this.disableMaintenanceSubscription) {
       this.disableMaintenanceSubscription.unsubscribe()
+    }
+    if (this.eventSubscription) {
+      this.eventSubscription.unsubscribe()
+    }
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe()
     }
   }
 
@@ -154,6 +172,66 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
         this.getData(this.currentUnit?.id!)
       }
     })
+  }
+
+  toggleAssignRenter() {
+    this.isAssignRenter = !this.isAssignRenter
+    if (this.isAssignRenter) {
+      const timer = setTimeout(
+        () => {
+          this.startSearchPipe()
+        }, 500
+      )
+    } else {
+
+    }
+  }
+
+  startSearchPipe() {
+    this.eventSubscription = fromEvent(this.renterSearchInput?.nativeElement, 'keyup').pipe(
+      map((event: any) => {
+        return event.target.value
+      }),
+      filter(
+        res => res.length > 2
+      ),
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe(
+      (text: string) => {
+        this.isSearching = true
+        this.searchSubscription = this.renterSvc.search(text).subscribe({
+          next: () => {
+            this.isSearching = false
+          },
+          error: () => {
+            this.isSearching = false
+          },
+          complete: () => {
+            this.searchedRenters = this.renterSvc.renters
+          }
+        })
+      }
+    )
+  }
+
+  onSelectRenter(renter: Renter) {
+    this.selectedRenter = renter
+    console.log(this.selectedRenter)
+  }
+
+  cancelAssignRenter() {
+    this.selectedRenter = undefined
+    this.searchedRenters = []
+    const timer = setTimeout(
+      () => {
+        this.startSearchPipe()
+      }, 500
+    )
+  }
+
+  assignRenter() {
+    
   }
 
 }
