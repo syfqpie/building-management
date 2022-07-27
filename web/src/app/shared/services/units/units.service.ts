@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Unit } from './units.model';
+import { Unit, UnitExtended } from './units.model';
 import { DetailResponse } from '../auth/auth.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/units/`
@@ -16,6 +16,7 @@ export class UnitsService {
   // Data
   public unit: Unit | undefined
   public units: Unit[] = []
+  public unitExtended: UnitExtended | undefined
 
   constructor(
     private http: HttpClient
@@ -47,6 +48,16 @@ export class UnitsService {
       tap((res: Unit) => {
         this.unit = res
         // console.log('Unit:', this.unit)
+      })
+    )
+  }
+
+  getOneExtended(id: number): Observable<UnitExtended> {
+    const urlTemp = `${ BASE_URL }${ id }/extended/`
+    return this.http.get<UnitExtended>(urlTemp).pipe(
+      tap((res: UnitExtended) => {
+        this.unitExtended = res
+        console.log('Unit:', this.unitExtended)
       })
     )
   }
