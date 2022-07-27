@@ -54,15 +54,6 @@ medias_router = router.register(
     r'medias', MediaViewSet
 )
 
-# Renters
-from renters.views import (
-    RenterViewSet,
-    RenterCustomRegisterView
-)
-renters_router = router.register(
-    r'renters', RenterViewSet
-)
-
 # Residents
 from residents.views import (
     ResidentViewSet,
@@ -117,7 +108,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/registration/admin/', AdminCustomRegisterView.as_view(), name='admin_register'),
-    # path('auth/registration/renter/', RenterCustomRegisterView.as_view(), name='renter_register'),
     path('auth/registration/resident/', ResidentCustomRegisterView.as_view(), name='resident_register'),
     path('auth/registration/verify-email/', MyVerifyEmailView.as_view(), name='account_email_verification_sent'),
     path('auth/registration/check-email-verification/', MyCheckEmailVerificationView.as_view(), name='check_verification'),

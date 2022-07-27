@@ -53,7 +53,7 @@ Run the django rest framework
 	- [ ] Parking units
 	- [ ] Parking lots
 	- [ ] Parking owners
-- [x] Renters
+- [x] Residents
 - [ ] Units
 	- [ ] Blocks
 	- [ ] Floors
