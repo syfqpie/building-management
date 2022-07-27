@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 
     'medias',
     'renters',
+    'residents',
     'units',
     'users'
 ]
