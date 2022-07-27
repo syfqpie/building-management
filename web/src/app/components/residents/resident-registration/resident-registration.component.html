@@ -5,7 +5,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    Register renter
+                    Register resident
                 </h5>
             </div>
             <div class="modal-body">
@@ -69,17 +69,18 @@
                                     Title
                                 </label>
                                 <select class="form-select"
-                                    formControlName="title">
-                                    <option [value]="null">
+                                    formControlName="title"
+                                    (click)="test()">
+                                    <option [ngValue]="null">
                                         Secret
                                     </option>
-                                    <option [value]="titleType.MR">
+                                    <option [ngValue]="titleType.MR">
                                         Mr.
                                     </option>
-                                    <option [value]="titleType.MRS">
+                                    <option [ngValue]="titleType.MRS">
                                         Mrs.
                                     </option>
-                                    <option [value]="titleType.MS">
+                                    <option [ngValue]="titleType.MS">
                                         Ms.
                                     </option>
                                 </select>
@@ -93,13 +94,13 @@
                                 </label>
                                 <select class="form-select"
                                     formControlName="gender">
-                                    <option [value]="null">
+                                    <option [ngValue]="null">
                                         Secret
                                     </option>
-                                    <option [value]="genderType.FEMALE">
+                                    <option [ngValue]="genderType.FEMALE">
                                         Female
                                     </option>
-                                    <option [value]="genderType.MALE">
+                                    <option [ngValue]="genderType.MALE">
                                         Male
                                     </option>
                                 </select>
@@ -115,20 +116,20 @@
                                 </label>
                                 <input type="text"
                                     class="form-control"
-                                    formControlName="phoneNumber"
+                                    formControlName="phoneNo"
                                     placeholder="Phone number"
                                     [ngClass]="{
-                                        'is-invalid': registerForm.controls['phoneNumber'].touched &&
-                                        registerForm.controls['phoneNumber'].errors,
-                                        'is-valid': registerForm.controls['phoneNumber'].touched &&
-                                        !registerForm.controls['phoneNumber'].errors
+                                        'is-invalid': registerForm.controls['phoneNo'].touched &&
+                                        registerForm.controls['phoneNo'].errors,
+                                        'is-valid': registerForm.controls['phoneNo'].touched &&
+                                        !registerForm.controls['phoneNo'].errors
                                     }" />
                                 <div class="invalid-tooltip invalid-tooltip-right"
-                                    *ngIf="registerForm.controls['phoneNumber'].errors &&
-                                    (registerForm.controls['phoneNumber'].dirty || registerForm.controls['phoneNumber'].touched)">
-                                    <ng-container *ngFor="let message of registerFormMessages['phoneNumber']">
-                                        <span *ngIf="registerForm.get('phoneNumber')?.hasError(message.type) &&
-                                            (registerForm.get('phoneNumber')?.dirty || registerForm.get('phoneNumber')?.touched)">
+                                    *ngIf="registerForm.controls['phoneNo'].errors &&
+                                    (registerForm.controls['phoneNo'].dirty || registerForm.controls['phoneNo'].touched)">
+                                    <ng-container *ngFor="let message of registerFormMessages['phoneNo']">
+                                        <span *ngIf="registerForm.get('phoneNo')?.hasError(message.type) &&
+                                            (registerForm.get('phoneNo')?.dirty || registerForm.get('phoneNo')?.touched)">
                                             • {{ message.message }}
                                         </span>
                                     </ng-container>
@@ -169,7 +170,7 @@
             <div class="modal-footer">
                 <button type="button"
                     class="btn btn-primary"
-                    (click)="registerRenter()"
+                    (click)="registerResident()"
                     [disabled]="isProcessing || !registerForm.valid" >
                     <span *ngIf="!isProcessing; else isLoading">
                         Register

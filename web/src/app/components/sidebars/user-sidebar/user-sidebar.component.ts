@@ -41,8 +41,8 @@ export class UserSidebarComponent implements OnInit {
       ]
     },
     { 
-      path: ['/management', 'renters'], 
-      title: 'Renters',
+      path: ['/management', 'residents'], 
+      title: 'Residents',
       type: 'link',
       icon: 'fa-solid fa-building-user'
     },

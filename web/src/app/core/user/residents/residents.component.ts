@@ -3,27 +3,27 @@ import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
-import { RenterRegistrationComponent } from 'src/app/components/renters/renter-registration/renter-registration.component';
+import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
 
-import { Renter } from 'src/app/shared/services/renters/renters.model';
-import { RentersService } from 'src/app/shared/services/renters/renters.service';
+import { Resident } from 'src/app/shared/services/residents/residents.model';
+import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
 
 @Component({
-  selector: 'app-renters',
-  templateUrl: './renters.component.html',
-  styleUrls: ['./renters.component.scss']
+  selector: 'app-residents',
+  templateUrl: './residents.component.html',
+  styleUrls: ['./residents.component.scss']
 })
-export class RentersComponent implements OnInit, OnDestroy {
+export class ResidentsComponent implements OnInit, OnDestroy {
 
   // Data
-  renters: Renter[] = []
+  residents: Resident[] = []
 
-  tableRows: Renter[] = []
+  tableRows: Resident[] = []
   tableLoadingIndicator: boolean = true
   tableReorderable: boolean = true
   ColumnMode = ColumnMode
   tableMessages = {
-    totalMessage: 'total of renters'
+    totalMessage: 'total of residents'
   }
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
@@ -42,12 +42,12 @@ export class RentersComponent implements OnInit, OnDestroy {
   subscription: Subscription | undefined
 
   // Event
-  @ViewChild(RenterRegistrationComponent) registerModal: RenterRegistrationComponent | undefined
+  @ViewChild(ResidentRegistrationComponent) registerModal: ResidentRegistrationComponent | undefined
 
   constructor(
     private loadingBar: LoadingBarService,
     private router: Router,
-    private renterSvc: RentersService
+    private residentSvc: ResidentsService
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +63,7 @@ export class RentersComponent implements OnInit, OnDestroy {
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.renterSvc.getAll().subscribe({
+    this.subscription = this.residentSvc.getAll().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -73,15 +73,15 @@ export class RentersComponent implements OnInit, OnDestroy {
         this.isProcessing = false
       },
       complete: () => {
-        this.renters = this.renterSvc.renters
-        this.tableRows = [...this.renters]
+        this.residents = this.residentSvc.residents
+        this.tableRows = [...this.residents]
       }
     })
   }
 
   // Table on select row
   onSelect(selected: number) {
-    this.router.navigate(['management/renters/detail', selected])
+    this.router.navigate(['management/residents/detail', selected])
   }
 
   toggleModal() {

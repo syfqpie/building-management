@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12 text-end">
             <button class="btn btn-outline-primary btn-sm"
-                *ngIf="currentRenter?.isActive; else isNotActive"
+                *ngIf="currentResident?.isActive; else isNotActive"
                 (click)="deactivate()">
                 <i class="fa-solid fa-lock"></i>
                 Deactivate
@@ -26,7 +26,7 @@
                             Name: 
                         </label>
                         <p class="text-muted small">
-                            {{ currentRenter?.name }}
+                            {{ currentResident?.name }}
                         </p>
                     </div>
 
@@ -35,7 +35,7 @@
                             Title:
                         </label>
                         <p class="text-muted small">
-                            {{ currentRenter?.title | titleType }}
+                            {{ currentResident?.title | titleType }}
                         </p>
                     </div>
 
@@ -44,7 +44,7 @@
                             Phone number:
                         </label>
                         <p class="text-muted small">
-                            {{ currentRenter?.phoneNumber }}
+                            {{ currentResident?.phoneNo }}
                         </p>
                     </div>
 
@@ -53,7 +53,7 @@
                             Email:
                         </label>
                         <p class="text-muted small">
-                            {{ currentRenter?.email }}
+                            {{ currentResident?.email }}
                         </p>
                     </div>
 
@@ -62,7 +62,7 @@
                             NRIC:
                         </label>
                         <p class="text-muted small">
-                            {{ currentRenter?.nric }}
+                            {{ currentResident?.nric }}
                         </p>
                     </div>
 
@@ -71,7 +71,7 @@
                             Gender:
                         </label>
                         <p class="text-muted small">
-                            {{ currentRenter?.gender | genderType }}
+                            {{ currentResident?.gender | genderType }}
                         </p>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 <div class="container-fluid">
-    <app-renter-registration
+    <app-resident-registration
         (changedEvent)="getData()">
-    </app-renter-registration>
+    </app-resident-registration>
     <div class="row mb-3">
         <div class="col text-end">
             <button class="btn btn-outline-primary btn-sm"
@@ -14,10 +14,10 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">
-                List of renters
+                List of residents
             </h5>
             <h6 class="card-subtitle mb-3 text-muted">
-                Manage renters here
+                Manage residents here
             </h6>
             <div *ngIf="tableRows.length > 0; else isNoRowData">
                 <ngx-datatable
@@ -30,7 +30,7 @@
                     [messages]="tableMessages"
                     [cssClasses]="tableClass">
                     <ngx-datatable-column name="Id"
-                        prop="renterNo"
+                        prop="residentNo"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
@@ -54,7 +54,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Phone no."
-                        prop="phoneNumber"
+                        prop="phoneNo"
                         [flexGrow]="3"
                         [draggable]="false"
                         [resizeable]="false">

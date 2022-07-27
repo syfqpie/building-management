@@ -4,18 +4,18 @@ import { Subscription } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { Renter } from 'src/app/shared/services/renters/renters.model';
-import { RentersService } from 'src/app/shared/services/renters/renters.service';
+import { Resident } from 'src/app/shared/services/residents/residents.model';
+import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
 
 @Component({
-  selector: 'app-renter-detail',
-  templateUrl: './renter-detail.component.html',
-  styleUrls: ['./renter-detail.component.scss']
+  selector: 'app-resident-detail',
+  templateUrl: './resident-detail.component.html',
+  styleUrls: ['./resident-detail.component.scss']
 })
-export class RenterDetailComponent implements OnInit, OnDestroy {
+export class ResidentDetailComponent implements OnInit, OnDestroy {
 
   // Data
-  currentRenter: Renter | undefined
+  currentResident: Resident | undefined
 
   // Checker
   isProcessing: boolean = false
@@ -29,7 +29,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private route: ActivatedRoute,
-    private renterSvc: RentersService
+    private residentSvc: ResidentsService
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy {
   getData(id: number) {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.renterSvc.getOne(id).subscribe({
+    this.subscription = this.residentSvc.getOne(id).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -66,7 +66,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy {
         this.isProcessing = false
       },
       complete: () => {
-        this.currentRenter = this.renterSvc.renter
+        this.currentResident = this.residentSvc.resident
       }
     })
   }
@@ -74,7 +74,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy {
   activate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.activateSubscription = this.renterSvc.activate(this.currentRenter?.id!).subscribe({
+    this.activateSubscription = this.residentSvc.activate(this.currentResident?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -84,7 +84,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy {
         this.isProcessing = false
       },
       complete: () => {
-        this.currentRenter = this.renterSvc.renter
+        this.currentResident = this.residentSvc.resident
       }
     })
   }
@@ -92,7 +92,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy {
   deactivate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.deactivateSubscription = this.renterSvc.deactivate(this.currentRenter?.id!).subscribe({
+    this.deactivateSubscription = this.residentSvc.deactivate(this.currentResident?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -102,7 +102,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy {
         this.isProcessing = false
       },
       complete: () => {
-        this.currentRenter = this.renterSvc.renter
+        this.currentResident = this.residentSvc.resident
       }
     })
   }

@@ -6,14 +6,14 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
-import { GenderType, TitleType } from 'src/app/shared/services/renters/renters.model';
+import { GenderType, TitleType } from 'src/app/shared/services/residents/residents.model';
 
 @Component({
-  selector: 'app-renter-registration',
-  templateUrl: './renter-registration.component.html',
-  styleUrls: ['./renter-registration.component.scss']
+  selector: 'app-resident-registration',
+  templateUrl: './resident-registration.component.html',
+  styleUrls: ['./resident-registration.component.scss']
 })
-export class RenterRegistrationComponent implements OnInit, OnDestroy {
+export class ResidentRegistrationComponent implements OnInit, OnDestroy {
 
   // Data
   genderType = GenderType
@@ -25,7 +25,7 @@ export class RenterRegistrationComponent implements OnInit, OnDestroy {
     name: new FormControl(null),
     title: new FormControl(null),
     gender: new FormControl(null),
-    phoneNumber: new FormControl(null),
+    phoneNo: new FormControl(null),
     nric: new FormControl(null)
   })
   registerFormMessages = {
@@ -36,7 +36,7 @@ export class RenterRegistrationComponent implements OnInit, OnDestroy {
     name: [
       { type: 'required', message: 'Full name is required' }
     ],
-    phoneNumber: [
+    phoneNo: [
       { type: 'required', message: 'Field is required' }
     ],
     nric: [
@@ -82,7 +82,7 @@ export class RenterRegistrationComponent implements OnInit, OnDestroy {
       ])),
       title: new FormControl(null),
       gender: new FormControl(null),
-      phoneNumber: new FormControl(null, Validators.compose([
+      phoneNo: new FormControl(null, Validators.compose([
         Validators.required
       ])),
       nric: new FormControl(null, Validators.compose([
@@ -91,10 +91,10 @@ export class RenterRegistrationComponent implements OnInit, OnDestroy {
     })
   }
 
-  registerRenter() {
+  registerResident() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.authSvc.registerRenter(this.registerForm.value).subscribe({
+    this.subscription = this.authSvc.registerResident(this.registerForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -132,6 +132,10 @@ export class RenterRegistrationComponent implements OnInit, OnDestroy {
 
   toggleModal() {
     return this.isModalOpen = !this.isModalOpen
+  }
+
+  test() {
+    console.log(this.registerForm.value)
   }
 
 }

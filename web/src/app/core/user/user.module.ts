@@ -8,8 +8,8 @@ import { UserRoutes } from './user.routing';
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
-import { RentersComponent } from './renters/renters.component';
-import { RenterDetailComponent } from './renter-detail/renter-detail.component';
+import { ResidentsComponent } from './residents/residents.component';
+import { ResidentDetailComponent } from './resident-detail/resident-detail.component';
 import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
 import { UnitsComponent } from './units/units.component';
@@ -22,7 +22,7 @@ import { BlocksTableComponent } from 'src/app/components/units/blocks-table/bloc
 import { FloorsTableComponent } from 'src/app/components/units/floors-table/floors-table.component';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
-import { RenterRegistrationComponent } from 'src/app/components/renters/renter-registration/renter-registration.component';
+import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
 import { UnitAddComponent } from '../../components/units/unit-add/unit-add.component';
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
@@ -41,9 +41,9 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
   declarations: [
     AboutSystemComponent,
     DashboardComponent,
-    RentersComponent,
-    RenterDetailComponent,
-    RenterRegistrationComponent,
+    ResidentsComponent,
+    ResidentDetailComponent,
+    ResidentRegistrationComponent,
     SettingsComponent,
     SystemAdminComponent,
     TestComponent,
