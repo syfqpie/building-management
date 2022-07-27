@@ -206,8 +206,7 @@ class ResidentCustomRegisterView(RegisterView):
 
         resident_user = self.perform_create(serializer)
         response_msg = {
-            'Success':  f'Resident user created, an email has been sent \
-                        to {resident_user.email}'
+            'Success':  f'Resident user created, an email has been sent to {resident_user.email}'
         }
             
         return Response(
