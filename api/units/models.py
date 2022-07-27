@@ -12,7 +12,13 @@ from users.models import CustomUser, UserType
 class Block(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    block = models.CharField(max_length=10, null=True)
+    block = models.CharField(
+        max_length=10,
+        unique=True,
+        error_messages={
+            'unique': 'Block already exists'
+        }
+    )
 
     # Logs
     is_active = models.BooleanField(default=True)
@@ -34,7 +40,7 @@ class Block(models.Model):
     )
     
     class Meta:
-        ordering = ['-block']
+        ordering = ['block']
     
     def __str__(self):
         return ('%s'%(self.block))
@@ -43,7 +49,13 @@ class Block(models.Model):
 class Floor(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    floor = models.CharField(max_length=10, null=True)
+    floor = models.CharField(
+        max_length=10,
+        unique=True,
+        error_messages={
+            'unique': 'Floor already exists'
+        }
+    )
 
     # Logs
     is_active = models.BooleanField(default=True)
@@ -65,7 +77,7 @@ class Floor(models.Model):
     )
 
     class Meta:
-        ordering = ['-floor']
+        ordering = ['floor']
     
     def __str__(self):
         return ('%s'%(self.floor))
@@ -74,7 +86,13 @@ class Floor(models.Model):
 class UnitNumber(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    unit_number = models.IntegerField(default=0)
+    unit_number = models.CharField(
+        max_length=10,
+        unique=True,
+        error_messages={
+            'unique': 'Unit number already exists'
+        }
+    )
 
     # Logs
     is_active = models.BooleanField(default=True)
@@ -96,7 +114,7 @@ class UnitNumber(models.Model):
     )
     
     class Meta:
-        ordering = ['-unit_number']
+        ordering = ['unit_number']
     
     def __str__(self):
         return ('%s'%(str(self.unit_number)))
@@ -147,16 +165,16 @@ class Unit(models.Model):
         related_name='units_modified'
     )
 
-    def save(self,*args, **kwargs):
+    def save(self, *args, **kwargs):
         if not self.unit_no:
             self.unit_no = str(self.block.block) + '-' + str(self.floor.floor) + '-' + str(self.unit_number.unit_number)
         else:
             pass
             
-        super(Unit, self).save(*args, **kwargs)
-    
+        super().save(*args, **kwargs)
+        
     class Meta:
-        ordering = ['-unit_no']
+        ordering = ['unit_no']
     
     def __str__(self):
         return ('%s'%(self.unit_no))

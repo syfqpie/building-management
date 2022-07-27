@@ -111,4 +111,13 @@ export class AuthService {
     )
   }
 
+  registerRenter(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }registration/renter/`
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Resend verification', res)
+      })
+    )
+  }
+
 }

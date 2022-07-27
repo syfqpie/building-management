@@ -1,0 +1,81 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-end">
+            <button class="btn btn-outline-primary btn-sm"
+                *ngIf="currentRenter?.isActive; else isNotActive"
+                (click)="deactivate()">
+                <i class="fa-solid fa-lock"></i>
+                Deactivate
+            </button>
+            <ng-template #isNotActive>
+                <button class="btn btn-outline-primary btn-sm"
+                    (click)="activate()">         
+                    <i class="fa-solid fa-lock-open"></i>
+                    Activate
+                </button>
+            </ng-template>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Personal information
+                    </h5>
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Name: 
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentRenter?.name }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Title:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentRenter?.title | titleType }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Phone number:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentRenter?.phoneNumber }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Email:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentRenter?.email }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            NRIC:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentRenter?.nric }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Gender:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentRenter?.gender | genderType }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,9 @@
-import { Component, ContentChild, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
-import { UserVerification } from 'src/app/shared/services/users/users.model';
+import { EmailVerification } from 'src/app/shared/services/users/users.model';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 
 @Component({
@@ -14,16 +14,16 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 export class SystemAdminComponent implements OnInit, OnDestroy {
 
   // Data
-  users: UserVerification[] = []
+  verifications: EmailVerification[] = []
 
-  rows: UserVerification[] = []
+  rows: EmailVerification[] = []
   loadingIndicator: boolean = true
   reorderable: boolean = true
   ColumnMode = ColumnMode
   tableMessages = {
     totalMessage: 'total of users'
   }
-  selected: UserVerification[] = []
+  selected: EmailVerification[] = []
   SelectionType = SelectionType
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
@@ -44,8 +44,7 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
 
   // Event
   @ViewChild(SysRegisterAdminComponent) registerModal: SysRegisterAdminComponent | undefined
-  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
-
+  
   constructor(
     private loadingBar: LoadingBarService,
     private userSvc: UsersService
@@ -74,22 +73,22 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
         this.isProcessing = false
       },
       complete: () => {
-        this.users = this.userSvc.userVerifications
-        this.rows = [...this.users]
+        this.verifications = this.userSvc.emailVerifications
+        this.rows = [...this.verifications]
       }
     })
   }
 
   // Table on select row
-  onSelect(selected: UserVerification[]) {
+  onSelect(selected: EmailVerification[]) {
     console.log('Select Event', selected)
   }
 
-  // Sort by verification
-  companyComparator(propA: any, propB: any) {
-    if (propA[0].verified < propB[0].verified) {
+  // Sort by user type
+  userTypeComparator(propA: any, propB: any) {
+    if (propA.userType > propB.userType) {
       return -1;
-    } else if (propA[0].verified > propB[0].verified) {
+    } else if (propA.userType < propB.userType) {
       return 1
     }
     return 0
@@ -98,7 +97,6 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   toggleModal() {
     this.isRegisterAdmin = !this.isRegisterAdmin
     this.registerModal?.toggleModal()
-    this.changedEvent.emit(true)
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -33,7 +33,7 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
       { type: 'required', message: 'Full name is required' }
     ],
     isSuperuser: [
-      { type: 'required', message: 'Tfield is required' }
+      { type: 'required', message: 'Field is required' }
     ]
   }
 
@@ -44,6 +44,9 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
   // Subscription
   subscription: Subscription | undefined
 
+  // Event
+  @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
+
   constructor(
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
@@ -52,7 +55,6 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    console.log('onInit SysRegAdmin')
     this.initForm()
   }
 
@@ -113,6 +115,8 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
       complete: () => {
         this.registerForm.reset()
         this.initForm()
+        this.toggleModal()
+        this.changedEvent.emit(true)
       }
     })
   }

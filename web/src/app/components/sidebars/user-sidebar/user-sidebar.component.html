@@ -1,124 +1,54 @@
 <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark mt-0 shadow-lg overflow-y-scroll vh-100"
     style="width: 17rem;">
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
-                routerLink="/dashboard"
-                [routerLinkActive]="['active']" >
-                <i class="fas fa-house-user fa-fw"></i>
-                Dashboard
-            </a>
-        </li>
-
-        
-        <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
-                routerLink="/management/units"
-                [routerLinkActiveOptions]="{exact: true}"
-                [routerLinkActive]="['active']" >
-                <i class="fas fa-building fa-fw"></i>
-                Units Management
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
-                routerLink="/management/units/configuration"
-                [routerLinkActiveOptions]="{exact: true}"
-                [routerLinkActive]="['active']" >
-                <i class="fas fa-building fa-fw"></i>
-                Units Config
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
-                routerLink="/test"
-                [routerLinkActive]="['active']" >
-                <i class="fas fa-flask fa-fw"></i>
-                Test
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
-                routerLink="/settings"
-                [routerLinkActive]="['active']" >
-                <i class="fas fa-cogs fa-fw"></i>
-                Settings
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
-                routerLink="/system-admin"
-                [routerLinkActive]="['active']" >
-                <i class="fa-solid fa-user-shield"></i>
-                System Admin
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link cursor-pointer" 
-                routerLink="/about-system"
-                [routerLinkActive]="['active']" >
-                <i class="fa-solid fa-circle-info"></i>
-                About
-            </a>
-        </li>
-
-        <!-- <li class="nav-item">
-            <a href="#submenuUnits"
-                routerLinkActive
-                #itemLink="routerLinkActive"
-                class="nav-link cursor-pointer"
-                data-bs-toggle="collapse" >
-                <i class="fas fa-building fa-fw"></i>
-                Units Management
-                <i class="fas"
-                    [ngClass]="(unitLink.isActive || unitConfigurationLink.isActive)
-                    ? 'fa-angle-down'
-                    : 'fa-angle-right'">
-                </i>
-            </a>
-            <ul  style="transition: all 0.05s ease-in 0.05s; margin-left: 2rem;" id="submenuUnits"
-                class="collapse nav flex-column"
-                [routerLinkActive]="['show']" >
-                <li class="w-100">
-                    <a #unitLink="routerLinkActive"
-                        class="nav-link"
-                        [routerLink]="['/management', 'units']"
-                        [routerLinkActive]="['active']"
-                        [routerLinkActiveOptions]="{exact: true}">
-                        <span class="d-none d-sm-inline">Units</span> 
+        <ng-template ngFor
+            let-menu
+            [ngForOf]="menus">
+            <li class="nav-item">
+                <a *ngIf="menu.type === 'link'; else notLink"
+                    class="nav-link cursor-pointer" 
+                    [routerLink]="menu.path"
+                    [routerLinkActive]="['active']" >
+                    <i [class]="menu.icon + ' fa-fw'"></i>
+                    {{ menu.title }}
+                </a>
+                <ng-template #notLink>
+                    <a class="nav-link cursor-pointer collapsed"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#subMenu"
+                        [attr.aria-expanded]="subMenu.isActive">
+                        <i [class]="menu.icon + ' fa-fw'"></i>
+                        {{ menu.title }}
+                        <i class="fas fa-angle-right float-end"></i>
                     </a>
-                </li>
 
-                <li class="w-100">
-                    <a #unitConfigurationLink="routerLinkActive"
-                        class="nav-link"
-                        [routerLink]="['/management', 'units', 'configuration']"
-                        [routerLinkActive]="['active']"
-                        [routerLinkActiveOptions]="{exact: true}">
-                        <span class="d-none d-sm-inline">Configuration</span> 
-                    </a>
-                </li>
-            </ul>
-        </li> -->
-
-        <!-- <li>
-            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link cursor-pointer">
-                <i class="fas fa-cogs fa-fw"></i>
-                <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-            </a>
-            <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                <li class="w-100">
-                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                </li>
-            </ul>
-        </li> -->
+                    <div routerLinkActive
+                        #subMenu="routerLinkActive"
+                        id="subMenu"
+                        class="collapse"
+                        [routerLinkActive]="['show']">
+                        <ul
+                            class="nav flex-column">
+                            <ng-template ngFor
+                                let-sub
+                                let-i="index"
+                                [ngForOf]="menu.children">
+                                <li class="w-100">
+                                    <a class="nav-link"
+                                        [routerLink]="sub.path"
+                                        [routerLinkActive]="['active']"
+                                        [routerLinkActiveOptions]="{exact: true}">
+                                        <i class="fa-solid fa-fw"></i>
+                                        <span class="d-none d-sm-inline">
+                                            {{ sub.title }}
+                                        </span> 
+                                    </a>
+                                </li>
+                            </ng-template>
+                        </ul>
+                    </div>
+                </ng-template>
+            </li>
+        </ng-template>
     </ul>
 </div>

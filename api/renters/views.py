@@ -1,4 +1,5 @@
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -31,6 +32,7 @@ from .models import (
 )
 
 from .serializers import (
+    RenterAdminSerializer,
     RenterSerializer,
     RenterPublicSerializer,
     RenterCustomRegisterSerializer
@@ -81,6 +83,9 @@ from .serializers import (
 class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Renter.objects.all()
     serializer_class = RenterSerializer
+    serializer_class_admin = {
+        'list': RenterAdminSerializer
+    }
     serializer_class_public = {
         'list': RenterPublicSerializer
     }
@@ -88,6 +93,19 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     filterset_fields = [
         'gender',
         'is_active'
+    ]
+    search_fields = [
+        'renter_no',
+        'name',
+        'email'
+    ]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
     ]
 
     def get_permissions(self):
@@ -103,10 +121,12 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_class(self):
         user = self.request.user
 
-        if user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
+        if user.user_type == UserType.ADMIN and hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
+        elif user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
             return self.serializer_class_public.get(self.action, self.serializer_class)
         
-        return super(RenterViewSet, self).get_serializer_class()
+        return super().get_serializer_class()
 
     def get_queryset(self):
         user = self.request.user
@@ -133,11 +153,14 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_id='Activate renter',
         tags=['Renters'])
     def activate(self, request, *args, **kwargs):
-        user = self.get_object()
-        user.is_active = True
-        user.save()
+        renter = self.get_object()
 
-        serializer = RenterSerializer(user, many=False)
+        if renter.is_active is True:
+            raise PermissionDenied(detail='Renter is already activated')
+        renter.is_active = True
+        renter.save()
+
+        serializer = self.get_serializer(renter, many=False)
         return Response(serializer.data)
 
     # Deactivate renter
@@ -147,11 +170,14 @@ class RenterViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_id='Deactivate renter',
         tags=['Renters'])
     def deactivate(self, request, *args, **kwargs):
-        user = self.get_object()
-        user.is_active = False
-        user.save()
-        
-        serializer = RenterSerializer(user, many=False)
+        renter = self.get_object()
+
+        if renter.is_active is False:
+            raise PermissionDenied(detail='Renter is already deactivated')
+        renter.is_active = False
+        renter.save()
+
+        serializer = self.get_serializer(renter, many=False)
         return Response(serializer.data)
 
 
@@ -181,11 +207,11 @@ class RenterCustomRegisterView(RegisterView):
         serializer.is_valid(raise_exception=True)
 
         renter_user = self.perform_create(serializer)
-        renter = Renter.objects.get(renter_user=renter_user)
-
-        serializer = RenterSerializer(renter, many=False)
+        response_msg = {
+            'Success':  f'Renter user created, an email has been sent to {renter_user.email}'
+        }
             
         return Response(
-            serializer.data,
+            response_msg,
             status=status.HTTP_201_CREATED
         )
