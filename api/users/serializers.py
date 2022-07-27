@@ -131,14 +131,14 @@ class AdminCustomRegisterSerializer(RegisterSerializer):
     
     def save(self, request):
         # Call default first
-        renter_user = super(AdminCustomRegisterSerializer, self).save(request)
+        admin_user = super().save(request)
 
         # To save this values
-        renter_user.full_name = self.cleaned_data.get('full_name')
-        renter_user.is_superuser = self.cleaned_data.get('is_superuser')
-        renter_user.user_type = self.cleaned_data.get('user_type')
-        renter_user.is_staff = self.cleaned_data.get('is_staff')
+        admin_user.full_name = self.cleaned_data.get('full_name')
+        admin_user.is_superuser = self.cleaned_data.get('is_superuser')
+        admin_user.user_type = self.cleaned_data.get('user_type')
+        admin_user.is_staff = self.cleaned_data.get('is_staff')
 
-        renter_user.save()
+        admin_user.save()
 
-        return renter_user
+        return admin_user
