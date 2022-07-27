@@ -133,126 +133,184 @@
                             Last modified at:
                         </label>
                         <p class="text-muted small">
-                            {{ currentUnit?.lastModifiedAt| date : 'dd/MM/yyyy, h:mm a' }}
+                            {{ currentUnit?.lastModifiedAt | date : 'dd/MM/yyyy, h:mm a' }}
                         </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-8 d-flex">
-            <div class="text-center m-auto"
-                [ngClass]="{
-                    'w-100': selectedRenter
-                }">
-                <!-- <input #renterSearchInput id="renterSearchInput" class="form-control" /> -->
-                <div *ngIf="isAssignRenter; else isNotAssignRenter">
-                    <div *ngIf="selectedRenter; else notSelected"
-                        class="row">
-                        <div class="col-sm-12 col-md-auto d-flex">
-                            <div class="m-auto">
-                                <img src="assets/images/illustrations/confirmation.png"
-                                    style="width: 24rem" />
-                                <p class="text-muted">Confirmation</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md text-start">
-                            <div class="mb-2">
-                                <label class="fw-bold text-uppercase small">
-                                    Renter no.: 
-                                </label>
-                                <p class="text-muted small">
-                                    {{ selectedRenter?.renterNo }}
-                                </p>
-                            </div>
-        
+        <div *ngIf="currentUnit?.renter !== null; else isNoRenter"
+            class="col-sm-12 col-md-9">
+            <div class="row g-3">
+                <div class="col-sm-12 col-md-8">
+
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                Renter information
+                            </h5>
                             <div class="mb-2">
                                 <label class="fw-bold text-uppercase small">
                                     Name:
                                 </label>
                                 <p class="text-muted small">
-                                    {{ selectedRenter?.name }}
+                                    {{ currentUnit?.renter?.title | titleType }}
+                                    {{ currentUnit?.renter?.name }}
                                 </p>
                             </div>
-    
+
                             <div class="mb-2">
                                 <label class="fw-bold text-uppercase small">
-                                    Email:
+                                    Phone no.:
                                 </label>
                                 <p class="text-muted small">
-                                    {{ selectedRenter?.email }}
+                                    {{ currentUnit?.renter?.phoneNumber }}
                                 </p>
                             </div>
-    
+
                             <div class="mb-2">
                                 <label class="fw-bold text-uppercase small">
-                                    Phone number:
+                                    Moved in at:
                                 </label>
                                 <p class="text-muted small">
-                                    {{ selectedRenter?.phoneNumber }}
+                                    {{ currentUnit?.renter?.movedInAt | date : 'dd/MM/yyyy, h:mm a' }}
                                 </p>
                             </div>
-                            <button class="btn btn-primary me-2">
-                                Confirm
-                            </button>
-                            <button class="btn btn-outline-primary"
-                                (click)="cancelAssignRenter()">
-                                Cancel
-                            </button>
+
+                            <div class="mb-2">
+                                <label class="fw-bold text-uppercase small">
+                                    Last payment at:
+                                </label>
+                                <p class="text-muted small">
+                                    {{ 
+                                        (currentUnit?.renter?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
+                                        'N/A'
+                                    }}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <ng-template #notSelected>
-                        <form class="text-start">
-                            <div>
-                                <label class="form-label">
-                                    Renter
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i *ngIf="isSearching; else isNotSearching"
-                                            class="fa-solid fa-circle-notch fa-spin">
-                                        </i>
-                                        <ng-template #isNotSearching>
-                                            <i class="fa-brands fa-searchengin"></i>
-                                        </ng-template>
-                                    </span>
-                                    <input #renterSearchInput
-                                        class="form-control"
-                                        [disabled]="isSearching"
-                                        placeholder="Search renter"
-                                        list="encodings" />           
+                </div>
+            </div>
+        </div>
+
+        <ng-template #isNoRenter>
+            <div class="col-sm-12 col-md-9 d-flex">
+                <div class="text-center m-auto"
+                    [ngClass]="{
+                        'w-100': selectedRenter
+                    }">
+                    <div *ngIf="isAssignRenter; else isNotAssignRenter">
+                        <div *ngIf="selectedRenter; else notSelected"
+                            class="row">
+                            <div class="col-sm-12 col-md-auto d-flex">
+                                <div class="m-auto">
+                                    <img src="assets/images/illustrations/confirmation.png"
+                                        style="width: 24rem" />
+                                    <p class="text-muted">Confirmation</p>
                                 </div>
                             </div>
-                        </form>
-                        <div class="mt-3" *ngIf="searchedRenters.length > 0">
-                            <div class="list-group list-group-flush shadow rounded">
-                                <ng-template ngFor
-                                    let-renter
-                                    [ngForOf]="searchedRenters">
-                                    <button class="list-group-item list-group-item-action"
-                                        (click)="onSelectRenter(renter)">
-                                        <p class="mb-0 small">
-                                            <i class="fa-solid fa-building-user"></i>
-                                            [{{ renter.renterNo }}] {{ renter.name }} - {{ renter.email }}
-                                        </p>
-                                    </button>                                
-                                </ng-template>
+                            <div class="col-sm-12 col-md text-start">
+                                <div class="mb-2">
+                                    <label class="fw-bold text-uppercase small">
+                                        Renter no.: 
+                                    </label>
+                                    <p class="text-muted small">
+                                        {{ selectedRenter?.renterNo }}
+                                    </p>
+                                </div>
+            
+                                <div class="mb-2">
+                                    <label class="fw-bold text-uppercase small">
+                                        Name:
+                                    </label>
+                                    <p class="text-muted small">
+                                        {{ selectedRenter?.name }}
+                                    </p>
+                                </div>
+        
+                                <div class="mb-2">
+                                    <label class="fw-bold text-uppercase small">
+                                        Email:
+                                    </label>
+                                    <p class="text-muted small">
+                                        {{ selectedRenter?.email }}
+                                    </p>
+                                </div>
+        
+                                <div class="mb-2">
+                                    <label class="fw-bold text-uppercase small">
+                                        Phone number:
+                                    </label>
+                                    <p class="text-muted small">
+                                        {{ selectedRenter?.phoneNumber }}
+                                    </p>
+                                </div>
+                                <button class="btn btn-primary me-2">
+                                    Confirm
+                                </button>
+                                <button class="btn btn-outline-primary"
+                                    (click)="cancelAssignRenter()">
+                                    Cancel
+                                </button>
                             </div>
+                        </div>
+                        <ng-template #notSelected>
+                            <form class="text-start">
+                                <div>
+                                    <label class="form-label">
+                                        Renter
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i *ngIf="isSearching; else isNotSearching"
+                                                class="fa-solid fa-circle-notch fa-spin">
+                                            </i>
+                                            <ng-template #isNotSearching>
+                                                <i class="fa-brands fa-searchengin"></i>
+                                            </ng-template>
+                                        </span>
+                                        <input #renterSearchInput
+                                            class="form-control"
+                                            [disabled]="isSearching"
+                                            placeholder="Search renter"
+                                            list="encodings" />           
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="mt-3" *ngIf="searchedRenters.length > 0">
+                                <div class="list-group list-group-flush shadow rounded">
+                                    <ng-template ngFor
+                                        let-renter
+                                        [ngForOf]="searchedRenters">
+                                        <button class="list-group-item list-group-item-action"
+                                            (click)="onSelectRenter(renter)">
+                                            <p class="mb-0 small">
+                                                <i class="fa-solid fa-building-user"></i>
+                                                [{{ renter.renterNo }}] {{ renter.name }} - {{ renter.email }}
+                                            </p>
+                                        </button>                                
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <ng-template #isNotAssignRenter>
+                        <div>
+                            <img src="assets/images/illustrations/no-information.png"
+                                style="height: 14rem;">
+                            <p class="text-muted">No information yet</p>
+                            <button class="btn btn-primary"
+                                (click)="toggleAssignRenter()">
+                                Assign renter
+                            </button>
                         </div>
                     </ng-template>
                 </div>
-                <ng-template #isNotAssignRenter>
-                    <div>
-                        <img src="assets/images/illustrations/no-information.png"
-                            style="height: 14rem;">
-                        <p class="text-muted">No information yet</p>
-                        <button class="btn btn-primary"
-                            (click)="toggleAssignRenter()">
-                            Assign renter
-                        </button>
-                    </div>
-                </ng-template>
             </div>
-        </div>
+        </ng-template>
     </div>
 </div>
