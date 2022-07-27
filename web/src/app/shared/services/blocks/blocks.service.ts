@@ -20,12 +20,22 @@ export class BlocksService {
     private http: HttpClient
   ) { }
 
+  create(body: any): Observable<Block> {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.post<Block>(urlTemp, body).pipe(
+      tap((res: Block) => {
+        this.block = res
+        // console.log('Block:', this.block)
+      })
+    )
+  }
+
   getAll(): Observable<Block[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<Block[]>(urlTemp).pipe(
       tap((res: Block[]) => {
         this.blocks = res
-        console.log('Blocks:', this.blocks)
+        // console.log('Blocks:', this.blocks)
       })
     )
   }
@@ -35,7 +45,17 @@ export class BlocksService {
     return this.http.get<Block>(urlTemp).pipe(
       tap((res: Block) => {
         this.block = res
-        console.log('Block:', this.block)
+        // console.log('Block:', this.block)
+      })
+    )
+  }
+
+  patch(id: number, body: any): Observable<Block> {
+    const urlTemp = `${ BASE_URL }${ id }/`
+    return this.http.patch<Block>(urlTemp, body).pipe(
+      tap((res: Block) => {
+        this.block = res
+        // console.log('Block:', this.block)
       })
     )
   }

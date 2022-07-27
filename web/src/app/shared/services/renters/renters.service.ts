@@ -60,4 +60,14 @@ export class RentersService {
       })
     )
   }
+
+  search(searchText: string): Observable<Renter[]> {
+    const urlTemp = `${ BASE_URL }?search=${ searchText }`
+    return this.http.get<Renter[]>(urlTemp).pipe(
+      tap((res: Renter[]) => {
+        this.renters = res
+        // console.log('Renters: ', this.renters)
+      })
+    )
+  }
 }

@@ -7,6 +7,7 @@ import { RentersComponent } from './renters/renters.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
+import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitsComponent } from './units/units.component';
 
@@ -32,6 +33,10 @@ export const UserRoutes: Routes = [
                     {
                         path: '',
                         component: UnitsComponent
+                    },
+                    {
+                        path: 'detail/:id',
+                        component: UnitDetailComponent
                     },
                     {
                         path: 'configuration',

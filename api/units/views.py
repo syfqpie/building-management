@@ -1,17 +1,20 @@
+import datetime
+
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
-from core.settings import DEBUG
 
 from users.permissions import IsSuperAdmin
 
@@ -34,7 +37,15 @@ from .serializers import (
 class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -42,11 +53,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
-
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset
+        return [permission() for permission in permission_classes]
     
     def perform_create(self, serializer):
         request = serializer.context['request']
@@ -67,7 +74,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         block.is_active = True
         block.save()
 
-        serializer = BlockSerializer(block, many=False)
+        serializer = self.get_serializer(block, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Block activated' },
@@ -86,7 +93,7 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         block.is_active = False
         block.save()
 
-        serializer = BlockSerializer(block, many=False)
+        serializer = self.get_serializer(block, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Block deactivated' },
@@ -98,7 +105,15 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -106,11 +121,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
-    
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         request = serializer.context['request']
@@ -131,7 +142,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         floor.is_active = True
         floor.save()
 
-        serializer = FloorSerializer(floor, many=False)
+        serializer = self.get_serializer(floor, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Floor activated' },
@@ -150,7 +161,7 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         floor.is_active = False
         floor.save()
 
-        serializer = FloorSerializer(floor, many=False)
+        serializer = self.get_serializer(floor, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Floor deactivated' },
@@ -162,7 +173,15 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = UnitNumber.objects.all()
     serializer_class = UnitNumberSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -170,11 +189,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
-
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         request = serializer.context['request']
@@ -195,7 +210,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit_number.is_active = True
         unit_number.save()
 
-        serializer = UnitNumberSerializer(unit_number, many=False)
+        serializer = self.get_serializer(unit_number, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit number activated' },
@@ -214,7 +229,7 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit_number.is_active = False
         unit_number.save()
 
-        serializer = UnitNumberSerializer(unit_number, many=False)
+        serializer = self.get_serializer(unit_number, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit number deactivated' },
@@ -226,7 +241,24 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Unit.objects.all()
     serializer_class = UnitSerializer
+    serializer_class_admin = {
+        'list_ext': UnitExtendedSerializer,
+        'retrieve_ext': UnitExtendedSerializer
+    }
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    http_method_names = [
+        "get",
+        "post",
+        "patch",
+        "delete",
+        "head",
+        "options",
+        "trace",
+    ]
+    filterset_fields = [
+        'is_active',
+        'is_maintenance'
+    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -234,35 +266,37 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]    
+        return [permission() for permission in permission_classes]
 
-    
-    def get_queryset(self):
-        queryset = self.queryset
-        return queryset    
-    
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Check serializer class by action
+        if hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
 
+        # Return original class
+        return super().get_serializer_class()
+    
     def perform_create(self, serializer):
         request = serializer.context['request']
         serializer.save(created_by=request.user)
-
 
     def perform_update(self, serializer):
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
  
     # Get extended units
-    @action(methods=['GET'], detail=False)
-    def extended_all(self, request, *args, **kwargs):
-        units = Unit.objects.all()
-        serializer = UnitExtendedSerializer(units, many=True)
+    @action(methods=['GET'], detail=False, url_path='extended')
+    def list_ext(self, request, *args, **kwargs):
+        units = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(units, many=True)
         return Response(serializer.data)
     
     # Get extended unit
-    @action(methods=['GET'], detail=True)
-    def extended(self, request, *args, **kwargs):
+    @action(methods=['GET'], detail=True, url_path='extended')
+    def retrieve_ext(self, request, *args, **kwargs):
         unit = self.get_object()
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         return Response(serializer.data)
 
     # Enable maintenance
@@ -276,7 +310,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_maintenance = True
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit maintenance enabled' },
@@ -295,7 +329,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_maintenance = False
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit maintenance disabled' },
@@ -314,7 +348,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_active = True
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit activated' },
@@ -333,13 +367,64 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         unit.is_active = False
         unit.save()
 
-        serializer = UnitExtendedSerializer(unit, many=False)
+        serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'Unit deactivated' },
             status=status.HTTP_200_OK,
             headers=headers
         )
+
+    # Deactivate unit
+    @action(methods=['POST'], detail=True, url_path='assign-renter')
+    def assign_renter(self, request, *args, **kwargs):
+        unit = self.get_object()
+
+        is_replace = request.data.get('replace', False)
+        moved_in_at = request.data.get('moved_in_at', None)
+
+        # Check if unit already have a renter and not replacing
+        if unit.renter and is_replace == False:
+            raise PermissionDenied(
+                detail='Unit already have a renter. You should replace instead'
+            )
+
+        # Unit value validation
+        try:
+            renter_id = request.data['renter']
+        except Exception as e:
+            raise PermissionDenied(detail='Renter is required')
+        
+        unit_serializer = self.get_serializer(
+            unit,
+            data={ 'renter': renter_id },
+            partial=True
+        )
+        unit_serializer.is_valid(raise_exception=True)
+
+        # Renter value validation
+        if moved_in_at:
+            try:
+                parsed_datetime = datetime.datetime.fromisoformat(moved_in_at)
+            except ValueError:
+                raise ValidationError(detail={
+                    'moved_in_at': (
+                        'Datetime has wrong format. Use one of theseformats',
+                        'instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
+                    )
+                })
+        else:
+            parsed_datetime = timezone.now()
+
+        renter = unit_serializer.validated_data['renter']
+        renter.moved_in_at = parsed_datetime
+
+        # Saving
+        self.perform_update(unit_serializer)
+        renter.save()
+
+        serializer = self.get_serializer(unit, many=False)
+        return Response(serializer.data)
     
     # Get ownership count
     @action(methods=['GET'], detail=False, url_path='ownership-count')

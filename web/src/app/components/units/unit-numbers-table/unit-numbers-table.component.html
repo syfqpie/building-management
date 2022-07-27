@@ -1,0 +1,224 @@
+<div class="card shadow border-0">
+    <div class="card-body">
+        <h5 class="card-title">
+            List of unit numbers
+        </h5>
+        <h6 class="card-subtitle mb-3 text-muted">
+            Manage unit numbers here
+        </h6>
+        <div *ngIf="tableRows.length > 0; else isNoRowData">
+            <ngx-datatable
+                class="bootstrap rounded-2"
+                [rows]="tableRows"
+                [columnMode]="ColumnMode.flex"
+                [limit]="5"
+                rowHeight="auto"
+                [footerHeight]="50"
+                [messages]="tableMessages"
+                [cssClasses]="tableClass">
+                <ngx-datatable-column name="Unit number"
+                    prop="unitNumber"
+                    [flexGrow]="4"
+                    [draggable]="false"
+                    [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <p class="mb-0">
+                            {{ value }}
+                        </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Active"
+                    prop="isActive"
+                    [flexGrow]="2"
+                    [draggable]="false"
+                    [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2"
+                            [ngClass]="{
+                                'bg-success text-success
+                                    border-success': value,
+                                'bg-danger text-danger
+                                    border-danger': !value
+                            }">
+                            <span *ngIf="value; else isNotActive">
+                                <i class="fa-regular fa-circle-check my-auto"></i>
+                                Active
+                            </span>
+                            <ng-template #isNotActive>
+                                <span>
+                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                    Inactive
+                                </span>
+                            </ng-template>
+                        </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Action"
+                    prop="id"
+                    [flexGrow]="1"
+                    [sortable]="false"
+                    [draggable]="false"
+                    [resizeable]="false">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        <button class="btn btn-outline-primary btn-sm"
+                            (click)="onSelect(row)">
+                            Update
+                        </button>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <ng-template #isNoRowData>
+            <div *ngIf="!isProcessing;">
+                <div class="text-center">
+                    <img src="assets/images/illustrations/empty.png"
+                        style="height: 14rem;">
+                    <p class="text-muted">Empty data</p>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isAddModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add new unit number
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addForm">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Unit number
+                        </label>
+                        <input type="text"
+                            class="form-control"
+                            formControlName="unitNumber"
+                            placeholder="1"
+                            [ngClass]="{
+                                'is-invalid': addForm.controls['unitNumber'].touched &&
+                                addForm.controls['unitNumber'].errors,
+                                'is-valid': addForm.controls['unitNumber'].touched &&
+                                !addForm.controls['unitNumber'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="addForm.controls['unitNumber'].errors &&
+                            (addForm.controls['unitNumber'].dirty || addForm.controls['unitNumber'].touched)">
+                            <ng-container *ngFor="let message of formMessages['unitNumber']">
+                                <span *ngIf="addForm.get('unitNumber')?.hasError(message.type) &&
+                                    (addForm.get('unitNumber')?.dirty || addForm.get('unitNumber')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="addUnitNumber()"
+                    [disabled]="isProcessing || !addForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Add
+                    </span>
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleAddModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isUpdateModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Update unit number
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="updateForm">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Unit number
+                        </label>
+                        <input type="text"
+                            class="form-control"
+                            formControlName="unitNumber"
+                            placeholder="1"
+                            [ngClass]="{
+                                'is-invalid': updateForm.controls['unitNumber'].touched &&
+                                updateForm.controls['unitNumber'].errors,
+                                'is-valid': updateForm.controls['unitNumber'].touched &&
+                                !updateForm.controls['unitNumber'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="updateForm.controls['unitNumber'].errors &&
+                            (updateForm.controls['unitNumber'].dirty || updateForm.controls['unitNumber'].touched)">
+                            <ng-container *ngFor="let message of formMessages['unitNumber']">
+                                <span *ngIf="updateForm.get('unitNumber')?.hasError(message.type) &&
+                                    (updateForm.get('unitNumber')?.dirty || updateForm.get('unitNumber')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                id="checkboxAdmin"
+                                formControlName="isActive">
+                            <label class="form-check-label"
+                                for="checkboxAdmin">
+                                {{ updateForm.value.isActive ? 'Active' : 'Inactive' }}
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="patchUnitNumber()"
+                    [disabled]="isProcessing || !updateForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Update
+                    </span>
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleUpdateModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show d-block"
+    role="dialog"
+    *ngIf="isAddModalOpen || isUpdateModalOpen">
+</div>

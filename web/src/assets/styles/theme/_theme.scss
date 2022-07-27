@@ -141,3 +141,20 @@ a:hover:not(.active) {
     background-color: #ffcdd2;
     color: #c63737;
 }
+
+// Sidebar
+// Not collapsed
+a[aria-expanded="false"] {
+    i.fas.fa-angle-right {
+      margin-left: auto;
+      transition: transform .35s ease;
+    } 
+}
+
+// Collapsed
+a[aria-expanded="true"] {
+    i.fas.fa-angle-right {
+        transform: rotate(90deg);
+        transition: transform .35s ease;
+    } 
+}
