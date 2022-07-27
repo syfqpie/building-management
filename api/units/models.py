@@ -5,7 +5,7 @@ from django.db import models
 
 from core.helpers import PathAndRename
 
-from renters.models import Renter
+from residents.models import Resident
 from users.models import CustomUser, UserType
 
 
@@ -138,10 +138,11 @@ class Unit(models.Model):
         UnitNumber,
         on_delete=models.CASCADE
     )
-    renter = models.ForeignKey(
-        Renter,
+    owner = models.ForeignKey(
+        Resident,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        limit_choices_to={'is_owner': True}
     )
 
     is_maintenance = models.BooleanField(default=False)

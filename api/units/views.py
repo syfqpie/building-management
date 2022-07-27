@@ -376,52 +376,52 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
 
     # Deactivate unit
-    @action(methods=['POST'], detail=True, url_path='assign-renter')
-    def assign_renter(self, request, *args, **kwargs):
+    @action(methods=['POST'], detail=True, url_path='assign-owner')
+    def assign_owner(self, request, *args, **kwargs):
         unit = self.get_object()
 
         is_replace = request.data.get('replace', False)
         moved_in_at = request.data.get('moved_in_at', None)
 
-        # Check if unit already have a renter and not replacing
-        if unit.renter and is_replace == False:
+        # Check if unit already have an owner and not replacing
+        if unit.owner and is_replace == False:
             raise PermissionDenied(
-                detail='Unit already have a renter. You should replace instead'
+                detail='Unit already have a owner. You should replace instead'
             )
 
         # Unit value validation
         try:
-            renter_id = request.data['renter']
+            owner_id = request.data['resident']
         except Exception as e:
-            raise PermissionDenied(detail='Renter is required')
+            raise PermissionDenied(detail='Owner is required')
         
         unit_serializer = self.get_serializer(
             unit,
-            data={ 'renter': renter_id },
+            data={ 'owner': owner_id },
             partial=True
         )
         unit_serializer.is_valid(raise_exception=True)
 
-        # Renter value validation
-        if moved_in_at:
-            try:
-                parsed_datetime = datetime.datetime.fromisoformat(moved_in_at)
-            except ValueError:
-                raise ValidationError(detail={
-                    'moved_in_at': (
-                        'Datetime has wrong format. Use one of theseformats',
-                        'instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
-                    )
-                })
-        else:
-            parsed_datetime = timezone.now()
+        # Owner value validation
+        # if moved_in_at:
+        #     try:
+        #         parsed_datetime = datetime.datetime.fromisoformat(moved_in_at)
+        #     except ValueError:
+        #         raise ValidationError(detail={
+        #             'moved_in_at': (
+        #                 'Datetime has wrong format. Use one of theseformats',
+        #                 'instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
+        #             )
+        #         })
+        # else:
+        #     parsed_datetime = timezone.now()
 
-        renter = unit_serializer.validated_data['renter']
-        renter.moved_in_at = parsed_datetime
+        # owner = unit_serializer.validated_data['owner']
+        # owner.moved_in_at = parsed_datetime
 
         # Saving
         self.perform_update(unit_serializer)
-        renter.save()
+        # owner.save()
 
         serializer = self.get_serializer(unit, many=False)
         return Response(serializer.data)
@@ -437,8 +437,8 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 'Available'
             ],
             'datas': [
-                units.filter(renter__isnull=False).count(), 
-                units.filter(renter__isnull=True).count()
+                units.filter(owner__isnull=False).count(), 
+                units.filter(owner__isnull=True).count()
             ]
         }
         

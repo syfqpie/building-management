@@ -9,7 +9,7 @@ from .models import (
     Unit
 )
 
-from renters.serializers import RenterSerializer
+from residents.serializers import ResidentSerializer
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -52,7 +52,7 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class UnitExtendedSerializer(serializers.ModelSerializer):
-    renter = RenterSerializer(many=False, read_only=True)
+    resident = ResidentSerializer(many=False, read_only=True)
     
     class Meta:
         model = Unit
