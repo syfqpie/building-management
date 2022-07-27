@@ -416,12 +416,13 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         # else:
         #     parsed_datetime = timezone.now()
 
-        # owner = unit_serializer.validated_data['owner']
+        owner = unit_serializer.validated_data['owner']
+        owner.is_owner = True
         # owner.moved_in_at = parsed_datetime
 
         # Saving
         self.perform_update(unit_serializer)
-        # owner.save()
+        owner.save()
 
         serializer = self.get_serializer(unit, many=False)
         return Response(serializer.data)

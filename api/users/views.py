@@ -140,7 +140,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user.is_active = True
         user.save()
 
-        serializer = self.get_serializer_class(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'User account activated' },
@@ -163,7 +163,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user.is_active = False
         user.save()
 
-        serializer = self.get_serializer_class(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'User account deactivated' },
@@ -180,7 +180,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_account_information(self, request, *args, **kwargs):
         user = request.user
 
-        serializer = self.get_serializer_class(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         return Response(serializer.data)
     
 
