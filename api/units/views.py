@@ -385,7 +385,9 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         # Check if unit already have a renter and not replacing
         if unit.renter and is_replace == False:
-            raise PermissionDenied(detail='Unit already have a renter. You should replace instead')
+            raise PermissionDenied(
+                detail='Unit already have a renter. You should replace instead'
+            )
 
         # Unit value validation
         try:
@@ -406,7 +408,10 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 parsed_datetime = datetime.datetime.fromisoformat(moved_in_at)
             except ValueError:
                 raise ValidationError(detail={
-                    'moved_in_at': 'Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
+                    'moved_in_at': (
+                        'Datetime has wrong format. Use one of theseformats',
+                        'instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
+                    )
                 })
         else:
             parsed_datetime = timezone.now()
