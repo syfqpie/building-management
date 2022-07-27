@@ -6,7 +6,8 @@ from .models import (
     Block,
     Floor,
     UnitNumber,
-    Unit
+    Unit,
+    UnitActivity
 )
 
 from residents.serializers import ResidentSerializer
@@ -56,4 +57,11 @@ class UnitExtendedSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Unit
+        fields = '__all__'
+
+
+class UnitActivitySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = UnitActivity
         fields = '__all__'

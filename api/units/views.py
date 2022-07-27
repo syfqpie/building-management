@@ -16,13 +16,14 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from users.permissions import IsSuperAdmin
+from users.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
     Block,
     Floor,
     UnitNumber,
-    Unit
+    Unit,
+    UnitActivity
 )
 
 from .serializers import (
@@ -30,7 +31,8 @@ from .serializers import (
     FloorSerializer,
     UnitNumberSerializer,
     UnitSerializer,
-    UnitExtendedSerializer
+    UnitExtendedSerializer,
+    UnitActivitySerializer
 )
 
 
@@ -379,14 +381,12 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     @action(methods=['POST'], detail=True, url_path='assign-owner')
     def assign_owner(self, request, *args, **kwargs):
         unit = self.get_object()
-
-        is_replace = request.data.get('replace', False)
-        moved_in_at = request.data.get('moved_in_at', None)
+        notes = request.data.get('notes', None)
 
         # Check if unit already have an owner and not replacing
-        if unit.owner and is_replace == False:
+        if unit.owner:
             raise PermissionDenied(
-                detail='Unit already have a owner. You should replace instead'
+                detail='Unit already have a owner. You should check out last owner first instead'
             )
 
         # Unit value validation
@@ -402,27 +402,20 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
         unit_serializer.is_valid(raise_exception=True)
 
-        # Owner value validation
-        # if moved_in_at:
-        #     try:
-        #         parsed_datetime = datetime.datetime.fromisoformat(moved_in_at)
-        #     except ValueError:
-        #         raise ValidationError(detail={
-        #             'moved_in_at': (
-        #                 'Datetime has wrong format. Use one of theseformats',
-        #                 'instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
-        #             )
-        #         })
-        # else:
-        #     parsed_datetime = timezone.now()
-
         owner = unit_serializer.validated_data['owner']
         owner.is_owner = True
-        # owner.moved_in_at = parsed_datetime
+        
+        # Create activity
+        UnitActivity.objects.create(
+            unit=unit,
+            current_owner=owner,
+            notes=notes,
+            moved_in_by=request.user
+        )
 
         # Saving
-        self.perform_update(unit_serializer)
         owner.save()
+        self.perform_update(unit_serializer)
 
         serializer = self.get_serializer(unit, many=False)
         return Response(serializer.data)
@@ -444,3 +437,18 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         }
         
         return JsonResponse(data_)
+
+
+class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = UnitActivity.objects.all()
+    serializer_class = UnitActivitySerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        return [permission() for permission in permission_classes]
+    

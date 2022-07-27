@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.utils import timezone
 
 from core.helpers import PathAndRename
 
@@ -141,8 +142,7 @@ class Unit(models.Model):
     owner = models.ForeignKey(
         Resident,
         on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'is_owner': True}
+        null=True
     )
 
     is_maintenance = models.BooleanField(default=False)
@@ -179,3 +179,45 @@ class Unit(models.Model):
     
     def __str__(self):
         return ('%s'%(self.unit_no))
+
+
+class UnitActivity(models.Model):
+
+    id = models.AutoField(primary_key=True, editable=False)
+    unit = models.ForeignKey(
+        Unit, 
+        on_delete=models.CASCADE,
+        related_name='unit_activities'
+    )
+    current_owner = models.ForeignKey(
+        Resident,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='owner_activities'
+    )
+    notes = models.TextField(null=True)
+
+    # Logs
+    moved_in_at = models.DateTimeField(auto_now_add=True)
+    moved_out_at = models.DateTimeField(null=True)
+    moved_in_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'user_type': UserType.ADMIN},
+        related_name='moved_ins'
+    )
+    moved_out_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'user_type': UserType.ADMIN},
+        related_name='moved_outs'
+    )
+    
+    class Meta:
+        ordering = ['-id']
+    
+    def __str__(self):
+        return f'[{ self.unit }] { self.moved_in_at }'
+
