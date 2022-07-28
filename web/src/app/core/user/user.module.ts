@@ -36,6 +36,8 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { AssignResidentComponent } from '../../components/units/assign-resident/assign-resident.component';
+import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,9 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     // Reusable components
     BaseModalComponent,
     GenderTypePipe,
-    TitleTypePipe
+    TitleTypePipe,
+    AssignResidentComponent,
+    UnitResidentsComponent
   ],
   imports: [
     CommonModule,
