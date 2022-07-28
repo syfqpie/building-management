@@ -53,7 +53,7 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class UnitExtendedSerializer(serializers.ModelSerializer):
-    resident = ResidentSerializer(many=False, read_only=True)
+    owner = ResidentSerializer(many=False, read_only=True)
     
     class Meta:
         model = Unit

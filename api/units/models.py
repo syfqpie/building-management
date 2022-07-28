@@ -175,7 +175,7 @@ class Unit(models.Model):
         super().save(*args, **kwargs)
         
     class Meta:
-        ordering = ['unit_no']
+        ordering = ['-unit_no']
     
     def __str__(self):
         return ('%s'%(self.unit_no))
