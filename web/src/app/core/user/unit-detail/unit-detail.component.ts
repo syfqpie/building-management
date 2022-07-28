@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { debounceTime, distinctUntilChanged, filter, fromEvent, map, Subscription } from 'rxjs';
-import { Renter } from 'src/app/shared/services/renters/renters.model';
-import { RentersService } from 'src/app/shared/services/renters/renters.service';
+import { Resident } from 'src/app/shared/services/residents/residents.model';
+import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
 import { Unit, UnitExtended } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
@@ -16,12 +16,12 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
 
   // Data
   currentUnit: UnitExtended | undefined
-  searchedRenters: Renter[] = []
-  selectedRenter: Renter | undefined
+  searchedResidents: Resident[] = []
+  selectedResident: Resident | undefined
 
   // Checker
   isProcessing: boolean = false
-  isAssignRenter: boolean = false
+  isAssignResident: boolean = false
   isSearching: boolean = false
 
   // Subscription
@@ -30,13 +30,13 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   eventSubscription: Subscription | undefined
 
   // Event
-  @ViewChild('renterSearchInput', { static: false }) renterSearchInput: ElementRef | undefined
+  @ViewChild('residentSearchInput', { static: false }) residentSearchInput: ElementRef | undefined
 
   constructor(
     private loadingBar: LoadingBarService,
     private route: ActivatedRoute,
     private unitSvc: UnitsService,
-    private renterSvc: RentersService
+    private residentSvc: ResidentsService
   ) { }
 
   ngOnInit(): void {
@@ -80,6 +80,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.currentUnit = this.unitSvc.unitExtended
+        console.log(this.currentUnit)
       }
     }))
   }
@@ -156,9 +157,9 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     }))
   }
 
-  toggleAssignRenter() {
-    this.isAssignRenter = !this.isAssignRenter
-    if (this.isAssignRenter) {
+  toggleAssignResident() {
+    this.isAssignResident = !this.isAssignResident
+    if (this.isAssignResident) {
       const timer = setTimeout(
         () => {
           this.startSearchPipe()
@@ -168,7 +169,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   }
 
   startSearchPipe() {
-    this.eventSubscription = fromEvent(this.renterSearchInput?.nativeElement, 'keyup').pipe(
+    this.eventSubscription = fromEvent(this.residentSearchInput?.nativeElement, 'keyup').pipe(
       map((event: any) => {
         return event.target.value
       }),
@@ -180,7 +181,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     ).subscribe(
       (text: string) => {
         this.isSearching = true
-        this.svcSubscription.add(this.renterSvc.search(text).subscribe({
+        this.svcSubscription.add(this.residentSvc.search(text).subscribe({
           next: () => {
             this.isSearching = false
           },
@@ -188,21 +189,21 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
             this.isSearching = false
           },
           complete: () => {
-            this.searchedRenters = this.renterSvc.renters
+            this.searchedResidents = this.residentSvc.residents
           }
         }))
       }
     )
   }
 
-  onSelectRenter(renter: Renter) {
-    this.selectedRenter = renter
-    console.log(this.selectedRenter)
+  onSelectResident(resident: Resident) {
+    this.selectedResident = resident
+    console.log(this.selectedResident)
   }
 
-  cancelAssignRenter() {
-    this.selectedRenter = undefined
-    this.searchedRenters = []
+  cancelAssignResident() {
+    this.selectedResident = undefined
+    this.searchedResidents = []
     const timer = setTimeout(
       () => {
         this.startSearchPipe()
@@ -210,7 +211,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     )
   }
 
-  assignRenter() {
+  assignResident() {
     
   }
 

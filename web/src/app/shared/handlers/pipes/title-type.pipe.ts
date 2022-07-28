@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TitleType } from '../../services/renters/renters.model';
+import { TitleType } from '../../services/residents/residents.model';
 
 @Pipe({
   name: 'titleType'

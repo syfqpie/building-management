@@ -12,7 +12,7 @@ export class Resident {
         public nric?: string,
         public gender?: number,
         public lastPaymentAt?: string,
-        public renterUser?: number,
+        public residentUser?: number,
         public lastModifiedAt?: string,
         public lastModifiedBy?: string,
     ) {}

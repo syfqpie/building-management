@@ -100,6 +100,34 @@
                         </ng-template>
                     </ngx-datatable-column>
 
+                    <ngx-datatable-column name="Vacant"
+                        prop="owner"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-success text-success
+                                        border-success': !value,
+                                    'bg-warning text-warning
+                                        border-warning': value
+                                }">
+                                <span *ngIf="!value; else isNotVacant">
+                                    <i class="fa-solid fa-building-circle-check my-auto"></i>
+                                    Vacant
+                                </span>
+                                <ng-template #isNotVacant>
+                                    <span>
+                                        <i class="fa-solid fa-building-circle-xmark my-auto"></i>
+                                        Occupied
+                                    </span>
+                                </ng-template>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
                     <ngx-datatable-column name="Created at"
                         prop="createdAt"
                         [flexGrow]="3"

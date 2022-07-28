@@ -140,7 +140,7 @@
             </div>
         </div>
 
-        <div *ngIf="currentUnit?.renter !== null; else isNoRenter"
+        <div *ngIf="currentUnit?.owner !== null; else isNoResident"
             class="col-sm-12 col-md-9">
             <div class="row g-3">
                 <div class="col-sm-12 col-md-8">
@@ -150,15 +150,15 @@
                     <div class="card shadow border-0">
                         <div class="card-body">
                             <h5 class="card-title">
-                                Renter information
+                                Resident information
                             </h5>
                             <div class="mb-2">
                                 <label class="fw-bold text-uppercase small">
                                     Name:
                                 </label>
                                 <p class="text-muted small">
-                                    {{ currentUnit?.renter?.title | titleType }}
-                                    {{ currentUnit?.renter?.name }}
+                                    {{ currentUnit?.owner?.title | titleType }}
+                                    {{ currentUnit?.owner?.name }}
                                 </p>
                             </div>
 
@@ -167,16 +167,7 @@
                                     Phone no.:
                                 </label>
                                 <p class="text-muted small">
-                                    {{ currentUnit?.renter?.phoneNumber }}
-                                </p>
-                            </div>
-
-                            <div class="mb-2">
-                                <label class="fw-bold text-uppercase small">
-                                    Moved in at:
-                                </label>
-                                <p class="text-muted small">
-                                    {{ currentUnit?.renter?.movedInAt | date : 'dd/MM/yyyy, h:mm a' }}
+                                    {{ currentUnit?.owner?.phoneNo }}
                                 </p>
                             </div>
 
@@ -186,7 +177,7 @@
                                 </label>
                                 <p class="text-muted small">
                                     {{ 
-                                        (currentUnit?.renter?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
+                                        (currentUnit?.owner?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
                                         'N/A'
                                     }}
                                 </p>
@@ -197,14 +188,14 @@
             </div>
         </div>
 
-        <ng-template #isNoRenter>
+        <ng-template #isNoResident>
             <div class="col-sm-12 col-md-9 d-flex">
                 <div class="text-center m-auto"
                     [ngClass]="{
-                        'w-100': selectedRenter
+                        'w-100': selectedResident
                     }">
-                    <div *ngIf="isAssignRenter; else isNotAssignRenter">
-                        <div *ngIf="selectedRenter; else notSelected"
+                    <div *ngIf="isAssignResident; else isNotAssignResident">
+                        <div *ngIf="selectedResident; else notSelected"
                             class="row">
                             <div class="col-sm-12 col-md-auto d-flex">
                                 <div class="m-auto">
@@ -216,10 +207,10 @@
                             <div class="col-sm-12 col-md text-start">
                                 <div class="mb-2">
                                     <label class="fw-bold text-uppercase small">
-                                        Renter no.: 
+                                        Resident no.: 
                                     </label>
                                     <p class="text-muted small">
-                                        {{ selectedRenter.renterNo }}
+                                        {{ selectedResident.residentNo }}
                                     </p>
                                 </div>
             
@@ -228,7 +219,7 @@
                                         Name:
                                     </label>
                                     <p class="text-muted small">
-                                        {{ selectedRenter.name }}
+                                        {{ selectedResident.name }}
                                     </p>
                                 </div>
         
@@ -237,7 +228,7 @@
                                         Email:
                                     </label>
                                     <p class="text-muted small">
-                                        {{ selectedRenter.email }}
+                                        {{ selectedResident.email }}
                                     </p>
                                 </div>
         
@@ -246,14 +237,14 @@
                                         Phone number:
                                     </label>
                                     <p class="text-muted small">
-                                        {{ selectedRenter.phoneNumber }}
+                                        {{ selectedResident.phoneNo }}
                                     </p>
                                 </div>
                                 <button class="btn btn-primary me-2">
                                     Confirm
                                 </button>
                                 <button class="btn btn-outline-primary"
-                                    (click)="cancelAssignRenter()">
+                                    (click)="cancelAssignResident()">
                                     Cancel
                                 </button>
                             </div>
@@ -262,7 +253,7 @@
                             <form class="text-start">
                                 <div>
                                     <label class="form-label">
-                                        Renter
+                                        Resident
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-text">
@@ -273,24 +264,24 @@
                                                 <i class="fa-brands fa-searchengin"></i>
                                             </ng-template>
                                         </span>
-                                        <input #renterSearchInput
+                                        <input #residentSearchInput
                                             class="form-control"
                                             [disabled]="isSearching"
-                                            placeholder="Search renter"
+                                            placeholder="Search resident"
                                             list="encodings" />           
                                     </div>
                                 </div>
                             </form>
-                            <div class="mt-3" *ngIf="searchedRenters.length > 0">
+                            <div class="mt-3" *ngIf="searchedResidents.length > 0">
                                 <div class="list-group list-group-flush shadow rounded">
                                     <ng-template ngFor
-                                        let-renter
-                                        [ngForOf]="searchedRenters">
+                                        let-resident
+                                        [ngForOf]="searchedResidents">
                                         <button class="list-group-item list-group-item-action"
-                                            (click)="onSelectRenter(renter)">
+                                            (click)="onSelectResident(resident)">
                                             <p class="mb-0 small">
                                                 <i class="fa-solid fa-building-user"></i>
-                                                [{{ renter.renterNo }}] {{ renter.name }} - {{ renter.email }}
+                                                [{{ resident.residentNo }}] {{ resident.name }} - {{ resident.email }}
                                             </p>
                                         </button>                                
                                     </ng-template>
@@ -298,14 +289,14 @@
                             </div>
                         </ng-template>
                     </div>
-                    <ng-template #isNotAssignRenter>
+                    <ng-template #isNotAssignResident>
                         <div>
                             <img src="assets/images/illustrations/no-information.png"
                                 style="height: 14rem;">
                             <p class="text-muted">No information yet</p>
                             <button class="btn btn-primary"
-                                (click)="toggleAssignRenter()">
-                                Assign renter
+                                (click)="toggleAssignResident()">
+                                Assign resident
                             </button>
                         </div>
                     </ng-template>
