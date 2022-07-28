@@ -134,8 +134,4 @@ export class ResidentRegistrationComponent implements OnInit, OnDestroy {
     return this.isModalOpen = !this.isModalOpen
   }
 
-  test() {
-    console.log(this.registerForm.value)
-  }
-
 }
