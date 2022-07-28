@@ -80,7 +80,6 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.currentUnit = this.unitSvc.unitExtended
-        console.log(this.currentUnit)
       }
     }))
   }
