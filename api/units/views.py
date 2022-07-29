@@ -377,7 +377,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate unit
+    # Assign owner
     @action(methods=['POST'], detail=True, url_path='assign-owner')
     def assign_owner(self, request, *args, **kwargs):
         unit = self.get_object()
@@ -417,7 +417,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         owner.save()
         self.perform_update(unit_serializer)
 
-        serializer = self.get_serializer(unit, many=False)
+        serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
     
     # Get ownership count
