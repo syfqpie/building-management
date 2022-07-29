@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { UnitExtended } from 'src/app/shared/services/units/units.model';
+import { ActivityType, UnitActivityNested, UnitExtended } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
 @Component({
@@ -18,6 +18,8 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   // Data
   currentUnit: UnitExtended | undefined
   currentTab: string = 'residents' // residents | bills
+  activities: UnitActivityNested[] = []
+  activityType = ActivityType
 
   // Checker
   isProcessing: boolean = false
@@ -65,7 +67,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   getData(id: number) {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.svcSubscription.add(this.unitSvc.getOneExtended(id).subscribe({
+    this.svcSubscription.add(forkJoin([
+      this.unitSvc.getOneExtended(id),
+      this.unitSvc.getUnitActivities(id)
+    ]).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -76,6 +81,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.currentUnit = this.unitSvc.unitExtended
+        this.activities = this.unitSvc.unitActivites
       }
     }))
   }

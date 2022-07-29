@@ -187,31 +187,89 @@
                 </div>
             </div>
 
-            <ul class="nav nav-tabs mb-3">
-                <li class="nav-item">
-                    <button class="nav-link"
-                        (click)="changeTab('residents')"
-                        [ngClass]="{
-                            'active': currentTab === 'residents'
-                        }">
-                        Residents 
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link"
-                        disabled
-                        (click)="changeTab('bills')"
-                        [ngClass]="{
-                            'active': currentTab === 'bills'
-                        }">
-                        Bills (coming soon)
-                    </button>
-                </li>
-            </ul>
-
             <div class="row g-3">
-                <div class="col-sm-12 col-md-12">
-                    <app-unit-residents></app-unit-residents>
+                <div class="col-sm-12 col-md-8">
+                    <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                (click)="changeTab('residents')"
+                                [ngClass]="{
+                                    'active': currentTab === 'residents'
+                                }">
+                                Residents 
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                disabled
+                                (click)="changeTab('bills')"
+                                [ngClass]="{
+                                    'active': currentTab === 'bills'
+                                }">
+                                Bills (coming soon)
+                            </button>
+                        </li>
+                    </ul>
+        
+                    <div class="row g-3">
+                        <div class="col-sm-12 col-md-12">
+                            <app-unit-residents></app-unit-residents>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <h5 class="card-title mb-0">
+                                Activities
+                            </h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <ng-template ngFor
+                                let-activity
+                                [ngForOf]="activities">
+                                <li class="list-group-item">
+                                    <span class="ms-0 badge bg-opacity-10 border
+                                        border-opacity-10 mb-2"
+                                        [ngClass]="{
+                                            'bg-success text-success': (
+                                                activity.activityType === activityType.MOVE_IN ||
+                                                activity.activityType === activityType.ACTIVATE ||
+                                                activity.activityType === activityType.DISABLE_MAINTENANCE
+                                            ),
+                                            'bg-danger text-danger': (
+                                                activity.activityType === activityType.MOVE_OUT ||
+                                                activity.activityType === activityType.DEACTIVATE ||
+                                                activity.activityType === activityType.ENABLE_MAINTENANCE
+                                            )
+                                        }">
+                                        <i class="fa-solid" [ngClass]="{
+                                            'fa-people-carry-box': (
+                                                activity.activityType === activityType.MOVE_IN ||
+                                                activity.activityType === activityType.MOVE_OUT
+                                            ),
+                                            'fa-triangle-exclamation': (
+                                                activity.activityType === activityType.ACTIVATE ||
+                                                activity.activityType === activityType.DEACTIVATE ||
+                                                activity.activityType === activityType.ENABLE_MAINTENANCE ||
+                                                activity.activityType === activityType.DISABLE_MAINTENANCE
+                                            )
+                                        }"></i>
+                                        {{ activity.activityType | activityType }}
+                                    </span>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-regular fa-circle-user"></i>
+                                        {{ activity.activityBy.email }}
+                                    </p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-regular fa-clock"></i>
+                                        {{ activity.activityAt | date : 'dd/MM/yyyy, h:mm a' }}
+                                    </p>
+                                </li>
+                            </ng-template>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
