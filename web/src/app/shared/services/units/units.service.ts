@@ -98,4 +98,14 @@ export class UnitsService {
     )
   }
 
+  assignOwner(id: any, body: any): Observable<UnitExtended>  {
+    const urlTemp = `${ BASE_URL }${ id }/assign-owner/`
+    return this.http.post<UnitExtended>(urlTemp, body).pipe(
+      tap((res: UnitExtended) => {
+        this.unitExtended = res
+        // console.log('Assign owner:', this.unitExtended)
+      })
+    )
+  }
+
 }
