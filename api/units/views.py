@@ -28,6 +28,7 @@ from .serializers import (
     BlockSerializer,
     FloorSerializer,
     UnitActivityNestedSerializer,
+    UnitActivityNonNestedSerializer,
     UnitNumberSerializer,
     UnitSerializer,
     UnitExtendedSerializer
@@ -507,9 +508,26 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return [permission() for permission in permission_classes]
     
     def get_queryset(self):
+        queryset = self.queryset
+
         # Queryset for nested
         if 'parent_lookup_id' in self.kwargs:
-            queryset = self.queryset.filter(unit__id=self.kwargs['parent_lookup_id'])
+            queryset = queryset.filter(unit__id=self.kwargs['parent_lookup_id'])[:5]
         else:
-            queryset = self.queryset
+            pass
+
         return queryset
+
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Get serializer for non nested
+        if 'parent_lookup_id' not in self.kwargs:
+            return UnitActivityNonNestedSerializer
+        else:
+            pass
+
+        # Return original class
+        return super().get_serializer_class()
+
+
+    

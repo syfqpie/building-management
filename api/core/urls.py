@@ -86,6 +86,9 @@ floors_router = router.register(
 unit_numbers_router = router.register(
     r'unit-numbers', UnitNumberViewSet
 )
+unit_activities_router = router.register(
+    r'unit-activities', UnitActivityViewSet
+)
 
 # Users
 from users.views import (

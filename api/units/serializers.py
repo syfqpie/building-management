@@ -54,6 +54,13 @@ class UnitSerializer(serializers.ModelSerializer):
         ]
 
 
+class UnitNoSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Unit
+        fields = ['id', 'unit_no']
+
+
 class UnitExtendedSerializer(serializers.ModelSerializer):
     owner = ResidentSerializer(many=False, read_only=True)
     
@@ -68,6 +75,15 @@ class UnitActivitySerializer(serializers.ModelSerializer):
         model = UnitActivity
         fields = '__all__'
 
+
+class UnitActivityNonNestedSerializer(serializers.ModelSerializer):
+    unit = UnitNoSerializer(read_only=True)
+    activity_by = CustomUserEmailSerializer(read_only=True)
+    class Meta:
+        model = UnitActivity
+        exclude = [
+            'current_owner',
+        ]
 
 class UnitActivityNestedSerializer(serializers.ModelSerializer):
     activity_by = CustomUserEmailSerializer(read_only=True)
