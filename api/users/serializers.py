@@ -142,3 +142,14 @@ class AdminCustomRegisterSerializer(RegisterSerializer):
         admin_user.save()
 
         return admin_user
+
+
+class CustomUserEmailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id',
+		    'email'
+        ]
+        read_only_fields = ['email']
