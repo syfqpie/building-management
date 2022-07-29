@@ -18,6 +18,7 @@ import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
+import { AssignOwnerComponent } from '../../components/units/assign-owner/assign-owner.component';
 import { BlocksTableComponent } from 'src/app/components/units/blocks-table/blocks-table.component';
 import { FloorsTableComponent } from 'src/app/components/units/floors-table/floors-table.component';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
@@ -26,6 +27,7 @@ import { ResidentRegistrationComponent } from 'src/app/components/residents/resi
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
 import { UnitAddComponent } from '../../components/units/unit-add/unit-add.component';
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
+import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
 
 // Basic components
 import { BaseModalComponent } from 'src/app/components/custom/base-modal/base-modal.component';
@@ -36,8 +38,6 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { AssignResidentComponent } from '../../components/units/assign-resident/assign-resident.component';
-import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +54,7 @@ import { UnitResidentsComponent } from '../../components/units/unit-residents/un
     UnitDetailComponent,
     // Child components
     AccountSettingsComponent,
+    AssignOwnerComponent,
     BlocksTableComponent,
     FloorsTableComponent,
     NotAuthorizedComponent,
@@ -61,12 +62,11 @@ import { UnitResidentsComponent } from '../../components/units/unit-residents/un
     SysRegisterAdminComponent,
     UnitAddComponent,
     UnitNumbersTableComponent,
+    UnitResidentsComponent,
     // Reusable components
     BaseModalComponent,
     GenderTypePipe,
-    TitleTypePipe,
-    AssignResidentComponent,
-    UnitResidentsComponent
+    TitleTypePipe
   ],
   imports: [
     CommonModule,

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AssignResidentComponent } from './assign-resident.component';
+import { AssignOwnerComponent } from './assign-owner.component';
 
-describe('AssignResidentComponent', () => {
-  let component: AssignResidentComponent;
-  let fixture: ComponentFixture<AssignResidentComponent>;
+describe('AssignOwnerComponent', () => {
+  let component: AssignOwnerComponent;
+  let fixture: ComponentFixture<AssignOwnerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssignResidentComponent ]
+      declarations: [ AssignOwnerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AssignResidentComponent);
+    fixture = TestBed.createComponent(AssignOwnerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
