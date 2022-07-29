@@ -21,3 +21,10 @@ export class EmailVerification {
         public UserVerification: User
     ) {}
 }
+
+export class UserEmail {
+    constructor(
+        public id: number,
+        public email: string
+    ){}
+}
