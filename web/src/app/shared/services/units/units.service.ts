@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Unit, UnitExtended } from './units.model';
+import { Unit, UnitActivityNested, UnitExtended } from './units.model';
 import { DetailResponse } from '../auth/auth.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/units/`
@@ -17,6 +17,7 @@ export class UnitsService {
   public unit: Unit | undefined
   public units: Unit[] = []
   public unitExtended: UnitExtended | undefined
+  public unitActivites: UnitActivityNested[] = []
 
   constructor(
     private http: HttpClient
@@ -104,6 +105,16 @@ export class UnitsService {
       tap((res: UnitExtended) => {
         this.unitExtended = res
         // console.log('Assign owner:', this.unitExtended)
+      })
+    )
+  }
+
+  getUnitActivities(id: number): Observable<UnitActivityNested[]> {
+    const urlTemp = `${ BASE_URL }${ id }/activities/`
+    return this.http.get<UnitActivityNested[]>(urlTemp).pipe(
+      tap((res: UnitActivityNested[]) => {
+        this.unitActivites = res
+        // console.log('Unit activities:', this.unitActivites)
       })
     )
   }
