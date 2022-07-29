@@ -33,6 +33,7 @@ import { UnitResidentsComponent } from '../../components/units/unit-residents/un
 import { BaseModalComponent } from 'src/app/components/custom/base-modal/base-modal.component';
 
 // Pipes
+import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
 import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
@@ -65,6 +66,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     UnitResidentsComponent,
     // Reusable components
     BaseModalComponent,
+    ActivityTypePipe,
     GenderTypePipe,
     TitleTypePipe
   ],
