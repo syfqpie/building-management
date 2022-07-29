@@ -24,3 +24,21 @@
     background-color: #5660d9 !important;
     border-color: #5660d9 !important;
 }
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    color: rgb(86, 96, 217, 1) !important;
+    border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgb(86, 96, 217, 1) !important; // top sides boottom
+    transition: all 250ms ease 0s;
+    transform: scale(1)
+}
+
+.nav-tabs .nav-link:not(.disabled,:disabled) {
+    color: #495057;
+}
+
+.nav-tabs .nav-link:hover:not(.disabled,:disabled),
+.nav-tabs .nav-link:focus:not(.disabled,:disabled) {
+    isolation: none;
+    border-color: rgba(0, 0, 0, 0);
+    color: rgb(86, 96, 217, 0.75);
+}

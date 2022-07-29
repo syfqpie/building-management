@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { debounceTime, distinctUntilChanged, filter, fromEvent, map, Subscription } from 'rxjs';
-import { Resident } from 'src/app/shared/services/residents/residents.model';
-import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
-import { Unit, UnitExtended } from 'src/app/shared/services/units/units.model';
+import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
+
+import { UnitExtended } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
 @Component({
@@ -16,27 +17,22 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
 
   // Data
   currentUnit: UnitExtended | undefined
-  searchedResidents: Resident[] = []
-  selectedResident: Resident | undefined
+  currentTab: string = 'residents' // residents | bills
 
   // Checker
   isProcessing: boolean = false
-  isAssignResident: boolean = false
-  isSearching: boolean = false
+  isAssigning: boolean = false
 
   // Subscription
   svcSubscription: Subscription = new Subscription
   routeSubscription: Subscription | undefined
   eventSubscription: Subscription | undefined
 
-  // Event
-  @ViewChild('residentSearchInput', { static: false }) residentSearchInput: ElementRef | undefined
-
   constructor(
     private loadingBar: LoadingBarService,
+    private notifySvc: NotifyService,
     private route: ActivatedRoute,
-    private unitSvc: UnitsService,
-    private residentSvc: ResidentsService
+    private unitSvc: UnitsService
   ) { }
 
   ngOnInit(): void {
@@ -91,6 +87,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit activated'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -109,6 +109,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit deactivated'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -127,6 +131,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit maintenance enabled'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -145,6 +153,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit maintenance disabled'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -156,62 +168,18 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     }))
   }
 
-  toggleAssignResident() {
-    this.isAssignResident = !this.isAssignResident
-    if (this.isAssignResident) {
-      const timer = setTimeout(
-        () => {
-          this.startSearchPipe()
-        }, 500
-      )
-    }
+  // Triggered when new owner assigned
+  onOwnerChanged() {
+    this.toggleAssignOwner()
+    this.currentUnit = this.unitSvc.unitExtended
   }
 
-  startSearchPipe() {
-    this.eventSubscription = fromEvent(this.residentSearchInput?.nativeElement, 'keyup').pipe(
-      map((event: any) => {
-        return event.target.value
-      }),
-      filter(
-        res => res.length > 2
-      ),
-      debounceTime(1000),
-      distinctUntilChanged()
-    ).subscribe(
-      (text: string) => {
-        this.isSearching = true
-        this.svcSubscription.add(this.residentSvc.search(text).subscribe({
-          next: () => {
-            this.isSearching = false
-          },
-          error: () => {
-            this.isSearching = false
-          },
-          complete: () => {
-            this.searchedResidents = this.residentSvc.residents
-          }
-        }))
-      }
-    )
+  toggleAssignOwner() {
+    this.isAssigning = !this.isAssigning
   }
 
-  onSelectResident(resident: Resident) {
-    this.selectedResident = resident
-    console.log(this.selectedResident)
-  }
-
-  cancelAssignResident() {
-    this.selectedResident = undefined
-    this.searchedResidents = []
-    const timer = setTimeout(
-      () => {
-        this.startSearchPipe()
-      }, 500
-    )
-  }
-
-  assignResident() {
-    
+  changeTab(tab: string) {
+    this.currentTab = tab
   }
 
 }
