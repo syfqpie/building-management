@@ -73,6 +73,9 @@ from units.views import (
 )
 units_router = router.register(
     r'units', UnitViewSet
+).register(
+    r'activities', UnitActivityViewSet,
+    'unit-activities', parents_query_lookups=['id']
 )
 blocks_router = router.register(
     r'blocks', BlockViewSet
@@ -82,9 +85,6 @@ floors_router = router.register(
 )
 unit_numbers_router = router.register(
     r'unit-numbers', UnitNumberViewSet
-)
-unit_activities_router = router.register(
-    r'unit-activities', UnitActivityViewSet
 )
 
 # Users
