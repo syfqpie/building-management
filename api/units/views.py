@@ -1,9 +1,6 @@
-import datetime
-
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.utils import timezone
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -33,8 +30,7 @@ from .serializers import (
     UnitActivityNestedSerializer,
     UnitNumberSerializer,
     UnitSerializer,
-    UnitExtendedSerializer,
-    UnitActivitySerializer
+    UnitExtendedSerializer
 )
 
 
@@ -311,8 +307,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_maintenance is True:
             raise PermissionDenied(detail='Unit maintenance is already enabled')
         
+        # Change value, add signal setup
         unit.is_maintenance = True
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.ENABLE_MAINTENANCE,
+            'notes': None,
+            'activity_by': request.user
+        }
+
+        # Saving
+        unit.save(update_fields=[
+            'is_maintenance',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -330,8 +339,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_maintenance is False:
             raise PermissionDenied(detail='Unit maintenance is already disabled')
         
+        # Change value, add signal setup
         unit.is_maintenance = False
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.DISABLE_MAINTENANCE,
+            'notes': None,
+            'activity_by': request.user
+        }
+
+        # Saving
+        unit.save(update_fields=[
+            'is_maintenance',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -349,8 +371,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_active is True:
             raise PermissionDenied(detail='Unit is already activated')
         
+        # Change value, add signal setup
         unit.is_active = True
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.ACTIVATE,
+            'notes': None,
+            'activity_by': request.user
+        }
+
+        # Saving
+        unit.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -368,8 +403,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_active is False:
             raise PermissionDenied(detail='Unit is already deactivated')
         
+        # Change value, add signal setup
         unit.is_active = False
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.DEACTIVATE,
+            'notes': None,
+            'activity_by': request.user
+        }
+        
+        # Saving
+        unit.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -404,21 +452,24 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
         unit_serializer.is_valid(raise_exception=True)
 
+        # Change value, add signal setup
         owner = unit_serializer.validated_data['owner']
         owner.is_owner = True
-        
-        # Create activity
-        UnitActivity.objects.create(
-            unit=unit,
-            current_owner=owner,
-            activity_type=ActivityType.MOVE_IN,
-            notes=notes,
-            activity_by=request.user
-        )
+        unit.owner = owner
+        unit._activity_setup = {
+            'current_owner': owner,
+            'activity_type': ActivityType.MOVE_IN,
+            'notes': notes,
+            'activity_by': request.user
+        }
 
         # Saving
+        unit.save(update_fields=[
+            'owner',
+            'last_modified_at',
+            'last_modified_by'
+        ])
         owner.save()
-        self.perform_update(unit_serializer)
 
         serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
@@ -455,3 +506,10 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
 
         return [permission() for permission in permission_classes]
     
+    def get_queryset(self):
+        # Queryset for nested
+        if 'parent_lookup_id' in self.kwargs:
+            queryset = self.queryset.filter(unit__id=self.kwargs['parent_lookup_id'])
+        else:
+            queryset = self.queryset
+        return queryset
