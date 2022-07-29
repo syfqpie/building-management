@@ -23,12 +23,14 @@ from .models import (
     Floor,
     UnitNumber,
     Unit,
-    UnitActivity
+    UnitActivity,
+    ActivityType
 )
 
 from .serializers import (
     BlockSerializer,
     FloorSerializer,
+    UnitActivityNestedSerializer,
     UnitNumberSerializer,
     UnitSerializer,
     UnitExtendedSerializer,
@@ -409,8 +411,9 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         UnitActivity.objects.create(
             unit=unit,
             current_owner=owner,
+            activity_type=ActivityType.MOVE_IN,
             notes=notes,
-            moved_in_by=request.user
+            activity_by=request.user
         )
 
         # Saving
@@ -441,7 +444,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
 class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     queryset = UnitActivity.objects.all()
-    serializer_class = UnitActivitySerializer
+    serializer_class = UnitActivityNestedSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
     def get_permissions(self):

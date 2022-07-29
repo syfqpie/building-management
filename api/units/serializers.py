@@ -2,6 +2,8 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
+from users.serializers import CustomUserEmailSerializer
+
 from .models import (
     Block,
     Floor,
@@ -65,3 +67,13 @@ class UnitActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = UnitActivity
         fields = '__all__'
+
+
+class UnitActivityNestedSerializer(serializers.ModelSerializer):
+    activity_by = CustomUserEmailSerializer(read_only=True)
+    class Meta:
+        model = UnitActivity
+        exclude = [
+            'current_owner',
+            'unit'
+        ]

@@ -10,6 +10,15 @@ from residents.models import Resident
 from users.models import CustomUser, UserType
 
 
+class ActivityType(models.IntegerChoices):
+    MOVE_IN = 1, 'Move in'
+    MOVE_OUT = 2, 'Move out'
+    ACTIVATE = 3, 'Activate'
+    DEACTIVATE = 4, 'Deactivate'
+    ENABLE_MAINTENANCE = 5, 'Enable maintenance'
+    DISABLE_MAINTENANCE = 6, 'Disabled maintenance'
+
+
 class Block(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
@@ -195,24 +204,20 @@ class UnitActivity(models.Model):
         null=True,
         related_name='owner_activities'
     )
+
+    activity_type = models.IntegerField(
+        choices=ActivityType.choices
+    )
     notes = models.TextField(null=True)
 
     # Logs
-    moved_in_at = models.DateTimeField(auto_now_add=True)
-    moved_out_at = models.DateTimeField(null=True)
-    moved_in_by = models.ForeignKey(
+    activity_at = models.DateTimeField(auto_now_add=True)
+    activity_by = models.ForeignKey(
         CustomUser, 
         on_delete=models.SET_NULL,
         null=True,
         limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='moved_ins'
-    )
-    moved_out_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='moved_outs'
+        related_name='activities'
     )
     
     class Meta:
