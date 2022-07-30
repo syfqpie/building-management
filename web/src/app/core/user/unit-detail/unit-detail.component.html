@@ -228,21 +228,18 @@
                         <ul class="list-group list-group-flush">
                             <ng-template ngFor
                                 let-activity
+                                let-index="index"
                                 [ngForOf]="activities">
                                 <li class="list-group-item">
                                     <span class="ms-0 badge bg-opacity-10 border
                                         border-opacity-10 mb-2"
                                         [ngClass]="{
-                                            'bg-success text-success': (
-                                                activity.activityType === activityType.MOVE_IN ||
-                                                activity.activityType === activityType.ACTIVATE ||
-                                                activity.activityType === activityType.DISABLE_MAINTENANCE
-                                            ),
-                                            'bg-danger text-danger': (
-                                                activity.activityType === activityType.MOVE_OUT ||
-                                                activity.activityType === activityType.DEACTIVATE ||
-                                                activity.activityType === activityType.ENABLE_MAINTENANCE
-                                            )
+                                            'bg-info text-info': activity.activityType === activityType.MOVE_IN,
+                                            'bg-warning text-warning': activity.activityType === activityType.MOVE_OUT,
+                                            'bg-success text-success': activity.activityType === activityType.ACTIVATE,
+                                            'bg-danger text-danger': activity.activityType === activityType.DEACTIVATE,
+                                            'bg-dark text-dark': activity.activityType === activityType.ENABLE_MAINTENANCE,
+                                            'bg-secondary text-secondary': activity.activityType === activityType.DISABLE_MAINTENANCE
                                         }">
                                         <i class="fa-solid" [ngClass]="{
                                             'fa-people-carry-box': (
@@ -267,6 +264,16 @@
                                         {{ activity.activityAt | date : 'dd/MM/yyyy, h:mm a' }}
                                     </p>
                                 </li>
+                                <button *ngIf="index === 4"
+                                    class="list-group-item
+                                        list-group-item-action text-center
+                                        bg-outline-primary"
+                                    (click)="viewMoreActivities()">
+                                    <p class="mb-0">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                        View more
+                                    </p>
+                                </button> 
                             </ng-template>
                         </ul>
                     </div>

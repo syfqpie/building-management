@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { ActivityType, UnitActivityNested, UnitExtended } from 'src/app/shared/services/units/units.model';
+import { ActivityType, UnitActivityNested } from 'src/app/shared/services/activities/activities.model';
+import { UnitExtended } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
 @Component({
@@ -34,6 +35,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
+    private router: Router,
     private unitSvc: UnitsService
   ) { }
 
@@ -186,6 +188,15 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
 
   changeTab(tab: string) {
     this.currentTab = tab
+  }
+
+  viewMoreActivities() {
+    return this.router.navigate(
+      ['/management', 'units', 'activities'],
+      { queryParams: 
+        { id: this.currentUnit?.id! }
+      }
+    )
   }
 
 }

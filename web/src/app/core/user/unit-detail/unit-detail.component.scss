@@ -42,3 +42,22 @@
     border-color: rgba(0, 0, 0, 0);
     color: rgb(86, 96, 217, 0.75);
 }
+
+.list-group.list-group-flush {
+    button.list-group-item.list-group-item-action.bg-outline-primary {
+        & {
+            color: #5660d9;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            color: #fff; //var(--bs-btn-hover-color);
+            background-color: #5660d9; // var(--bs-btn-hover-bg)
+        }
+        &:focus {
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075),
+            0 0 0 0.25rem rgba(86, 96, 217, .5)
+            //var(--bs-btn-box-shadow), var(--bs-btn-focus-box-shadow)
+        }
+    }
+}
