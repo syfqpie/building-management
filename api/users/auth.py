@@ -345,7 +345,7 @@ class MyResendVerificationView(GenericAPIView):
 # @method_decorator(
 #     name='post', 
 #     decorator=swagger_auto_schema(
-#         operation_id='Verify registration email for renter',
+#         operation_id='Verify registration email for resident',
 #         filter_inspectors=[DjangoFilterDescriptionInspector],
 #         tags=['Authentication']
 #     )

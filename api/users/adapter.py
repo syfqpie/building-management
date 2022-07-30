@@ -28,9 +28,9 @@ class MyAccountAdapter(DefaultAccountAdapter):
         if current_user.user_type == UserType.PUBLIC:
             ctx['verification_url'] = 'https://{}auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
             if signup:
-                email_template = "account/email/renter_email_confirmation_signup"
+                email_template = "account/email/resident_email_confirmation_signup"
             else:
-                email_template = "account/email/renter_email_confirmation"
+                email_template = "account/email/resident_email_confirmation"
         elif current_user.user_type == UserType.ADMIN:
             if signup:
                 email_template = "account/email/admin_email_confirmation_signup"

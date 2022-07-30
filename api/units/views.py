@@ -1,9 +1,6 @@
-import datetime
-
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.utils import timezone
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -16,18 +13,22 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from users.permissions import IsSuperAdmin
+from users.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
     Block,
     Floor,
     UnitNumber,
-    Unit
+    Unit,
+    UnitActivity,
+    ActivityType
 )
 
 from .serializers import (
     BlockSerializer,
     FloorSerializer,
+    UnitActivityNestedSerializer,
+    UnitActivityNonNestedSerializer,
     UnitNumberSerializer,
     UnitSerializer,
     UnitExtendedSerializer
@@ -307,8 +308,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_maintenance is True:
             raise PermissionDenied(detail='Unit maintenance is already enabled')
         
+        # Change value, add signal setup
         unit.is_maintenance = True
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.ENABLE_MAINTENANCE,
+            'notes': None,
+            'activity_by': request.user
+        }
+
+        # Saving
+        unit.save(update_fields=[
+            'is_maintenance',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -326,8 +340,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_maintenance is False:
             raise PermissionDenied(detail='Unit maintenance is already disabled')
         
+        # Change value, add signal setup
         unit.is_maintenance = False
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.DISABLE_MAINTENANCE,
+            'notes': None,
+            'activity_by': request.user
+        }
+
+        # Saving
+        unit.save(update_fields=[
+            'is_maintenance',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -345,8 +372,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_active is True:
             raise PermissionDenied(detail='Unit is already activated')
         
+        # Change value, add signal setup
         unit.is_active = True
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.ACTIVATE,
+            'notes': None,
+            'activity_by': request.user
+        }
+
+        # Saving
+        unit.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -364,8 +404,21 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if unit.is_active is False:
             raise PermissionDenied(detail='Unit is already deactivated')
         
+        # Change value, add signal setup
         unit.is_active = False
-        unit.save()
+        unit._activity_setup = {
+            'current_owner': unit.owner,
+            'activity_type': ActivityType.DEACTIVATE,
+            'notes': None,
+            'activity_by': request.user
+        }
+        
+        # Saving
+        unit.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(unit, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -375,55 +428,51 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate unit
-    @action(methods=['POST'], detail=True, url_path='assign-renter')
-    def assign_renter(self, request, *args, **kwargs):
+    # Assign owner
+    @action(methods=['POST'], detail=True, url_path='assign-owner')
+    def assign_owner(self, request, *args, **kwargs):
         unit = self.get_object()
+        notes = request.data.get('notes', None)
 
-        is_replace = request.data.get('replace', False)
-        moved_in_at = request.data.get('moved_in_at', None)
-
-        # Check if unit already have a renter and not replacing
-        if unit.renter and is_replace == False:
+        # Check if unit already have an owner and not replacing
+        if unit.owner:
             raise PermissionDenied(
-                detail='Unit already have a renter. You should replace instead'
+                detail='Unit already have a owner. You should check out last owner first instead'
             )
 
         # Unit value validation
         try:
-            renter_id = request.data['renter']
+            owner_id = request.data['resident']
         except Exception as e:
-            raise PermissionDenied(detail='Renter is required')
+            raise PermissionDenied(detail='Owner is required')
         
         unit_serializer = self.get_serializer(
             unit,
-            data={ 'renter': renter_id },
+            data={ 'owner': owner_id },
             partial=True
         )
         unit_serializer.is_valid(raise_exception=True)
 
-        # Renter value validation
-        if moved_in_at:
-            try:
-                parsed_datetime = datetime.datetime.fromisoformat(moved_in_at)
-            except ValueError:
-                raise ValidationError(detail={
-                    'moved_in_at': (
-                        'Datetime has wrong format. Use one of theseformats',
-                        'instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
-                    )
-                })
-        else:
-            parsed_datetime = timezone.now()
-
-        renter = unit_serializer.validated_data['renter']
-        renter.moved_in_at = parsed_datetime
+        # Change value, add signal setup
+        owner = unit_serializer.validated_data['owner']
+        owner.is_owner = True
+        unit.owner = owner
+        unit._activity_setup = {
+            'current_owner': owner,
+            'activity_type': ActivityType.MOVE_IN,
+            'notes': notes,
+            'activity_by': request.user
+        }
 
         # Saving
-        self.perform_update(unit_serializer)
-        renter.save()
+        unit.save(update_fields=[
+            'owner',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+        owner.save()
 
-        serializer = self.get_serializer(unit, many=False)
+        serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
     
     # Get ownership count
@@ -437,9 +486,48 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 'Available'
             ],
             'datas': [
-                units.filter(renter__isnull=False).count(), 
-                units.filter(renter__isnull=True).count()
+                units.filter(owner__isnull=False).count(), 
+                units.filter(owner__isnull=True).count()
             ]
         }
         
         return JsonResponse(data_)
+
+
+class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = UnitActivity.objects.all()
+    serializer_class = UnitActivityNestedSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        return [permission() for permission in permission_classes]
+    
+    def get_queryset(self):
+        queryset = self.queryset
+
+        # Queryset for nested
+        if 'parent_lookup_id' in self.kwargs:
+            queryset = queryset.filter(unit__id=self.kwargs['parent_lookup_id'])[:5]
+        else:
+            pass
+
+        return queryset
+
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Get serializer for non nested
+        if 'parent_lookup_id' not in self.kwargs:
+            return UnitActivityNonNestedSerializer
+        else:
+            pass
+
+        # Return original class
+        return super().get_serializer_class()
+
+
+    

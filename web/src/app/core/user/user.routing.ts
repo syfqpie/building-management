@@ -2,11 +2,12 @@ import { Routes } from '@angular/router';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { RenterDetailComponent } from './renter-detail/renter-detail.component';
-import { RentersComponent } from './renters/renters.component';
+import { ResidentDetailComponent } from './resident-detail/resident-detail.component';
+import { ResidentsComponent } from './residents/residents.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
+import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitsComponent } from './units/units.component';
@@ -41,19 +42,23 @@ export const UserRoutes: Routes = [
                     {
                         path: 'configuration',
                         component: UnitsConfigurationComponent
+                    },
+                    {
+                        path: 'activities',
+                        component: UnitActivitiesComponent
                     }
                 ]
             },
             {
-                path: 'renters',
+                path: 'residents',
                 children: [
                     {
                         path: '',
-                        component: RentersComponent
+                        component: ResidentsComponent
                     },
                     {
                         path: 'detail/:id',
-                        component: RenterDetailComponent
+                        component: ResidentDetailComponent
                     }
                 ]
             }

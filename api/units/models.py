@@ -2,11 +2,21 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.utils import timezone
 
 from core.helpers import PathAndRename
 
-from renters.models import Renter
+from residents.models import Resident
 from users.models import CustomUser, UserType
+
+
+class ActivityType(models.IntegerChoices):
+    MOVE_IN = 1, 'Move in'
+    MOVE_OUT = 2, 'Move out'
+    ACTIVATE = 3, 'Activate'
+    DEACTIVATE = 4, 'Deactivate'
+    ENABLE_MAINTENANCE = 5, 'Enable maintenance'
+    DISABLE_MAINTENANCE = 6, 'Disabled maintenance'
 
 
 class Block(models.Model):
@@ -138,8 +148,8 @@ class Unit(models.Model):
         UnitNumber,
         on_delete=models.CASCADE
     )
-    renter = models.ForeignKey(
-        Renter,
+    owner = models.ForeignKey(
+        Resident,
         on_delete=models.SET_NULL,
         null=True
     )
@@ -174,7 +184,45 @@ class Unit(models.Model):
         super().save(*args, **kwargs)
         
     class Meta:
-        ordering = ['unit_no']
+        ordering = ['-unit_no']
     
     def __str__(self):
         return ('%s'%(self.unit_no))
+
+
+class UnitActivity(models.Model):
+
+    id = models.AutoField(primary_key=True, editable=False)
+    unit = models.ForeignKey(
+        Unit, 
+        on_delete=models.CASCADE,
+        related_name='unit_activities'
+    )
+    current_owner = models.ForeignKey(
+        Resident,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='owner_activities'
+    )
+
+    activity_type = models.IntegerField(
+        choices=ActivityType.choices
+    )
+    notes = models.TextField(null=True)
+
+    # Logs
+    activity_at = models.DateTimeField(auto_now_add=True)
+    activity_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'user_type': UserType.ADMIN},
+        related_name='activities'
+    )
+    
+    class Meta:
+        ordering = ['-id']
+    
+    def __str__(self):
+        return f'[{ self.unit }] { self.moved_in_at }'
+

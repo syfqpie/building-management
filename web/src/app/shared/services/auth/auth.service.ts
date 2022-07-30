@@ -106,16 +106,16 @@ export class AuthService {
     const urlTemp = `${ BASE_URL }registration/admin/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
-        // console.log('Resend verification', res)
+        // console.log('Register admin', res)
       })
     )
   }
 
-  registerRenter(body: any): Observable<DetailResponse> {
-    const urlTemp = `${ BASE_URL }registration/renter/`
+  registerResident(body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }registration/resident/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
-        // console.log('Resend verification', res)
+        // console.log('Register resident', res)
       })
     )
   }

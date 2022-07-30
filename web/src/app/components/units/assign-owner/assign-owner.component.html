@@ -1,0 +1,100 @@
+<div *ngIf="selectedResident; else noSelectedResident"
+    class="row text-center w-100">
+    <div class="col-sm-12 col-md-auto d-flex">
+        <div class="m-auto">
+            <img src="assets/images/illustrations/confirmation.png"
+                style="width: 24rem" />
+            <p class="text-muted">Assign owner</p>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md text-start">
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Resident no.: 
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.residentNo }}
+            </p>
+        </div>
+
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Name:
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.name }}
+            </p>
+        </div>
+
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Email:
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.email }}
+            </p>
+        </div>
+
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Phone number:
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.phoneNo }}
+            </p>
+        </div>
+        <button class="btn btn-primary me-2"
+            [disabled]="isProcessing"
+            (click)="assignOwner()">
+            Confirm
+        </button>
+        <button class="btn btn-outline-primary"
+            [disabled]="isProcessing"
+            (click)="cancelAssignOwner()">
+            Cancel
+        </button>
+    </div>
+</div>
+
+<ng-template #noSelectedResident>
+    <div class="row g-3 justify-content-center">
+        <div class="col-sm-12 col-md-5">
+            <form class="text-start">
+                <div>
+                    <label class="form-label">
+                        Resident
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i *ngIf="isSearching; else isNotSearching"
+                                class="fa-solid fa-circle-notch fa-spin">
+                            </i>
+                            <ng-template #isNotSearching>
+                                <i class="fa-brands fa-searchengin"></i>
+                            </ng-template>
+                        </span>
+                        <input #residentSearchInput
+                            class="form-control"
+                            [disabled]="isSearching"
+                            placeholder="Search resident" />           
+                    </div>
+                </div>
+            </form>
+            <div class="mt-3" *ngIf="searchedResidents.length > 0">
+                <div class="list-group list-group-flush shadow rounded">
+                    <ng-template ngFor
+                        let-resident
+                        [ngForOf]="searchedResidents">
+                        <button class="list-group-item list-group-item-action"
+                            (click)="onSelectResident(resident)">
+                            <p class="mb-0 small">
+                                <i class="fa-solid fa-building-user"></i>
+                                [{{ resident.residentNo }}] {{ resident.name }} - {{ resident.email }}
+                            </p>
+                        </button>                                
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

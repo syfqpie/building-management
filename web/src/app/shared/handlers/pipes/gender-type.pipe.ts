@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GenderType } from '../../services/renters/renters.model';
+import { GenderType } from '../../services/residents/residents.model';
 
 @Pipe({
   name: 'genderType'

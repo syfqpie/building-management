@@ -140,176 +140,167 @@
             </div>
         </div>
 
-        <div *ngIf="currentUnit?.renter !== null; else isNoRenter"
+        <div *ngIf="currentUnit?.owner !== null; else isNoOwner"
             class="col-sm-12 col-md-9">
+            <div class="card border-0 shadow mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="rounded-circle
+                                border border-primary border-opacity-50 d-flex justify-content-center
+                                align-items-center mx-auto m-0 p-2 avatar"
+                                alt="Avatar">
+                                <div class="rounded-circle bg-primary bg-opacity-75
+                                    d-flex justify-content-center
+                                    align-items-center w-100 h-100">
+                                    <i class="fa-solid fa-house-user fa-2x text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md">
+                            <p class="fw-bold small mb-0">
+                                <i class="fa-regular fa-id-card fa-fw"></i>
+                                {{ currentUnit?.owner?.title | titleType }}
+                                {{ currentUnit?.owner?.name }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-mobile-screen fa-fw"></i>
+                                {{ currentUnit?.owner?.phoneNo }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-receipt fa-fw"></i>
+                                {{ 
+                                    (currentUnit?.owner?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
+                                    'N/A'
+                                }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-envelope fa-fw"></i>
+                                {{ currentUnit?.owner?.email }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row g-3">
                 <div class="col-sm-12 col-md-8">
-
+                    <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                (click)="changeTab('residents')"
+                                [ngClass]="{
+                                    'active': currentTab === 'residents'
+                                }">
+                                Residents 
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                disabled
+                                (click)="changeTab('bills')"
+                                [ngClass]="{
+                                    'active': currentTab === 'bills'
+                                }">
+                                Bills (coming soon)
+                            </button>
+                        </li>
+                    </ul>
+        
+                    <div class="row g-3">
+                        <div class="col-sm-12 col-md-12">
+                            <app-unit-residents></app-unit-residents>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="col-sm-12 col-md-4">
                     <div class="card shadow border-0">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                Renter information
+                            <h5 class="card-title mb-0">
+                                Activities
                             </h5>
-                            <div class="mb-2">
-                                <label class="fw-bold text-uppercase small">
-                                    Name:
-                                </label>
-                                <p class="text-muted small">
-                                    {{ currentUnit?.renter?.title | titleType }}
-                                    {{ currentUnit?.renter?.name }}
-                                </p>
-                            </div>
-
-                            <div class="mb-2">
-                                <label class="fw-bold text-uppercase small">
-                                    Phone no.:
-                                </label>
-                                <p class="text-muted small">
-                                    {{ currentUnit?.renter?.phoneNumber }}
-                                </p>
-                            </div>
-
-                            <div class="mb-2">
-                                <label class="fw-bold text-uppercase small">
-                                    Moved in at:
-                                </label>
-                                <p class="text-muted small">
-                                    {{ currentUnit?.renter?.movedInAt | date : 'dd/MM/yyyy, h:mm a' }}
-                                </p>
-                            </div>
-
-                            <div class="mb-2">
-                                <label class="fw-bold text-uppercase small">
-                                    Last payment at:
-                                </label>
-                                <p class="text-muted small">
-                                    {{ 
-                                        (currentUnit?.renter?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
-                                        'N/A'
-                                    }}
-                                </p>
-                            </div>
                         </div>
+                        <ul class="list-group list-group-flush">
+                            <ng-template ngFor
+                                let-activity
+                                let-index="index"
+                                [ngForOf]="activities">
+                                <li class="list-group-item">
+                                    <span class="ms-0 badge bg-opacity-10 border
+                                        border-opacity-10 mb-2"
+                                        [ngClass]="{
+                                            'bg-info text-info': activity.activityType === activityType.MOVE_IN,
+                                            'bg-warning text-warning': activity.activityType === activityType.MOVE_OUT,
+                                            'bg-success text-success': activity.activityType === activityType.ACTIVATE,
+                                            'bg-danger text-danger': activity.activityType === activityType.DEACTIVATE,
+                                            'bg-dark text-dark': activity.activityType === activityType.ENABLE_MAINTENANCE,
+                                            'bg-secondary text-secondary': activity.activityType === activityType.DISABLE_MAINTENANCE
+                                        }">
+                                        <i class="fa-solid" [ngClass]="{
+                                            'fa-people-carry-box': (
+                                                activity.activityType === activityType.MOVE_IN ||
+                                                activity.activityType === activityType.MOVE_OUT
+                                            ),
+                                            'fa-triangle-exclamation': (
+                                                activity.activityType === activityType.ACTIVATE ||
+                                                activity.activityType === activityType.DEACTIVATE ||
+                                                activity.activityType === activityType.ENABLE_MAINTENANCE ||
+                                                activity.activityType === activityType.DISABLE_MAINTENANCE
+                                            )
+                                        }"></i>
+                                        {{ activity.activityType | activityType }}
+                                    </span>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-regular fa-circle-user"></i>
+                                        {{ activity.activityBy.email }}
+                                    </p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-regular fa-clock"></i>
+                                        {{ activity.activityAt | date : 'dd/MM/yyyy, h:mm a' }}
+                                    </p>
+                                </li>
+                                <button *ngIf="index === 4"
+                                    class="list-group-item
+                                        list-group-item-action text-center
+                                        bg-outline-primary"
+                                    (click)="viewMoreActivities()">
+                                    <p class="mb-0">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                        View more
+                                    </p>
+                                </button> 
+                            </ng-template>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <ng-template #isNoRenter>
+        <ng-template #isNoOwner>
             <div class="col-sm-12 col-md-9 d-flex">
-                <div class="text-center m-auto"
-                    [ngClass]="{
-                        'w-100': selectedRenter
-                    }">
-                    <div *ngIf="isAssignRenter; else isNotAssignRenter">
-                        <div *ngIf="selectedRenter; else notSelected"
-                            class="row">
-                            <div class="col-sm-12 col-md-auto d-flex">
-                                <div class="m-auto">
-                                    <img src="assets/images/illustrations/confirmation.png"
-                                        style="width: 24rem" />
-                                    <p class="text-muted">Confirmation</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md text-start">
-                                <div class="mb-2">
-                                    <label class="fw-bold text-uppercase small">
-                                        Renter no.: 
-                                    </label>
-                                    <p class="text-muted small">
-                                        {{ selectedRenter.renterNo }}
-                                    </p>
-                                </div>
-            
-                                <div class="mb-2">
-                                    <label class="fw-bold text-uppercase small">
-                                        Name:
-                                    </label>
-                                    <p class="text-muted small">
-                                        {{ selectedRenter.name }}
-                                    </p>
-                                </div>
-        
-                                <div class="mb-2">
-                                    <label class="fw-bold text-uppercase small">
-                                        Email:
-                                    </label>
-                                    <p class="text-muted small">
-                                        {{ selectedRenter.email }}
-                                    </p>
-                                </div>
-        
-                                <div class="mb-2">
-                                    <label class="fw-bold text-uppercase small">
-                                        Phone number:
-                                    </label>
-                                    <p class="text-muted small">
-                                        {{ selectedRenter.phoneNumber }}
-                                    </p>
-                                </div>
-                                <button class="btn btn-primary me-2">
-                                    Confirm
-                                </button>
-                                <button class="btn btn-outline-primary"
-                                    (click)="cancelAssignRenter()">
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                        <ng-template #notSelected>
-                            <form class="text-start">
-                                <div>
-                                    <label class="form-label">
-                                        Renter
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i *ngIf="isSearching; else isNotSearching"
-                                                class="fa-solid fa-circle-notch fa-spin">
-                                            </i>
-                                            <ng-template #isNotSearching>
-                                                <i class="fa-brands fa-searchengin"></i>
-                                            </ng-template>
-                                        </span>
-                                        <input #renterSearchInput
-                                            class="form-control"
-                                            [disabled]="isSearching"
-                                            placeholder="Search renter"
-                                            list="encodings" />           
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="mt-3" *ngIf="searchedRenters.length > 0">
-                                <div class="list-group list-group-flush shadow rounded">
-                                    <ng-template ngFor
-                                        let-renter
-                                        [ngForOf]="searchedRenters">
-                                        <button class="list-group-item list-group-item-action"
-                                            (click)="onSelectRenter(renter)">
-                                            <p class="mb-0 small">
-                                                <i class="fa-solid fa-building-user"></i>
-                                                [{{ renter.renterNo }}] {{ renter.name }} - {{ renter.email }}
-                                            </p>
-                                        </button>                                
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </ng-template>
+                <app-assign-owner
+                    *ngIf="isAssigning; else isNotAssigning"
+                    class="w-100 m-auto"
+                    [unitId]="currentUnit!.id"
+                    (changedEvent)="onOwnerChanged()">
+                </app-assign-owner>
+
+                <ng-template #isNotAssigning>
+                    <div class="text-center w-100 m-auto">
+                        <img src="assets/images/illustrations/no-information.png"
+                            style="height: 14rem;">
+                        <p class="text-muted">No information yet</p>
+                        <button class="btn btn-primary"
+                            (click)="toggleAssignOwner()">
+                            Assign owner
+                        </button>
                     </div>
-                    <ng-template #isNotAssignRenter>
-                        <div>
-                            <img src="assets/images/illustrations/no-information.png"
-                                style="height: 14rem;">
-                            <p class="text-muted">No information yet</p>
-                            <button class="btn btn-primary"
-                                (click)="toggleAssignRenter()">
-                                Assign renter
-                            </button>
-                        </div>
-                    </ng-template>
-                </div>
+                </ng-template>
             </div>
         </ng-template>
     </div>

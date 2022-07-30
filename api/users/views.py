@@ -123,7 +123,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return self.serializer_class_by_action.get(self.action, self.serializer_class)
 
         # Return original class
-        return super(CustomUserViewSet, self).get_serializer_class()
+        return super().get_serializer_class()
     
     # Activate account
     @action(methods=['GET'], detail=True)
@@ -140,7 +140,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user.is_active = True
         user.save()
 
-        serializer = CustomUserSerializer(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'User account activated' },
@@ -163,7 +163,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user.is_active = False
         user.save()
 
-        serializer = CustomUserSerializer(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         headers = self.get_success_headers(serializer.data)
         return Response(
             { 'detail': 'User account deactivated' },
@@ -180,7 +180,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_account_information(self, request, *args, **kwargs):
         user = request.user
 
-        serializer = CustomUserSerializer(user, many=False)
+        serializer = self.get_serializer(user, many=False)
         return Response(serializer.data)
     
 
@@ -200,9 +200,9 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 @method_decorator(
     name='post', 
     decorator=swagger_auto_schema(
-        operation_id='Register new account for renter',
+        operation_id='Register new account for admin',
         filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Renters']
+        tags=['Authentication']
     )
 )
 class AdminCustomRegisterView(RegisterView):

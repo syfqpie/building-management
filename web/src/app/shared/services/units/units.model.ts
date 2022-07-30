@@ -1,4 +1,4 @@
-import { Renter } from '../renters/renters.model';
+import { Resident } from '../residents/residents.model';
 
 export class Unit {
     constructor(
@@ -7,7 +7,7 @@ export class Unit {
         public squareFeet: number,
         public block: number,
         public floor: number,
-        public renter: number,
+        public owner: number,
         public unitNumber: number,
         public isMaintenance: number,
         public isActive: boolean,
@@ -25,7 +25,7 @@ export class UnitExtended {
         public squareFeet: number,
         public block: number,
         public floor: number,
-        public renter: Renter,
+        public owner: Resident,
         public unitNumber: number,
         public isMaintenance: number,
         public isActive: boolean,
@@ -33,5 +33,12 @@ export class UnitExtended {
         public createdBy: number,
         public lastModifiedAt: string,
         public lastModifiedBy: number
+    ) {}
+}
+
+export class UnitNo {
+    constructor(
+        public id: number,
+        public unitNo: string
     ) {}
 }

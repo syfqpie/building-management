@@ -158,3 +158,9 @@ a[aria-expanded="true"] {
         transition: transform .35s ease;
     } 
 }
+
+.avatar {
+    border-style: dashed solid !important;
+    width: 5rem;
+    height: 5rem;
+}

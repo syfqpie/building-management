@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, Subscription } from 'rxjs';
+
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { debounceTime, distinctUntilChanged, filter, fromEvent, map, Subscription } from 'rxjs';
-import { Renter } from 'src/app/shared/services/renters/renters.model';
-import { RentersService } from 'src/app/shared/services/renters/renters.service';
-import { Unit, UnitExtended } from 'src/app/shared/services/units/units.model';
+import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
+
+import { ActivityType, UnitActivityNested } from 'src/app/shared/services/activities/activities.model';
+import { UnitExtended } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
 @Component({
@@ -16,27 +18,25 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
 
   // Data
   currentUnit: UnitExtended | undefined
-  searchedRenters: Renter[] = []
-  selectedRenter: Renter | undefined
+  currentTab: string = 'residents' // residents | bills
+  activities: UnitActivityNested[] = []
+  activityType = ActivityType
 
   // Checker
   isProcessing: boolean = false
-  isAssignRenter: boolean = false
-  isSearching: boolean = false
+  isAssigning: boolean = false
 
   // Subscription
   svcSubscription: Subscription = new Subscription
   routeSubscription: Subscription | undefined
   eventSubscription: Subscription | undefined
 
-  // Event
-  @ViewChild('renterSearchInput', { static: false }) renterSearchInput: ElementRef | undefined
-
   constructor(
     private loadingBar: LoadingBarService,
+    private notifySvc: NotifyService,
     private route: ActivatedRoute,
-    private unitSvc: UnitsService,
-    private renterSvc: RentersService
+    private router: Router,
+    private unitSvc: UnitsService
   ) { }
 
   ngOnInit(): void {
@@ -69,7 +69,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   getData(id: number) {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.svcSubscription.add(this.unitSvc.getOneExtended(id).subscribe({
+    this.svcSubscription.add(forkJoin([
+      this.unitSvc.getOneExtended(id),
+      this.unitSvc.getUnitActivities(id)
+    ]).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -80,6 +83,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.currentUnit = this.unitSvc.unitExtended
+        this.activities = this.unitSvc.unitActivites
       }
     }))
   }
@@ -91,6 +95,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit activated'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -109,6 +117,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit deactivated'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -127,6 +139,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit maintenance enabled'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -145,6 +161,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Unit maintenance disabled'
+        )
       },
       error: () => {
         this.loadingBar.useRef('http').stop()
@@ -156,62 +176,27 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     }))
   }
 
-  toggleAssignRenter() {
-    this.isAssignRenter = !this.isAssignRenter
-    if (this.isAssignRenter) {
-      const timer = setTimeout(
-        () => {
-          this.startSearchPipe()
-        }, 500
-      )
-    }
+  // Triggered when new owner assigned
+  onOwnerChanged() {
+    this.toggleAssignOwner()
+    this.currentUnit = this.unitSvc.unitExtended
   }
 
-  startSearchPipe() {
-    this.eventSubscription = fromEvent(this.renterSearchInput?.nativeElement, 'keyup').pipe(
-      map((event: any) => {
-        return event.target.value
-      }),
-      filter(
-        res => res.length > 2
-      ),
-      debounceTime(1000),
-      distinctUntilChanged()
-    ).subscribe(
-      (text: string) => {
-        this.isSearching = true
-        this.svcSubscription.add(this.renterSvc.search(text).subscribe({
-          next: () => {
-            this.isSearching = false
-          },
-          error: () => {
-            this.isSearching = false
-          },
-          complete: () => {
-            this.searchedRenters = this.renterSvc.renters
-          }
-        }))
+  toggleAssignOwner() {
+    this.isAssigning = !this.isAssigning
+  }
+
+  changeTab(tab: string) {
+    this.currentTab = tab
+  }
+
+  viewMoreActivities() {
+    return this.router.navigate(
+      ['/management', 'units', 'activities'],
+      { queryParams: 
+        { id: this.currentUnit?.id! }
       }
     )
-  }
-
-  onSelectRenter(renter: Renter) {
-    this.selectedRenter = renter
-    console.log(this.selectedRenter)
-  }
-
-  cancelAssignRenter() {
-    this.selectedRenter = undefined
-    this.searchedRenters = []
-    const timer = setTimeout(
-      () => {
-        this.startSearchPipe()
-      }, 500
-    )
-  }
-
-  assignRenter() {
-    
   }
 
 }

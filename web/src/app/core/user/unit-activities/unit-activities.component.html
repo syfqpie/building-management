@@ -1,0 +1,117 @@
+<div class="container-fluid">
+    <div class="card shadow border-0">
+        <div class="card-body">
+            <h5 class="card-title">
+                List of activities
+            </h5>
+            <h6 class="card-subtitle mb-3 text-muted">
+                Manage activities here
+            </h6>
+            <div *ngIf="tableRows.length > 0; else isNoRowData">
+                <ngx-datatable
+                    class="bootstrap rounded-2"
+                    [rows]="tableRows"
+                    [columnMode]="ColumnMode.flex"
+                    [limit]="5"
+                    rowHeight="auto"
+                    [footerHeight]="50"
+                    [messages]="tableMessages"
+                    [cssClasses]="tableClass">
+                    <ngx-datatable-column name="Unit no."
+                        prop="unit.unitNo"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Notes"
+                        prop="notes"
+                        [flexGrow]="3"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Activity"
+                        prop="activityType"
+                        [flexGrow]="3"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-info text-info': value === activityType.MOVE_IN,
+                                    'bg-warning text-warning': value === activityType.MOVE_OUT,
+                                    'bg-success text-success': value === activityType.ACTIVATE,
+                                    'bg-danger text-danger': value === activityType.DEACTIVATE,
+                                    'bg-dark text-dark': value === activityType.ENABLE_MAINTENANCE,
+                                    'bg-primary text-primary': value === activityType.DISABLE_MAINTENANCE
+                                }">
+                                <span>
+                                    <i class="fa-solid my-auto"
+                                        [ngClass]="{
+                                            'fa-people-carry-box': (
+                                                value === activityType.MOVE_IN ||
+                                                value === activityType.MOVE_OUT
+                                            ),
+                                            'fa-triangle-exclamation': (
+                                                value === activityType.ACTIVATE ||
+                                                value === activityType.DEACTIVATE ||
+                                                value === activityType.ENABLE_MAINTENANCE ||
+                                                value === activityType.DISABLE_MAINTENANCE
+                                            )
+                                        }">
+                                    </i>
+                                    {{ value | activityType }}
+                                </span>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Created by"
+                        prop="activityBy.email"
+                        [flexGrow]="3"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Created at"
+                        prop="activityAt"
+                        [flexGrow]="3"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value | date : 'dd/MM/yyyy' }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <ng-template #isNoRowData>
+                <div *ngIf="!isProcessing;">
+                    <div class="text-center">
+                        <img src="assets/images/illustrations/empty.png"
+                            style="height: 14rem;">
+                        <p class="text-muted">Empty data</p>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

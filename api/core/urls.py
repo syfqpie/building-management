@@ -54,13 +54,13 @@ medias_router = router.register(
     r'medias', MediaViewSet
 )
 
-# Renters
-from renters.views import (
-    RenterViewSet,
-    RenterCustomRegisterView
+# Residents
+from residents.views import (
+    ResidentViewSet,
+    ResidentCustomRegisterView
 )
-renters_router = router.register(
-    r'renters', RenterViewSet
+residents_router = router.register(
+    r'residents', ResidentViewSet
 )
 
 # Units
@@ -68,10 +68,14 @@ from units.views import (
     UnitViewSet,
     BlockViewSet,
     FloorViewSet,
-    UnitNumberViewSet
+    UnitNumberViewSet,
+    UnitActivityViewSet
 )
 units_router = router.register(
     r'units', UnitViewSet
+).register(
+    r'activities', UnitActivityViewSet,
+    'unit-activities', parents_query_lookups=['id']
 )
 blocks_router = router.register(
     r'blocks', BlockViewSet
@@ -81,6 +85,9 @@ floors_router = router.register(
 )
 unit_numbers_router = router.register(
     r'unit-numbers', UnitNumberViewSet
+)
+unit_activities_router = router.register(
+    r'unit-activities', UnitActivityViewSet
 )
 
 # Users
@@ -108,7 +115,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/registration/admin/', AdminCustomRegisterView.as_view(), name='admin_register'),
-    path('auth/registration/renter/', RenterCustomRegisterView.as_view(), name='renter_register'),
+    path('auth/registration/resident/', ResidentCustomRegisterView.as_view(), name='resident_register'),
     path('auth/registration/verify-email/', MyVerifyEmailView.as_view(), name='account_email_verification_sent'),
     path('auth/registration/check-email-verification/', MyCheckEmailVerificationView.as_view(), name='check_verification'),
     path('auth/registration/resend-verification/', MyResendVerificationView.as_view(), name='resend_verification'),
@@ -121,7 +128,6 @@ urlpatterns = [
     path(r'auth/password/reset/confirm/', MyPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 
     re_path(r'v1/', include(router.urls)),
-    # path('v1/renters/register/', RenterCustomRegisterView.as_view(), name='renter_register'),
     # re_path(r'auth/', include('dj_rest_auth.urls')),
     re_path('auth/obtain/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     re_path('auth/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
