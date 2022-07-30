@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ActivityType } from '../../services/units/units.model';
+import { ActivityType } from '../../services/activities/activities.model';
 
 @Pipe({
   name: 'activityType'

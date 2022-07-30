@@ -39,6 +39,7 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     BaseModalComponent,
     ActivityTypePipe,
     GenderTypePipe,
-    TitleTypePipe
+    TitleTypePipe,
+    UnitActivitiesComponent
   ],
   imports: [
     CommonModule,

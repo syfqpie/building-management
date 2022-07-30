@@ -7,6 +7,7 @@ import { ResidentsComponent } from './residents/residents.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
+import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitsComponent } from './units/units.component';
@@ -41,6 +42,10 @@ export const UserRoutes: Routes = [
                     {
                         path: 'configuration',
                         component: UnitsConfigurationComponent
+                    },
+                    {
+                        path: 'activities',
+                        component: UnitActivitiesComponent
                     }
                 ]
             },
