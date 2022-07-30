@@ -3,8 +3,9 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Unit, UnitActivityNested, UnitExtended } from './units.model';
+import { Unit, UnitExtended } from './units.model';
 import { DetailResponse } from '../auth/auth.model';
+import { UnitActivityNested } from '../activities/activities.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/units/`
 
