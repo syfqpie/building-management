@@ -37,6 +37,10 @@ export class UserSidebarComponent implements OnInit {
         {
           path: ['/management', 'units', 'configuration'],
           title: 'Configuration'
+        },
+        {
+          path: ['/management', 'units', 'activities'],
+          title: 'Activities'
         }
       ]
     },
