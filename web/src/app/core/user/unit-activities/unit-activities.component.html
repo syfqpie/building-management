@@ -50,16 +50,12 @@
                             <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
                                 border border-opacity-10 rounded-2"
                                 [ngClass]="{
-                                    'bg-success text-success': (
-                                        value === activityType.MOVE_IN ||
-                                        value === activityType.ACTIVATE ||
-                                        value === activityType.DISABLE_MAINTENANCE
-                                    ),
-                                    'bg-danger text-danger': (
-                                        value === activityType.MOVE_OUT ||
-                                        value === activityType.DEACTIVATE ||
-                                        value === activityType.ENABLE_MAINTENANCE
-                                    )
+                                    'bg-info text-info': value === activityType.MOVE_IN,
+                                    'bg-warning text-warning': value === activityType.MOVE_OUT,
+                                    'bg-success text-success': value === activityType.ACTIVATE,
+                                    'bg-danger text-danger': value === activityType.DEACTIVATE,
+                                    'bg-dark text-dark': value === activityType.ENABLE_MAINTENANCE,
+                                    'bg-primary text-primary': value === activityType.DISABLE_MAINTENANCE
                                 }">
                                 <span>
                                     <i class="fa-solid my-auto"
@@ -105,20 +101,6 @@
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
-
-                    <!-- <ngx-datatable-column name="Action"
-                        prop="id"
-                        [flexGrow]="2"
-                        [sortable]="false"
-                        [draggable]="false"
-                        [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            <button class="btn btn-outline-primary btn-sm"
-                                (click)="onSelect(value)">
-                                View
-                            </button>
-                        </ng-template>
-                    </ngx-datatable-column> -->
                 </ngx-datatable>
             </div>
             <ng-template #isNoRowData>
