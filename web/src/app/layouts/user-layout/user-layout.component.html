@@ -1,56 +1,26 @@
+<!-- Pages and footer -->
 <div>
-    <!-- <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner> -->
-
-    <!-- Pages and footer -->
-    <!-- <div
-        style="transition: 0.3s ease-in;"
-        [ngStyle]="isMenuOpen === true && isMobileResolution === false 
-            ? {'margin-left': '16rem'}
-            : {'margin-left': '0'}"> -->
-    <div>
-        <!-- Top navbar -->
-        <app-user-navbar
-            [isMenuOpen]="isMenuOpen"
-            (toggleMenuEvent)="receiveToggle()">
-        </app-user-navbar>
-        <!-- Sidebar -->
-        <div class="border-end border-dark shadow-sm"
-            @slideLeftRight
-            *ngIf="isMenuOpen">
-            <app-user-sidebar
-                class="flex-column position-fixed"
-                [ngClass]="{ 'sticky-top mobile-sidebar': isMobileResolution === true }">
-            </app-user-sidebar>
-        </div>
-        <div style="transition: 0.3s ease-in;"
-            [ngStyle]="isMenuOpen === true && isMobileResolution === false 
-            ? {'margin-left': '17rem'}
-            : {'margin-left': '0'}">
-            <div class="px-3 py-4 min-vh-full">
-                <router-outlet></router-outlet>
-            </div>
-            <app-user-footer></app-user-footer>
-        </div>
+    <!-- Top navbar -->
+    <app-user-navbar
+        [isMenuOpen]="isMenuOpen"
+        (toggleMenuEvent)="receiveToggle()">
+    </app-user-navbar>
+    <!-- Sidebar -->
+    <div class="border-end border-dark shadow-sm"
+        @slideLeftRight
+        *ngIf="isMenuOpen">
+        <app-user-sidebar
+            class="flex-column position-fixed"
+            [ngClass]="{ 'sticky-top mobile-sidebar': isMobileResolution === true }">
+        </app-user-sidebar>
     </div>
-
-    <!-- <div class="container-fluid bg-theme">
-        <div class="row flex-nowrap">
-            <div class="col-auto px-0">
-                <div *ngIf="isMenuOpen"
-                    @slideLeftRight
-                    class="border-end border-dark shadow-sm">
-                    <app-user-sidebar [ngClass]="{
-                            'fixed': isMobileResolution === false
-                        }">
-                    </app-user-sidebar>
-                </div>
-            </div>
-            <main class="col p-0 pt-2">
-                <div class="py-4">
-                    <router-outlet></router-outlet>
-                </div>
-                <app-user-footer></app-user-footer>
-            </main>
+    <div style="transition: 0.3s ease-in;"
+        [ngStyle]="isMenuOpen === true && isMobileResolution === false 
+        ? {'margin-left': '17rem'}
+        : {'margin-left': '0'}">
+        <div class="px-3 py-4 min-vh-full">
+            <router-outlet></router-outlet>
         </div>
-    </div> -->
+        <app-user-footer></app-user-footer>
+    </div>
 </div>

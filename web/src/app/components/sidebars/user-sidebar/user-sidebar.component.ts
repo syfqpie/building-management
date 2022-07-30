@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLinkActive } from '@angular/router';
-import { ROUTES } from 'src/app/shared/menus/menu.item';
-import { ParentItems } from 'src/app/shared/menus/menu.model';
 import { NavItem } from './nav-item.model';
 
 @Component({

@@ -29,9 +29,6 @@ import { UnitAddComponent } from '../../components/units/unit-add/unit-add.compo
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
 import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
 
-// Basic components
-import { BaseModalComponent } from 'src/app/components/custom/base-modal/base-modal.component';
-
 // Pipes
 import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
@@ -66,7 +63,6 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
     UnitNumbersTableComponent,
     UnitResidentsComponent,
     // Reusable components
-    BaseModalComponent,
     ActivityTypePipe,
     GenderTypePipe,
     TitleTypePipe,
