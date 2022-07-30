@@ -37,10 +37,10 @@ export class UnitsComponent implements OnInit, OnDestroy {
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
     sortDescending: 'fa-solid fa-angle-down ms-1 small',
-    pagerLeftArrow: 'fa-solid fa-angle-left ms-1 small',
-    pagerRightArrow: 'fa-solid fa-angle-right ms-1 small',
-    pagerPrevious: 'fa-solid fa-angles-left ms-1 small',
-    pagerNext: 'fa-solid fa-angles-right ms-1 small'
+    pagerLeftArrow: 'fa-solid fa-angle-left small',
+    pagerRightArrow: 'fa-solid fa-angle-right small',
+    pagerPrevious: 'fa-solid fa-angles-left small',
+    pagerNext: 'fa-solid fa-angles-right small'
   }
 
   // Checker
