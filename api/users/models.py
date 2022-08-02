@@ -8,7 +8,6 @@ class UserType(models.IntegerChoices):
 
 
 class CustomUser(AbstractUser):
-    
     # Account information
     id = models.AutoField(primary_key=True, editable=False)
     full_name = models.CharField(max_length=255, blank=True)

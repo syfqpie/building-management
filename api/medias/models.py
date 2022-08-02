@@ -7,7 +7,6 @@ from core.helpers import PathAndRename
 from users.models import CustomUser
 
 class Media(models.Model):
-
     id = models.AutoField(primary_key=True, editable=False)
     filename = models.CharField(max_length=100, null=True)
     file_extension = models.CharField(max_length=10, null=True)
