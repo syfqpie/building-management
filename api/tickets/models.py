@@ -157,10 +157,7 @@ class TicketActivity(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL,
-        limit_choices_to={
-            'user_type': UserType.ADMIN
-        }, null=True,
-        related_name='tickets_activity_created'
+        null=True, related_name='tickets_activity_created'
     )
 
     class Meta:
