@@ -63,6 +63,28 @@ residents_router = router.register(
     r'residents', ResidentViewSet
 )
 
+from tickets.views import (
+    TicketViewSet,
+    TicketTagViewSet,
+    TicketActivityViewSet,
+    TicketCommentViewSet
+)
+tickets_router = router.register(
+    r'tickets', TicketViewSet
+)
+ticket_tags_router = router.register(
+    r'ticket-tags', TicketTagViewSet
+)
+ticket_activities_router = router.register(
+    r'ticket-activities', TicketActivityViewSet
+)
+
+ticket_comments_router = router.register(
+    r'ticket-comments', TicketCommentViewSet
+)
+
+
+
 # Units
 from units.views import (
     UnitViewSet,

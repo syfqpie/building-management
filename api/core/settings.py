@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 
     'medias',
     'residents',
+    'tickets',
     'units',
     'users'
 ]
