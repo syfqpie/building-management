@@ -264,8 +264,11 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_permissions(self):
         permission_classes = [
             IsAuthenticated,
-            IsSuperAdmin
+            IsAdminStaff
         ]
+
+        if self.action == 'destroy':
+            permission_classes.append(IsSuperAdmin)
 
         return [permission() for permission in permission_classes]
 
@@ -310,6 +313,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         
         # Change value, add signal setup
         unit.is_maintenance = True
+        unit.last_modified_by = request.user
         unit._activity_setup = {
             'current_owner': unit.owner,
             'activity_type': ActivityType.ENABLE_MAINTENANCE,
@@ -342,6 +346,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         
         # Change value, add signal setup
         unit.is_maintenance = False
+        unit.last_modified_by = request.user
         unit._activity_setup = {
             'current_owner': unit.owner,
             'activity_type': ActivityType.DISABLE_MAINTENANCE,
@@ -374,6 +379,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         
         # Change value, add signal setup
         unit.is_active = True
+        unit.last_modified_by = request.user
         unit._activity_setup = {
             'current_owner': unit.owner,
             'activity_type': ActivityType.ACTIVATE,
@@ -406,6 +412,7 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         
         # Change value, add signal setup
         unit.is_active = False
+        unit.last_modified_by = request.user
         unit._activity_setup = {
             'current_owner': unit.owner,
             'activity_type': ActivityType.DEACTIVATE,
