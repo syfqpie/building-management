@@ -34,11 +34,15 @@ import { UnitResidentsComponent } from '../../components/units/unit-residents/un
 // Pipes
 import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
+import { TicketStatusPipe } from '../../shared/handlers/pipes/ticket-status.pipe';
+import { TicketPriorityPipe } from '../../shared/handlers/pipes/ticket-priority.pipe';
+import { TicketCategoryPipe } from '../../shared/handlers/pipes/ticket-category.pipe';
 import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
+
 
 @NgModule({
   declarations: [
@@ -69,6 +73,9 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
     // Reusable components
     ActivityTypePipe,
     GenderTypePipe,
+    TicketStatusPipe,
+    TicketPriorityPipe,
+    TicketCategoryPipe,
     TitleTypePipe,
     UnitActivitiesComponent
   ],
