@@ -27,6 +27,19 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = '__all__'
+        read_only_fields = ('id', 'ticket_no', 'status')
+
+
+class TicketStatusSerializer(serializers.ModelSerializer):
+    """
+        Serializer for update status action
+    """
+    status = serializers.ChoiceField(required=True, choices=TicketStatus.choices, allow_null=False)
+    notes = serializers.CharField(required=True, allow_null=False)
+    
+    class Meta:
+        model = Ticket
+        fields = ['status', 'notes']
         read_only_fields = ('id', 'ticket_no')
 
 
