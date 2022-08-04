@@ -12,6 +12,8 @@ import { ResidentsComponent } from './residents/residents.component';
 import { ResidentDetailComponent } from './resident-detail/resident-detail.component';
 import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
+import { TicketsComponent } from './tickets/tickets.component';
+import { TicketDetailComponent } from './ticket-detail/ticket-detail.component';
 import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
@@ -48,6 +50,8 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
     SettingsComponent,
     SystemAdminComponent,
     TestComponent,
+    TicketsComponent,
+    TicketDetailComponent,
     UnitsComponent,
     UnitsConfigurationComponent,
     UnitDetailComponent,
