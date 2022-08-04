@@ -8,7 +8,7 @@ export class TicketCategoryPipe implements PipeTransform {
 
   transform(value: TicketCategory | undefined, ...args: unknown[]): unknown {
     if (value) {
-      return value === TicketCategory.SYS ? 'Sytem' :
+      return value === TicketCategory.SYS ? 'System' :
         value === TicketCategory.UNIT ? 'Unit' :
         value === TicketCategory.FACI ? 'Facility' :
         'N/A'
