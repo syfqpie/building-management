@@ -15,7 +15,7 @@ from .models import (
     TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
 )
 from .serializers import (
-    TicketTagSerializer, TicketSerializer,
+    TicketExtendedSerializer, TicketTagSerializer, TicketSerializer,
     TicketActivitySerializer, TicketCommentSerializer,
     TicketStatusSerializer
 )
@@ -57,6 +57,9 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class_validator = {
         'update_status': TicketStatusSerializer
     }
+    serializer_class_admin = {
+        'retrieve_ext': TicketExtendedSerializer
+    }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     http_method_names = [
         'get',
@@ -75,6 +78,14 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
+    def get_serializer_class(self):
+        # Check serializer class by action
+        if hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
+
+        # Return original class
+        return super().get_serializer_class()
+    
     # For validation only
     def get_serializer_validator_class(self):
         # Check serializer validation class by action
@@ -105,6 +116,13 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         # Return default method
         return super().get_serializer(*args, **kwargs)
+    
+    # Get extended ticket
+    @action(methods=['GET'], detail=True, url_path='extended')
+    def retrieve_ext(self, request, *args, **kwargs):
+        ticket = self.get_object()
+        serializer = self.get_serializer(ticket, many=False)
+        return Response(serializer.data)
     
     # Update status
     @action(methods=['PATCH'], detail=True, url_path='update-status')

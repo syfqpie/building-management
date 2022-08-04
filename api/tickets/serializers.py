@@ -71,3 +71,28 @@ class TicketCommentSerializer(serializers.ModelSerializer):
         model = TicketComment
         fields = '__all__'
         read_only_fields = ('id', 'reply_to')
+
+
+class TicketExtendedSerializer(serializers.ModelSerializer):
+    """
+        Serializer for extended ticket
+    """
+    ticket_activities = TicketActivitySerializer(many=True, read_only=True)
+    class Meta:
+        model = Ticket
+        fields = [
+            'id',
+            'ticket_no',
+            'unit',
+            'tags',
+            'status',
+            'category',
+            'assignee',
+            'priority',
+            'ticket_activities',
+            'created_at',
+            'last_modified_at',
+            'created_by',
+            'last_modified_by'
+        ]
+        read_only_fields = ('id', 'ticket_no', 'status')

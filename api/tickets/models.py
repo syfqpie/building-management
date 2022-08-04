@@ -146,7 +146,7 @@ class TicketActivity(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         on_delete=models.CASCADE,
-        related_name='activity_ticket'
+        related_name='ticket_activities'
     )
     status = models.IntegerField(
         choices=TicketStatus.choices,
