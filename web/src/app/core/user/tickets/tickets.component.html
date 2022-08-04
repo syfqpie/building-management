@@ -1,1 +1,164 @@
-<p>tickets works!</p>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col text-end">
+            <button class="btn btn-outline-primary btn-sm">
+                <i class="fa-solid fa-file-circle-plus"></i>
+                Add ticket
+            </button>
+        </div>
+    </div>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="card-title">
+                List of tickets
+            </h5>
+            <h6 class="card-subtitle mb-3 text-muted">
+                Manage tickets here
+            </h6>
+            <div *ngIf="tableRows.length > 0; else isNoRowData">
+                <ngx-datatable
+                    class="bootstrap rounded-2"
+                    [rows]="tableRows"
+                    [columnMode]="ColumnMode.flex"
+                    [limit]="5"
+                    rowHeight="auto"
+                    [footerHeight]="50"
+                    [messages]="tableMessages"
+                    [cssClasses]="tableClass">
+                    <ngx-datatable-column name="Id"
+                        prop="ticketNo"
+                        [flexGrow]="3"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Title"
+                        prop="title"
+                        [flexGrow]="5"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 text-truncate">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Status"
+                        prop="status"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-primary text-primary': value === ticketStatus.OPENED,
+                                    'bg-warning text-warning': value === ticketStatus.IN_PROGRESS,
+                                    'bg-success text-success': value === ticketStatus.RESOLVED,
+                                    'bg-danger text-danger': value === ticketStatus.CLOSED,
+                                    'bg-info text-info': value === ticketStatus.DUPLICATED
+                                }">
+                                <span>
+                                    <i class="fa-solid"
+                                        [ngClass]="{
+                                            'fa-circle-exclamation': value === ticketStatus.OPENED,
+                                            'fa-exclamation': value === ticketStatus.IN_PROGRESS,
+                                            'fa-circle-check': value === ticketStatus.RESOLVED,
+                                            'circle-xmark': value === ticketStatus.CLOSED,
+                                            'fa-triangle-exclamation': value === ticketStatus.DUPLICATED
+                                        }"></i>
+                                    {{ value | ticketStatus }}
+                                </span>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Category"
+                        prop="category"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-primary text-primary': value === ticketCategory.SYS,
+                                    'bg-info text-info': value === ticketCategory.UNIT,
+                                    'bg-dark text-dark': value === ticketCategory.FACI
+                                }">
+                                <span>
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    {{ value | ticketCategory }}
+                                </span>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Priority"
+                        prop="priority"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-danger text-danger': value === ticketPriority.CRIT,
+                                    'bg-warning text-warning': value === ticketPriority.HIGH,
+                                    'bg-primary text-primary': value === ticketPriority.NORMAL,
+                                    'bg-info text-info': value === ticketPriority.LOW,
+                                    'bg-secondary text-secondary': value === ticketPriority.VLOW
+                                }">
+                                <span>
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ value | ticketPriority }}
+                                </span>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Created at"
+                        prop="createdAt"
+                        [flexGrow]="3"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value | date : 'dd/MM/yyyy' }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Action"
+                        prop="id"
+                        [flexGrow]="2"
+                        [sortable]="false"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <button class="btn btn-outline-primary btn-sm"
+                                (click)="onSelect(value)">
+                                View
+                            </button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <ng-template #isNoRowData>
+                <div *ngIf="!isProcessing;">
+                    <div class="text-center">
+                        <img src="assets/images/illustrations/empty.png"
+                            style="height: 14rem;">
+                        <p class="text-muted">Empty data</p>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

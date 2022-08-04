@@ -49,6 +49,12 @@ export class UserSidebarComponent implements OnInit {
       icon: 'fa-solid fa-building-user'
     },
     { 
+      path: ['/management', 'tickets'], 
+      title: 'Tickets',
+      type: 'link',
+      icon: 'fa-solid fa-bug'
+    },
+    { 
       path: ['/settings'], 
       title: 'Settings',
       type: 'link',
