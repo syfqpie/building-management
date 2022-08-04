@@ -17,12 +17,10 @@ def create_ticket_activity(sender, created, **kwargs):
             notes='Ticket opened',
             created_by=instance.created_by
         )
-
-    # if update_fields and activity_setup:
-    #     TicketActivity.objects.create(
-    #         ticket=instance,
-    #         current_owner=activity_setup['current_owner'],
-    #         activity_type=activity_setup['activity_type'],
-    #         notes=activity_setup['notes'],
-    #         activity_by=activity_setup['activity_by']
-    #     )
+    elif not created and activity_setup:
+        TicketActivity.objects.create(
+            ticket=instance,
+            status=activity_setup['current_status'],
+            notes=activity_setup['notes'],
+            created_by=instance.last_modified_by
+        )
