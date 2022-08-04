@@ -20,6 +20,7 @@ import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
+import { ActivityTimelineComponent } from '../../components/tickets/activity-timeline/activity-timeline.component';
 import { AssignOwnerComponent } from '../../components/units/assign-owner/assign-owner.component';
 import { BlocksTableComponent } from 'src/app/components/units/blocks-table/blocks-table.component';
 import { FloorsTableComponent } from 'src/app/components/units/floors-table/floors-table.component';
@@ -27,6 +28,7 @@ import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
+import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
 import { UnitAddComponent } from '../../components/units/unit-add/unit-add.component';
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
 import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
@@ -41,8 +43,6 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
-
 
 @NgModule({
   declarations: [
@@ -61,12 +61,14 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
     UnitDetailComponent,
     // Child components
     AccountSettingsComponent,
+    ActivityTimelineComponent,
     AssignOwnerComponent,
     BlocksTableComponent,
     FloorsTableComponent,
     NotAuthorizedComponent,
     PasswordSettingsComponent,
     SysRegisterAdminComponent,
+    UnitActivitiesComponent,
     UnitAddComponent,
     UnitNumbersTableComponent,
     UnitResidentsComponent,
@@ -76,8 +78,7 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
     TicketStatusPipe,
     TicketPriorityPipe,
     TicketCategoryPipe,
-    TitleTypePipe,
-    UnitActivitiesComponent
+    TitleTypePipe
   ],
   imports: [
     CommonModule,
