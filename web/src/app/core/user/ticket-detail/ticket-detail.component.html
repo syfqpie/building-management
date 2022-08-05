@@ -1,1 +1,17 @@
-<p>ticket-detail works!</p>
+<div class="container">
+    <div *ngIf="isNew; else isNotNew">
+        <app-add-ticket>
+        </app-add-ticket>
+    </div>
+
+    <ng-template #isNotNew>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-4">
+                <app-activity-timeline
+                    [activities]="currentTicket?.ticketActivities">
+                </app-activity-timeline>
+            </div>
+        </div>
+    </ng-template>
+</div>

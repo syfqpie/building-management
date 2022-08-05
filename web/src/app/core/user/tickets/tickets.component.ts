@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 
 import { Ticket, TicketCategory, TicketPriority, TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
-
 
 @Component({
   selector: 'app-tickets',
@@ -17,10 +16,13 @@ export class TicketsComponent implements OnInit, OnDestroy {
 
   // Data
   tickets: Ticket[] = []
+
+  // Predefined
   ticketCategory = TicketCategory
   ticketPriority = TicketPriority
   ticketStatus = TicketStatus
 
+  // Table
   tableRows: Ticket[] = []
   tableLoadingIndicator: boolean = true
   tableReorderable: boolean = true
