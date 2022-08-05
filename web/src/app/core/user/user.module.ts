@@ -21,6 +21,7 @@ import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
+import { AddTicketComponent } from '../../components/tickets/add-ticket/add-ticket.component';
 import { ActivityTimelineComponent } from '../../components/tickets/activity-timeline/activity-timeline.component';
 import { AssignOwnerComponent } from '../../components/units/assign-owner/assign-owner.component';
 import { BlocksTableComponent } from 'src/app/components/units/blocks-table/blocks-table.component';
@@ -63,6 +64,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     UnitDetailComponent,
     // Child components
     AccountSettingsComponent,
+    AddTicketComponent,
     ActivityTimelineComponent,
     AssignOwnerComponent,
     BlocksTableComponent,
