@@ -51,8 +51,18 @@ export class UserSidebarComponent implements OnInit {
     { 
       path: ['/management', 'tickets'], 
       title: 'Tickets',
-      type: 'link',
-      icon: 'fa-solid fa-bug'
+      type: 'sub',
+      icon: 'fa-solid fa-bug',
+      children: [
+        {
+          path: ['/management', 'tickets', 'overview'],
+          title: 'Overview'
+        },
+        {
+          path: ['/management', 'tickets'],
+          title: 'Management'
+        }
+      ]
     },
     { 
       path: ['/settings'], 

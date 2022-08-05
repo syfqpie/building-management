@@ -8,6 +8,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
 import { TicketDetailComponent } from './ticket-detail/ticket-detail.component';
+import { TicketsOverviewComponent } from './tickets-overview/tickets-overview.component';
 import { TicketsComponent } from './tickets/tickets.component';
 import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
@@ -70,6 +71,10 @@ export const UserRoutes: Routes = [
                     {
                         path: '',
                         component: TicketsComponent
+                    },
+                    {
+                        path: 'overview',
+                        component: TicketsOverviewComponent
                     },
                     {
                         path: 'detail/:id',

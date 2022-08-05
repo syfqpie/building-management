@@ -14,6 +14,7 @@ import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketDetailComponent } from './ticket-detail/ticket-detail.component';
+import { TicketsOverviewComponent } from './tickets-overview/tickets-overview.component';
 import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
@@ -56,6 +57,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     TestComponent,
     TicketsComponent,
     TicketDetailComponent,
+    TicketsOverviewComponent,
     UnitsComponent,
     UnitsConfigurationComponent,
     UnitDetailComponent,
