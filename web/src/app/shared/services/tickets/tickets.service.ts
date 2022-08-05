@@ -21,12 +21,23 @@ const BASE_URL_COMMENT = `${ environment.baseUrl }v1/ticket-comments/`
 export class TicketsService {
 
   // Data
-  ticket: TicketExtended | undefined
+  ticket: Ticket | undefined
   tickets: Ticket[] = []
+  ticketExtended: TicketExtended | undefined
   
   constructor(
     private http: HttpClient
   ) { }
+
+  create(body: any): Observable<Ticket> {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.post<Ticket>(urlTemp, body).pipe(
+      tap((res: Ticket) => {
+        this.ticket = res
+        // console.log('Ticket:', this.ticket)
+      })
+    )
+  }
 
   getAll(): Observable<Ticket[]> {
     const urlTemp = `${ BASE_URL }`
@@ -42,8 +53,8 @@ export class TicketsService {
     const urlTemp = `${ BASE_URL }${ id }/extended/`
     return this.http.get<TicketExtended>(urlTemp).pipe(
       tap((res: TicketExtended) => {
-        this.ticket = res
-        // console.log('Ticket: ', this.ticket)
+        this.ticketExtended = res
+        console.log('Ticket: ', this.ticketExtended)
       })
     )
   }
