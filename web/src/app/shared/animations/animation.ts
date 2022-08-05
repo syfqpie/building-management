@@ -13,12 +13,27 @@ import {
 
 export const collapsedAnimation = trigger('collapsed', [
   transition(':enter', [
-    style({ height: 0, visibility: 'hidden' }),
-    animate('300ms ease-out', style({ height: AUTO_STYLE, visibility: AUTO_STYLE }))
+    style({ 
+      height: 0,
+      visibility: 'hidden'
+    }),
+    animate('300ms ease-out', style({
+      height: AUTO_STYLE,
+      visibility: AUTO_STYLE,
+      overflow: AUTO_STYLE 
+    }))
   ]),
   transition(':leave', [
-    style({ height: AUTO_STYLE, visibility: AUTO_STYLE }),
-    animate('300ms ease-in', style({ height: 0, visibility: 'hidden' }))
+    style({
+      height: AUTO_STYLE,
+      visibility: AUTO_STYLE,
+      overflow: 'hidden'
+    }),
+    animate('300ms ease-in', style({
+      height: 0,
+      visibility: 'hidden',
+      overflow: 'hidden'
+    }))
   ])
 ])
 
