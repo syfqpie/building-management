@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid pt-5">
     <div *ngIf="isNew; else isNotNew">
         <app-add-ticket>
         </app-add-ticket>
@@ -6,11 +6,287 @@
 
     <ng-template #isNotNew>
         <div class="row">
-            <div class="col"></div>
+            <div class="col">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary fw-bold">
+                            #{{ currentTicket?.ticketNo }}
+                        </h5>
+
+                        <div class="mb-3">
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-primary text-primary': currentTicket?.status === ticketStatus.OPENED,
+                                    'bg-warning text-warning': currentTicket?.status === ticketStatus.IN_PROGRESS,
+                                    'bg-success text-success': currentTicket?.status === ticketStatus.RESOLVED,
+                                    'bg-danger text-danger': currentTicket?.status === ticketStatus.CLOSED,
+                                    'bg-info text-info': currentTicket?.status === ticketStatus.DUPLICATED
+                                }">
+                                <span>
+                                    <i class="fa-solid"
+                                        [ngClass]="{
+                                            'fa-circle-exclamation': currentTicket?.status === ticketStatus.OPENED,
+                                            'fa-exclamation': currentTicket?.status === ticketStatus.IN_PROGRESS,
+                                            'fa-circle-check': currentTicket?.status === ticketStatus.RESOLVED,
+                                            'circle-xmark': currentTicket?.status === ticketStatus.CLOSED,
+                                            'fa-triangle-exclamation': currentTicket?.status === ticketStatus.DUPLICATED
+                                        }"></i>
+                                    {{ currentTicket?.status | ticketStatus }}
+                                </span>
+                            </p>
+
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2 ms-2"
+                                [ngClass]="{
+                                    'bg-danger text-danger': currentTicket?.priority === ticketPriority.CRIT,
+                                    'bg-warning text-warning': currentTicket?.priority === ticketPriority.HIGH,
+                                    'bg-primary text-primary': currentTicket?.priority === ticketPriority.NORMAL,
+                                    'bg-info text-info': currentTicket?.priority === ticketPriority.LOW,
+                                    'bg-secondary text-secondary': currentTicket?.priority === ticketPriority.VLOW
+                                }">
+                                <span>
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ currentTicket?.priority | ticketPriority }}
+                                </span>
+                            </p>
+                        </div>
+                        
+                        <form [formGroup]="patchForm">
+                            <div class="mb-3 position-relative">
+                                <label class="form-label">
+                                    Title
+                                </label>
+                                <input type="text"
+                                    class="form-control"
+                                    formControlName="title"
+                                    placeholder="Eg: Error in Dashboard"
+                                    [ngClass]="{
+                                        'is-invalid': patchForm.controls['title'].touched &&
+                                        patchForm.controls['title'].errors,
+                                        'is-valid': patchForm.controls['title'].touched &&
+                                        !patchForm.controls['title'].errors
+                                    }" />
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="patchForm.controls['title'].errors &&
+                                    (patchForm.controls['title'].dirty ||
+                                    patchForm.controls['title'].touched)" >
+                                    <ng-container *ngFor="let message of formMessages['title']">
+                                        <span *ngIf="patchForm.controls['title'].hasError(message.type) &&
+                                            (patchForm.controls['title'].dirty ||
+                                            patchForm.controls['title'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                
+                                <p class="text-muted small mb-0 position-absolute end-0">
+                                    {{ patchForm.controls['title'].value ? patchForm.controls['title'].value.length : 0 }} / 100
+                                </p>
+                            </div>
+                
+                            <div class="mb-4 position-relative">
+                                <label class="form-label">
+                                    Description
+                                </label>
+                                <textarea
+                                    class="form-control"
+                                    formControlName="description"
+                                    placeholder="Eg: Test"
+                                    [ngClass]="{
+                                        'is-invalid': patchForm.controls['description'].touched &&
+                                        patchForm.controls['description'].errors,
+                                        'is-valid': patchForm.controls['description'].touched &&
+                                        !patchForm.controls['description'].errors
+                                    }"></textarea>
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="patchForm.controls['description'].errors &&
+                                    (patchForm.controls['description'].dirty ||
+                                    patchForm.controls['description'].touched)" >
+                                    <ng-container *ngFor="let message of formMessages['description']">
+                                        <span *ngIf="patchForm.controls['description'].hasError(message.type) &&
+                                            (patchForm.controls['description'].dirty ||
+                                            patchForm.controls['description'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                
+                                <p class="text-muted small mb-0 position-absolute end-0">
+                                    {{ patchForm.controls['description'].value ? patchForm.controls['description'].value.length : 0 }} / 512
+                                </p>
+                            </div>
+                        </form>
+
+                        <div class="text-end">
+                            <button *ngIf="patchForm.disabled &&
+                                [ticketStatus.OPENED,
+                                ticketStatus.IN_PROGRESS].includes(currentTicket?.status!)"
+                                class="btn btn-outline-primary"
+                                (click)="enableEdit()">
+                                Edit
+                            </button>
+                            
+                            <div *ngIf="patchForm.enabled &&
+                                [ticketStatus.OPENED,
+                                ticketStatus.IN_PROGRESS].includes(currentTicket?.status!)">
+                                <button class="btn btn-outline-primary me-2"
+                                    (click)="cancelEdit()">
+                                    Save
+                                </button>
+
+                                <button class="btn btn-primary"
+                                    (click)="cancelEdit()">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-4">
                 <app-activity-timeline
                     [activities]="currentTicket?.ticketActivities">
                 </app-activity-timeline>
+
+                <div class="card shadow-sm border-0 mb-3">
+                    <h6 class="card-header bg-white mb-0">
+                        Related to
+                    </h6>
+                    <div class="card-body">
+                        <form [formGroup]="patchForm">
+                            <div class="position-relative">
+                                <label class="form-label">
+                                    Unit
+                                </label>
+                                <input type="text"
+                                    class="form-control"
+                                    formControlName="unit"
+                                    placeholder="Eg: Unit"
+                                    [ngClass]="{
+                                        'is-invalid': patchForm.controls['unit'].touched &&
+                                        patchForm.controls['unit'].errors,
+                                        'is-valid': patchForm.controls['unit'].touched &&
+                                        !patchForm.controls['unit'].errors
+                                    }" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 mb-3">
+                    <h6 class="card-header bg-white mb-0">
+                        Assign
+                    </h6>
+                    <div class="card-body">
+                        <form [formGroup]="patchForm">
+                            <div class="position-relative">
+                                <label class="form-label">
+                                    Assignee
+                                </label>
+                                <input type="text"
+                                    class="form-control"
+                                    formControlName="assignee"
+                                    placeholder="Eg: Assignee"
+                                    [ngClass]="{
+                                        'is-invalid': patchForm.controls['assignee'].touched &&
+                                        patchForm.controls['assignee'].errors,
+                                        'is-valid': patchForm.controls['assignee'].touched &&
+                                        !patchForm.controls['assignee'].errors
+                                    }" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+
+                <div class="card shadow-sm border-0">
+                    <h6 class="card-header bg-white mb-0">
+                        Classification
+                    </h6>
+                    <div class="card-body">
+                        <form [formGroup]="patchForm">
+                            <div class="mb-3 position-relative">
+                                <label class="form-label">
+                                    Priority
+                                </label>
+                                <select class="form-select"
+                                    formControlName="priority"
+                                    [ngClass]="{
+                                        'is-invalid': patchForm.controls['priority'].touched &&
+                                        patchForm.controls['priority'].errors,
+                                        'is-valid': patchForm.controls['priority'].touched &&
+                                        !patchForm.controls['priority'].errors
+                                    }">
+                                    <option [ngValue]="null">
+                                        -
+                                    </option>
+
+                                    <ng-template ngFor
+                                        let-choice
+                                        [ngForOf]="[1, 2, 3, 4, 5]">
+                                        <option [ngValue]="choice">
+                                            {{ choice | ticketPriority }}
+                                        </option>
+                                    </ng-template>
+                                </select>
+
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="patchForm.controls['priority'].errors &&
+                                    (patchForm.controls['priority'].dirty ||
+                                    patchForm.controls['priority'].touched)" >
+                                    <ng-container *ngFor="let message of formMessages['priority']">
+                                        <span *ngIf="patchForm.controls['priority'].hasError(message.type) &&
+                                            (patchForm.controls['priority'].dirty ||
+                                            patchForm.controls['priority'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <div class="position-relative">
+                                <label class="form-label">
+                                    Category
+                                </label>
+                                <select class="form-select"
+                                    formControlName="category"
+                                    [ngClass]="{
+                                        'is-invalid': patchForm.controls['category'].touched &&
+                                        patchForm.controls['category'].errors,
+                                        'is-valid': patchForm.controls['category'].touched &&
+                                        !patchForm.controls['category'].errors
+                                    }">
+                                    <option [ngValue]="null">
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+                                    </option>
+                                    <ng-template ngFor
+                                        let-choice
+                                        [ngForOf]="[1, 2, 3]">
+                                        <option [ngValue]="choice">
+                                            {{ choice | ticketCategory }}
+                                        </option>
+                                    </ng-template>
+                                </select>
+
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="patchForm.controls['category'].errors &&
+                                    (patchForm.controls['category'].dirty ||
+                                    patchForm.controls['category'].touched)" >
+                                    <ng-container *ngFor="let message of formMessages['category']">
+                                        <span *ngIf="patchForm.controls['category'].hasError(message.type) &&
+                                            (patchForm.controls['category'].dirty ||
+                                            patchForm.controls['category'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </ng-template>

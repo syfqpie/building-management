@@ -82,6 +82,8 @@ class TicketExtendedSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = [
             'id',
+            'title',
+            'description',
             'ticket_no',
             'unit',
             'tags',
