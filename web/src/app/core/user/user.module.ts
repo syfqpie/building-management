@@ -36,9 +36,6 @@ import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers
 import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
 
 // Reusable
-import { SelectComponent } from '../../components/customs/select/select.component';
-
-// Pipes
 import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
 import { TicketStatusPipe } from '../../shared/handlers/pipes/ticket-status.pipe';
@@ -81,7 +78,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     UnitNumbersTableComponent,
     UnitResidentsComponent,
     // Reusable components
-    SelectComponent,
     ActivityTypePipe,
     GenderTypePipe,
     TicketStatusPipe,
