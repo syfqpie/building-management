@@ -3,6 +3,7 @@
 // Variables
 
 // Theme
+@import './theme/ng-select';
 @import './theme/table';
 @import './theme/theme';
 @import './theme/toastr';
@@ -31,7 +32,5 @@
 // Prime custom
 @import './prime/p-tab-view';
 
-// Prime
-// @import '~primeicons/primeicons.css';
-// @import '~primeng-lts/resources/primeng.min.css';
-// @import '~primeng-lts/resources/themes/bootstrap4-light-blue/theme.css';
+// Ng-select
+// @import "~@ng-select/ng-select/themes/default.theme.css";

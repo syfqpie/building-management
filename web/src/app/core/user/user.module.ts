@@ -35,6 +35,9 @@ import { UnitAddComponent } from '../../components/units/unit-add/unit-add.compo
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
 import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
 
+// Reusable
+import { SelectComponent } from '../../components/customs/select/select.component';
+
 // Pipes
 import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
@@ -45,6 +48,7 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -77,6 +81,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     UnitNumbersTableComponent,
     UnitResidentsComponent,
     // Reusable components
+    SelectComponent,
     ActivityTypePipe,
     GenderTypePipe,
     TicketStatusPipe,
@@ -90,7 +95,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     ReactiveFormsModule,
     RouterModule.forChild(UserRoutes),
     // 3rd party
-    NgxDatatableModule
+    NgxDatatableModule,
+    NgSelectModule
   ]
 })
 export class UserModule { }
