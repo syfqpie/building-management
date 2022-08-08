@@ -73,4 +73,14 @@ export class UsersService {
     )
   }
 
+  filter(filterStr: string): Observable<User[]> {
+    const urlTemp = `${ BASE_URL }${filterStr}`
+    return this.http.get<User[]>(urlTemp).pipe(
+      tap((res: User[]) => {
+        this.users = res
+        // console.log('Users: ', this.users)
+      })
+    )
+  }
+
 }
