@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { User, EmailVerification } from './users.model';
+import { User, EmailVerification, UserEmail } from './users.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/users/`
 
@@ -17,6 +17,7 @@ export class UsersService {
   currentUser: User | undefined
   user: User | undefined
   users: User[] = []
+  usersChoice: UserEmail[] = []
   emailVerifications: EmailVerification[] = []
 
   constructor(
@@ -73,12 +74,12 @@ export class UsersService {
     )
   }
 
-  filter(filterStr: string): Observable<User[]> {
-    const urlTemp = `${ BASE_URL }${filterStr}`
-    return this.http.get<User[]>(urlTemp).pipe(
-      tap((res: User[]) => {
-        this.users = res
-        // console.log('Users: ', this.users)
+  filterSimplified(filterStr: string): Observable<UserEmail[]> {
+    const urlTemp = `${ BASE_URL }get-simplified/${filterStr}`
+    return this.http.get<UserEmail[]>(urlTemp).pipe(
+      tap((res: UserEmail[]) => {
+        this.usersChoice = res
+        // console.log('Users: ', this.usersChoice)
       })
     )
   }
