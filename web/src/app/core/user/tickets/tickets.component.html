@@ -40,11 +40,12 @@
 
                     <ngx-datatable-column name="Title"
                         prop="title"
-                        [flexGrow]="5"
+                        [flexGrow]="4.5"
                         [draggable]="false"
                         [resizeable]="false">
                         <ng-template let-value="value" ngx-datatable-cell-template>
-                            <p class="mb-0 text-truncate">
+                            <p class="mb-0 text-truncate"
+                                [title]="value">
                                 {{ value }}
                             </p>
                         </ng-template>
@@ -52,7 +53,7 @@
 
                     <ngx-datatable-column name="Status"
                         prop="status"
-                        [flexGrow]="2"
+                        [flexGrow]="2.5"
                         [draggable]="false"
                         [resizeable]="false">
                         <ng-template let-value="value" ngx-datatable-cell-template>
@@ -68,10 +69,10 @@
                                 <span>
                                     <i class="fa-solid"
                                         [ngClass]="{
-                                            'fa-circle-exclamation': value === ticketStatus.OPENED,
-                                            'fa-exclamation': value === ticketStatus.IN_PROGRESS,
+                                            'fa-circle-exclamation': value === ticketStatus.OPENED ||
+                                                ticketStatus.IN_PROGRESS,
                                             'fa-circle-check': value === ticketStatus.RESOLVED,
-                                            'circle-xmark': value === ticketStatus.CLOSED,
+                                            'fa-circle-xmark': value === ticketStatus.CLOSED,
                                             'fa-triangle-exclamation': value === ticketStatus.DUPLICATED
                                         }"></i>
                                     {{ value | ticketStatus }}
