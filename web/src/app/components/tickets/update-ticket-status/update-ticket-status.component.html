@@ -1,0 +1,63 @@
+<div class="modal fade show d-block"
+    role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Update status to {{ nextStatus | ticketStatus }}
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="updateForm">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Notes
+                        </label>
+                        <textarea type="text"
+                            class="form-control"
+                            formControlName="notes"
+                            placeholder="Eg: Issue closed by doing..."
+                            [ngClass]="{
+                                'is-invalid': updateForm.controls['notes'].touched &&
+                                updateForm.controls['notes'].errors,
+                                'is-valid': updateForm.controls['notes'].touched &&
+                                !updateForm.controls['notes'].errors
+                            }"></textarea>
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="updateForm.controls['notes'].errors &&
+                            (updateForm.controls['notes'].dirty || updateForm.controls['notes'].touched)">
+                            <ng-container *ngFor="let message of formMessages['notes']">
+                                <span *ngIf="updateForm.get('notes')?.hasError(message.type) &&
+                                    (updateForm.get('notes')?.dirty || updateForm.get('notes')?.touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="updateStatus()"
+                    [disabled]="isProcessing || !updateForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Update
+                    </span>
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show d-block"
+    role="dialog">
+</div>

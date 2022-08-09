@@ -34,6 +34,7 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
 import { UnitAddComponent } from '../../components/units/unit-add/unit-add.component';
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
 import { UnitResidentsComponent } from '../../components/units/unit-residents/unit-residents.component';
+import { UpdateTicketStatusComponent } from '../../components/tickets/update-ticket-status/update-ticket-status.component';
 
 // Reusable
 import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
@@ -77,6 +78,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     UnitAddComponent,
     UnitNumbersTableComponent,
     UnitResidentsComponent,
+    UpdateTicketStatusComponent,
     // Reusable components
     ActivityTypePipe,
     GenderTypePipe,

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { DetailResponse } from '../auth/auth.model';
 
 import { 
   Ticket, TicketTag, TicketActivity,
@@ -54,7 +55,16 @@ export class TicketsService {
     return this.http.get<TicketExtended>(urlTemp).pipe(
       tap((res: TicketExtended) => {
         this.ticketExtended = res
-        console.log('Ticket: ', this.ticketExtended)
+        // console.log('Ticket: ', this.ticketExtended)
+      })
+    )
+  }
+  
+  updateStatus(id: number, body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }${ id }/update-status/`
+    return this.http.patch<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Ticket: ', res)
       })
     )
   }
