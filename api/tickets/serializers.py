@@ -4,6 +4,9 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
+from units.serializers import UnitNoSerializer
+from users.serializers import CustomUserEmailSerializer
+
 from .models import (
     TicketStatus, TicketPriority, TicketCategory,
     TicketTag, Ticket, TicketActivity, TicketComment
@@ -78,6 +81,9 @@ class TicketExtendedSerializer(serializers.ModelSerializer):
         Serializer for extended ticket
     """
     ticket_activities = TicketActivitySerializer(many=True, read_only=True)
+    unit = UnitNoSerializer(many=False, read_only=True)
+    assignee = CustomUserEmailSerializer(many=False, read_only=True)
+
     class Meta:
         model = Ticket
         fields = [
