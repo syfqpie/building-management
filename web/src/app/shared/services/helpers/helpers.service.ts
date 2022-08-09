@@ -21,7 +21,9 @@ export class HelpersService {
         }
       }
     )
-
+    
+    // Return filtered values
     return newForm
   }
+
 }
