@@ -1,11 +1,80 @@
-<div class="container-fluid pt-5">
-    <div *ngIf="isNew; else isNotNew">
+<div class="container-fluid">
+    <div *ngIf="isNew; else isNotNew"
+        class="pt-5">
         <app-add-ticket>
         </app-add-ticket>
     </div>
 
     <ng-template #isNotNew>
-        <div class="row">
+        <app-update-ticket-status
+            *ngIf="isUpdateStatus"
+            [ticketId]="currentTicket!.id"
+            [nextStatus]="nextStatus"
+            (toggleEvent)="toggleStatusModal()"
+            (changedEvent)="getData(currentTicket!.id)">
+        </app-update-ticket-status>
+
+        <div class="row g-3">
+            <div class="col-12 text-end">
+                <div class="btn-group btn-group-sm"
+                    role="group">
+                    <div *ngIf="this.currentTicket?.status === ticketStatus.OPENED || 
+                        this.currentTicket?.status === ticketStatus.IN_PROGRESS"
+                        class="btn-group btn-group-sm"
+                        role="group">
+                        <button type="button"
+                            class="btn btn-outline-primary btn-sm"
+                            (click)="toggleStatusModal()">
+                            Update to 
+                            <span class="fst-italic">
+                                {{ nextStatus | ticketStatus }}
+                            </span>
+                        </button>
+                    
+                        <div class="btn-group btn-group-sm"
+                            role="group">
+                            <button type="button"
+                                class="btn btn-outline-primary
+                                dropdown-toggle btn-sm
+                                rounded-end"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"> 
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-custom p-0">
+                                <ng-template ngFor
+                                    let-status
+                                    [ngForOf]="[2, 3, 4, 5]">
+                                    <li *ngIf="this.currentTicket?.status !== status">
+                                        <button class="dropdown-item"
+                                            (click)="onSelectNextStatus(status)">
+                                            {{ status | ticketStatus }}
+                                        </button>
+                                    </li>
+                                </ng-template>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-outline-primary dropdown-toggle btn-sm"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-gear"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-custom p-0">
+                            <li *ngIf="currentTicket">
+                                <button class="dropdown-item"
+                                    [disabled]="isProcessing">
+                                    <i class="fa-solid fa-lock"></i>
+                                    Edit
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="col">
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
@@ -26,10 +95,10 @@
                                 <span>
                                     <i class="fa-solid"
                                         [ngClass]="{
-                                            'fa-circle-exclamation': currentTicket?.status === ticketStatus.OPENED,
-                                            'fa-exclamation': currentTicket?.status === ticketStatus.IN_PROGRESS,
+                                            'fa-circle-exclamation': currentTicket?.status === ticketStatus.OPENED ||
+                                                currentTicket?.status === ticketStatus.IN_PROGRESS,
                                             'fa-circle-check': currentTicket?.status === ticketStatus.RESOLVED,
-                                            'circle-xmark': currentTicket?.status === ticketStatus.CLOSED,
+                                            'fa-circle-xmark': currentTicket?.status === ticketStatus.CLOSED,
                                             'fa-triangle-exclamation': currentTicket?.status === ticketStatus.DUPLICATED
                                         }"></i>
                                     {{ currentTicket?.status | ticketStatus }}
@@ -63,9 +132,11 @@
                                     placeholder="Eg: Error in Dashboard"
                                     [ngClass]="{
                                         'is-invalid': patchForm.controls['title'].touched &&
-                                        patchForm.controls['title'].errors,
+                                        patchForm.controls['title'].errors &&
+                                        originalForm['title'] !== patchForm.value['title'],
                                         'is-valid': patchForm.controls['title'].touched &&
-                                        !patchForm.controls['title'].errors
+                                        !patchForm.controls['title'].errors &&
+                                        originalForm['title'] !== patchForm.value['title']
                                     }" />
                                 <div class="invalid-tooltip invalid-tooltip-right"
                                     *ngIf="patchForm.controls['title'].errors &&
@@ -95,9 +166,11 @@
                                     placeholder="Eg: Test"
                                     [ngClass]="{
                                         'is-invalid': patchForm.controls['description'].touched &&
-                                        patchForm.controls['description'].errors,
+                                        patchForm.controls['description'].errors &&
+                                        originalForm['description'] !== patchForm.value['description'],
                                         'is-valid': patchForm.controls['description'].touched &&
-                                        !patchForm.controls['description'].errors
+                                        !patchForm.controls['description'].errors &&
+                                        originalForm['description'] !== patchForm.value['description']
                                     }"></textarea>
                                 <div class="invalid-tooltip invalid-tooltip-right"
                                     *ngIf="patchForm.controls['description'].errors &&
@@ -117,30 +190,6 @@
                                 </p>
                             </div>
                         </form>
-
-                        <div class="text-end">
-                            <button *ngIf="patchForm.disabled &&
-                                [ticketStatus.OPENED,
-                                ticketStatus.IN_PROGRESS].includes(currentTicket?.status!)"
-                                class="btn btn-outline-primary"
-                                (click)="enableEdit()">
-                                Edit
-                            </button>
-                            
-                            <div *ngIf="patchForm.enabled &&
-                                [ticketStatus.OPENED,
-                                ticketStatus.IN_PROGRESS].includes(currentTicket?.status!)">
-                                <button class="btn btn-outline-primary me-2"
-                                    (click)="cancelEdit()">
-                                    Save
-                                </button>
-
-                                <button class="btn btn-primary"
-                                    (click)="cancelEdit()">
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -159,18 +208,23 @@
                                 <label class="form-label">
                                     Unit
                                 </label>
-                                <input type="text"
-                                    class="form-control"
+                                <ng-select [items]="units" 
+                                    bindLabel="unitNo" 
+                                    bindValue="id"
                                     formControlName="unit"
-                                    placeholder="Eg: Unit"
-                                    [ngClass]="{
-                                        'is-invalid': patchForm.controls['unit'].touched &&
-                                        patchForm.controls['unit'].errors,
-                                        'is-valid': patchForm.controls['unit'].touched &&
-                                        !patchForm.controls['unit'].errors
-                                    }" />
+                                    placeholder="Type unit no.">
+                                </ng-select>
                             </div>
                         </form>
+
+                        <div *ngIf="this.currentTicket?.unit"
+                            class="mt-2 text-end">
+                            <a class="link-secondary cursor-pointer mb-0 small" 
+                                [routerLink]="['/management/units/detail', this.currentTicket?.unit?.id]" >
+                                View
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -184,16 +238,12 @@
                                 <label class="form-label">
                                     Assignee
                                 </label>
-                                <input type="text"
-                                    class="form-control"
+                                <ng-select [items]="assignees" 
+                                    bindLabel="email" 
+                                    bindValue="id" 
                                     formControlName="assignee"
-                                    placeholder="Eg: Assignee"
-                                    [ngClass]="{
-                                        'is-invalid': patchForm.controls['assignee'].touched &&
-                                        patchForm.controls['assignee'].errors,
-                                        'is-valid': patchForm.controls['assignee'].touched &&
-                                        !patchForm.controls['assignee'].errors
-                                    }" />
+                                    placeholder="Type assignee email">
+                                </ng-select>
                             </div>
                         </form>
                     </div>
@@ -214,9 +264,11 @@
                                     formControlName="priority"
                                     [ngClass]="{
                                         'is-invalid': patchForm.controls['priority'].touched &&
-                                        patchForm.controls['priority'].errors,
+                                        patchForm.controls['priority'].errors &&
+                                        originalForm['priority'] !== patchForm.value['priority'],
                                         'is-valid': patchForm.controls['priority'].touched &&
-                                        !patchForm.controls['priority'].errors
+                                        !patchForm.controls['priority'].errors &&
+                                        originalForm['priority'] !== patchForm.value['priority']
                                     }">
                                     <option [ngValue]="null">
                                         -
@@ -245,7 +297,7 @@
                                 </div>
                             </div>
 
-                            <div class="position-relative">
+                            <div class="mb-3 position-relative">
                                 <label class="form-label">
                                     Category
                                 </label>
@@ -253,9 +305,11 @@
                                     formControlName="category"
                                     [ngClass]="{
                                         'is-invalid': patchForm.controls['category'].touched &&
-                                        patchForm.controls['category'].errors,
+                                        patchForm.controls['category'].errors &&
+                                        originalForm['category'] !== patchForm.value['category'],
                                         'is-valid': patchForm.controls['category'].touched &&
-                                        !patchForm.controls['category'].errors
+                                        !patchForm.controls['category'].errors &&
+                                        originalForm['category'] !== patchForm.value['category']
                                     }">
                                     <option [ngValue]="null">
                                         <span class="text-muted">

@@ -3,11 +3,18 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { HelpersService } from 'src/app/shared/services/helpers/helpers.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
+import {
+  TicketCategory,
+  TicketExtended,
+  TicketPriority,
+  TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
+import { UnitNo } from 'src/app/shared/services/units/units.model';
+import { UserEmail } from 'src/app/shared/services/users/users.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
-import { TicketCategory, TicketExtended, TicketPriority, TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
 import { AddTicketComponent } from 'src/app/components/tickets/add-ticket/add-ticket.component';
 
 @Component({
@@ -19,6 +26,10 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   // Data
   currentTicket: TicketExtended | undefined
+  units: UnitNo[] = []
+  assignees: UserEmail[] = []
+  originalForm: any = {}
+  nextStatus: TicketStatus | undefined
 
   // Predefined
   ticketStatus = TicketStatus
@@ -30,7 +41,6 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     title: new FormControl({ disabled: true, value: null }),
     description: new FormControl({ disabled: true, value: null }),
     unit: new FormControl({ disabled: true, value: null }),
-    tags: new FormControl([]),
     category: new FormControl({ disabled: true, value: null }),
     assignee: new FormControl({ disabled: true, value: null }),
     priority: new FormControl({ disabled: true, value: null }),
@@ -56,6 +66,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   isProcessing: boolean = false
   isAssigning: boolean = false
   isNew: boolean = false
+  isUpdateStatus: boolean = false
 
   // Subscription
   svcSubscription: Subscription = new Subscription
@@ -70,6 +81,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
     private router: Router,
+    private helper: HelpersService,
     private ticketSvc: TicketsService
   ) { }
 
@@ -105,22 +117,23 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.patchForm = this.fb.group({
-      title: new FormControl(this.currentTicket?.title),
-      description: new FormControl(this.currentTicket?.description, Validators.compose([
+      title: new FormControl({ disabled: true, value: this.currentTicket?.title }),
+      description: new FormControl({ disabled: true, value: this.currentTicket?.description }, Validators.compose([
         Validators.required,
         Validators.maxLength(512)
       ])),
-      unit: new FormControl({ disabled: true, value: null}),
-      tags: new FormControl({ disabled: true, value: []}),
-      category: new FormControl(this.currentTicket?.category, Validators.compose([
+      unit: new FormControl({ disabled: true, value: this.currentTicket?.unit?.id}),
+      category: new FormControl({ disabled: true, value: this.currentTicket?.category }, Validators.compose([
         Validators.required
       ])),
-      assignee: new FormControl({ disabled: true, value: null}),
-      priority: new FormControl(this.currentTicket?.priority, Validators.compose([
+      assignee: new FormControl({ disabled: true, value: this.currentTicket?.assignee?.id }),
+      priority: new FormControl({ disabled: true, value: this.currentTicket?.priority }, Validators.compose([
         Validators.required
       ]))
     })
-    this.patchForm.disable()
+
+    // Set original form
+    this.originalForm = this.patchForm.value
   }
 
   getData(id: number) {
@@ -139,16 +152,36 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.currentTicket = this.ticketSvc.ticketExtended
         this.initForm()
+
+        // Append default options
+        if (this.currentTicket?.unit) {
+          const defaultUnit = new UnitNo(
+            this.currentTicket?.unit.id,
+            this.currentTicket?.unit.unitNo
+          )
+          this.units = [defaultUnit]
+        }
+        if (this.currentTicket?.assignee) {
+          const defaultAssignee = new UserEmail(
+            this.currentTicket?.assignee.id,
+            this.currentTicket?.assignee.email
+          )
+          this.assignees = [defaultAssignee]
+        }
+        if (this.currentTicket?.status && 
+          this.currentTicket?.status < 3) {
+          this.nextStatus = this.currentTicket?.status + 1
+        }
       }
     }))
   }
 
-  enableEdit() {
-    this.patchForm.enable()
+  onSelectNextStatus(next: TicketStatus) {
+    this.nextStatus = next
   }
 
-  cancelEdit() {
-    this.patchForm.disable()
+  toggleStatusModal() {
+    this.isUpdateStatus = !this.isUpdateStatus
   }
-
+  
 }
