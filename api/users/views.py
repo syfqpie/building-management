@@ -27,6 +27,7 @@ from .models import (
     CustomUser
 )
 from .serializers import (
+    CustomUserEmailSerializer,
     CustomUserSerializer,
     CustomUserNotSuperAdminSerializer,
     EmailVerificationSerializer,
@@ -105,12 +106,24 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             permission_classes.append(IsCustomUserOwnerOrAdmin)
         elif self.action == 'get_users_verification':
             permission_classes.append(IsSuperAdmin)
+        elif self.action == 'get_simplified':
+            permission_classes.append(IsAdminStaff)
 
         return [permission() for permission in permission_classes]    
     
     # Override get_queryset
     def get_queryset(self):
-        queryset = self.queryset
+        user = self.request.user
+
+        if user.is_anonymous:
+            # For documentation
+            queryset = self.queryset.none()
+        elif user.user_type == UserType.PUBLIC:
+            # Filter for public user
+            queryset = self.queryset.filter(id=user.id)
+        else:
+            queryset = self.queryset
+
         return queryset
     
     # Override get_serializer_class for default action
@@ -194,6 +207,18 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         email_address = EmailAddress.objects.all()
 
         serializer = EmailVerificationSerializer(email_address, many=True)
+        return Response(serializer.data)
+
+    # Get all users simplified
+    @action(methods=['GET'], detail=False, url_path='get-simplified')
+    @swagger_auto_schema(
+        operation_description='Get all users simplified',
+        operation_id='Get all users simplified',
+        tags=['Users'])
+    def get_simplified(self, request, *args, **kwargs):
+        users = self.filter_queryset(self.get_queryset())
+
+        serializer = CustomUserEmailSerializer(users, many=True)
         return Response(serializer.data)
 
 
