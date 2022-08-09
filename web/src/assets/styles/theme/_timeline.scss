@@ -1,0 +1,47 @@
+.timeline {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 1rem;
+    .timeline-event {
+        display: flex;
+        position: relative;
+        min-height: 70px;
+    }
+    .timeline-event:last-child:not(.completed) {
+        min-height: 0;
+    }
+    .timeline-event {
+        .timeline-point-track-container {
+            flex: 0;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            .timeline-point {
+                display: flex;
+                border-radius: 50%;
+                width: 1.3rem;
+                height: 1.3rem;
+            }
+        }
+        .timeline-content {
+            flex: 1;
+            padding: 0 1rem;
+        }
+    }
+}
+
+
+.timeline .timeline-event:not(:last-child) .timeline-point-track-container .timeline-track {
+    flex-grow: 1;
+    background-color: rgb(86, 96, 217, 1);
+    width: 2px
+}
+
+.timeline .timeline-event:last-child .timeline-point-track-container .timeline-point {
+    border: 2px dotted rgb(86, 96, 217, 1);
+}
+
+.timeline .timeline-event:nth-last-child(2) .timeline-point-track-container .timeline-track {
+    background-color: rgb(86, 96, 217, 0.5);
+}
