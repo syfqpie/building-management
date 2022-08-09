@@ -1,3 +1,6 @@
+import { UnitNo } from '../units/units.model';
+import { UserEmail } from '../users/users.model';
+
 export class Ticket {
     constructor(
         public id: number,
@@ -23,11 +26,11 @@ export class TicketExtended {
         public ticketNo: string,
         public title: string,
         public description: string,
-        public unit: number,
+        public unit: UnitNo,
         public tags: number[],
         public status: number,
         public category: number,
-        public assignee: number,
+        public assignee: UserEmail,
         public priority: number,
         public ticketActivities: TicketActivity[],
         public createdAt: string,
