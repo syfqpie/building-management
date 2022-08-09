@@ -1,0 +1,20 @@
+.dropdown ul.dropdown-menu.dropdown-menu-custom li {
+    button.dropdown-item {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        color: rgba(33, 37, 41, 0.75)
+    }
+    button.dropdown-item:active {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        color: #fff;
+    }
+    &:first-child button.dropdown-item {
+        border-top-left-radius: 0.25rem !important;
+        border-top-right-radius: 0.25rem !important;
+    }
+    &:last-child button.dropdown-item {
+        border-bottom-left-radius: 0.25rem !important;
+        border-bottom-right-radius: 0.25rem !important;
+    }
+}
