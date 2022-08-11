@@ -74,8 +74,9 @@ export class UsersService {
     )
   }
 
-  filterSimplified(filterStr: string): Observable<UserEmail[]> {
-    const urlTemp = `${ BASE_URL }get-simplified/${filterStr}`
+  filterSimplified(filterStr?: string): Observable<UserEmail[]> {
+    const qStr = filterStr ? `?${filterStr}` : ''
+    const urlTemp = `${ BASE_URL }get-simplified/${ qStr }`
     return this.http.get<UserEmail[]>(urlTemp).pipe(
       tap((res: UserEmail[]) => {
         this.usersChoice = res
