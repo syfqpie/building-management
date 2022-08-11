@@ -1,11 +1,11 @@
 <div class="container-fluid">
-    <div *ngIf="isNew; else isNotNew"
+    <div *ngIf="isNewTicket; else isNotNewTicket"
         class="pt-5">
         <app-add-ticket>
         </app-add-ticket>
     </div>
 
-    <ng-template #isNotNew>
+    <ng-template #isNotNewTicket>
         <app-update-ticket-status
             *ngIf="isUpdateStatus"
             [ticketId]="currentTicket!.id"
@@ -16,14 +16,21 @@
 
         <div class="row g-3">
             <div class="col-12 text-end">
-                <div class="btn-group btn-group-sm"
-                    role="group">
-                    <div *ngIf="this.currentTicket?.status === ticketStatus.OPENED || 
-                        this.currentTicket?.status === ticketStatus.IN_PROGRESS"
+                <div class="btn-toolbar justify-content-end"
+                    role="toolbar">
+                    <button *ngIf="isUpdateInfo"
+                        class="btn btn-primary btn-sm"
+                        [disabled]="isProcessing || !patchForm.valid || !isFormUpdated"
+                        (click)="saveEdit()">
+                        Save
+                    </button>
+
+                    <div *ngIf="!isUpdateInfo && 
+                        !isCompleted"
                         class="btn-group btn-group-sm"
                         role="group">
                         <button type="button"
-                            class="btn btn-outline-primary btn-sm"
+                            class="btn btn-outline-primary"
                             (click)="toggleStatusModal()">
                             Update to 
                             <span class="fst-italic">
@@ -35,11 +42,11 @@
                             role="group">
                             <button type="button"
                                 class="btn btn-outline-primary
-                                dropdown-toggle btn-sm
-                                rounded-end"
+                                dropdown-toggle"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"> 
                             </button>
+
                             <ul class="dropdown-menu dropdown-menu-custom p-0">
                                 <ng-template ngFor
                                     let-status
@@ -62,12 +69,13 @@
                             aria-expanded="false">
                             <i class="fa-solid fa-gear"></i>
                         </button>
+
                         <ul class="dropdown-menu dropdown-menu-custom p-0">
                             <li *ngIf="currentTicket">
                                 <button class="dropdown-item"
-                                    [disabled]="isProcessing">
-                                    <i class="fa-solid fa-lock"></i>
-                                    Edit
+                                    [disabled]="isProcessing"
+                                    (click)="toggleEdit()">
+                                    {{ isUpdateInfo ? 'Cancel edit' : 'Edit' }}
                                 </button>
                             </li>
                         </ul>
@@ -209,6 +217,7 @@
                                     Unit
                                 </label>
                                 <ng-select [items]="units" 
+                                    [loading]="isFetchingOpts"
                                     bindLabel="unitNo" 
                                     bindValue="id"
                                     formControlName="unit"
@@ -239,6 +248,7 @@
                                     Assignee
                                 </label>
                                 <ng-select [items]="assignees" 
+                                    [loading]="isFetchingOpts"
                                     bindLabel="email" 
                                     bindValue="id" 
                                     formControlName="assignee"

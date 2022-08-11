@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 
 import { HelpersService } from 'src/app/shared/services/helpers/helpers.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -15,6 +15,8 @@ import {
 import { UnitNo } from 'src/app/shared/services/units/units.model';
 import { UserEmail } from 'src/app/shared/services/users/users.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
+import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { UsersService } from 'src/app/shared/services/users/users.service';
 import { AddTicketComponent } from 'src/app/components/tickets/add-ticket/add-ticket.component';
 
 @Component({
@@ -63,10 +65,14 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
 
   // Checker
-  isProcessing: boolean = false
-  isAssigning: boolean = false
-  isNew: boolean = false
-  isUpdateStatus: boolean = false
+  isProcessing: boolean = false // http req
+  isNewTicket: boolean = false // create new ticket
+  isUpdateStatus: boolean = false // update ticket status
+  isUpdateInfo: boolean = false // update ticket informations
+  isCompleted: boolean = false // ticket not opened / in_progress
+  isFetchingOpts: boolean = false // opts fetching
+  isFormUpdated: boolean = false // original === form
+
 
   // Subscription
   svcSubscription: Subscription = new Subscription
@@ -82,7 +88,9 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private helper: HelpersService,
-    private ticketSvc: TicketsService
+    private ticketSvc: TicketsService,
+    private unitSvc: UnitsService,
+    private userSvc: UsersService
   ) { }
 
   ngOnInit(): void {
@@ -94,10 +102,10 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
           
           // Check if id is NaN or not
           if (isNaN(id)) {
-            this.isNew = true
+            this.isNewTicket = true
           } else {
             this.getData(id)
-            this.isNew = false
+            this.isNewTicket = false
           }
         }
       }
@@ -117,16 +125,18 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.patchForm = this.fb.group({
-      title: new FormControl({ disabled: true, value: this.currentTicket?.title }),
+      title: new FormControl({ disabled: true, value: this.currentTicket?.title }, Validators.compose([
+        Validators.required
+      ])),
       description: new FormControl({ disabled: true, value: this.currentTicket?.description }, Validators.compose([
         Validators.required,
         Validators.maxLength(512)
       ])),
-      unit: new FormControl({ disabled: true, value: this.currentTicket?.unit?.id}),
+      unit: new FormControl({ disabled: true, value: this.currentTicket?.unit?.id ?? null}),
       category: new FormControl({ disabled: true, value: this.currentTicket?.category }, Validators.compose([
         Validators.required
       ])),
-      assignee: new FormControl({ disabled: true, value: this.currentTicket?.assignee?.id }),
+      assignee: new FormControl({ disabled: true, value: this.currentTicket?.assignee?.id ?? null }),
       priority: new FormControl({ disabled: true, value: this.currentTicket?.priority }, Validators.compose([
         Validators.required
       ]))
@@ -172,6 +182,14 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
           this.currentTicket?.status < 3) {
           this.nextStatus = this.currentTicket?.status + 1
         }
+
+        // Checker if ticket is already completed
+        this.isCompleted = (
+          this.currentTicket?.status !== this.ticketStatus.OPENED && 
+          this.currentTicket?.status !== this.ticketStatus.IN_PROGRESS
+        )
+        // Set update info to false
+        this.isUpdateInfo = false
       }
     }))
   }
@@ -182,6 +200,68 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   toggleStatusModal() {
     this.isUpdateStatus = !this.isUpdateStatus
+  }
+
+  toggleEdit() {
+    // Only can edit when ticket is not completed
+    if (!this.isCompleted) {
+      this.isUpdateInfo = !this.isUpdateInfo
+
+      if (this.isUpdateInfo) {
+        this.patchForm.enable()
+
+        if (this.assignees.length < 2 ||
+          this.units.length < 2) {
+          this.getOpts()
+        }
+      } else {
+        // Reset form to original state
+        this.patchForm.reset(this.originalForm)
+
+        this.patchForm.disable()
+      }
+    } else {
+      // Noop
+      console.log('noop')
+    }
+  }
+
+  getOpts() {
+    this.loadingBar.useRef('http').start()
+    this.isFetchingOpts = true
+    this.svcSubscription.add(forkJoin([
+      this.unitSvc.getAll(),
+      this.userSvc.filterSimplified('is_staff=True')
+    ]).subscribe({
+      next: () => {
+        this.loadingBar.useRef('http').complete()
+        this.isFetchingOpts = false
+      },
+      error: () => {
+        this.loadingBar.useRef('http').stop()
+        this.isFetchingOpts = false
+      },
+      complete: () => {
+        this.units = this.unitSvc.units
+        this.assignees = this.userSvc.usersChoice
+        this.listenToForm()
+      }
+    }))
+  }
+
+  listenToForm() {
+    this.svcSubscription.add(
+      this.patchForm.valueChanges.subscribe((val: any) => {
+        const isChanged = !this.helper.isEqual(this.originalForm, val)
+        this.isFormUpdated = isChanged
+      })
+    )
+  }
+
+  saveEdit() {
+    const updatedForm = this.helper.getUpdatedObj(this.originalForm, this.patchForm.value)
+    console.log('updated only', updatedForm)
+    this.toggleEdit()
   }
   
 }
