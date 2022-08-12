@@ -6,7 +6,9 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
+from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
 
 from users.models import UserType
 from users.permissions import IsAdminStaff, IsSuperAdmin
@@ -21,6 +23,22 @@ from .serializers import (
 )
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    tags=['Ticket Tags'], operation_id='Get ticket tags',
+    operation_description='List all ticket tags'
+))
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    tags=['Ticket Tags'], operation_id='Get ticket tag',
+    operation_description='Retrieve ticket tag information'
+))
+@method_decorator(name='create', decorator=swagger_auto_schema(
+    tags=['Ticket Tags'], operation_id='Create a ticket tag',
+    operation_description='Create a new ticket tag'
+))
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    tags=['Ticket Tags'], operation_id='Edit ticket tag',
+    operation_description='Edit ticket tag information'
+))
 class TicketTagViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = TicketTag.objects.all()
     serializer_class = TicketTagSerializer
@@ -51,6 +69,22 @@ class TicketTagViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer.save(last_modified_by=request.user)
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    tags=['Tickets'], operation_id='Get tickets',
+    operation_description='List all tickets'
+))
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    tags=['Tickets'], operation_id='Get ticket',
+    operation_description='Retrieve ticket information'
+))
+@method_decorator(name='create', decorator=swagger_auto_schema(
+    tags=['Tickets'], operation_id='Create a ticket',
+    operation_description='Create a new ticket'
+))
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    tags=['Tickets'], operation_id='Edit ticket',
+    operation_description='Edit ticket information'
+))
 class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
@@ -118,6 +152,8 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return super().get_serializer(*args, **kwargs)
     
     # Get extended ticket
+    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket extended',
+        operation_description='Get ticket extended information')
     @action(methods=['GET'], detail=True, url_path='extended')
     def retrieve_ext(self, request, *args, **kwargs):
         ticket = self.get_object()
@@ -125,6 +161,8 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
     
     # Update status
+    @swagger_auto_schema(tags=['Tickets'], operation_id='Update ticket status',
+        operation_description='Update a ticket status')
     @action(methods=['PATCH'], detail=True, url_path='update-status')
     def update_status(self, request, *args, **kwargs):
         # Get ticket instance
@@ -167,6 +205,14 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    tags=['Ticket Activities'], operation_id='Get ticket activities',
+    operation_description='List all ticket activities'
+))
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    tags=['Ticket Activities'], operation_id='Get ticket activity',
+    operation_description='Retrieve ticket activity information'
+))
 class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     queryset = TicketActivity.objects.all()
     serializer_class = TicketActivitySerializer
@@ -189,6 +235,18 @@ class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         serializer.save(last_modified_by=request.user)
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    tags=['Ticket Comments'], operation_id='Get ticket comments',
+    operation_description='List all ticket comments'
+))
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    tags=['Ticket Comments'], operation_id='Get ticket comment',
+    operation_description='Retrieve ticket comment information'
+))
+@method_decorator(name='create', decorator=swagger_auto_schema(
+    tags=['Ticket Comments'], operation_id='Create a ticket comment',
+    operation_description='Create a new ticket comment'
+))
 class TicketCommentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = TicketComment.objects.all()
     serializer_class = TicketCommentSerializer
