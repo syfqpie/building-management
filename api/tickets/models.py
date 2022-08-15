@@ -166,6 +166,10 @@ class TicketActivity(models.Model):
 
 class TicketComment(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
+    ticket = models.ForeignKey(
+        Ticket, on_delete=models.CASCADE,
+        related_name='ticket_comments'
+    )
     
     reply_to = models.ForeignKey(
         'self', on_delete=models.SET_NULL,
