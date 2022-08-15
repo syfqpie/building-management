@@ -30,6 +30,7 @@ import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
+import { TicketCommentsComponent } from '../../components/tickets/ticket-comments/ticket-comments.component';
 import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
 import { UnitAddComponent } from '../../components/units/unit-add/unit-add.component';
 import { UnitNumbersTableComponent } from 'src/app/components/units/unit-numbers-table/unit-numbers-table.component';
@@ -74,6 +75,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NotAuthorizedComponent,
     PasswordSettingsComponent,
     SysRegisterAdminComponent,
+    TicketCommentsComponent,
     UnitActivitiesComponent,
     UnitAddComponent,
     UnitNumbersTableComponent,
