@@ -17,7 +17,7 @@ from .models import (
     TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
 )
 from .serializers import (
-    TicketExtendedSerializer, TicketTagSerializer, TicketSerializer,
+    TicketCommentExtendedSerializer, TicketExtendedSerializer, TicketTagSerializer, TicketSerializer,
     TicketActivitySerializer, TicketCommentSerializer,
     TicketStatusSerializer
 )
@@ -226,14 +226,6 @@ class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    def perform_create(self, serializer):
-        request = serializer.context['request']
-        serializer.save(created_by=request.user)
-
-    def perform_update(self, serializer):
-        request = serializer.context['request']
-        serializer.save(last_modified_by=request.user)
-
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     tags=['Ticket Comments'], operation_id='Get ticket comments',
@@ -243,21 +235,13 @@ class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     tags=['Ticket Comments'], operation_id='Get ticket comment',
     operation_description='Retrieve ticket comment information'
 ))
-@method_decorator(name='create', decorator=swagger_auto_schema(
-    tags=['Ticket Comments'], operation_id='Create a ticket comment',
-    operation_description='Create a new ticket comment'
-))
-class TicketCommentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class TicketCommentViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     queryset = TicketComment.objects.all()
     serializer_class = TicketCommentSerializer
+    serializer_class_admin = {
+        'list': TicketCommentExtendedSerializer
+    }
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    http_method_names = [
-        'get',
-        'post',
-        'head',
-        'options',
-        'trace',
-    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -267,11 +251,49 @@ class TicketCommentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    def perform_create(self, serializer):
-        request = serializer.context['request']
-        serializer.save(created_by=request.user)
+    def get_queryset(self):
+        queryset = self.queryset
 
-    def perform_update(self, serializer):
-        request = serializer.context['request']
-        serializer.save(last_modified_by=request.user)
+        # Queryset for nested
+        if 'parent_lookup_id' in self.kwargs:
+            queryset = queryset.filter(ticket__id=self.kwargs['parent_lookup_id'])
+        else:
+            pass
+
+        return queryset
+    
+    def get_serializer_class(self):
+        # Check serializer class by action
+        if hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
+
+        # Return original class
+        return super().get_serializer_class()
+
+    # Post comment
+    @swagger_auto_schema(tags=['Ticket Comments'], operation_id='Add comment',
+        operation_description='Add ticket commit')
+    @action(methods=['POST'], detail=False, url_path='add-comment')
+    def add_comment(self, request, *args, **kwargs):
+        # Get ticket instance
+        ticket_id = kwargs.get('parent_lookup_id', None)
+
+        # Validate data
+        request.data['ticket'] = ticket_id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        # Create
+        TicketComment.objects.create(
+            ticket=validated_data['ticket'],
+            reply_to=validated_data.get('reply_to', None),
+            comment=validated_data['comment'],
+            created_by=request.user
+        )
+
+        return Response(
+            {'detail': 'Comment added'},
+            status=status.HTTP_201_CREATED
+        )
 
