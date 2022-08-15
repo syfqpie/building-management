@@ -175,10 +175,10 @@ class TicketComment(models.Model):
     comment = models.TextField(max_length=512)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE,
+        CustomUser, on_delete=models.SET_NULL,
         limit_choices_to={
             'user_type': UserType.ADMIN
-        },
+        }, null=True,
         related_name='comments'
     )
 
