@@ -63,6 +63,7 @@ residents_router = router.register(
     r'residents', ResidentViewSet
 )
 
+# Tickets
 from tickets.views import (
     TicketViewSet,
     TicketTagViewSet,
@@ -71,6 +72,9 @@ from tickets.views import (
 )
 tickets_router = router.register(
     r'tickets', TicketViewSet
+).register(
+    r'comments', TicketCommentViewSet,
+    'ticket-comments', parents_query_lookups=['id']
 )
 ticket_tags_router = router.register(
     r'ticket-tags', TicketTagViewSet
@@ -78,12 +82,6 @@ ticket_tags_router = router.register(
 ticket_activities_router = router.register(
     r'ticket-activities', TicketActivityViewSet
 )
-
-ticket_comments_router = router.register(
-    r'ticket-comments', TicketCommentViewSet
-)
-
-
 
 # Units
 from units.views import (
