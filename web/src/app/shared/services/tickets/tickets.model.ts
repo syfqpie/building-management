@@ -72,6 +72,16 @@ export class TicketComment {
     ) {}
 }
 
+export class TicketCommentExtended {
+    constructor(
+        public id: number,
+        public replyTo: number,
+        public comment: string,
+        public createdAt: string,
+        public createdBy: UserEmail
+    ) {}
+}
+
 export enum TicketStatus {
     OPENED = 1,
     IN_PROGRESS = 2,

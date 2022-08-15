@@ -8,13 +8,13 @@ import { DetailResponse } from '../auth/auth.model';
 import { 
   Ticket, TicketTag, TicketActivity,
   TicketComment, TicketStatus, TicketPriority,
-  TicketCategory, TicketExtended
+  TicketCategory, TicketExtended, TicketCommentExtended
 } from './tickets.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/tickets/`
 const BASE_URL_TAG = `${ environment.baseUrl }v1/ticket-tags/`
 const BASE_URL_ACTIVITY = `${ environment.baseUrl }v1/ticket-activities/`
-const BASE_URL_COMMENT = `${ environment.baseUrl }v1/ticket-comments/`
+// const BASE_URL_COMMENT = `${ environment.baseUrl }${ BASE_URL }comments/`
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class TicketsService {
   ticket: Ticket | undefined
   tickets: Ticket[] = []
   ticketExtended: TicketExtended | undefined
+  comments: TicketCommentExtended[] = []
   
   constructor(
     private http: HttpClient
@@ -59,12 +60,41 @@ export class TicketsService {
       })
     )
   }
+
+  patch(id: number, body: any): Observable<Ticket> {
+    const urlTemp = `${ BASE_URL }${ id }/`
+    return this.http.patch<Ticket>(urlTemp, body).pipe(
+      tap((res: Ticket) => {
+        this.ticket = res
+        // console.log('Ticket:', this.ticket)
+      })
+    )
+  }
   
   updateStatus(id: number, body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ id }/update-status/`
     return this.http.patch<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
         // console.log('Ticket: ', res)
+      })
+    )
+  }
+
+  getComments(ticketId: number): Observable<TicketCommentExtended[]> {
+    const urlTemp = `${ BASE_URL }${ ticketId }/comments/`
+    return this.http.get<TicketCommentExtended[]>(urlTemp).pipe(
+      tap((res: TicketCommentExtended[]) => {
+        this.comments = res
+        console.log('Comments: ', this.comments)
+      })
+    )
+  }
+
+  postComment(ticketId: number, body: any): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }${ ticketId }/comments/add-comment/`
+    return this.http.patch<DetailResponse>(urlTemp, body).pipe(
+      tap((res: DetailResponse) => {
+        console.log('Comment: ', res)
       })
     )
   }
