@@ -222,7 +222,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       }
     } else {
       // Noop
-      console.log('noop')
+      this.notifySvc.info('Info', 'Ticket already completed')
     }
   }
 
@@ -231,7 +231,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.isFetchingOpts = true
     this.svcSubscription.add(forkJoin([
       this.unitSvc.getAll(),
-      this.userSvc.filterSimplified('is_staff=True')
+      this.userSvc.filterSimplified('user_type=1')
     ]).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
@@ -260,8 +260,32 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   saveEdit() {
     const updatedForm = this.helper.getUpdatedObj(this.originalForm, this.patchForm.value)
-    console.log('updated only', updatedForm)
-    this.toggleEdit()
+    this.loadingBar.useRef('http').start()
+    this.isProcessing = true
+
+    this.svcSubscription.add(
+      this.ticketSvc.patch(this.currentTicket!.id, updatedForm).subscribe({
+      next: () => {
+        this.loadingBar.useRef('http').complete()
+        this.isProcessing = false
+        this.notifySvc.success(
+          'Success', 
+          'Ticket updated'
+        )
+      },
+      error: () => {
+        this.loadingBar.useRef('http').stop()
+        this.isFetchingOpts = false
+        this.notifySvc.success(
+          'Error', 
+          ''
+        )
+      },
+      complete: () => {
+        this.getData(this.currentTicket!.id)
+        this.toggleEdit()
+      }
+    }))
   }
   
 }
