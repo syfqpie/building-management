@@ -88,12 +88,12 @@ button.toast-close-button {
     border: 0;
 }
 .toast-container {
-    pointer-events: none;
-    position: fixed;
-    z-index: 999999;
+    pointer-events: none !important;
+    position: fixed !important;
+    z-index: 999999 !important;
 }
 .toast-container * {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
 }
 .toast-container .ngx-toastr {
     position: relative;
