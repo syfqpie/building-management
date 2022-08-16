@@ -85,16 +85,16 @@ export class TicketsService {
     return this.http.get<TicketCommentExtended[]>(urlTemp).pipe(
       tap((res: TicketCommentExtended[]) => {
         this.comments = res
-        console.log('Comments: ', this.comments)
+        // console.log('Comments: ', this.comments)
       })
     )
   }
 
   postComment(ticketId: number, body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ ticketId }/comments/add-comment/`
-    return this.http.patch<DetailResponse>(urlTemp, body).pipe(
+    return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
-        console.log('Comment: ', res)
+        // console.log('Comment: ', res)
       })
     )
   }
