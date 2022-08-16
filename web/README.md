@@ -20,123 +20,53 @@ Run dev server
   ng serve --o
 ```
 
+## Build and run with Docker
+
+Build with different environment configuration
+
+```bash
+  docker build -t <image-name> . --no-cache --build-arg env=<dev/stag/prod>
+```
+
+Run image
+
+```bash
+  docker run --name <container-name> -p <port>:80 <image-name>
+```
+
 ## References
 
-[Angular Command Reference](https://angular.io/cli)
+[Angular Command Reference](https://angular.io/cli)\
 [Themeisle Illustrations](https://themeisle.com/illustrations/)
 
-## Task List
-- [x] Edit angular.json
-- [x] Helpers
-- [x] Codes
-	- [x] Genders
-	- [x] Status
-	- [x] Titles
-	- [x] User types
-- [x] Handlers
-	- [x] JWT
-	- [x] Notify
-- [x] Interceptor
-- [x] Menu
-- [ ] Layout
-- [x] Admin
-	- [x] Navbar
-	- [x] Sidebar
-	- [x] Footer
-- [ ] Public
-	- [x] Navbar
-	- [x] Sidebar
-	- [x] Footer
-- [ ] Services and models
+## Module List
 - [x] Auth
-- [x] Billings
-- [x] Blocks
-- [x] Complaints
-- [x] Floors
-- [x] Medias
-- [x] Proprietors
-- [x] Unit numbers
-- [x] Units
-- [x] Users
-- [ ] Components
-- [ ] Auth
-	- [ ] Login
-		- [x] Design
-		- [x] Route after success login
-		- [ ] Change background image
-	- [ ] Reset
-		- [x] Design
-		- [ ] Make a successful request
-- [ ] Admin
-	- [ ] Dashboard
-		- [ ] Statistics
-			- [ ] Total tenants
-			- [ ] Total reports
-			- [ ] Total free parkings
-			- [ ] Pending payment amount
-		- [x] Charts
-			- [x] Total payments
-			- [x] Total ownerships
-			- [x] Total complaints
-		- [ ] Latest - display 5 only on each 
-			- [ ] Payments
-			- [ ] Complaints
-			- [ ] Activity feed
-		
-	- [ ] System management
-		- [ ] Audit trail
-		- [x] Users
-			- [x] List
-	- [ ] Proprietors
-		- [x] List
-		- [ ] Information
-			- [x] Patch
-			- [ ] Statistics
-			- [x] List units
-			- [x] List complaints
-	- [ ] Units management
-		- [ ] Units
-			- [x] List
-			- [ ] Information
-				- [x] Enable
-				- [x] Disable
-				- [x] Enable maintenance
-				- [x] Disable maintenance
-				- [x] Add proprietor
-					- [x] Search proprietor by NRIC
-				- [x] Change proprietor
-					- [x] Search proprietor by NRIC
-					- [x] Compare proprietors' details
-					- [x] Patch
-				- [ ] Statistics
-				- [x] List complaints
-				- [x] List billings
-				- [ ] Graph
-		- [ ] Configurations
-			- [x] List blocks
-			- [x] List floors
-			- [x] List unit numbers
-			- [x] Add new block
-			- [x] Add new floor
-			- [x] Add new unit number
-			- [x] Patch block
-			- [x] Patch floor
-			- [x] Patch unit number
-	- [ ] Parkings
-		- [ ] List
-		- [ ] Information
-	- [ ] Billings
-		- [ ] List
-		- [ ] Payment
-	- [ ] Reporting
-- [ ] Global
-	- [ ] Settings
-		- [ ] Change sidebar theme
-- [ ] Public
-	- [ ] Home
-		- [x] Header
-		- [ ] Introduction
-		- [ ] Help
-		- [ ] Contact
-		- [x] Complaint
-		- [x] Scroll to top
+  - [x] Login
+  - [x] Resend verification
+  - [x] Reset
+  - [x] Verify account
+- [ ] Dashboard
+- [x] Settings
+- [ ] Management
+  - [x] Units
+    - [x] *
+    - [x] Detail
+    - [x] Configuration
+    - [x] Activities
+  - [x] Residents
+    - [x] *
+    - [x] Detail
+  - [ ] Parkings
+    - [ ] *
+    - [ ] Information
+  - [ ] Billings
+    - [ ] *
+    - [ ] Payment
+  - [ ] Tickets
+    - [x] *
+    - [ ] Overview
+    - [x] Detail
+- [ ] Reporting
+- [x] System admin
+- [x] About system
+- [x] Not authorized
