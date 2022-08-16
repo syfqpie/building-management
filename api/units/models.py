@@ -20,7 +20,6 @@ class ActivityType(models.IntegerChoices):
 
 
 class Block(models.Model):
-
     id = models.AutoField(primary_key=True, editable=False)
     block = models.CharField(
         max_length=10,
@@ -57,7 +56,6 @@ class Block(models.Model):
 
 
 class Floor(models.Model):
-
     id = models.AutoField(primary_key=True, editable=False)
     floor = models.CharField(
         max_length=10,
@@ -94,7 +92,6 @@ class Floor(models.Model):
 
 
 class UnitNumber(models.Model):
-
     id = models.AutoField(primary_key=True, editable=False)
     unit_number = models.CharField(
         max_length=10,
@@ -131,7 +128,6 @@ class UnitNumber(models.Model):
 
 
 class Unit(models.Model):
-
     id = models.AutoField(primary_key=True, editable=False)
     unit_no = models.CharField(max_length=100, null=True)
     square_feet = models.IntegerField(default=0)
@@ -174,6 +170,12 @@ class Unit(models.Model):
         limit_choices_to={'user_type': UserType.ADMIN},
         related_name='units_modified'
     )
+        
+    class Meta:
+        ordering = ['-unit_no']
+    
+    def __str__(self):
+        return ('%s'%(self.unit_no))
 
     def save(self, *args, **kwargs):
         if not self.unit_no:
@@ -182,16 +184,9 @@ class Unit(models.Model):
             pass
             
         super().save(*args, **kwargs)
-        
-    class Meta:
-        ordering = ['-unit_no']
-    
-    def __str__(self):
-        return ('%s'%(self.unit_no))
 
 
 class UnitActivity(models.Model):
-
     id = models.AutoField(primary_key=True, editable=False)
     unit = models.ForeignKey(
         Unit, 

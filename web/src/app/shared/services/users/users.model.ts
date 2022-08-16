@@ -28,3 +28,8 @@ export class UserEmail {
         public email: string
     ){}
 }
+
+export enum UserType {
+    ADMIN = 1,
+    PUBLIC = 2
+}

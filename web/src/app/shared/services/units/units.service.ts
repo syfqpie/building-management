@@ -59,7 +59,7 @@ export class UnitsService {
     return this.http.get<UnitExtended>(urlTemp).pipe(
       tap((res: UnitExtended) => {
         this.unitExtended = res
-        console.log('Unit:', this.unitExtended)
+        // console.log('Unit:', this.unitExtended)
       })
     )
   }

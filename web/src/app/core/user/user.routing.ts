@@ -7,6 +7,9 @@ import { ResidentsComponent } from './residents/residents.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SystemAdminComponent } from './system-admin/system-admin.component';
 import { TestComponent } from './test/test.component';
+import { TicketDetailComponent } from './ticket-detail/ticket-detail.component';
+import { TicketsOverviewComponent } from './tickets-overview/tickets-overview.component';
+import { TicketsComponent } from './tickets/tickets.component';
 import { UnitActivitiesComponent } from './unit-activities/unit-activities.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
@@ -59,6 +62,23 @@ export const UserRoutes: Routes = [
                     {
                         path: 'detail/:id',
                         component: ResidentDetailComponent
+                    }
+                ]
+            },
+            {
+                path: 'tickets',
+                children: [
+                    {
+                        path: '',
+                        component: TicketsComponent
+                    },
+                    {
+                        path: 'overview',
+                        component: TicketsOverviewComponent
+                    },
+                    {
+                        path: 'detail/:id',
+                        component: TicketDetailComponent
                     }
                 ]
             }

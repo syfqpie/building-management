@@ -1,0 +1,52 @@
+<div class="not-body">
+    <div class="w-100">
+        <div *ngIf="activities && activities.length > 0"
+            class="timeline">
+            <ng-template ngFor
+                let-activity
+                let-index="index"
+                [ngForOf]="activities.reverse()">
+                <div class="timeline-event"
+                    [ngClass]="{
+                        'completed': activity.status === ticketStatus.RESOLVED ||
+                        activity.status === ticketStatus.CLOSED ||
+                        activity.status === ticketStatus.DUPLICATED
+                    }">
+                    <div class="timeline-point-track-container">
+                        <div class="timeline-point bg-primary"
+                            [ngClass]="{
+                                'opacity-50 bg-opacity-25': index + 1 === activities.length &&
+                                activity.status !== ticketStatus.RESOLVED &&
+                                activity.status !== ticketStatus.CLOSED &&
+                                activity.status !== ticketStatus.DUPLICATED
+                            }">
+                            <i *ngIf="index + 1 !== activities.length ||
+                                (activity.status === ticketStatus.RESOLVED ||
+                                activity.status === ticketStatus.CLOSED ||
+                                activity.status === ticketStatus.DUPLICATED)"
+                                class="fa-solid fa-check m-auto fa-sm text-white">
+                            </i>
+                        </div>
+                        <div class="timeline-track"></div>
+                    </div>
+    
+                    <div class="timeline-content mb-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="fw-bold mb-0">
+                                    {{ activity.status | ticketStatus }}
+                                </p>
+                                <p class="fst-italic text-muted">
+                                    {{ activity.notes }}
+                                </p>
+                                <p class="small fst-italic text-muted mb-0">
+                                    {{ activity.createdAt | date: 'dd/MM/yyyy, h:mm a' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

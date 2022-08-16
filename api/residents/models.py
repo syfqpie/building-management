@@ -17,7 +17,6 @@ class GenderType(models.IntegerChoices):
 
 
 class Resident(models.Model):
-
     id = models.AutoField(primary_key=True, editable=False)
     resident_no = models.CharField(max_length=100, null=True)
     is_owner = models.BooleanField(default=False)
@@ -54,6 +53,12 @@ class Resident(models.Model):
         null=True,
         related_name='residents_last_modified'
     )
+    
+    class Meta:
+        ordering = ['-resident_no']
+    
+    def __str__(self):
+        return ('%s - %s'%(self.resident_no, self.name))
 
     def save(self, *args, **kwargs):
         if not self.resident_no:
@@ -66,9 +71,3 @@ class Resident(models.Model):
                 self.resident_no = prefix+'{0:05d}'.format(1)
             
         super().save(*args, **kwargs)
-    
-    class Meta:
-        ordering = ['-resident_no']
-    
-    def __str__(self):
-        return ('%s - %s'%(self.resident_no, self.name))

@@ -3,6 +3,7 @@
     <ul class="nav nav-pills flex-column mb-auto">
         <ng-template ngFor
             let-menu
+            let-i="index"
             [ngForOf]="menus">
             <li class="nav-item">
                 <a *ngIf="menu.type === 'link'; else notLink"
@@ -15,7 +16,7 @@
                 <ng-template #notLink>
                     <a class="nav-link cursor-pointer collapsed"
                         data-bs-toggle="collapse"
-                        data-bs-target="#subMenu"
+                        [attr.data-bs-target]="'#subMenu' + i"
                         [attr.aria-expanded]="subMenu.isActive">
                         <i [class]="menu.icon + ' fa-fw'"></i>
                         {{ menu.title }}
@@ -24,14 +25,13 @@
 
                     <div routerLinkActive
                         #subMenu="routerLinkActive"
-                        id="subMenu"
+                        [id]="'subMenu' + i"
                         class="collapse"
                         [routerLinkActive]="['show']">
                         <ul
                             class="nav flex-column">
                             <ng-template ngFor
                                 let-sub
-                                let-i="index"
                                 [ngForOf]="menu.children">
                                 <li class="w-100">
                                     <a class="nav-link"

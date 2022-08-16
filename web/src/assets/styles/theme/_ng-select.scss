@@ -1,0 +1,305 @@
+$ngs-bg-disabled: #e9ecef !default;
+$ngs-border-color-focus: #abb0ec !default;
+$ngs-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 0 0.25rem rgba(86, 96, 217, 0.25) !default;
+$ngs-border-valid: #198754 !default;
+$ngs-shadow-valid: 0 0 0 .25rem rgba(#198754, .25) !default;
+$ngs-border-invalid: #dc3545 !default;
+$ngs-shadow-invalid: 0 0 0 .25rem rgba(#dc3545, .25) !default;
+
+$ngs-validation-pe: 2.125rem !default;
+$ngs-validation-bg-position: right 0.75rem center, center right 2.25rem !default;
+$ngs-validation-bg-size: 16px 12px, calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !default;
+
+.ng-select {
+    // Opened
+    &.ng-select-opened {
+        & > .ng-select-container {
+            background: #fff;
+        }
+        &.ng-select-top > .ng-select-container {
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+        }
+        &.ng-select-right > .ng-select-container {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        &.ng-select-bottom > .ng-select-container {
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        &.ng-select-left > .ng-select-container {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+
+    // Focused
+    &.ng-select-focused > .ng-select-container {
+        border-color: $ngs-border-color-focus;
+        box-shadow: $ngs-shadow;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+        background-repeat: no-repeat;
+    }
+
+    // Disabled
+    &.ng-select-disabled > .ng-select-container {
+        background-color: $ngs-bg-disabled;
+    }
+
+    // Value and placeholder
+    .ng-has-value .ng-placeholder {
+        display: none;
+    }
+
+    // Container
+    .ng-select-container {
+        color: #212529;
+        background-color: #fff;
+        border-radius: 0.375rem;
+        border: 1px solid #ced4da;
+        line-height: 1.5;
+        align-items: center;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        background-color: #fff;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+        background-repeat: no-repeat;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        min-height: 2.34rem;
+        .ng-value-container {
+            align-items: center;
+            padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+            .ng-placeholder {
+                color: #6c757d;
+            }
+        }
+    }
+
+    // Single select
+    &.ng-select-single .ng-select-container {
+        line-height: 1.5;
+        .ng-value-container .ng-input {
+            padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+        }
+    }
+
+    // Multiple select
+    &.ng-select-multiple {
+        &.ng-select-disabled > .ng-select-container .ng-value-container .ng-value {
+            background-color: $ngs-bg-disabled;
+            border: 1px solid #e6e6e6;
+            .ng-value-label {
+                padding: 0 5px;
+            }
+        }
+        .ng-select-container .ng-value-container {
+            padding-top: 5px;
+            padding-left: 7px;
+            .ng-value {
+                font-size: 0.9em;
+                margin-bottom: 5px;
+                color: #333;
+                background-color: #ebf5ff;
+                border-radius: 2px;
+                margin-right: 5px;
+                &.ng-value-disabled {
+                    background-color: $ngs-bg-disabled;
+                    .ng-value-label {
+                        padding-left: 5px;
+                    }
+                }
+                .ng-value-label {
+                    display: inline-block;
+                    padding: 1px 5px;
+                }
+                .ng-value-icon {
+                    display: inline-block;
+                    padding: 1px 5px;
+                    &:hover {
+                        background-color: #d1e8ff;
+                    }
+                    &.left {
+                        border-right: 1px solid #b8dbff;
+                    }
+                    &.right {
+                        border-left: 1px solid #b8dbff;
+                    }
+                }
+            }
+            .ng-input {
+                padding: 0 0 3px 3px;
+                & > input {
+                    color: #000;
+                }
+            }
+            .ng-placeholder {
+                top: 5px;
+                padding-bottom: 5px;
+                padding-left: 3px;
+            }
+        }
+    }
+
+    // Validation
+    &.is-valid {
+        .ng-select-container  {
+            padding-right: $ngs-validation-pe;
+            border-color: $ngs-border-valid !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"), url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+            background-position: $ngs-validation-bg-position;
+            background-size: $ngs-validation-bg-size;
+            background-repeat: no-repeat;
+        }
+        &.ng-select-focused > .ng-select-container {
+            outline: 0;
+            box-shadow: $ngs-shadow-valid !important;
+        }
+    }
+    &.is-invalid {
+        .ng-select-container  {
+            padding-right: $ngs-validation-pe;
+            border-color: $ngs-border-invalid !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"), url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+            background-position: $ngs-validation-bg-position;
+            background-size: $ngs-validation-bg-size;
+            background-repeat: no-repeat;
+        }
+        &.ng-select-focused > .ng-select-container {
+            outline: 0;
+            box-shadow: $ngs-shadow-invalid !important;
+        }
+    }
+
+    // Clear wrapper
+    .ng-clear-wrapper {
+        color: #999;
+    }
+    .ng-clear-wrapper:hover .ng-clear {
+        color: #dc3545;
+    }
+
+    // Spinner
+    .ng-spinner-zone {
+        padding: 5px 5px 0 0;
+    }
+
+    // Arrow
+    .ng-arrow-wrapper {
+        width: 25px;
+        padding-right: 1.25rem;
+    }
+}
+.ng-dropdown-panel {
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,0.75);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+    left: 0;
+    &.ng-select-top {
+        bottom: 100%;
+        border-top-right-radius: 0.375rem;
+        border-top-left-radius: 0.375rem;
+        border-bottom-color: #e6e6e6;
+        margin-bottom: -1px;
+        .ng-dropdown-panel-items .ng-option:first-child {
+            border-top-right-radius: 0.375rem;
+            border-top-left-radius: 0.375rem;
+        }
+    }
+    &.ng-select-right {
+        left: 100%;
+        top: 0;
+        border-top-right-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+        border-bottom-left-radius: 0.375rem;
+        border-bottom-color: #e6e6e6;
+        margin-bottom: -1px;
+        .ng-dropdown-panel-items .ng-option:first-child {
+            border-top-right-radius: 0.375rem;
+        }
+    }
+    &.ng-select-bottom {
+        top: 100%;
+        border-bottom-right-radius: 0.375rem;
+        border-bottom-left-radius: 0.375rem;
+        margin-top: 0;
+        .ng-dropdown-panel-items .ng-option:last-child {
+            border-bottom-right-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+        }
+    }
+    &.ng-select-left {
+        left: -100%;
+        top: 0;
+        border-top-left-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+        border-bottom-left-radius: 0.375rem;
+        border-bottom-color: #e6e6e6;
+        margin-bottom: -1px;
+        .ng-dropdown-panel-items .ng-option:first-child {
+            border-top-left-radius: 0.375rem;
+        }
+    }
+
+    .ng-dropdown-header {
+        border-bottom: 1px solid #ccc;
+        padding: 5px 7px;
+    }
+    .ng-dropdown-footer {
+        border-top: 1px solid #ccc;
+        padding: 5px 7px;
+    }
+    .ng-dropdown-panel-items {
+        .ng-optgroup {
+            user-select: none;
+            padding: 8px 10px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.54);
+            cursor: pointer;
+            &.ng-option-disabled {
+                cursor: default;
+            }
+            &.ng-option-marked {
+                background-color: #f5faff;
+            }
+            &.ng-option-selected,
+            &.ng-option-selected.ng-option-marked {
+                color: rgba(0, 0, 0, 0.54);
+                background-color: #ebf5ff;
+                font-weight: 600;
+            }
+        }
+
+        .ng-option {
+            background-color: #fff;
+            color: rgba(0, 0, 0, 0.87);
+            padding: 8px 10px;
+            &.ng-option-selected,
+            &.ng-option-selected.ng-option-marked {
+                color: #fff;
+                background-color: rgba(86, 96, 217, 0.5) !important;
+                .ng-option-label {
+                    font-weight: 600;
+                }
+            }
+            &.ng-option-marked {
+                background-color: rgba(86, 96, 217, 0.1) !important;
+                color: #1e2125;
+            }
+            &.ng-option-disabled {
+                color: #ccc;
+            }
+            &.ng-option-child {
+                padding-left: 22px;
+            }
+            .ng-tag-label {
+                font-size: 80%;
+                font-weight: 400;
+                padding-right: 5px;
+            }
+        }
+    }
+}

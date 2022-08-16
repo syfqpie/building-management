@@ -1,10 +1,10 @@
 // Import all styles
-
-// Variables
-
 // Theme
+@import './theme/dropdown';
+@import './theme/ng-select';
 @import './theme/table';
 @import './theme/theme';
+@import './theme/timeline';
 @import './theme/toastr';
 @import './theme/typography';
 @import './theme/variables';
@@ -18,20 +18,8 @@
 @import '~@fortawesome/fontawesome-free/css/regular.css';
 @import '~@fortawesome/fontawesome-free/css/solid.css';
 @import '~@fortawesome/fontawesome-free/css/brands.css';
-// @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
-// @import '~@fortawesome/fontawesome-free/scss/regular.scss';
-// @import '~@fortawesome/fontawesome-free/scss/solid.scss';
-// @import '~@fortawesome/fontawesome-free/scss/brands.scss';
 
 // Table
 @import '~@swimlane/ngx-datatable/index.css';
 @import '~@swimlane/ngx-datatable/themes/bootstrap.scss';
 @import '~@swimlane/ngx-datatable/assets/icons.css';
-
-// Prime custom
-@import './prime/p-tab-view';
-
-// Prime
-// @import '~primeicons/primeicons.css';
-// @import '~primeng-lts/resources/primeng.min.css';
-// @import '~primeng-lts/resources/themes/bootstrap4-light-blue/theme.css';
