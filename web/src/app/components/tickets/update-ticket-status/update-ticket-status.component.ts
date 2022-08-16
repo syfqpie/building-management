@@ -73,6 +73,7 @@ export class UpdateTicketStatusComponent implements OnInit, OnDestroy {
   updateStatus() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+    
     this.subscription = this.ticketSvc.updateStatus(this.ticketId!, this.updateForm.value).subscribe({
       next: (res) => {
         this.loadingBar.useRef('http').complete()

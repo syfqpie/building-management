@@ -12,9 +12,6 @@ import {
 } from './tickets.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/tickets/`
-const BASE_URL_TAG = `${ environment.baseUrl }v1/ticket-tags/`
-const BASE_URL_ACTIVITY = `${ environment.baseUrl }v1/ticket-activities/`
-// const BASE_URL_COMMENT = `${ environment.baseUrl }${ BASE_URL }comments/`
 
 @Injectable({
   providedIn: 'root'

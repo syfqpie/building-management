@@ -1,10 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ColumnMode } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
 
-import { Ticket, TicketCategory, TicketPriority, TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { ColumnMode } from '@swimlane/ngx-datatable';
+
+import { 
+  Ticket,
+  TicketCategory,
+  TicketPriority,
+  TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
 
 @Component({
@@ -64,6 +69,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+    
     this.subscription = this.ticketSvc.getAll().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()

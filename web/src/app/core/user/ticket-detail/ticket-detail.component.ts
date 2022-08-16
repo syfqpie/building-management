@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 
 import { HelpersService } from 'src/app/shared/services/helpers/helpers.service';
@@ -73,7 +73,6 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   isFetchingOpts: boolean = false // opts fetching
   isFormUpdated: boolean = false // original === form
 
-
   // Subscription
   svcSubscription: Subscription = new Subscription
   routeSubscription: Subscription | undefined
@@ -86,7 +85,6 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
-    private router: Router,
     private helper: HelpersService,
     private ticketSvc: TicketsService,
     private unitSvc: UnitsService,
@@ -149,6 +147,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   getData(id: number) {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.svcSubscription.add(
       this.ticketSvc.getOneExtended(id).subscribe({
       next: () => {
@@ -217,7 +216,8 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       } else {
         // Reset form to original state
         this.patchForm.reset(this.originalForm)
-
+        
+        // Disable form
         this.patchForm.disable()
       }
     } else {
@@ -229,6 +229,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   getOpts() {
     this.loadingBar.useRef('http').start()
     this.isFetchingOpts = true
+    
     this.svcSubscription.add(forkJoin([
       this.unitSvc.getAll(),
       this.userSvc.filterSimplified('user_type=1')
