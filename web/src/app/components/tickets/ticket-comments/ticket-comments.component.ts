@@ -1,8 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Subscription } from 'rxjs';
+
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
+
 import { TicketCommentExtended } from 'src/app/shared/services/tickets/tickets.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
 
@@ -11,10 +13,11 @@ import { TicketsService } from 'src/app/shared/services/tickets/tickets.service'
   templateUrl: './ticket-comments.component.html',
   styleUrls: ['./ticket-comments.component.scss']
 })
-export class TicketCommentsComponent implements OnInit, OnDestroy {
+export class TicketCommentsComponent implements OnInit, OnDestroy, OnChanges {
 
   // Input
   @Input('ticketId') ticketId: number | undefined
+  @Input('isCompleted') isCompleted: boolean = false
 
   // Data
   comments: TicketCommentExtended[] = []
@@ -25,7 +28,7 @@ export class TicketCommentsComponent implements OnInit, OnDestroy {
   })
 
   // Checker
-  isProcessing: boolean = false // http req
+  isProcessing: boolean = true // http req
 
   // Subscription
   svcSubscription: Subscription = new Subscription
@@ -46,6 +49,15 @@ export class TicketCommentsComponent implements OnInit, OnDestroy {
     // Unsubscribe services subscription
     if (this.svcSubscription) {
       this.svcSubscription.unsubscribe()
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Check for checker changes
+    const isCompletedChange = changes['isCompleted']
+    if (isCompletedChange.currentValue === true &&
+      isCompletedChange.previousValue !== undefined) {
+      this.commentForm.disable()
     }
   }
 
@@ -71,8 +83,9 @@ export class TicketCommentsComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
+    const currentVal = this.isCompleted ? { value: null, disabled: true } : null
     this.commentForm = this.fb.group({
-      comment: new FormControl(null, Validators.compose([
+      comment: new FormControl(currentVal, Validators.compose([
         Validators.required
       ]))
     })
@@ -87,20 +100,22 @@ export class TicketCommentsComponent implements OnInit, OnDestroy {
         next: () => {
           this.isProcessing = false
           this.loadingBar.useRef('http').complete()
+          this.notifySvc.success('Success', 'Comment added')
         },
         error: () => {
           this.isProcessing = false
           this.loadingBar.useRef('http').stop()
         },
         complete: () => {
-          this.notifySvc.success('Success', 'Comment added')
+          // Refresh data
+          this.getData()
+
+          // Reset form
+          this.commentForm.reset()
+          this.initForm()
         }
       })
     )
-  }
-
-  toggleReply(id: number) {
-    console.log('Current comment', id)
   }
 
 }

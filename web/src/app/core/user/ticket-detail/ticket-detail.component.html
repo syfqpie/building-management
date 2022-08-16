@@ -203,7 +203,8 @@
 
                 <app-ticket-comments
                     *ngIf="currentTicket"
-                    [ticketId]="currentTicket!.id">
+                    [ticketId]="currentTicket!.id"
+                    [isCompleted]="isCompleted">
                 </app-ticket-comments>
             </div>
             <div class="col-4">
