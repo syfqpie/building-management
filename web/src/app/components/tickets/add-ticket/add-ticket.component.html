@@ -1,10 +1,10 @@
 <div class="row g-3 pt-5">
     <div class="col-sm-12 col-md-8">
         <div class="card shadow-sm border-0">
-            <h5 class="card-header bg-white mb-0">
-                New ticket
-            </h5>
             <div class="card-body">
+                <h5 class="card-title fw-bold">
+                    New ticket
+                </h5>
                 <form [formGroup]="addForm">
                     <div class="mb-3 position-relative">
                         <label class="form-label">
@@ -70,24 +70,24 @@
                         </p>
                     </div>
         
-                    <hr class="my-4" />
+                    <hr class="my-4" *ngIf="!isAssigning || !isUnitRelated" />
 
                     <button class="btn btn-outline-primary btn-sm"
                         [ngClass]="{
                             'me-2': !isAssigning
                         }"
                         *ngIf="!isUnitRelated"
-                        (click)="isUnitRelated = true">
+                        (click)="toggleUnitRelated()">
                         Add unit related?
                     </button>
                     <button class="btn btn-outline-primary btn-sm"
                         *ngIf="!isAssigning"
-                        (click)="isAssigning = true">
+                        (click)="toggleAssigning()">
                         Assign?
                     </button>
                 </form>
             </div>
-            <div class="card-footer bg-white text-end">
+            <div class="card-footer bg-white text-end py-3">
                 <button type="button"
                     class="btn btn-primary me-2"
                     (click)="addTicket()"
@@ -112,62 +112,70 @@
         <div *ngIf="isUnitRelated"
             [@collapsed]="isUnitRelated"
             class="card shadow-sm border-0 mb-3">
-            <h5 class="card-header bg-white mb-0">
+            <h6 class="card-header bg-white mb-0">
                 Related to
-            </h5>
+            </h6>
             <div class="card-body">
                 <form [formGroup]="addForm">
                     <div class="position-relative">
                         <label class="form-label">
                             Unit
                         </label>
-                        <input type="text"
-                            class="form-control"
+                        <ng-select [items]="units" 
+                            [loading]="isFetchingOpts"
+                            bindLabel="unitNo" 
+                            bindValue="id"
                             formControlName="unit"
-                            placeholder="Eg: Unit"
-                            [ngClass]="{
-                                'is-invalid': addForm.controls['unit'].touched &&
-                                addForm.controls['unit'].errors,
-                                'is-valid': addForm.controls['unit'].touched &&
-                                !addForm.controls['unit'].errors
-                            }" />
+                            placeholder="Type unit no.">
+                        </ng-select>
                     </div>
                 </form>
+
+                <div class="mt-2 text-end">
+                    <a class="link-secondary cursor-pointer mb-0 small" 
+                        (click)="toggleUnitRelated()" >
+                        Remove
+                    </a>
+                </div>
             </div>
         </div>
 
         <div *ngIf="isAssigning"
             [@collapsed]="isAssigning"
             class="card shadow-sm border-0 mb-3">
-            <h5 class="card-header bg-white mb-0">
+            <h6 class="card-header bg-white mb-0">
                 Assign
-            </h5>
+            </h6>
             <div class="card-body">
                 <form [formGroup]="addForm">
                     <div class="position-relative">
                         <label class="form-label">
                             Assignee
                         </label>
-                        <input type="text"
-                            class="form-control"
+                        <ng-select [items]="assignees" 
+                            [loading]="isFetchingOpts"
+                            bindLabel="email" 
+                            bindValue="id" 
                             formControlName="assignee"
-                            placeholder="Eg: Assignee"
-                            [ngClass]="{
-                                'is-invalid': addForm.controls['assignee'].touched &&
-                                addForm.controls['assignee'].errors,
-                                'is-valid': addForm.controls['assignee'].touched &&
-                                !addForm.controls['assignee'].errors
-                            }" />
+                            placeholder="Type assignee email">
+                        </ng-select>
                     </div>
                 </form>
+
+                <div class="mt-2 text-end">
+                    <a class="link-secondary cursor-pointer mb-0 small" 
+                        (click)="toggleAssigning()" >
+                        Remove
+                    </a>
+                </div>
             </div>
         </div>
         
 
         <div class="card shadow-sm border-0">
-            <h5 class="card-header bg-white mb-0">
+            <h6 class="card-header bg-white mb-0">
                 Classification
-            </h5>
+            </h6>
             <div class="card-body">
                 <form [formGroup]="addForm">
                     <div class="mb-3 position-relative">
