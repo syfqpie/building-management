@@ -213,7 +213,6 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_description='Get ticket overview information')
     @action(methods=['GET'], detail=False, url_path='overview')
     def get_overview(self, request, *args, **kwargs):
-        # tickets = self.get_queryset()
         current_date = now()
         tickets = Ticket.objects.all()
 
@@ -313,6 +312,63 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return JsonResponse({
             'total': overview_total
         })
+    
+    # Get ticket status overview
+    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket status overview',
+        operation_description='Get ticket status overview information')
+    @action(methods=['GET'], detail=False, url_path='status-overview')
+    def get_status_overview(self, request, *args, **kwargs):
+        current_date = now()
+        tickets = Ticket.objects.all()
+
+        overview_status = {
+            'opened': [
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=1)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=2)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=3)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=4)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=5)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=6)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=7)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=8)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=9)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=10)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=11)
+                ))['count'],
+                tickets.aggregate(count=Count('id', filter=Q(
+                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=12)
+                ))['count'],
+            ]
+        }
+
+        to_json = {
+            'msg': 'hello'
+        }
+
+        print(overview_status)
+
+        return JsonResponse(to_json)
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
