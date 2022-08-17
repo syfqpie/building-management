@@ -16,6 +16,8 @@ from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 
+from core.helpers import dict_snake_to_camel
+
 from users.models import UserType
 from users.permissions import IsAdminStaff, IsSuperAdmin
 
@@ -215,59 +217,59 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_description='Get ticket overview information')
     @action(methods=['GET'], detail=False, url_path='overview')
     def get_overview(self, request, *args, **kwargs):
-        current_date = now()
-        tickets = Ticket.objects.all()
-
         """
             Month over Month growth
+
             x = new month
             y = old month
             z = difference percentage
             z = (x - y) / y * 100
             None = infinty
         """
+        # Get this year's tickets
+        current_date = now()
+        tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
+
+        # Q filters
+        tickets_pctg_exp = (( Count('id', filter=Q(created_at__month=current_date.month)) -
+                Count('id', filter=Q(created_at__month=current_date.month - 1))
+            ) / Count('id', filter=Q(created_at__month=current_date.month - 1)) * 100
+        )
+
+        opened_pctg_exp = ((Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=current_date.month)) -
+                Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=current_date.month - 1))
+            ) / Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=current_date.month - 1)) * 100
+        )
+
+        progress_pctg_exp = (( Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=current_date.month)) -
+                Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=current_date.month - 1))
+            ) / Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=current_date.month - 1)) * 100
+        )
+        completed_pctg_exp = ((Count('id', filter=(
+                Q(status=TicketStatus.RESOLVED, created_at__month=current_date.month) |
+                Q(status=TicketStatus.CLOSED, created_at__month=current_date.month) |
+                Q(status=TicketStatus.DUPLICATED, created_at__month=current_date.month))) - Count('id', filter=(
+                    Q(status=TicketStatus.RESOLVED, created_at__month=current_date.month - 1) |
+                    Q(status=TicketStatus.CLOSED, created_at__month=current_date.month - 1) |
+                    Q(status=TicketStatus.DUPLICATED, created_at__month=current_date.month - 1))
+                )) / Count('id', filter=(
+            Q(status=TicketStatus.RESOLVED, created_at__month=current_date.month - 1) |
+            Q(status=TicketStatus.CLOSED, created_at__month=current_date.month - 1) |
+            Q(status=TicketStatus.DUPLICATED, created_at__month=current_date.month - 1))) * 100
+        )
+
         overview_total = {
             'tickets': tickets.aggregate(
                 count=Count('id'),
-                percentage=(
-                    Count('id', filter=Q(created_at__year=current_date.year,
-                        created_at__month=current_date.month)) -
-                    Count('id', filter=Q(created_at__year=current_date.year,
-                        created_at__month=current_date.month - 1))
-                ) / (
-                    Count('id', filter=Q(created_at__year=current_date.year,
-                        created_at__month=current_date.month - 1))
-                ) * 100
+                percentage=tickets_pctg_exp
             ),
             'opened': tickets.aggregate(
                 count=Count('id', filter=Q(status=TicketStatus.OPENED)),
-                percentage=(
-                    Count('id', filter=Q(status=TicketStatus.OPENED,
-                        created_at__year=current_date.year,
-                        created_at__month=current_date.month)) -
-                    Count('id', filter=Q(status=TicketStatus.OPENED,
-                        created_at__year=current_date.year,
-                        created_at__month=current_date.month - 1))
-                ) / (
-                    Count('id', filter=Q(status=TicketStatus.OPENED,
-                        created_at__year=current_date.year,
-                        created_at__month=current_date.month - 1))
-                ) * 100
+                percentage=opened_pctg_exp
             ),
-            'inProgress': tickets.aggregate(
+            'in_progress': tickets.aggregate(
                 count=Count('id', filter=Q(status=TicketStatus.IN_PROGRESS)),
-                percentage=(
-                    Count('id', filter=Q(status=TicketStatus.IN_PROGRESS,
-                        created_at__year=current_date.year,
-                        created_at__month=current_date.month)) -
-                    Count('id', filter=Q(status=TicketStatus.IN_PROGRESS,
-                        created_at__year=current_date.year,
-                        created_at__month=current_date.month - 1))
-                ) / (
-                    Count('id', filter=Q(status=TicketStatus.IN_PROGRESS,
-                        created_at__year=current_date.year,
-                        created_at__month=current_date.month - 1))
-                ) * 100
+                percentage=progress_pctg_exp
             ),
             'completed': tickets.aggregate(
                 count=Count('id', filter=(
@@ -275,45 +277,11 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                     Q(status=TicketStatus.CLOSED) |
                     Q(status=TicketStatus.DUPLICATED)
                 )),
-                percentage=(
-                    Count('id', filter=(
-                        Q(status=TicketStatus.RESOLVED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month) |
-                        Q(status=TicketStatus.CLOSED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month) |
-                        Q(status=TicketStatus.DUPLICATED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month))) -
-                    Count('id', filter=(
-                        Q(status=TicketStatus.RESOLVED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month - 1) |
-                        Q(status=TicketStatus.CLOSED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month - 1) |
-                        Q(status=TicketStatus.DUPLICATED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month - 1)))
-                ) / (
-                    Count('id', filter=(
-                        Q(status=TicketStatus.RESOLVED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month - 1) |
-                        Q(status=TicketStatus.CLOSED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month - 1) |
-                        Q(status=TicketStatus.DUPLICATED,
-                            created_at__year=current_date.year,
-                            created_at__month=current_date.month - 1)))
-                ) * 100
+                percentage=completed_pctg_exp
             )
         }
 
-        return JsonResponse({
-            'total': overview_total
-        })
+        return JsonResponse(dict_snake_to_camel(overview_total))
     
     # Get ticket status overview
     @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket status overview',
@@ -329,11 +297,11 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         for month in range(1, 13):
             # Get all status counts
             agg_data = tickets.aggregate(
-                opened=Count('id',filter=Q(status=TicketStatus.OPENED, created_at__month=month)),
-                in_progress=Count('id',filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=month)),
-                resolved=Count('id',filter=Q(status=TicketStatus.RESOLVED, created_at__month=month)),
-                closed=Count('id',filter=Q(status=TicketStatus.CLOSED, created_at__month=month)),
-                duplicated=Count('id',filter=Q(status=TicketStatus.DUPLICATED, created_at__month=month))
+                opened=Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=month)),
+                in_progress=Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=month)),
+                resolved=Count('id', filter=Q(status=TicketStatus.RESOLVED, created_at__month=month)),
+                closed=Count('id', filter=Q(status=TicketStatus.CLOSED, created_at__month=month)),
+                duplicated=Count('id', filter=Q(status=TicketStatus.DUPLICATED, created_at__month=month))
             )
 
             # Append data
@@ -357,8 +325,8 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 'month': f'{ calendar.month_name[month] }',
                 'count': agg_data['duplicated']
             })
-
-        return JsonResponse(status_monthly)
+        
+        return JsonResponse(dict_snake_to_camel(status_monthly))
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
