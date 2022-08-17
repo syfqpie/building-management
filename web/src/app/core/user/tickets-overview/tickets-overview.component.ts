@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { Subscription } from 'rxjs';
-import { TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
+import { forkJoin, Subscription } from 'rxjs';
+
+import { PriorityOverviewMonthly, StatusOverviewMonthly, TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
 
 @Component({
@@ -12,7 +13,9 @@ import { TicketsService } from 'src/app/shared/services/tickets/tickets.service'
 export class TicketsOverviewComponent implements OnInit, OnDestroy {
 
   // Data
-  overviewData: TicketOverview | undefined
+  overview: TicketOverview | undefined
+  statusOverview: StatusOverviewMonthly | undefined
+  priorityOverview: PriorityOverviewMonthly | undefined
 
   // Checker
   isProcessing: boolean = false
@@ -40,7 +43,11 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.subscription.add(
-      this.ticketSvc.getOverview().subscribe({
+      forkJoin([
+        this.ticketSvc.getOverview(),
+        this.ticketSvc.getStatusOverview(),
+        this.ticketSvc.getPriorityOverview()
+      ]).subscribe({
         next: () => {
           this.loadingBar.useRef('http').complete()
           this.isProcessing = false
@@ -50,7 +57,9 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
           this.isProcessing = false
         },
         complete: () => {
-          this.overviewData = this.ticketSvc.overview
+          this.overview = this.ticketSvc.overview
+          this.statusOverview = this.ticketSvc.statusOverview
+          this.priorityOverview = this.ticketSvc.priorityOverview
         }
       })
     )

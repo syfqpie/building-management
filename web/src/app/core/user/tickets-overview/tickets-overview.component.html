@@ -9,25 +9,25 @@
                                 Total tickets
                             </h6>
                             <h2 class="text-muted mb-0">
-                                {{ overviewData?.tickets?.count }}
+                                {{ overview?.tickets?.count }}
                             </h2>
                             <span class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overviewData?.tickets?.percentage !== null &&
-                                        overviewData?.tickets?.percentage! < 0,
-                                    'bg-success text-success': overviewData?.tickets?.percentage === null ||
-                                        overviewData?.tickets?.percentage! > 0
+                                    'bg-danger text-danger': overview?.tickets?.percentage !== null &&
+                                        overview?.tickets?.percentage! < 0,
+                                    'bg-success text-success': overview?.tickets?.percentage === null ||
+                                        overview?.tickets?.percentage! > 0
                                          
                                 }">
                                 <i class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overviewData?.tickets?.percentage !== null &&
-                                            overviewData?.tickets?.percentage! < 0,
-                                        'fa-caret-up':  overviewData?.tickets?.percentage === null ||
-                                            overviewData?.tickets?.percentage! > 0
+                                        'fa-caret-down': overview?.tickets?.percentage !== null &&
+                                            overview?.tickets?.percentage! < 0,
+                                        'fa-caret-up':  overview?.tickets?.percentage === null ||
+                                            overview?.tickets?.percentage! > 0
                                     }"></i>
-                                {{  overviewData?.tickets?.percentage !== null ?
-                                    overviewData?.tickets?.percentage :
+                                {{  overview?.tickets?.percentage !== null ?
+                                    overview?.tickets?.percentage :
                                     '∞' }} %
                             </span>
                         </div>
@@ -54,25 +54,25 @@
                                 Total opened
                             </h6>
                             <h2 class="text-muted mb-0">
-                                {{ overviewData?.opened?.count }}
+                                {{ overview?.opened?.count }}
                             </h2>
                             <span class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overviewData?.opened?.percentage !== null &&
-                                        overviewData?.opened?.percentage! < 0,
-                                    'bg-success text-success': overviewData?.opened?.percentage === null ||
-                                        overviewData?.opened?.percentage! > 0
+                                    'bg-danger text-danger': overview?.opened?.percentage !== null &&
+                                        overview?.opened?.percentage! < 0,
+                                    'bg-success text-success': overview?.opened?.percentage === null ||
+                                        overview?.opened?.percentage! > 0
                                          
                                 }">
                                 <i class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overviewData?.opened?.percentage !== null &&
-                                            overviewData?.opened?.percentage! < 0,
-                                        'fa-caret-up':  overviewData?.opened?.percentage === null ||
-                                            overviewData?.opened?.percentage! > 0
+                                        'fa-caret-down': overview?.opened?.percentage !== null &&
+                                            overview?.opened?.percentage! < 0,
+                                        'fa-caret-up':  overview?.opened?.percentage === null ||
+                                            overview?.opened?.percentage! > 0
                                     }"></i>
-                                {{  overviewData?.opened?.percentage !== null ?
-                                    overviewData?.opened?.percentage :
+                                {{  overview?.opened?.percentage !== null ?
+                                    overview?.opened?.percentage :
                                     '∞' }} %
                             </span>
                         </div>
@@ -99,25 +99,25 @@
                                 Total in progress
                             </h6>
                             <h2 class="text-muted mb-0">
-                                {{ overviewData?.inProgress?.count }}
+                                {{ overview?.inProgress?.count }}
                             </h2>
                             <span class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overviewData?.inProgress?.percentage !== null &&
-                                        overviewData?.inProgress?.percentage! < 0,
-                                    'bg-success text-success': overviewData?.inProgress?.percentage === null ||
-                                        overviewData?.inProgress?.percentage! > 0
+                                    'bg-danger text-danger': overview?.inProgress?.percentage !== null &&
+                                        overview?.inProgress?.percentage! < 0,
+                                    'bg-success text-success': overview?.inProgress?.percentage === null ||
+                                        overview?.inProgress?.percentage! > 0
                                          
                                 }">
                                 <i class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overviewData?.inProgress?.percentage !== null &&
-                                            overviewData?.inProgress?.percentage! < 0,
-                                        'fa-caret-up':  overviewData?.inProgress?.percentage === null ||
-                                            overviewData?.inProgress?.percentage! > 0
+                                        'fa-caret-down': overview?.inProgress?.percentage !== null &&
+                                            overview?.inProgress?.percentage! < 0,
+                                        'fa-caret-up':  overview?.inProgress?.percentage === null ||
+                                            overview?.inProgress?.percentage! > 0
                                     }"></i>
-                                {{  overviewData?.inProgress?.percentage !== null ?
-                                    overviewData?.inProgress?.percentage :
+                                {{  overview?.inProgress?.percentage !== null ?
+                                    overview?.inProgress?.percentage :
                                     '∞' }} %
                             </span>
                         </div>
@@ -144,25 +144,25 @@
                                 Total completed
                             </h6>
                             <h2 class="text-muted mb-0">
-                                {{ overviewData?.completed?.count }}
+                                {{ overview?.completed?.count }}
                             </h2>
                             <span class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overviewData?.completed?.percentage !== null &&
-                                        overviewData?.completed?.percentage! < 0,
-                                    'bg-success text-success': overviewData?.completed?.percentage === null ||
-                                        overviewData?.completed?.percentage! > 0
+                                    'bg-danger text-danger': overview?.completed?.percentage !== null &&
+                                        overview?.completed?.percentage! < 0,
+                                    'bg-success text-success': overview?.completed?.percentage === null ||
+                                        overview?.completed?.percentage! > 0
                                          
                                 }">
                                 <i class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overviewData?.completed?.percentage !== null &&
-                                            overviewData?.completed?.percentage! < 0,
-                                        'fa-caret-up':  overviewData?.completed?.percentage === null ||
-                                            overviewData?.completed?.percentage! > 0
+                                        'fa-caret-down': overview?.completed?.percentage !== null &&
+                                            overview?.completed?.percentage! < 0,
+                                        'fa-caret-up':  overview?.completed?.percentage === null ||
+                                            overview?.completed?.percentage! > 0
                                     }"></i>
-                                {{  overviewData?.completed?.percentage !== null ?
-                                    overviewData?.completed?.percentage :
+                                {{  overview?.completed?.percentage !== null ?
+                                    overview?.completed?.percentage :
                                     '∞' }} %
                             </span>
                         </div>
