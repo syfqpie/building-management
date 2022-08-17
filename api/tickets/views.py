@@ -22,7 +22,7 @@ from users.models import UserType
 from users.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
-    TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
+    TicketPriority, TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
 )
 from .serializers import (
     TicketCommentExtendedSerializer, TicketExtendedSerializer, TicketTagSerializer, TicketSerializer,
@@ -327,6 +327,51 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             })
         
         return JsonResponse(dict_snake_to_camel(status_monthly))
+    
+    # Get ticket priority overview
+    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket priority overview',
+        operation_description='Get ticket priority overview information')
+    @action(methods=['GET'], detail=False, url_path='priority-overview')
+    def get_priority_overview(self, request, *args, **kwargs):
+        current_date = now()
+        tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
+        
+        priority_monthly = { 'critical': [], 'high': [],
+            'normal': [], 'low': [], 'very_low': [] }
+
+        for month in range(1, 13):
+            # Get all status counts
+            agg_data = tickets.aggregate(
+                critical=Count('id', filter=Q(status=TicketPriority.CRIT, created_at__month=month)),
+                high=Count('id', filter=Q(status=TicketPriority.HIGH, created_at__month=month)),
+                normal=Count('id', filter=Q(status=TicketPriority.NORMAL, created_at__month=month)),
+                low=Count('id', filter=Q(status=TicketPriority.LOW, created_at__month=month)),
+                very_low=Count('id', filter=Q(status=TicketPriority.VLOW, created_at__month=month))
+            )
+
+            # Append data
+            priority_monthly['critical'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['critical']
+            })
+            priority_monthly['high'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['high']
+            })
+            priority_monthly['normal'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['normal']
+            })
+            priority_monthly['low'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['low']
+            })
+            priority_monthly['very_low'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['very_low']
+            })
+        
+        return JsonResponse(dict_snake_to_camel(priority_monthly))
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
