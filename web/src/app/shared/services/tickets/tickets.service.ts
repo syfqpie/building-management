@@ -8,7 +8,8 @@ import { DetailResponse } from '../auth/auth.model';
 import { 
   Ticket, TicketTag, TicketActivity,
   TicketComment, TicketStatus, TicketPriority,
-  TicketCategory, TicketExtended, TicketCommentExtended
+  TicketCategory, TicketExtended, TicketCommentExtended,
+  TicketOverview
 } from './tickets.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/tickets/`
@@ -23,6 +24,7 @@ export class TicketsService {
   tickets: Ticket[] = []
   ticketExtended: TicketExtended | undefined
   comments: TicketCommentExtended[] = []
+  overview: TicketOverview | undefined
   
   constructor(
     private http: HttpClient
@@ -92,6 +94,16 @@ export class TicketsService {
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
         // console.log('Comment: ', res)
+      })
+    )
+  }
+
+  getOverview(): Observable<TicketOverview> {
+    const urlTemp = `${ BASE_URL }overview/`
+    return this.http.get<TicketOverview>(urlTemp).pipe(
+      tap((res: TicketOverview) => {
+        this.overview = res
+        // console.log('Tickets: ', this.tickets)
       })
     )
   }
