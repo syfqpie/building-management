@@ -1,3 +1,5 @@
+import calendar
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -319,56 +321,44 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     @action(methods=['GET'], detail=False, url_path='status-overview')
     def get_status_overview(self, request, *args, **kwargs):
         current_date = now()
-        tickets = Ticket.objects.all()
+        tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
+        
+        status_monthly = { 'opened': [], 'in_progress': [],
+            'resolved': [], 'closed': [], 'duplicated': [] }
 
-        overview_status = {
-            'opened': [
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=1)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=2)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=3)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=4)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=5)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=6)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=7)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=8)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=9)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=10)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=11)
-                ))['count'],
-                tickets.aggregate(count=Count('id', filter=Q(
-                    status=TicketStatus.OPENED, created_at__year=current_date.year, created_at__month=12)
-                ))['count'],
-            ]
-        }
+        for month in range(1, 13):
+            # Get all status counts
+            agg_data = tickets.aggregate(
+                opened=Count('id',filter=Q(status=TicketStatus.OPENED, created_at__month=month)),
+                in_progress=Count('id',filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=month)),
+                resolved=Count('id',filter=Q(status=TicketStatus.RESOLVED, created_at__month=month)),
+                closed=Count('id',filter=Q(status=TicketStatus.CLOSED, created_at__month=month)),
+                duplicated=Count('id',filter=Q(status=TicketStatus.DUPLICATED, created_at__month=month))
+            )
 
-        to_json = {
-            'msg': 'hello'
-        }
+            # Append data
+            status_monthly['opened'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['opened']
+            })
+            status_monthly['in_progress'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['in_progress']
+            })
+            status_monthly['resolved'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['resolved']
+            })
+            status_monthly['closed'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['closed']
+            })
+            status_monthly['duplicated'].append({
+                'month': f'{ calendar.month_name[month] }',
+                'count': agg_data['duplicated']
+            })
 
-        print(overview_status)
-
-        return JsonResponse(to_json)
+        return JsonResponse(status_monthly)
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
