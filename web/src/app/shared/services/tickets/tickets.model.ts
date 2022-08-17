@@ -84,13 +84,36 @@ export class TicketCommentExtended {
 
 export class TicketOverview {
     constructor(
-        public total: {
-            tickets: CountPercentage,
-            opened: CountPercentage,
-            inProgress: CountPercentage,
-            completed: CountPercentage
-        }
+        public tickets: CountPercentage,
+        public opened: CountPercentage,
+        public inProgress: CountPercentage,
+        public completed: CountPercentage
     ) {}
+}
+
+export class StatusOverviewMonthly {
+    constructor(
+        public opened: MonthlyCount,
+        public inProgress: MonthlyCount,
+        public resolved: MonthlyCount,
+        public closed: MonthlyCount,
+        public duplicated: MonthlyCount
+    ){}
+}
+
+export class PriorityOverviewMonthly {
+    constructor(
+        public critical: MonthlyCount,
+        public high: MonthlyCount,
+        public normal: MonthlyCount,
+        public low: MonthlyCount,
+        public veryLow: MonthlyCount
+    ){}
+}
+
+interface MonthlyCount {
+    month: string,
+    count: number
 }
 
 interface CountPercentage {
