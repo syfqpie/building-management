@@ -9,7 +9,7 @@ import {
   Ticket, TicketTag, TicketActivity,
   TicketComment, TicketStatus, TicketPriority,
   TicketCategory, TicketExtended, TicketCommentExtended,
-  TicketOverview
+  TicketOverview, StatusOverviewMonthly, PriorityOverviewMonthly
 } from './tickets.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/tickets/`
@@ -25,6 +25,8 @@ export class TicketsService {
   ticketExtended: TicketExtended | undefined
   comments: TicketCommentExtended[] = []
   overview: TicketOverview | undefined
+  statusOverview: StatusOverviewMonthly | undefined
+  priorityOverview: PriorityOverviewMonthly | undefined
   
   constructor(
     private http: HttpClient
@@ -103,7 +105,27 @@ export class TicketsService {
     return this.http.get<TicketOverview>(urlTemp).pipe(
       tap((res: TicketOverview) => {
         this.overview = res
-        // console.log('Tickets: ', this.tickets)
+        // console.log('Ticket overview: ', this.overview)
+      })
+    )
+  }
+
+  getStatusOverview(): Observable<StatusOverviewMonthly> {
+    const urlTemp = `${ BASE_URL }status-overview/`
+    return this.http.get<StatusOverviewMonthly>(urlTemp).pipe(
+      tap((res: StatusOverviewMonthly) => {
+        this.statusOverview = res
+        // console.log('Status overview: ', this.statusOverview)
+      })
+    )
+  }
+
+  getPriorityOverview(): Observable<PriorityOverviewMonthly> {
+    const urlTemp = `${ BASE_URL }priority-overview/`
+    return this.http.get<PriorityOverviewMonthly>(urlTemp).pipe(
+      tap((res: PriorityOverviewMonthly) => {
+        this.priorityOverview = res
+        // console.log('Priority overview: ', this.priorityOverview)
       })
     )
   }
