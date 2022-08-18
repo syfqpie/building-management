@@ -1,3 +1,5 @@
+import calendar
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -6,15 +8,21 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
+from django.db.models import Count, Q, Sum
+from django.http import JsonResponse
+from django.utils.timezone import now
 from django.utils.decorators import method_decorator
+
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
+
+from core.helpers import dict_snake_to_camel, camel_to_capitalize
 
 from users.models import UserType
 from users.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
-    TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
+    TicketPriority, TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
 )
 from .serializers import (
     TicketCommentExtendedSerializer, TicketExtendedSerializer, TicketTagSerializer, TicketSerializer,
@@ -203,6 +211,156 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
             headers=headers
         )
+
+    # Get ticket overview
+    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket overview',
+        operation_description='Get ticket overview information')
+    @action(methods=['GET'], detail=False, url_path='overview')
+    def get_overview(self, request, *args, **kwargs):
+        """
+            Month over Month growth
+
+            x = new month
+            y = old month
+            z = difference percentage
+            z = (x - y) / y * 100
+            None = infinty
+        """
+        # Get this year's tickets
+        current_date = now()
+        tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
+
+        # Q filters
+        tickets_pctg_exp = (( Count('id', filter=Q(created_at__month=current_date.month)) -
+                Count('id', filter=Q(created_at__month=current_date.month - 1))
+            ) / Count('id', filter=Q(created_at__month=current_date.month - 1)) * 100
+        )
+
+        opened_pctg_exp = ((Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=current_date.month)) -
+                Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=current_date.month - 1))
+            ) / Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=current_date.month - 1)) * 100
+        )
+
+        progress_pctg_exp = (( Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=current_date.month)) -
+                Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=current_date.month - 1))
+            ) / Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=current_date.month - 1)) * 100
+        )
+        completed_pctg_exp = ((Count('id', filter=(
+                Q(status=TicketStatus.RESOLVED, created_at__month=current_date.month) |
+                Q(status=TicketStatus.CLOSED, created_at__month=current_date.month) |
+                Q(status=TicketStatus.DUPLICATED, created_at__month=current_date.month))) - Count('id', filter=(
+                    Q(status=TicketStatus.RESOLVED, created_at__month=current_date.month - 1) |
+                    Q(status=TicketStatus.CLOSED, created_at__month=current_date.month - 1) |
+                    Q(status=TicketStatus.DUPLICATED, created_at__month=current_date.month - 1))
+                )) / Count('id', filter=(
+            Q(status=TicketStatus.RESOLVED, created_at__month=current_date.month - 1) |
+            Q(status=TicketStatus.CLOSED, created_at__month=current_date.month - 1) |
+            Q(status=TicketStatus.DUPLICATED, created_at__month=current_date.month - 1))) * 100
+        )
+
+        overview_total = {
+            'tickets': tickets.aggregate(
+                count=Count('id'),
+                percentage=tickets_pctg_exp
+            ),
+            'opened': tickets.aggregate(
+                count=Count('id', filter=Q(status=TicketStatus.OPENED)),
+                percentage=opened_pctg_exp
+            ),
+            'in_progress': tickets.aggregate(
+                count=Count('id', filter=Q(status=TicketStatus.IN_PROGRESS)),
+                percentage=progress_pctg_exp
+            ),
+            'completed': tickets.aggregate(
+                count=Count('id', filter=(
+                    Q(status=TicketStatus.RESOLVED) |
+                    Q(status=TicketStatus.CLOSED) |
+                    Q(status=TicketStatus.DUPLICATED)
+                )),
+                percentage=completed_pctg_exp
+            )
+        }
+
+        return JsonResponse(dict_snake_to_camel(overview_total))
+    
+    # Get ticket status overview
+    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket status overview',
+        operation_description='Get ticket status overview information')
+    @action(methods=['GET'], detail=False, url_path='status-overview')
+    def get_status_overview(self, request, *args, **kwargs):
+        # Get this year's tickets
+        current_date = now()
+        tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
+        
+        # Prepare response data
+        status_monthly = [
+            { 'name': 'Opened', 'series': [] },
+            { 'name': 'In progress', 'series': [] },
+            { 'name': 'Resolved', 'series': [] },
+            { 'name': 'Closed', 'series': [] },
+            { 'name': 'Duplicated', 'series': [] }
+        ]
+
+        for month in range(1, 13):
+            # Get all status counts
+            agg_data = tickets.aggregate(
+                opened=Count('id', filter=Q(status=TicketStatus.OPENED, created_at__month=month)),
+                in_progress=Count('id', filter=Q(status=TicketStatus.IN_PROGRESS, created_at__month=month)),
+                resolved=Count('id', filter=Q(status=TicketStatus.RESOLVED, created_at__month=month)),
+                closed=Count('id', filter=Q(status=TicketStatus.CLOSED, created_at__month=month)),
+                duplicated=Count('id', filter=Q(status=TicketStatus.DUPLICATED, created_at__month=month))
+            )
+
+            # Append data
+            status_monthly[0]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['opened']
+            })
+            status_monthly[1]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['in_progress']
+            })
+            status_monthly[2]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['resolved']
+            })
+            status_monthly[3]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['closed']
+            })
+            status_monthly[4]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['duplicated']
+            })
+        
+        return JsonResponse(status_monthly, safe=False)
+    
+    # Get ticket priority overview
+    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket priority overview',
+        operation_description='Get ticket priority overview information')
+    @action(methods=['GET'], detail=False, url_path='priority-overview')
+    def get_priority_overview(self, request, *args, **kwargs):
+        # Get this year's tickets
+        current_date = now()
+        tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
+
+        # Prepare response data
+        by_priority = []
+        agg_data = tickets.aggregate(
+            critical=Count('id', filter=Q(priority=TicketPriority.CRIT)),
+            high=Count('id', filter=Q(priority=TicketPriority.HIGH), distinct=True),
+            normal=Count('id', filter=Q(priority=TicketPriority.NORMAL)),
+            low=Count('id', filter=Q(priority=TicketPriority.LOW)),
+            very_low=Count('id', filter=Q(priority=TicketPriority.VLOW))
+        )
+
+        for key in agg_data:
+            by_priority.append({
+                'name': camel_to_capitalize(key),
+                'value': agg_data[key]
+            })
+        
+        return JsonResponse(by_priority, safe=False)
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(

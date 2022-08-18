@@ -8,7 +8,8 @@ import { DetailResponse } from '../auth/auth.model';
 import { 
   Ticket, TicketTag, TicketActivity,
   TicketComment, TicketStatus, TicketPriority,
-  TicketCategory, TicketExtended, TicketCommentExtended
+  TicketCategory, TicketExtended, TicketCommentExtended,
+  TicketOverview, MultiSeries, SingleSeries
 } from './tickets.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/tickets/`
@@ -23,6 +24,9 @@ export class TicketsService {
   tickets: Ticket[] = []
   ticketExtended: TicketExtended | undefined
   comments: TicketCommentExtended[] = []
+  overview: TicketOverview | undefined
+  statusOverview: MultiSeries[] = []
+  priorityOverview: SingleSeries[] = []
   
   constructor(
     private http: HttpClient
@@ -92,6 +96,36 @@ export class TicketsService {
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
       tap((res: DetailResponse) => {
         // console.log('Comment: ', res)
+      })
+    )
+  }
+
+  getOverview(): Observable<TicketOverview> {
+    const urlTemp = `${ BASE_URL }overview/`
+    return this.http.get<TicketOverview>(urlTemp).pipe(
+      tap((res: TicketOverview) => {
+        this.overview = res
+        // console.log('Ticket overview: ', this.overview)
+      })
+    )
+  }
+
+  getStatusOverview(): Observable<MultiSeries[]> {
+    const urlTemp = `${ BASE_URL }status-overview/`
+    return this.http.get<MultiSeries[]>(urlTemp).pipe(
+      tap((res: MultiSeries[]) => {
+        this.statusOverview = res
+        // console.log('Status overview: ', this.statusOverview)
+      })
+    )
+  }
+
+  getPriorityOverview(): Observable<SingleSeries[]> {
+    const urlTemp = `${ BASE_URL }priority-overview/`
+    return this.http.get<SingleSeries[]>(urlTemp).pipe(
+      tap((res: SingleSeries[]) => {
+        this.priorityOverview = res
+        // console.log('Priority overview: ', this.priorityOverview)
       })
     )
   }

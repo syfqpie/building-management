@@ -46,6 +46,7 @@ import { TicketCategoryPipe } from '../../shared/handlers/pipes/ticket-category.
 import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 
 // 3rd party
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -95,6 +96,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ReactiveFormsModule,
     RouterModule.forChild(UserRoutes),
     // 3rd party
+    NgxChartsModule,
     NgxDatatableModule,
     NgSelectModule
   ]

@@ -82,6 +82,30 @@ export class TicketCommentExtended {
     ) {}
 }
 
+export class TicketOverview {
+    constructor(
+        public tickets: CountPercentage,
+        public opened: CountPercentage,
+        public inProgress: CountPercentage,
+        public completed: CountPercentage
+    ) {}
+}
+
+export interface MultiSeries {
+    name: string,
+    series: SingleSeries[]
+}
+
+export interface SingleSeries {
+    name: string,
+    value: number
+}
+
+interface CountPercentage {
+    count: number,
+    percentage: number
+}
+
 export enum TicketStatus {
     OPENED = 1,
     IN_PROGRESS = 2,
