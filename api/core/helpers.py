@@ -80,3 +80,6 @@ def dict_camel_to_snake(payload_dict):
         payload_dict[new_key] = payload_dict.pop(key)
     
     return payload_dict
+
+def camel_to_capitalize(payload):
+    return payload.replace('_', ' ').capitalize()
