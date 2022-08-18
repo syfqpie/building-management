@@ -1,4 +1,6 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark mt-0 shadow-lg overflow-y-scroll vh-100"
+<div class="d-flex flex-column flex-shrink-0
+    p-3 text-white bg-dark mt-0 shadow-lg
+    overflow-y-scroll vh-100"
     style="width: 17rem;">
     <ul class="nav nav-pills flex-column mb-auto">
         <ng-template ngFor
@@ -28,8 +30,7 @@
                         [id]="'subMenu' + i"
                         class="collapse"
                         [routerLinkActive]="['show']">
-                        <ul
-                            class="nav flex-column">
+                        <ul class="nav flex-column">
                             <ng-template ngFor
                                 let-sub
                                 [ngForOf]="menu.children">

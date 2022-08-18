@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLinkActive } from '@angular/router';
 import { NavItem } from './nav-item.model';
 
 @Component({

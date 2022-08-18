@@ -1,10 +1,16 @@
-<nav class="navbar navbar-expand-lg sticky-top bg-dark border-bottom border-dark navbar-dark border-3 shadow-lg px-3">
+<nav class="navbar navbar-expand-lg sticky-top
+	bg-dark border-bottom border-dark navbar-dark
+	border-3 shadow-lg px-3">
 	<div class="container-fluid">
 		<a class="navbar-brand cursor-pointer"
 			(click)="toggleMenu()"
-			[title]="isMenuOpen ? 'Close menu' : 'Open menu'">
+			[title]="isMenuOpen
+				? 'Close menu'
+				: 'Open menu'">
 			<i class="fas text-white"
-				[ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'">
+				[ngClass]="isMenuOpen
+				? 'fa-times'
+				: 'fa-bars'">
 			</i>
 		</a>
 
@@ -28,6 +34,7 @@
 							Settings
 						</a>
 					</li>
+					
 					<li>
 						<a class="dropdown-item cursor-pointer"
 							(click)="logout()">
