@@ -91,29 +91,14 @@ export class TicketOverview {
     ) {}
 }
 
-export class StatusOverviewMonthly {
-    constructor(
-        public opened: MonthlyCount,
-        public inProgress: MonthlyCount,
-        public resolved: MonthlyCount,
-        public closed: MonthlyCount,
-        public duplicated: MonthlyCount
-    ){}
+export interface MultiSeries {
+    name: string,
+    series: SingleSeries[]
 }
 
-export class PriorityOverviewMonthly {
-    constructor(
-        public critical: MonthlyCount,
-        public high: MonthlyCount,
-        public normal: MonthlyCount,
-        public low: MonthlyCount,
-        public veryLow: MonthlyCount
-    ){}
-}
-
-interface MonthlyCount {
-    month: string,
-    count: number
+export interface SingleSeries {
+    name: string,
+    value: number
 }
 
 interface CountPercentage {
