@@ -347,11 +347,11 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         # Prepare response data
         by_priority = []
         agg_data = tickets.aggregate(
-            critical=Count('id', filter=Q(status=TicketPriority.CRIT)),
-            high=Count('id', filter=Q(status=TicketPriority.HIGH)),
-            normal=Count('id', filter=Q(status=TicketPriority.NORMAL)),
-            low=Count('id', filter=Q(status=TicketPriority.LOW)),
-            very_low=Count('id', filter=Q(status=TicketPriority.VLOW))
+            critical=Count('id', filter=Q(priority=TicketPriority.CRIT)),
+            high=Count('id', filter=Q(priority=TicketPriority.HIGH), distinct=True),
+            normal=Count('id', filter=Q(priority=TicketPriority.NORMAL)),
+            low=Count('id', filter=Q(priority=TicketPriority.LOW)),
+            very_low=Count('id', filter=Q(priority=TicketPriority.VLOW))
         )
 
         for key in agg_data:
