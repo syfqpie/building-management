@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 
-from core.helpers import dict_snake_to_camel
+from core.helpers import dict_snake_to_camel, camel_to_capitalize
 
 from users.models import UserType
 from users.permissions import IsAdminStaff, IsSuperAdmin
@@ -288,11 +288,18 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         operation_description='Get ticket status overview information')
     @action(methods=['GET'], detail=False, url_path='status-overview')
     def get_status_overview(self, request, *args, **kwargs):
+        # Get this year's tickets
         current_date = now()
         tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
         
-        status_monthly = { 'opened': [], 'in_progress': [],
-            'resolved': [], 'closed': [], 'duplicated': [] }
+        # Prepare response data
+        status_monthly = [
+            { 'name': 'Opened', 'series': [] },
+            { 'name': 'In progress', 'series': [] },
+            { 'name': 'Resolved', 'series': [] },
+            { 'name': 'Closed', 'series': [] },
+            { 'name': 'Duplicated', 'series': [] }
+        ]
 
         for month in range(1, 13):
             # Get all status counts
@@ -305,73 +312,55 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             )
 
             # Append data
-            status_monthly['opened'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['opened']
+            status_monthly[0]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['opened']
             })
-            status_monthly['in_progress'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['in_progress']
+            status_monthly[1]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['in_progress']
             })
-            status_monthly['resolved'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['resolved']
+            status_monthly[2]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['resolved']
             })
-            status_monthly['closed'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['closed']
+            status_monthly[3]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['closed']
             })
-            status_monthly['duplicated'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['duplicated']
+            status_monthly[4]['series'].append({
+                'name': f'{ calendar.month_name[month][:3] }',
+                'value': agg_data['duplicated']
             })
         
-        return JsonResponse(dict_snake_to_camel(status_monthly))
+        return JsonResponse(status_monthly, safe=False)
     
     # Get ticket priority overview
     @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket priority overview',
         operation_description='Get ticket priority overview information')
     @action(methods=['GET'], detail=False, url_path='priority-overview')
     def get_priority_overview(self, request, *args, **kwargs):
+        # Get this year's tickets
         current_date = now()
         tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
-        
-        priority_monthly = { 'critical': [], 'high': [],
-            'normal': [], 'low': [], 'very_low': [] }
 
-        for month in range(1, 13):
-            # Get all status counts
-            agg_data = tickets.aggregate(
-                critical=Count('id', filter=Q(status=TicketPriority.CRIT, created_at__month=month)),
-                high=Count('id', filter=Q(status=TicketPriority.HIGH, created_at__month=month)),
-                normal=Count('id', filter=Q(status=TicketPriority.NORMAL, created_at__month=month)),
-                low=Count('id', filter=Q(status=TicketPriority.LOW, created_at__month=month)),
-                very_low=Count('id', filter=Q(status=TicketPriority.VLOW, created_at__month=month))
-            )
+        # Prepare response data
+        by_priority = []
+        agg_data = tickets.aggregate(
+            critical=Count('id', filter=Q(status=TicketPriority.CRIT)),
+            high=Count('id', filter=Q(status=TicketPriority.HIGH)),
+            normal=Count('id', filter=Q(status=TicketPriority.NORMAL)),
+            low=Count('id', filter=Q(status=TicketPriority.LOW)),
+            very_low=Count('id', filter=Q(status=TicketPriority.VLOW))
+        )
 
-            # Append data
-            priority_monthly['critical'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['critical']
-            })
-            priority_monthly['high'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['high']
-            })
-            priority_monthly['normal'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['normal']
-            })
-            priority_monthly['low'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['low']
-            })
-            priority_monthly['very_low'].append({
-                'month': f'{ calendar.month_name[month] }',
-                'count': agg_data['very_low']
+        for key in agg_data:
+            by_priority.append({
+                'name': camel_to_capitalize(key),
+                'value': agg_data[key]
             })
         
-        return JsonResponse(dict_snake_to_camel(priority_monthly))
+        return JsonResponse(by_priority, safe=False)
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
