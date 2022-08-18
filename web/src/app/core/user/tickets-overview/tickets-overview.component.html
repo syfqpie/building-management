@@ -191,6 +191,20 @@
                     <h5 class="card-title mb-2">
                         Ticket status
                     </h5>
+
+                    <div class="w-100" style="height: 23rem">
+                        <ngx-charts-area-chart
+                            [scheme]="colorScheme"
+                            [results]="statusOverview"
+                            [yAxisTickFormatting]="axisFormat"
+                            [xAxis]="true"
+                            [yAxis]="true"
+                            [showXAxisLabel]="true"
+                            [showYAxisLabel]="true"
+                            [xAxisLabel]="'Month'"
+                            [yAxisLabel]="'# of Tickets'">
+                        </ngx-charts-area-chart>
+                    </div>
                 </div>
             </div>
         </div>
@@ -204,6 +218,15 @@
                     <h5 class="card-title mb-2">
                         Ticket priority
                     </h5>
+
+                    <div class="w-100" style="height: 23rem">
+                        <ngx-charts-pie-chart
+                            [scheme]="colorScheme"
+                            [results]="priorityOverview"
+                            [labels]="true"
+                            [legend]="false">
+                        </ngx-charts-pie-chart>
+                    </div>
                 </div>
             </div>
         </div>

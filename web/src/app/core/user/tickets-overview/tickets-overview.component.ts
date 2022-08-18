@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { Color, colorSets } from '@swimlane/ngx-charts';
 import { forkJoin, Subscription } from 'rxjs';
 
-import { PriorityOverviewMonthly, StatusOverviewMonthly, TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
+import { MultiSeries, SingleSeries, TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
 
 @Component({
@@ -14,14 +15,17 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
 
   // Data
   overview: TicketOverview | undefined
-  statusOverview: StatusOverviewMonthly | undefined
-  priorityOverview: PriorityOverviewMonthly | undefined
+  statusOverview: MultiSeries[] = []
+  priorityOverview: SingleSeries[] = []
 
   // Checker
   isProcessing: boolean = false
 
   // Subscription
   subscription: Subscription = new Subscription
+
+  // Chart
+  colorScheme: string | Color = colorSets[12]
 
   constructor(
     private loadingBar: LoadingBarService,
@@ -63,6 +67,15 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
         }
       })
     )
+  }
+
+  // axis formatting
+  axisFormat(val: number) {
+    if (!isNaN(val) && val % 1 === 0) {
+      return val.toLocaleString()
+    } else {
+      return ''
+    }
   }
 
 }
