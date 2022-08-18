@@ -64,7 +64,7 @@ Run image
     - [ ] Payment
   - [ ] Tickets
     - [x] *
-    - [ ] Overview
+    - [x] Overview
     - [x] Detail
 - [ ] Reporting
 - [x] System admin

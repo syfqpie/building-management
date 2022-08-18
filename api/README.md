@@ -40,24 +40,3 @@ Run the django rest framework
 ## References
 
 [Django REST Framework](https://www.django-rest-framework.org)
-
-## Task List
-- [x] Create project starter from django-admin
-- [ ] App
-- [ ] Billings
-	- [ ] Billings
-	- [ ] Base maintenance fees
-- [x] Complaints
-- [x] Medias
-- [ ] Parkings
-	- [ ] Parking units
-	- [ ] Parking lots
-	- [ ] Parking owners
-- [x] Residents
-- [ ] Units
-	- [ ] Blocks
-	- [ ] Floors
-	- [ ] Unit numbers
-	- [ ] Units
-- [x] Users
-- [ ] Tracking
