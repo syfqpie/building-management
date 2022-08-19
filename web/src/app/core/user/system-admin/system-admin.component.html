@@ -18,18 +18,15 @@
             <h6 class="card-subtitle mb-3 text-muted">
                 Manage users here
             </h6>
-            <div *ngIf="rows.length > 0; else isNoRowData">
+            <div *ngIf="tableRows.length > 0; else isNoRowData">
                 <ngx-datatable
                     class="bootstrap rounded-2"
-                    [rows]="rows"
+                    [rows]="tableRows"
                     [columnMode]="ColumnMode.flex"
                     [limit]="5"
                     rowHeight="auto"
                     [footerHeight]="50"
                     [messages]="tableMessages"
-                    [selected]="selected"
-                    [selectionType]="SelectionType.single"
-                    (select)="onSelect($event)"
                     [cssClasses]="tableClass">
                     <ngx-datatable-column name="Id"
                         prop="user.id"
