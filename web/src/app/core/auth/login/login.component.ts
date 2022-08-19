@@ -23,14 +23,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     username: new FormControl(null),
     password: new FormControl(null)
   })
-  loginFormMessages = {
+  formMessages = {
     username: [
       { type: 'required', message: 'Email address is required' },
       { type: 'email', message: 'Enter a valid email address' }
     ],
     password: [
       { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' }
+      { type: 'minlength', message: 'Password must contain at least 8 character' }
     ]
   }
 
@@ -56,6 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -77,10 +78,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   login() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.authSvc.login(this.loginForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        
         this.notifySvc.success('Success', 'Successfully login')
       },
       error: (err) => {
@@ -97,6 +100,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.router.navigate(['/dashboard'])
       }
     })
+  }
+
+  onFormEnter() {
+    if (this.loginForm.valid) {
+      this.login()
+    } else {
+      // noop
+    }
   }
 
 }

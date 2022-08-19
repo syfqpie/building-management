@@ -21,6 +21,7 @@
                         class="form-control"
                         placeholder="example@test.com"
                         formControlName="username"
+                        (keyup.enter)="onFormEnter()"
                         [ngClass]="{
                             'is-invalid': loginForm.controls['username'].touched &&
                             loginForm.controls['username'].errors,
@@ -30,9 +31,9 @@
                     <div class="invalid-tooltip invalid-tooltip-right"
                         *ngIf="loginForm.controls['username'].errors &&
                         (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
-                        <ng-container *ngFor="let message of loginFormMessages['username']">
-                            <span *ngIf="loginForm.get('username')?.hasError(message.type) &&
-                                (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)">
+                        <ng-container *ngFor="let message of formMessages['username']">
+                            <span *ngIf="loginForm.controls['username'].hasError(message.type) &&
+                                (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
                                 • {{ message.message }}
                             </span>
                         </ng-container>
@@ -43,12 +44,12 @@
                     <label for="formPassword" class="form-label">
                         Password
                     </label>
-                    <input
-                        id="formPassword"
+                    <input id="formPassword"
                         type="password"
                         class="form-control"
                         placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                         formControlName="password"
+                        (keyup.enter)="onFormEnter()"
                         [ngClass]="{
                             'is-invalid': loginForm.controls['password'].touched &&
                             loginForm.controls['password'].errors,
@@ -58,9 +59,9 @@
                     <div class="invalid-tooltip invalid-tooltip-right"
                         *ngIf="loginForm.controls['password'].errors &&
                         (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
-                        <ng-container *ngFor="let message of loginFormMessages['password']">
-                            <span *ngIf="loginForm.get('password')?.hasError(message.type) &&
-                                (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
+                        <ng-container *ngFor="let message of formMessages['password']">
+                            <span *ngIf="loginForm.controls['password'].hasError(message.type) &&
+                                (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
                                 • {{ message.message }}
                             </span>
                         </ng-container>
@@ -91,6 +92,7 @@
                             </a>
                         </small>
                     </p>
+                    
                     <p class="mb-3">
                         <small class="text-muted">
                             No verification email?

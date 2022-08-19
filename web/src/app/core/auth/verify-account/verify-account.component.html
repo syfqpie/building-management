@@ -42,9 +42,9 @@
                     <div class="invalid-tooltip invalid-tooltip-right"
                         *ngIf="verifyForm.controls['newPassword1'].errors &&
                         (verifyForm.controls['newPassword1'].dirty || verifyForm.controls['newPassword1'].touched)">
-                        <ng-container *ngFor="let message of verifyFormMessages['newPassword1']">
-                            <span *ngIf="verifyForm.get('newPassword1')?.hasError(message.type) &&
-                                (verifyForm.get('newPassword1')?.dirty || verifyForm.get('newPassword1')?.touched)">
+                        <ng-container *ngFor="let message of formMessages['newPassword1']">
+                            <span *ngIf="verifyForm.controls['newPassword1'].hasError(message.type) &&
+                                (verifyForm.controls['newPassword1'].dirty || verifyForm.controls['newPassword1'].touched)">
                                 • {{ message.message }}
                             </span>
                         </ng-container>
@@ -69,9 +69,9 @@
                     <div class="invalid-tooltip invalid-tooltip-right"
                         *ngIf="verifyForm.controls['newPassword2'].errors &&
                         (verifyForm.controls['newPassword2'].dirty || verifyForm.controls['newPassword2'].touched)">
-                        <ng-container *ngFor="let message of verifyFormMessages['newPassword2']">
-                            <span *ngIf="verifyForm.get('newPassword2')?.hasError(message.type) &&
-                                (verifyForm.get('newPassword1')?.dirty || verifyForm.get('newPassword1')?.touched)">
+                        <ng-container *ngFor="let message of formMessages['newPassword2']">
+                            <span *ngIf="verifyForm.controls['newPassword2'].hasError(message.type) &&
+                                (verifyForm.controls['newPassword2'].dirty || verifyForm.controls['newPassword2'].touched)">
                                 • {{ message.message }}
                             </span>
                         </ng-container>
@@ -102,6 +102,7 @@
                             </a>
                         </small>
                     </p>
+                    
                     <p class="mb-3">
                         <small class="text-muted">
                             Forgot password?

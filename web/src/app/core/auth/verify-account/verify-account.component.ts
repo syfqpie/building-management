@@ -26,17 +26,17 @@ export class VerifyAccountComponent implements OnInit, OnDestroy {
     newPassword1: new FormControl(null),
     newPassword2: new FormControl(null)
   })
-  verifyFormMessages = {
+  formMessages = {
     key: [
       { type: 'required', message: 'Key is required' }
     ],
     newPassword1: [
       { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' }
+      { type: 'minlength', message: 'Password must contain at least 8 character.' }
     ],
     newPassword2: [
       { type: 'required', message: 'Confirm password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' },
+      { type: 'minlength', message: 'Password must contain at least 8 character.' },
       { type: 'matching', message: 'Passwords must match' }
     ]
   }
@@ -97,11 +97,13 @@ export class VerifyAccountComponent implements OnInit, OnDestroy {
   verify() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.authSvc.verifyAccount(this.verifyForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
         this.isVerified = true
+        
         this.notifySvc.success(
           'Your account has been verified',
           'You will be redirected to login page in 5 seconds'

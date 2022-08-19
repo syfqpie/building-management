@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
@@ -19,7 +18,7 @@ export class ResendVerificationComponent implements OnInit, OnDestroy {
   resendForm: FormGroup = new FormGroup({
     email: new FormControl(null)
   })
-  resendFormMessages = {
+  formMessages = {
     email: [
       { type: 'required', message: 'Email address is required' },
       { type: 'email', message: 'Enter a valid email address' }
@@ -36,8 +35,6 @@ export class ResendVerificationComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private route: ActivatedRoute,
-    private router: Router,
     private authSvc: AuthService
   ) { }
 
@@ -46,6 +43,7 @@ export class ResendVerificationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -63,10 +61,12 @@ export class ResendVerificationComponent implements OnInit, OnDestroy {
   resend() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.authSvc.resendVerification(this.resendForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        
         this.notifySvc.success('Success', 'Verification e-mail sent')
       },
       error: (err) => {
