@@ -21,14 +21,14 @@ export class PasswordSettingsComponent implements OnInit, OnDestroy {
     newPassword1: new FormControl(null),
     newPassword2: new FormControl(null)
   })
-  changeFormMessages = {
+  formMessages = {
     newPassword1: [
       { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' }
+      { type: 'minlength', message: 'Password must contain at least 8 character.' }
     ],
     newPassword2: [
       { type: 'required', message: 'Confirm password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' },
+      { type: 'minlength', message: 'Password must contain at least 8 character.' },
       { type: 'matching', message: 'Passwords must match' }
     ]
   }
@@ -75,10 +75,12 @@ export class PasswordSettingsComponent implements OnInit, OnDestroy {
   change() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.authSvc.changePassword(this.changeForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        
         this.notifySvc.success(
           'Success',
           'New password has been saved'
