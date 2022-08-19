@@ -8,6 +8,7 @@
                     Register resident
                 </h5>
             </div>
+
             <div class="modal-body">
                 <form [formGroup]="registerForm">
                     <div class="mb-3 position-relative">
@@ -27,9 +28,9 @@
                         <div class="invalid-tooltip invalid-tooltip-right"
                             *ngIf="registerForm.controls['username'].errors &&
                             (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
-                            <ng-container *ngFor="let message of registerFormMessages['username']">
-                                <span *ngIf="registerForm.get('username')?.hasError(message.type) &&
-                                    (registerForm.get('username')?.dirty || registerForm.get('username')?.touched)">
+                            <ng-container *ngFor="let message of formMessages['username']">
+                                <span *ngIf="registerForm.controls['username'].hasError(message.type) &&
+                                    (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -53,9 +54,9 @@
                         <div class="invalid-tooltip invalid-tooltip-right"
                             *ngIf="registerForm.controls['name'].errors &&
                             (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)">
-                            <ng-container *ngFor="let message of registerFormMessages['name']">
-                                <span *ngIf="registerForm.get('name')?.hasError(message.type) &&
-                                    (registerForm.get('name')?.dirty || registerForm.get('name')?.touched)">
+                            <ng-container *ngFor="let message of formMessages['name']">
+                                <span *ngIf="registerForm.controls['name'].hasError(message.type) &&
+                                    (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -126,9 +127,9 @@
                                 <div class="invalid-tooltip invalid-tooltip-right"
                                     *ngIf="registerForm.controls['phoneNo'].errors &&
                                     (registerForm.controls['phoneNo'].dirty || registerForm.controls['phoneNo'].touched)">
-                                    <ng-container *ngFor="let message of registerFormMessages['phoneNo']">
-                                        <span *ngIf="registerForm.get('phoneNo')?.hasError(message.type) &&
-                                            (registerForm.get('phoneNo')?.dirty || registerForm.get('phoneNo')?.touched)">
+                                    <ng-container *ngFor="let message of formMessages['phoneNo']">
+                                        <span *ngIf="registerForm.controls['phoneNo'].hasError(message.type) &&
+                                            (registerForm.controls['phoneNo'].dirty || registerForm.controls['phoneNo'].touched)">
                                             • {{ message.message }}
                                         </span>
                                     </ng-container>
@@ -154,9 +155,9 @@
                                 <div class="invalid-tooltip invalid-tooltip-right"
                                     *ngIf="registerForm.controls['nric'].errors &&
                                     (registerForm.controls['nric'].dirty || registerForm.controls['nric'].touched)">
-                                    <ng-container *ngFor="let message of registerFormMessages['nric']">
-                                        <span *ngIf="registerForm.get('nric')?.hasError(message.type) &&
-                                            (registerForm.get('nric')?.dirty || registerForm.get('nric')?.touched)">
+                                    <ng-container *ngFor="let message of formMessages['nric']">
+                                        <span *ngIf="registerForm.controls['nric'].hasError(message.type) &&
+                                            (registerForm.controls['nric'].dirty || registerForm.controls['nric'].touched)">
                                             • {{ message.message }}
                                         </span>
                                     </ng-container>
@@ -166,6 +167,7 @@
                     </div>
                 </form>
             </div>
+            
             <div class="modal-footer">
                 <button type="button"
                     class="btn btn-primary"
@@ -178,6 +180,7 @@
                         <i class="fa-solid fa-circle-notch fa-spin"></i>
                     </ng-template>
                 </button>
+
                 <button type="button"
                     class="btn btn-outline-primary"
                     (click)="toggleModal()">
