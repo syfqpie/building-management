@@ -8,14 +8,17 @@
             </button>
         </div>
     </div>
+
     <div class="card shadow-sm border-0">
         <div class="card-body">
             <h5 class="card-title">
                 List of tickets
             </h5>
+
             <h6 class="card-subtitle mb-3 text-muted">
                 Manage tickets here
             </h6>
+            
             <div *ngIf="tableRows.length > 0; else isNoRowData">
                 <ngx-datatable
                     class="bootstrap rounded-2"
@@ -152,6 +155,7 @@
                     </ngx-datatable-column>
                 </ngx-datatable>
             </div>
+            
             <ng-template #isNoRowData>
                 <div *ngIf="!isProcessing;">
                     <div class="text-center">

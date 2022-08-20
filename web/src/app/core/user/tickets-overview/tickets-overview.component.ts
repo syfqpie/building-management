@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { forkJoin, Subscription } from 'rxjs';
+
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Color, colorSets } from '@swimlane/ngx-charts';
-import { forkJoin, Subscription } from 'rxjs';
 
 import { MultiSeries, SingleSeries, TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
@@ -37,6 +38,7 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
