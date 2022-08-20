@@ -3,9 +3,11 @@
         <h5 class="card-title">
             List of blocks
         </h5>
+        
         <h6 class="card-subtitle mb-3 text-muted">
             Manage blocks here
         </h6>
+
         <div *ngIf="tableRows.length > 0; else isNoRowData">
             <ngx-datatable
                 class="bootstrap rounded-2"
@@ -72,6 +74,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
+
         <ng-template #isNoRowData>
             <div *ngIf="!isProcessing;">
                 <div class="text-center">
@@ -94,6 +97,7 @@
                     Add new block
                 </h5>
             </div>
+
             <div class="modal-body">
                 <form [formGroup]="addForm">
                     <div class="mb-3 position-relative">
@@ -114,8 +118,8 @@
                             *ngIf="addForm.controls['block'].errors &&
                             (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
                             <ng-container *ngFor="let message of formMessages['block']">
-                                <span *ngIf="addForm.get('block')?.hasError(message.type) &&
-                                    (addForm.get('block')?.dirty || addForm.get('block')?.touched)">
+                                <span *ngIf="addForm.controls['block'].hasError(message.type) &&
+                                    (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -123,6 +127,7 @@
                     </div>
                 </form>
             </div>
+
             <div class="modal-footer">
                 <button type="button"
                     class="btn btn-primary"
@@ -135,6 +140,7 @@
                         <i class="fa-solid fa-circle-notch fa-spin"></i>
                     </ng-template>
                 </button>
+
                 <button type="button"
                     class="btn btn-outline-primary"
                     (click)="toggleAddModal()">
@@ -155,6 +161,7 @@
                     Update block
                 </h5>
             </div>
+
             <div class="modal-body">
                 <form [formGroup]="updateForm">
                     <div class="mb-3 position-relative">
@@ -175,8 +182,8 @@
                             *ngIf="updateForm.controls['block'].errors &&
                             (updateForm.controls['block'].dirty || updateForm.controls['block'].touched)">
                             <ng-container *ngFor="let message of formMessages['block']">
-                                <span *ngIf="updateForm.get('block')?.hasError(message.type) &&
-                                    (updateForm.get('block')?.dirty || updateForm.get('block')?.touched)">
+                                <span *ngIf="updateForm.controls['block'].hasError(message.type) &&
+                                    (updateForm.controls['block'].dirty || updateForm.controls['block'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -197,6 +204,7 @@
                     </div>
                 </form>
             </div>
+
             <div class="modal-footer">
                 <button type="button"
                     class="btn btn-primary"
@@ -209,6 +217,7 @@
                         <i class="fa-solid fa-circle-notch fa-spin"></i>
                     </ng-template>
                 </button>
+
                 <button type="button"
                     class="btn btn-outline-primary"
                     (click)="toggleUpdateModal()">

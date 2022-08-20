@@ -40,6 +40,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    // Get id and data
     this.routeSubscription = this.route.paramMap.subscribe(
       (params) => {
         if (params.get('id')) {
@@ -69,6 +70,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   getData(id: number) {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.svcSubscription.add(forkJoin([
       this.unitSvc.getOneExtended(id),
       this.unitSvc.getUnitActivities(id)
@@ -91,10 +93,12 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   activate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.svcSubscription.add(this.unitSvc.activate(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        
         this.notifySvc.success(
           'Success', 
           'Unit activated'
@@ -113,10 +117,12 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   deactivate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.svcSubscription.add(this.unitSvc.deactivate(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'Unit deactivated'
@@ -135,10 +141,12 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   enableMaintenance() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.svcSubscription.add(this.unitSvc.enableMaintenance(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'Unit maintenance enabled'
@@ -157,10 +165,12 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   disableMaintenance() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.svcSubscription.add(this.unitSvc.disableMaintenance(this.currentUnit?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'Unit maintenance disabled'

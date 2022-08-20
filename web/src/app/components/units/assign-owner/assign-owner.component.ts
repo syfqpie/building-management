@@ -8,8 +8,6 @@ import {
   OnInit,
   Output,
   ViewChild } from '@angular/core';
-
-import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -17,6 +15,8 @@ import {
   fromEvent,
   map,
   Subscription } from 'rxjs';
+
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { Resident } from 'src/app/shared/services/residents/residents.model';
@@ -87,6 +87,7 @@ export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe(
       (text: string) => {
         this.isSearching = true
+
         this.svcSubscription.add(this.residentSvc.search(text).subscribe({
           next: () => {
             this.isSearching = false
@@ -105,6 +106,7 @@ export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
   assignOwner() {
     this.isProcessing = true
     this.loadingBar.useRef('http').start()
+
     const formSetup = {
       resident: this.selectedResident!.id
     }
@@ -116,6 +118,7 @@ export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
       next: () => {
         this.isProcessing = false
         this.loadingBar.useRef('http').complete()
+
         this.notifySvc.success(
           'Success', 
           'Owner has been assigned to this unit'

@@ -3,9 +3,11 @@
         <h5 class="card-title">
             List of floors
         </h5>
+
         <h6 class="card-subtitle mb-3 text-muted">
             Manage floors here
         </h6>
+
         <div *ngIf="tableRows.length > 0; else isNoRowData">
             <ngx-datatable
                 class="bootstrap rounded-2"
@@ -72,6 +74,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
+
         <ng-template #isNoRowData>
             <div *ngIf="!isProcessing;">
                 <div class="text-center">
@@ -94,6 +97,7 @@
                     Add new floor
                 </h5>
             </div>
+
             <div class="modal-body">
                 <form [formGroup]="addForm">
                     <div class="mb-3 position-relative">
@@ -123,6 +127,7 @@
                     </div>
                 </form>
             </div>
+
             <div class="modal-footer">
                 <button type="button"
                     class="btn btn-primary"
@@ -135,6 +140,7 @@
                         <i class="fa-solid fa-circle-notch fa-spin"></i>
                     </ng-template>
                 </button>
+
                 <button type="button"
                     class="btn btn-outline-primary"
                     (click)="toggleAddModal()">
@@ -155,6 +161,7 @@
                     Update floor
                 </h5>
             </div>
+
             <div class="modal-body">
                 <form [formGroup]="updateForm">
                     <div class="mb-3 position-relative">
@@ -197,6 +204,7 @@
                     </div>
                 </form>
             </div>
+
             <div class="modal-footer">
                 <button type="button"
                     class="btn btn-primary"
@@ -209,6 +217,7 @@
                         <i class="fa-solid fa-circle-notch fa-spin"></i>
                     </ng-template>
                 </button>
+                
                 <button type="button"
                     class="btn btn-outline-primary"
                     (click)="toggleUpdateModal()">

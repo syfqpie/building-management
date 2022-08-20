@@ -21,12 +21,10 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
   activityType = ActivityType
   
   // Table
-  tableRows: UnitActivity[] = []
-  tableLoadingIndicator: boolean = true
-  tableReorderable: boolean = true
   ColumnMode = ColumnMode
+  tableRows: UnitActivity[] = []
   tableMessages = {
-    totalMessage: 'total of activities'
+    totalMessage: 'total of records'
   }
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
@@ -51,6 +49,7 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    // Get id and data
     this.routeSubscription = this.route.queryParams.subscribe(
       (params) => {
         if (params['id']) {
@@ -76,6 +75,7 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+    
     this.subscription = this.activitySvc.getAll().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()

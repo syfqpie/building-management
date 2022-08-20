@@ -8,6 +8,7 @@
                     Add new unit
                 </h5>
             </div>
+
             <div class="modal-body">
                 <form [formGroup]="addForm">
                     <div class="row g-3">
@@ -29,8 +30,8 @@
                                 *ngIf="addForm.controls['squareFeet'].errors &&
                                 (addForm.controls['squareFeet'].dirty || addForm.controls['squareFeet'].touched)">
                                 <ng-container *ngFor="let message of formMessages['squareFeet']">
-                                    <span *ngIf="addForm.get('squareFeet')?.hasError(message.type) &&
-                                        (addForm.get('squareFeet')?.dirty || addForm.get('squareFeet')?.touched)">
+                                    <span *ngIf="addForm.controls['squareFeet'].hasError(message.type) &&
+                                        (addForm.controls['squareFeet'].dirty || addForm.controls['squareFeet'].touched)">
                                         • {{ message.message }}
                                     </span>
                                 </ng-container>
@@ -63,8 +64,8 @@
                                 *ngIf="addForm.controls['block'].errors &&
                                 (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
                                 <ng-container *ngFor="let message of formMessages['block']">
-                                    <span *ngIf="addForm.get('block')?.hasError(message.type) &&
-                                        (addForm.get('block')?.dirty || addForm.get('block')?.touched)">
+                                    <span *ngIf="addForm.controls['block'].hasError(message.type) &&
+                                        (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
                                         • {{ message.message }}
                                     </span>
                                 </ng-container>
@@ -97,8 +98,8 @@
                                 *ngIf="addForm.controls['block'].errors &&
                                 (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
                                 <ng-container *ngFor="let message of formMessages['block']">
-                                    <span *ngIf="addForm.get('block')?.hasError(message.type) &&
-                                        (addForm.get('block')?.dirty || addForm.get('block')?.touched)">
+                                    <span *ngIf="addForm.controls['floor'].hasError(message.type) &&
+                                        (addForm.controls['floor'].dirty || addForm.controls['floor'].touched)">
                                         • {{ message.message }}
                                     </span>
                                 </ng-container>
@@ -131,8 +132,8 @@
                                 *ngIf="addForm.controls['block'].errors &&
                                 (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
                                 <ng-container *ngFor="let message of formMessages['block']">
-                                    <span *ngIf="addForm.get('block')?.hasError(message.type) &&
-                                        (addForm.get('block')?.dirty || addForm.get('block')?.touched)">
+                                    <span *ngIf="addForm.controls['block'].hasError(message.type) &&
+                                        (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
                                         • {{ message.message }}
                                     </span>
                                 </ng-container>
@@ -141,6 +142,7 @@
                     </div>
                 </form>
             </div>
+            
             <div class="modal-footer">
                 <button type="button"
                     class="btn btn-primary"
@@ -149,10 +151,12 @@
                     <span *ngIf="!isProcessing; else isLoading">
                         Add
                     </span>
+
                     <ng-template #isLoading>
                         <i class="fa-solid fa-circle-notch fa-spin"></i>
                     </ng-template>
                 </button>
+
                 <button type="button"
                     class="btn btn-outline-primary"
                     (click)="toggleModal()">
