@@ -6,7 +6,7 @@ import { GenderType } from '../../services/residents/residents.model';
 })
 export class GenderTypePipe implements PipeTransform {
 
-  transform(value: GenderType | undefined, ...args: unknown[]): unknown {
+  transform(value: GenderType | undefined, ...args: unknown[]): string {
     if (value) {
       return value === GenderType.FEMALE ? 'Female' :
         'Male'

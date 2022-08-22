@@ -6,7 +6,7 @@ import { TitleType } from '../../services/residents/residents.model';
 })
 export class TitleTypePipe implements PipeTransform {
 
-  transform(value: TitleType | undefined, ...args: unknown[]): unknown {
+  transform(value: TitleType | undefined, ...args: unknown[]): string {
     if (value) {
       return value === TitleType.MR ? 'Mr.' :
         value === TitleType.MRS ? 'Mrs.' :

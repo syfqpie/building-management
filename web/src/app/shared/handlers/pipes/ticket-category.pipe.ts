@@ -6,7 +6,7 @@ import { TicketCategory } from '../../services/tickets/tickets.model';
 })
 export class TicketCategoryPipe implements PipeTransform {
 
-  transform(value: TicketCategory | undefined, ...args: unknown[]): unknown {
+  transform(value: TicketCategory | undefined, ...args: unknown[]): string {
     if (value) {
       return value === TicketCategory.SYS ? 'System' :
         value === TicketCategory.UNIT ? 'Unit' :

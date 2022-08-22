@@ -6,7 +6,7 @@ import { TicketPriority } from '../../services/tickets/tickets.model';
 })
 export class TicketPriorityPipe implements PipeTransform {
 
-  transform(value: TicketPriority | undefined, ...args: unknown[]): unknown {
+  transform(value: TicketPriority | undefined, ...args: unknown[]): string {
     if (value) {
       return value === TicketPriority.CRIT ? 'Critical' :
         value === TicketPriority.HIGH ? 'High' :

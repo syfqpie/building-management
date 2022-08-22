@@ -6,7 +6,7 @@ import { TicketStatus } from '../../services/tickets/tickets.model';
 })
 export class TicketStatusPipe implements PipeTransform {
 
-  transform(value: TicketStatus | undefined, ...args: unknown[]): unknown {
+  transform(value: TicketStatus | undefined, ...args: unknown[]): string {
     if (value) {
       return value === TicketStatus.OPENED ? 'Opened' :
         value === TicketStatus.IN_PROGRESS ? 'In progress' :
