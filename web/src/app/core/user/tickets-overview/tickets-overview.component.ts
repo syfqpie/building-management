@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, Subscription } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { Color, colorSets } from '@swimlane/ngx-charts';
+import { Color, colorSets, MultiSeries, SingleSeries } from '@swimlane/ngx-charts';
 
-import { MultiSeries, SingleSeries, TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
+import { TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
 
 @Component({
