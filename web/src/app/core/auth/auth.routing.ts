@@ -8,18 +8,30 @@ import { VerifyAccountComponent } from './verify-account/verify-account.componen
 export const AuthRoutes: Routes = [
     {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
+        data: {
+            title: 'Login'
+        }
     },
     {
         path: 'resend-verification',
-        component: ResendVerificationComponent
+        component: ResendVerificationComponent,
+        data: {
+            title: 'Resend verification'
+        }
     },
     {
         path: 'reset',
-        component: ResetComponent
+        component: ResetComponent,
+        data: {
+            title: 'Reset'
+        }
     },
     {
         path: 'verify-account',
-        component: VerifyAccountComponent
+        component: VerifyAccountComponent,
+        data: {
+            title: 'Verify account'
+        }
     }
 ]

@@ -18,15 +18,24 @@ import { UnitsComponent } from './units/units.component';
 export const UserRoutes: Routes = [
     {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent,
+        data: {
+            title: 'Dashboard'
+        }
     },
     {
         path: 'settings',
-        component: SettingsComponent
+        component: SettingsComponent,
+        data: {
+            title: 'Settings'
+        }
     },
     {
         path: 'test',
-        component: TestComponent
+        component: TestComponent,
+        data: {
+            title: 'Test'
+        }
     },
     {
         path: 'management',
@@ -36,19 +45,31 @@ export const UserRoutes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: UnitsComponent
+                        component: UnitsComponent,
+                        data: {
+                            title: 'Units'
+                        }
                     },
                     {
                         path: 'detail/:id',
-                        component: UnitDetailComponent
+                        component: UnitDetailComponent,
+                        data: {
+                            title: 'Unit detail'
+                        }
                     },
                     {
                         path: 'configuration',
-                        component: UnitsConfigurationComponent
+                        component: UnitsConfigurationComponent,
+                        data: {
+                            title: 'Unit configuration'
+                        }
                     },
                     {
                         path: 'activities',
-                        component: UnitActivitiesComponent
+                        component: UnitActivitiesComponent,
+                        data: {
+                            title: 'Unit activities'
+                        }
                     }
                 ]
             },
@@ -57,11 +78,17 @@ export const UserRoutes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: ResidentsComponent
+                        component: ResidentsComponent,
+                        data: {
+                            title: 'Residents'
+                        }
                     },
                     {
                         path: 'detail/:id',
-                        component: ResidentDetailComponent
+                        component: ResidentDetailComponent,
+                        data: {
+                            title: 'Resident detail'
+                        }
                     }
                 ]
             },
@@ -70,15 +97,24 @@ export const UserRoutes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: TicketsComponent
+                        component: TicketsComponent,
+                        data: {
+                            title: 'Tickets'
+                        }
                     },
                     {
                         path: 'overview',
-                        component: TicketsOverviewComponent
+                        component: TicketsOverviewComponent,
+                        data: {
+                            title: 'Ticket overview'
+                        }
                     },
                     {
                         path: 'detail/:id',
-                        component: TicketDetailComponent
+                        component: TicketDetailComponent,
+                        data: {
+                            title: 'Ticket detail'
+                        }
                     }
                 ]
             }
@@ -86,14 +122,23 @@ export const UserRoutes: Routes = [
     },
     {
         path: 'system-admin',
-        component: SystemAdminComponent
+        component: SystemAdminComponent,
+        data: {
+            title: 'System admin'
+        }
     },
     {
         path: 'about-system',
-        component: AboutSystemComponent
+        component: AboutSystemComponent,
+        data: {
+            title: 'About system'
+        }
     },
     {
         path: 'not-authorized',
-        component: NotAuthorizedComponent
+        component: NotAuthorizedComponent,
+        data: {
+            title: 'Not authorized'
+        }
     }
 ]
