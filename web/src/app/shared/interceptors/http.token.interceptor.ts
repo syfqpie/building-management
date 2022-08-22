@@ -7,11 +7,12 @@ import {
   HttpResponse,
   HttpErrorResponse,
 } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+
 import { JwtService } from '../handlers/jwt/jwt.service';
 import { NotifyService } from '../handlers/notify/notify.service';
-import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
@@ -56,20 +57,19 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       console.error('It happens: ', error);
     }
 
-    return throwError(error)
+    return throwError(() => error)
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let headers = req.headers
     headers = headers.append('Accept', '*/*')
 
+    // Append token if available
     const token = this.jwtSvc.getToken('accessToken');
 
     if (token) {
       headers = headers.append('Authorization', `Bearer ${token}`);
     }
-
-    // console.log('Intercepting...', headers)
 
     const request = req.clone({ headers });
     return next.handle(request).pipe(

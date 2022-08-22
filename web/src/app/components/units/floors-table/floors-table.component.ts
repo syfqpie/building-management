@@ -4,10 +4,10 @@ import { Subscription } from 'rxjs';
 
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { Floor } from 'src/app/shared/services/floors/floors.model';
 import { FloorsService } from 'src/app/shared/services/floors/floors.service';
-import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 @Component({
   selector: 'app-floors-table',
@@ -36,10 +36,8 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
   }
 
   // Table
-  tableRows: Floor[] = []
-  tableLoadingIndicator: boolean = true
-  tableReorderable: boolean = true
   ColumnMode = ColumnMode
+  tableRows: Floor[] = []
   tableMessages = {
     totalMessage: 'total of records'
   }
@@ -58,9 +56,7 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
   isUpdateModalOpen: boolean = false
   
   // Subscription
-  subscription: Subscription | undefined
-  addSubscription: Subscription  | undefined
-  updateSubscription: Subscription  | undefined
+  subscription: Subscription = new Subscription
 
   constructor(
     private fb: FormBuilder,
@@ -79,18 +75,13 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
-    if (this.addSubscription) {
-      this.addSubscription.unsubscribe()
-    }
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
   }
 
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.floorSvc.getAll().subscribe({
+
+    this.subscription.add(this.floorSvc.getAll().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -103,7 +94,7 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
         this.floors = this.floorSvc.floors
         this.tableRows = [...this.floors]
       }
-    })
+    }))
   }
 
   initForm() {
@@ -133,12 +124,14 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
   addFloor() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.addSubscription = this.floorSvc.create(
+
+    this.subscription.add(this.floorSvc.create(
       this.addForm.value
     ).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'New floor has been added'
@@ -175,19 +168,21 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
         // Update table
         this.getData()
       }
-    })
+    }))
   }
 
   patchFloor() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.addSubscription = this.floorSvc.patch(
+
+    this.subscription.add(this.floorSvc.patch(
       this.selectedFloor?.id!,
       this.updateForm.value
     ).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'Floor has been updated'
@@ -222,7 +217,7 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
         // Update table
         this.getData()
       }
-    })
+    }))
   }
 
   toggleAddModal() {

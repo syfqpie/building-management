@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
+
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { ColumnMode } from '@swimlane/ngx-datatable';
+
 import { EmailVerification } from 'src/app/shared/services/users/users.model';
+import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 
 @Component({
@@ -16,30 +18,25 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   // Data
   verifications: EmailVerification[] = []
 
-  rows: EmailVerification[] = []
-  loadingIndicator: boolean = true
-  reorderable: boolean = true
+  // Table
   ColumnMode = ColumnMode
+  tableRows: EmailVerification[] = []
   tableMessages = {
-    totalMessage: 'total of users'
+    totalMessage: 'total of records'
   }
-  selected: EmailVerification[] = []
-  SelectionType = SelectionType
   tableClass = {
-    sortAscending: 'fa-solid fa-angle-up ms-1 small',
-    sortDescending: 'fa-solid fa-angle-down ms-1 small',
+    sortAscending: 'fa-solid fa-angle-up ms-2 small',
+    sortDescending: 'fa-solid fa-angle-down ms-2 small',
     pagerLeftArrow: 'fa-solid fa-angle-left small',
     pagerRightArrow: 'fa-solid fa-angle-right small',
     pagerPrevious: 'fa-solid fa-angles-left small',
     pagerNext: 'fa-solid fa-angles-right small'
   }
-  @ViewChild('isEmptyCell')
-  isEmptyCell: TemplateRef<any> | undefined
 
   // Checker
   isProcessing: boolean = false
-  isRegisterAdmin: boolean = false
 
+  // Subscription
   subscription: Subscription | undefined
 
   // Event
@@ -55,6 +52,7 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -63,6 +61,7 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.userSvc.getAllVerification().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
@@ -74,14 +73,9 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.verifications = this.userSvc.emailVerifications
-        this.rows = [...this.verifications]
+        this.tableRows = [...this.verifications]
       }
     })
-  }
-
-  // Table on select row
-  onSelect(selected: EmailVerification[]) {
-    console.log('Select Event', selected)
   }
 
   // Sort by user type
@@ -95,7 +89,6 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   }
 
   toggleModal() {
-    this.isRegisterAdmin = !this.isRegisterAdmin
     this.registerModal?.toggleModal()
   }
 

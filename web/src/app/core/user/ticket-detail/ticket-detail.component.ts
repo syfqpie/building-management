@@ -269,6 +269,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        
         this.notifySvc.success(
           'Success', 
           'Ticket updated'

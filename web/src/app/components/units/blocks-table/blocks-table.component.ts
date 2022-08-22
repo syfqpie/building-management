@@ -36,10 +36,8 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   }
 
   // Table
-  tableRows: Block[] = []
-  tableLoadingIndicator: boolean = true
-  tableReorderable: boolean = true
   ColumnMode = ColumnMode
+  tableRows: Block[] = []
   tableMessages = {
     totalMessage: 'total of records'
   }
@@ -58,9 +56,7 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   isUpdateModalOpen: boolean = false
   
   // Subscription
-  subscription: Subscription | undefined
-  addSubscription: Subscription  | undefined
-  updateSubscription: Subscription  | undefined
+  subscription: Subscription = new Subscription
 
   constructor(
     private fb: FormBuilder,
@@ -79,18 +75,13 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
-    if (this.addSubscription) {
-      this.addSubscription.unsubscribe()
-    }
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
   }
 
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.blockSvc.getAll().subscribe({
+
+    this.subscription.add(this.blockSvc.getAll().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -103,7 +94,7 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
         this.blocks = this.blockSvc.blocks
         this.tableRows = [...this.blocks]
       }
-    })
+    }))
   }
 
   initForm() {
@@ -133,12 +124,14 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
   addBlock() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.addSubscription = this.blockSvc.create(
+
+    this.subscription.add(this.blockSvc.create(
       this.addForm.value
     ).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'New block has been added'
@@ -175,19 +168,21 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
         // Update table
         this.getData()
       }
-    })
+    }))
   }
 
   patchBlock() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.addSubscription = this.blockSvc.patch(
+
+    this.subscription.add(this.blockSvc.patch(
       this.selectedBlock?.id!,
       this.updateForm.value
     ).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'Block has been updated'
@@ -222,7 +217,7 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
         // Update table
         this.getData()
       }
-    })
+    }))
   }
 
   toggleAddModal() {

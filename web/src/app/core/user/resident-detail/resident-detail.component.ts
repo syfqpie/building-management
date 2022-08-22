@@ -21,9 +21,7 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
   isProcessing: boolean = false
 
   // Subscription
-  subscription: Subscription | undefined
-  activateSubscription: Subscription | undefined
-  deactivateSubscription: Subscription | undefined
+  subscription: Subscription = new Subscription
   routeSubscription: Subscription | undefined
 
   constructor(
@@ -33,6 +31,7 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    // Get id and data
     this.routeSubscription = this.route.paramMap.subscribe(
       (params) => {
         if (params.get('id')) {
@@ -56,7 +55,8 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
   getData(id: number) {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.residentSvc.getOne(id).subscribe({
+
+    this.subscription.add(this.residentSvc.getOne(id).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -68,13 +68,14 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.currentResident = this.residentSvc.resident
       }
-    })
+    }))
   }
 
   activate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.activateSubscription = this.residentSvc.activate(this.currentResident?.id!).subscribe({
+
+    this.subscription.add(this.residentSvc.activate(this.currentResident?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -86,13 +87,14 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.currentResident = this.residentSvc.resident
       }
-    })
+    }))
   }
 
   deactivate() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.deactivateSubscription = this.residentSvc.deactivate(this.currentResident?.id!).subscribe({
+
+    this.subscription.add(this.residentSvc.deactivate(this.currentResident?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -104,7 +106,7 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
       complete: () => {
         this.currentResident = this.residentSvc.resident
       }
-    })
+    }))
   }
 
 }

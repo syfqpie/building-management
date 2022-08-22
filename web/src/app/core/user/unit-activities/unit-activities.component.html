@@ -4,9 +4,11 @@
             <h5 class="card-title">
                 List of activities
             </h5>
+
             <h6 class="card-subtitle mb-3 text-muted">
                 Manage activities here
             </h6>
+
             <div *ngIf="tableRows.length > 0; else isNoRowData">
                 <ngx-datatable
                     class="bootstrap rounded-2"
@@ -103,6 +105,7 @@
                     </ngx-datatable-column>
                 </ngx-datatable>
             </div>
+            
             <ng-template #isNoRowData>
                 <div *ngIf="!isProcessing;">
                     <div class="text-center">

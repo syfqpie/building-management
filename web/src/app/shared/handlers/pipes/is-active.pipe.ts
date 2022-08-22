@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class IsActivePipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): unknown {
+  transform(value: unknown, ...args: unknown[]): string {
     return value === true ? 'Active' : value !== true ? 'Inactive' : '-'
   }
 

@@ -6,7 +6,7 @@ import { ActivityType } from '../../services/activities/activities.model';
 })
 export class ActivityTypePipe implements PipeTransform {
 
-  transform(value: ActivityType | undefined, ...args: unknown[]): unknown {
+  transform(value: ActivityType | undefined, ...args: unknown[]): string {
     if (value) {
       return value === ActivityType.MOVE_IN ? 'Moved in' :
         value === ActivityType.MOVE_OUT ? 'Moved out' :

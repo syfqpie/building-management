@@ -3,12 +3,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
-
-import { UnitsService } from 'src/app/shared/services/units/units.service';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
-import { Floor } from 'src/app/shared/services/floors/floors.model';
+
 import { Block } from 'src/app/shared/services/blocks/blocks.model';
+import { Floor } from 'src/app/shared/services/floors/floors.model';
 import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
+import { UnitsService } from 'src/app/shared/services/units/units.service';
 
 @Component({
   selector: 'app-unit-add',
@@ -17,6 +17,7 @@ import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.mo
 })
 export class UnitAddComponent implements OnInit, OnDestroy {
   
+  // Input
   @Input() blocks: Block[] = []
   @Input() floors: Floor[] = []
   @Input() unitNumbers: UnitNumber[] = []
@@ -30,7 +31,8 @@ export class UnitAddComponent implements OnInit, OnDestroy {
   })
   formMessages = {
     squareFeet: [
-      { type: 'required', message: 'This field is required' }
+      { type: 'required', message: 'This field is required' },
+      { type: 'min', message: 'Min is 100' }
     ],
     block: [
       { type: 'required', message: 'This field is required' }
@@ -65,6 +67,7 @@ export class UnitAddComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -73,7 +76,8 @@ export class UnitAddComponent implements OnInit, OnDestroy {
   initForm() {
     this.addForm = this.fb.group({
       squareFeet: new FormControl(null, Validators.compose([
-        Validators.required
+        Validators.required,
+        Validators.min(100)
       ])),
       block: new FormControl(null, Validators.compose([
         Validators.required
@@ -90,10 +94,12 @@ export class UnitAddComponent implements OnInit, OnDestroy {
   addUnit() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.unitSvc.create(this.addForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'New unit has been added'

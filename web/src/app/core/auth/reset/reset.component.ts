@@ -25,19 +25,17 @@ export class ResetComponent implements OnInit, OnDestroy {
   requestForm: FormGroup = new FormGroup({
     email: new FormControl(null)
   })
-  requestFormMessages = {
-    email: [
-      { type: 'required', message: 'Email address is required' },
-      { type: 'email', message: 'Enter a valid email address' }
-    ]
-  }
   confirmForm: FormGroup = new FormGroup({
     uid: new FormControl(null),
     token: new FormControl(null),
     newPassword1: new FormControl(null),
     newPassword2: new FormControl(null)
   })
-  confirmFormMessages = {
+  formMessages = {
+    email: [
+      { type: 'required', message: 'Email address is required' },
+      { type: 'email', message: 'Enter a valid email address' }
+    ],
     uid: [
       { type: 'required', message: 'This field is required' }
     ],
@@ -46,11 +44,11 @@ export class ResetComponent implements OnInit, OnDestroy {
     ],
     newPassword1: [
       { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' }
+      { type: 'minlength', message: 'Password must contain at least 8 character' }
     ],
     newPassword2: [
       { type: 'required', message: 'Confirm password is required' },
-      { type: 'minlength', message: 'Password is too short. It must contain at least 8 character.' },
+      { type: 'minlength', message: 'Password must contain at least 8 character' },
       { type: 'matching', message: 'Passwords must match' }
     ]
   }
@@ -62,8 +60,7 @@ export class ResetComponent implements OnInit, OnDestroy {
   isConfirmResetSubmitted: boolean = false
 
   // Subscriber
-  requestSubscription: Subscription | undefined
-  confirmSubscription: Subscription | undefined
+  subscription: Subscription = new Subscription
 
   constructor(
     private fb: FormBuilder,
@@ -90,14 +87,9 @@ export class ResetComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // To unsubscribe request subscription
-    if (this.requestSubscription) {
-      this.requestSubscription.unsubscribe()
-    }
-
-    // To unsubscribe confirm subscription
-    if (this.confirmSubscription) {
-      this.confirmSubscription.unsubscribe()
+    // To unsubscribe
+    if (this.subscription) {
+      this.subscription.unsubscribe()
     }
 
     // Clear timeout
@@ -137,11 +129,14 @@ export class ResetComponent implements OnInit, OnDestroy {
   request() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.requestSubscription = this.authSvc.requestReset(this.requestForm.value).subscribe({
+    
+    this.subscription.add(this.authSvc.requestReset(this.requestForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
-        this.notifySvc.success('Success', 'Your password reset request has been submitted')
+
+        this.notifySvc.success('Success', 
+          'Your password reset request has been submitted')
       },
       error: (err) => {
         this.loadingBar.useRef('http').stop()
@@ -157,17 +152,20 @@ export class ResetComponent implements OnInit, OnDestroy {
         // Set checker
         this.isResetSubmitted = true
       }
-    })
+    }))
   }
 
   reset() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.confirmSubscription = this.authSvc.confirmReset(this.confirmForm.value).subscribe({
+
+    this.subscription.add(this.authSvc.confirmReset(this.confirmForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
-        this.notifySvc.success('Your account password has been reset', 'You will be redirected to login page in 5 seconds')
+
+        this.notifySvc.success('Your account password has been reset',
+          'You will be redirected to login page in 5 seconds')
       },
       error: (err) => {
         this.loadingBar.useRef('http').stop()
@@ -196,7 +194,7 @@ export class ResetComponent implements OnInit, OnDestroy {
           }, 5000
         )
       }
-    })
+    }))
   }
 
 }

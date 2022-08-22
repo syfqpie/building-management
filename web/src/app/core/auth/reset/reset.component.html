@@ -29,10 +29,12 @@
                             }" />
                         <div class="invalid-tooltip invalid-tooltip-right"
                             *ngIf="confirmForm.controls['newPassword1'].errors &&
-                            (confirmForm.controls['newPassword1'].dirty || confirmForm.controls['newPassword1'].touched)">
-                            <ng-container *ngFor="let message of confirmFormMessages['newPassword1']">
-                                <span *ngIf="confirmForm.get('newPassword1')?.hasError(message.type) &&
-                                    (confirmForm.get('newPassword1')?.dirty || confirmForm.get('newPassword1')?.touched)">
+                            (confirmForm.controls['newPassword1'].dirty ||
+                            confirmForm.controls['newPassword1'].touched)">
+                            <ng-container *ngFor="let message of formMessages['newPassword1']">
+                                <span *ngIf="confirmForm.controls['newPassword1'].hasError(message.type) &&
+                                    (confirmForm.controls['newPassword1'].dirty ||
+                                    confirmForm.controls['newPassword1'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -56,10 +58,12 @@
                             }" />
                         <div class="invalid-tooltip invalid-tooltip-right"
                             *ngIf="confirmForm.controls['newPassword2'].errors &&
-                            (confirmForm.controls['newPassword2'].dirty || confirmForm.controls['newPassword2'].touched)">
-                            <ng-container *ngFor="let message of confirmFormMessages['newPassword2']">
-                                <span *ngIf="confirmForm.get('newPassword2')?.hasError(message.type) &&
-                                    (confirmForm.get('newPassword1')?.dirty || confirmForm.get('newPassword1')?.touched)">
+                            (confirmForm.controls['newPassword2'].dirty ||
+                            confirmForm.controls['newPassword2'].touched)">
+                            <ng-container *ngFor="let message of formMessages['newPassword2']">
+                                <span *ngIf="confirmForm.controls['newPassword2'].hasError(message.type) &&
+                                    (confirmForm.controls['newPassword2'].dirty ||
+                                    confirmForm.controls['newPassword2'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -90,6 +94,7 @@
                                 </a>
                             </small>
                         </p>
+
                         <p class="mb-3">
                             <small class="text-muted">
                                 No verification email?
@@ -134,9 +139,9 @@
                         <div class="invalid-tooltip invalid-tooltip-right"
                             *ngIf="requestForm.controls['email'].errors &&
                             (requestForm.controls['email'].dirty || requestForm.controls['email'].touched)">
-                            <ng-container *ngFor="let message of requestFormMessages['email']">
-                                <span *ngIf="requestForm.get('email')?.hasError(message.type) &&
-                                    (requestForm.get('email')?.dirty || requestForm.get('email')?.touched)">
+                            <ng-container *ngFor="let message of formMessages['email']">
+                                <span *ngIf="requestForm.controls['email'].hasError(message.type) &&
+                                    (requestForm.controls['email'].dirty || requestForm.controls['email'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -167,6 +172,7 @@
                                 </a>
                             </small>
                         </p>
+
                         <p class="mb-3">
                             <small class="text-muted">
                                 No verification email?
@@ -186,6 +192,7 @@
             <img *ngIf="isConfirmReset; else isNotConfirmResetImg"
                 src="assets/images/illustrations/reset-password.png"
                 style="height: 25rem;" />
+                
             <ng-template #isNotConfirmResetImg>
                 <img src="assets/images/illustrations/request-reset-password.png"
                     style="height: 25rem;" />

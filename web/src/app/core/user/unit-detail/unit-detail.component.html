@@ -8,6 +8,7 @@
                     aria-expanded="false">
                     <i class="fa-solid fa-gear"></i>
                 </button>
+
                 <ul class="dropdown-menu dropdown-menu-custom p-0">
                     <li *ngIf="currentUnit?.isActive">
                         <button class="dropdown-item"
@@ -17,6 +18,7 @@
                             Deactivate
                         </button>
                     </li>
+
                     <li *ngIf="!currentUnit?.isActive">
                         <button class="dropdown-item"
                             [disabled]="isProcessing"
@@ -25,6 +27,7 @@
                             Activate
                         </button>
                     </li>
+
                     <li *ngIf="currentUnit?.isMaintenance">
                         <button class="dropdown-item"
                             [disabled]="isProcessing"
@@ -33,6 +36,7 @@
                             Disable maintenance
                         </button>
                     </li>
+
                     <li *ngIf="!currentUnit?.isMaintenance">
                         <button class="dropdown-item"
                             [disabled]="isProcessing"
@@ -51,6 +55,7 @@
                     <h5 class="card-title">
                         Unit information
                     </h5>
+
                     <div class="mb-2">
                         <label class="fw-bold text-uppercase small">
                             Unit no.: 
@@ -199,6 +204,7 @@
                                 Residents 
                             </button>
                         </li>
+                        
                         <li class="nav-item">
                             <button class="nav-link"
                                 disabled

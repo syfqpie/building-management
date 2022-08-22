@@ -24,7 +24,7 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
     isStaff: new FormControl(null),
     isSuperuser: new FormControl(null)
   })
-  registerFormMessages = {
+  formMessages = {
     username: [
       { type: 'required', message: 'Email address is required' },
       { type: 'email', message: 'Enter a valid email address' }
@@ -59,6 +59,7 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -85,10 +86,12 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
   registerAdmin() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.authSvc.registerAdmin(this.registerForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        
         this.notifySvc.success(
           'Success', 
           `A verification has been sent to ${this.registerForm.value.username}`

@@ -28,7 +28,7 @@ export class ResidentRegistrationComponent implements OnInit, OnDestroy {
     phoneNo: new FormControl(null),
     nric: new FormControl(null)
   })
-  registerFormMessages = {
+  formMessages = {
     username: [
       { type: 'required', message: 'Email address is required' },
       { type: 'email', message: 'Enter a valid email address' }
@@ -66,6 +66,7 @@ export class ResidentRegistrationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -94,6 +95,7 @@ export class ResidentRegistrationComponent implements OnInit, OnDestroy {
   registerResident() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+    
     this.subscription = this.authSvc.registerResident(this.registerForm.value).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()

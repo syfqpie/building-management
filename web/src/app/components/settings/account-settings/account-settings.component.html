@@ -5,7 +5,9 @@
         </h5>
         <p class="card-text"
             *ngIf="accountInfo?.isStaff && accountInfo?.userType === 1">
-            <small class="d-inline-flex px-2 py-1 text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
+            <small class="d-inline-flex px-2 py-1 text-success
+                bg-success bg-opacity-10 border border-success
+                border-opacity-10 rounded-2">
                 <span *ngIf="accountInfo?.isSuperuser; else isNotSuperuser">
                     <i class="fa-solid fa-user-astronaut my-auto"></i>
                     Superadmin
@@ -50,9 +52,9 @@
                 <div class="invalid-tooltip"
                     *ngIf="informationForm.controls['fullName'].errors &&
                     (informationForm.controls['fullName'].dirty || informationForm.controls['fullName'].touched)">
-                    <ng-container *ngFor="let message of informationFormMessages['fullName']">
-                        <span *ngIf="informationForm.get('fullName')?.hasError(message.type) &&
-                            (informationForm.get('fullName')?.dirty || informationForm.get('fullName')?.touched)">
+                    <ng-container *ngFor="let message of formMessages['fullName']">
+                        <span *ngIf="informationForm.controls['fullName'].hasError(message.type) &&
+                            (informationForm.controls['fullName'].dirty || informationForm.controls['fullName'].touched)">
                             • {{ message.message }}
                         </span>
                     </ng-container>

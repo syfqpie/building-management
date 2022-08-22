@@ -22,7 +22,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
   informationForm: FormGroup = new FormGroup({
     fullName: new FormControl(null)
   })
-  informationFormMessages = {
+  formMessages = {
     fullName: [
       { type: 'required', message: 'Full name is required' },
       { type: 'minlength', message: 'Must contain at least 3 character' },
@@ -68,10 +68,12 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
   submitChange() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.userSvc.patchAccount(this.informationForm.value, this.accountInfo?.id!).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+        
         this.notifySvc.success('Success', 'Information updated')
       },
       error: (err) => {

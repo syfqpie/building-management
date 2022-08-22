@@ -30,9 +30,9 @@
                     <div class="invalid-tooltip invalid-tooltip-right"
                         *ngIf="resendForm.controls['email'].errors &&
                         (resendForm.controls['email'].dirty || resendForm.controls['email'].touched)">
-                        <ng-container *ngFor="let message of resendFormMessages['email']">
-                            <span *ngIf="resendForm.get('email')?.hasError(message.type) &&
-                                (resendForm.get('email')?.dirty || resendForm.get('email')?.touched)">
+                        <ng-container *ngFor="let message of formMessages['email']">
+                            <span *ngIf="resendForm.controls['email'].hasError(message.type) &&
+                                (resendForm.controls['email'].dirty || resendForm.controls['email'].touched)">
                                 • {{ message.message }}
                             </span>
                         </ng-container>
@@ -63,6 +63,7 @@
                             </a>
                         </small>
                     </p>
+                    
                     <p class="mb-3">
                         <small class="text-muted">
                             Forgot password?

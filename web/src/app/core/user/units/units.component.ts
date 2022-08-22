@@ -1,18 +1,19 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ColumnMode } from '@swimlane/ngx-datatable';
 import { forkJoin, Subscription } from 'rxjs';
-import { UnitAddComponent } from 'src/app/components/units/unit-add/unit-add.component';
-import { Block } from 'src/app/shared/services/blocks/blocks.model';
-import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
-import { Floor } from 'src/app/shared/services/floors/floors.model';
-import { FloorsService } from 'src/app/shared/services/floors/floors.service';
-import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
-import { UnitNumbersService } from 'src/app/shared/services/unit-numbers/unit-numbers.service';
 
+import { ColumnMode } from '@swimlane/ngx-datatable';
+import { LoadingBarService } from '@ngx-loading-bar/core';
+
+import { Block } from 'src/app/shared/services/blocks/blocks.model';
+import { Floor } from 'src/app/shared/services/floors/floors.model';
 import { Unit } from 'src/app/shared/services/units/units.model';
+import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
+import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
+import { FloorsService } from 'src/app/shared/services/floors/floors.service';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { UnitNumbersService } from 'src/app/shared/services/unit-numbers/unit-numbers.service';
+import { UnitAddComponent } from 'src/app/components/units/unit-add/unit-add.component';
 
 @Component({
   selector: 'app-units',
@@ -27,12 +28,11 @@ export class UnitsComponent implements OnInit, OnDestroy {
   floors: Floor[] = []
   unitNumbers: UnitNumber[] = []
 
-  tableRows: Unit[] = []
-  tableLoadingIndicator: boolean = true
-  tableReorderable: boolean = true
+  // Table
   ColumnMode = ColumnMode
+  tableRows: Unit[] = []
   tableMessages = {
-    totalMessage: 'total of units'
+    totalMessage: 'total of records'
   }
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
@@ -45,7 +45,6 @@ export class UnitsComponent implements OnInit, OnDestroy {
 
   // Checker
   isProcessing: boolean = false
-  isRegisterNew: boolean = false
   
   // Subscription
   subscription: Subscription | undefined
@@ -66,6 +65,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -74,6 +74,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = forkJoin([
       this.unitSvc.getAll(),
       this.blockSvc.getAll(),

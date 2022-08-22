@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ColumnMode } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
-import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
+
+import { ColumnMode } from '@swimlane/ngx-datatable';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { Resident } from 'src/app/shared/services/residents/residents.model';
 import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
+import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
 
 @Component({
   selector: 'app-residents',
@@ -18,12 +19,11 @@ export class ResidentsComponent implements OnInit, OnDestroy {
   // Data
   residents: Resident[] = []
 
-  tableRows: Resident[] = []
-  tableLoadingIndicator: boolean = true
-  tableReorderable: boolean = true
+  // table
   ColumnMode = ColumnMode
+  tableRows: Resident[] = []
   tableMessages = {
-    totalMessage: 'total of residents'
+    totalMessage: 'total of records'
   }
   tableClass = {
     sortAscending: 'fa-solid fa-angle-up ms-1 small',
@@ -36,7 +36,6 @@ export class ResidentsComponent implements OnInit, OnDestroy {
 
   // Checker
   isProcessing: boolean = false
-  isRegisterNew: boolean = false
   
   // Subscription
   subscription: Subscription | undefined
@@ -55,6 +54,7 @@ export class ResidentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
@@ -63,6 +63,7 @@ export class ResidentsComponent implements OnInit, OnDestroy {
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
+
     this.subscription = this.residentSvc.getAll().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
@@ -85,7 +86,6 @@ export class ResidentsComponent implements OnInit, OnDestroy {
   }
 
   toggleModal() {
-    this.isRegisterNew = !this.isRegisterNew
     this.registerModal?.toggleModal()
   }
 

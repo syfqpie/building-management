@@ -36,10 +36,8 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
   }
 
   // Table
-  tableRows: UnitNumber[] = []
-  tableLoadingIndicator: boolean = true
-  tableReorderable: boolean = true
   ColumnMode = ColumnMode
+  tableRows: UnitNumber[] = []
   tableMessages = {
     totalMessage: 'total of records'
   }
@@ -58,9 +56,7 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
   isUpdateModalOpen: boolean = false
   
   // Subscription
-  subscription: Subscription | undefined
-  addSubscription: Subscription  | undefined
-  updateSubscription: Subscription  | undefined
+  subscription: Subscription = new Subscription
 
   constructor(
      private fb: FormBuilder,
@@ -79,18 +75,13 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
-    if (this.addSubscription) {
-      this.addSubscription.unsubscribe()
-    }
-    if (this.updateSubscription) {
-      this.updateSubscription.unsubscribe()
-    }
   }
 
   getData() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.subscription = this.unitNumberSvc.getAll().subscribe({
+
+    this.subscription.add(this.unitNumberSvc.getAll().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -103,7 +94,7 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
         this.unitNumbers = this.unitNumberSvc.unitNumbers
         this.tableRows = [...this.unitNumbers]
       }
-    })
+    }))
   }
 
   initForm() {
@@ -134,12 +125,13 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
   addUnitNumber() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.addSubscription = this.unitNumberSvc.create(
+    this.subscription.add(this.unitNumberSvc.create(
       this.addForm.value
     ).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'New unit number has been added'
@@ -176,19 +168,20 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
         // Update table
         this.getData()
       }
-    })
+    }))
   }
 
   patchUnitNumber() {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
-    this.addSubscription = this.unitNumberSvc.patch(
+    this.subscription.add(this.unitNumberSvc.patch(
       this.selectedUnitNumber?.id!,
       this.updateForm.value
     ).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
+
         this.notifySvc.success(
           'Success', 
           'Unit number has been updated'
@@ -223,7 +216,7 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
         // Update table
         this.getData()
       }
-    })
+    }))
   }
 
   toggleAddModal() {

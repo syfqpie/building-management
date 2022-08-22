@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { 
   Ticket,
@@ -28,10 +28,8 @@ export class TicketsComponent implements OnInit, OnDestroy {
   ticketStatus = TicketStatus
 
   // Table
-  tableRows: Ticket[] = []
-  tableLoadingIndicator: boolean = true
-  tableReorderable: boolean = true
   ColumnMode = ColumnMode
+  tableRows: Ticket[] = []
   tableMessages = {
     totalMessage: 'total of records'
   }
