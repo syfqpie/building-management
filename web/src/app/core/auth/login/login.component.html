@@ -7,8 +7,14 @@
                 <div class="col-10 col-md-7">
                     <img src="assets/images/illustrations/building-town.png"
                         class="w-100 d-block d-md-none" />
-                    <p class="text-muted">
-                        Welcome back! Log in to your account
+                    <img class="mx-auto d-none d-md-block mb-3"
+                        src="assets/images/default/logo-primary.png"
+                        style="height: 5rem; width: 5rem" />
+                    <p class="text-muted mb-0 text-center">
+                        Welcome back!
+                    </p>
+                    <p class="text-muted text-center">
+                        Log in to your account
                     </p>
                 </div>
                 
@@ -83,7 +89,7 @@
 
                     <hr class="my-3" />
 
-                    <p class="mb-0">
+                    <p class="mb-0 text-center">
                         <small class="text-muted">
                             Forgot password?
                             <a [routerLink]="'/auth/reset'"
@@ -93,7 +99,7 @@
                         </small>
                     </p>
                     
-                    <p class="mb-3">
+                    <p class="mb-3 text-center">
                         <small class="text-muted">
                             No verification email?
                             <a [routerLink]="'/auth/resend-verification'"

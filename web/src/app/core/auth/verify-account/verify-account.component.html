@@ -7,7 +7,10 @@
                 <div class="col-10 col-md-7">
                     <img src="assets/images/illustrations/verify-account.png"
                         class="w-100 d-block d-md-none" />
-                    <p class="text-muted">
+                    <img class="mx-auto d-none d-md-block mb-3"
+                        src="assets/images/default/logo-primary.png"
+                        style="height: 5rem; width: 5rem" />
+                    <p class="text-muted text-center">
                         <span *ngIf="!isProcessing; else isLoading">
                             <span *ngIf="isVerified; else isNotVerified">
                                 Your account has been verified
@@ -93,7 +96,7 @@
 
                     <hr class="my-3" />
 
-                    <p class="mb-0">
+                    <p class="mb-0 text-center">
                         <small class="text-muted">
                             Back to
                             <a [routerLink]="'/auth/login'"
@@ -103,7 +106,7 @@
                         </small>
                     </p>
                     
-                    <p class="mb-3">
+                    <p class="mb-3 text-center">
                         <small class="text-muted">
                             Forgot password?
                             <a [routerLink]="'/auth/reset'"
