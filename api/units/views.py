@@ -1,10 +1,10 @@
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.utils.timezone import now
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,6 +12,8 @@ from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
+
+from core.helpers import camel_to_capitalize
 
 from users.permissions import IsAdminStaff, IsSuperAdmin
 
@@ -537,4 +539,29 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return super().get_serializer_class()
 
 
+    # Get unit activity overview
+    @action(methods=['GET'], detail=False, url_path='overview')
+    def get_overview(self, request, *args, **kwargs):
+        # Get this year's activities
+        current_date = now()
+        activities = UnitActivity.objects.all().filter(activity_at__year=current_date.year)
+
+        # Prepare response data
+        by_type = []
+        agg_data = activities.aggregate(
+            move_in=Count('id', filter=Q(activity_type=ActivityType.MOVE_IN)),
+            move_out=Count('id', filter=Q(activity_type=ActivityType.MOVE_OUT), distinct=True),
+            activate=Count('id', filter=Q(activity_type=ActivityType.ACTIVATE)),
+            deactivate=Count('id', filter=Q(activity_type=ActivityType.DEACTIVATE)),
+            enable_maintenance=Count('id', filter=Q(activity_type=ActivityType.ENABLE_MAINTENANCE)),
+            disable_maintenance=Count('id', filter=Q(activity_type=ActivityType.DISABLE_MAINTENANCE))
+        )
+
+        for key in agg_data:
+            by_type.append({
+                'name': camel_to_capitalize(key),
+                'value': agg_data[key]
+            })
+        
+        return JsonResponse(by_type, safe=False)
     

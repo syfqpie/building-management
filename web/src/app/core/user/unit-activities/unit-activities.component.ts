@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 
+import { Color, colorSets, SingleSeries } from '@swimlane/ngx-charts';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
@@ -19,6 +20,7 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
   activities: UnitActivity[] = []
   searchId: number[] = []
   activityType = ActivityType
+  overview: SingleSeries[] = []
   
   // Table
   ColumnMode = ColumnMode
@@ -41,6 +43,9 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
   // Subscription
   subscription: Subscription | undefined
   routeSubscription: Subscription | undefined
+
+  // Chart
+  colorScheme: string | Color = colorSets[12]
 
   constructor(
     private loadingBar: LoadingBarService,
@@ -76,7 +81,10 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
     
-    this.subscription = this.activitySvc.getAll().subscribe({
+    this.subscription = forkJoin([
+      this.activitySvc.getAll(),
+      this.activitySvc.getOverview()
+    ]).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -88,6 +96,7 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
       complete: () => {
         this.activities = this.activitySvc.activities
         this.tableRows = [...this.activities]
+        this.overview = this.activitySvc.overview
       }
     })
   }

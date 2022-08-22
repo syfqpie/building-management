@@ -2,14 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
 import { environment } from 'src/environments/environment';
 import { DetailResponse } from '../auth/auth.model';
+import { MultiSeries, SingleSeries } from '@swimlane/ngx-charts';
 
 import { 
-  Ticket, TicketTag, TicketActivity,
-  TicketComment, TicketStatus, TicketPriority,
-  TicketCategory, TicketExtended, TicketCommentExtended,
-  TicketOverview, MultiSeries, SingleSeries
+  Ticket, TicketExtended, 
+  TicketCommentExtended,
+  TicketOverview
 } from './tickets.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/tickets/`

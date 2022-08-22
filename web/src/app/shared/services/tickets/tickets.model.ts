@@ -91,16 +91,6 @@ export class TicketOverview {
     ) {}
 }
 
-export interface MultiSeries {
-    name: string,
-    series: SingleSeries[]
-}
-
-export interface SingleSeries {
-    name: string,
-    value: number
-}
-
 interface CountPercentage {
     count: number,
     percentage: number

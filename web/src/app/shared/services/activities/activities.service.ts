@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { UnitActivity } from '../activities/activities.model';
+import { SingleSeries } from '@swimlane/ngx-charts';
 
 const BASE_URL = `${ environment.baseUrl }v1/unit-activities/`
 
@@ -16,6 +17,7 @@ export class ActivitiesService {
   // Data
   public activity: UnitActivity | undefined
   public activities: UnitActivity[] = []
+  public overview: SingleSeries[] = []
 
   constructor(
     private http: HttpClient
@@ -37,6 +39,16 @@ export class ActivitiesService {
       tap((res: UnitActivity) => {
         this.activity = res
         // console.log('Unit activitiy:', this.activity)
+      })
+    )
+  }
+
+  getOverview(): Observable<SingleSeries[]> {
+    const urlTemp = `${ BASE_URL }overview/`
+    return this.http.get<SingleSeries[]>(urlTemp).pipe(
+      tap((res: SingleSeries[]) => {
+        this.overview = res
+        // console.log('Activity overview: ', this.overview)
       })
     )
   }
