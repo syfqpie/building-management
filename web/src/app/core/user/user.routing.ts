@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ParkingDetailComponent } from './parking-detail/parking-detail.component';
 import { ParkingsComponent } from './parkings/parkings.component';
 import { ResidentDetailComponent } from './resident-detail/resident-detail.component';
 import { ResidentsComponent } from './residents/residents.component';
@@ -127,6 +128,13 @@ export const UserRoutes: Routes = [
                         component: ParkingsComponent,
                         data: {
                             title: 'Parkings'
+                        }
+                    },
+                    {
+                        path: 'detail/:id',
+                        component: ParkingDetailComponent,
+                        data: {
+                            title: 'Parking detail'
                         }
                     }
                 ]

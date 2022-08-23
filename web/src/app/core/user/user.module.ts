@@ -21,6 +21,7 @@ import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
+import { AddParkingComponent } from '../../components/parkings/add-parking/add-parking.component';
 import { AddTicketComponent } from '../../components/tickets/add-ticket/add-ticket.component';
 import { ActivityTimelineComponent } from '../../components/tickets/activity-timeline/activity-timeline.component';
 import { AssignOwnerComponent } from '../../components/units/assign-owner/assign-owner.component';
@@ -28,6 +29,7 @@ import { BlocksTableComponent } from 'src/app/components/units/blocks-table/bloc
 import { FloorsTableComponent } from 'src/app/components/units/floors-table/floors-table.component';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { ParkingsComponent } from './parkings/parkings.component';
+import { ParkingDetailComponent } from './parking-detail/parking-detail.component';
 import { PasswordSettingsComponent } from 'src/app/components/settings/password-settings/password-settings.component';
 import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
@@ -69,6 +71,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     UnitDetailComponent,
     // Child components
     AccountSettingsComponent,
+    AddParkingComponent,
     AddTicketComponent,
     ActivityTimelineComponent,
     AssignOwnerComponent,
@@ -76,6 +79,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FloorsTableComponent,
     NotAuthorizedComponent,
     ParkingsComponent,
+    ParkingDetailComponent,
     PasswordSettingsComponent,
     SysRegisterAdminComponent,
     TicketCommentsComponent,
