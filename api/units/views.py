@@ -22,6 +22,7 @@ from .models import (
     Floor,
     UnitNumber,
     Unit,
+    ParkingLot,
     UnitActivity,
     ActivityType
 )
@@ -33,7 +34,8 @@ from .serializers import (
     UnitActivityNonNestedSerializer,
     UnitNumberSerializer,
     UnitSerializer,
-    UnitExtendedSerializer
+    UnitExtendedSerializer,
+    ParkingLotSerializer
 )
 
 
@@ -501,6 +503,28 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         }
         
         return JsonResponse(data_)
+
+
+class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = ParkingLot.objects.all()
+    serializer_class = ParkingLotSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        return [permission() for permission in permission_classes]
+    
+    def perform_create(self, serializer):
+        request = serializer.context['request']
+        serializer.save(created_by=request.user)
+
+    def perform_update(self, serializer):
+        request = serializer.context['request']
+        serializer.save(last_modified_by=request.user)
 
 
 class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):

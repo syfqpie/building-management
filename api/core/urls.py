@@ -89,6 +89,7 @@ from units.views import (
     BlockViewSet,
     FloorViewSet,
     UnitNumberViewSet,
+    ParkingLotViewSet,
     UnitActivityViewSet
 )
 units_router = router.register(
@@ -105,6 +106,9 @@ floors_router = router.register(
 )
 unit_numbers_router = router.register(
     r'unit-numbers', UnitNumberViewSet
+)
+parking_lots_router = router.register(
+    r'parking-lots', ParkingLotViewSet
 )
 unit_activities_router = router.register(
     r'unit-activities', UnitActivityViewSet

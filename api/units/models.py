@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.utils import timezone
+from rest_framework.exceptions import PermissionDenied
 
 from core.helpers import PathAndRename
 
@@ -182,6 +182,70 @@ class Unit(models.Model):
             self.unit_no = str(self.block.block) + '-' + str(self.floor.floor) + '-' + str(self.unit_number.unit_number)
         else:
             pass
+            
+        super().save(*args, **kwargs)
+
+
+class ParkingLot(models.Model):
+    id = models.AutoField(primary_key=True, editable=False)
+    lot_no = models.CharField(max_length=100, editable=False)
+
+    block = models.ForeignKey(
+        Block,
+        on_delete=models.CASCADE,
+        related_name='block_parking_lots'
+    )
+    floor = models.ForeignKey(
+        Floor,
+        on_delete=models.CASCADE,
+        related_name='floor_parking_lots'
+    )
+
+    # Logs
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'user_type': UserType.ADMIN},
+        related_name='parking_lots_created'
+    )
+    last_modified_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'user_type': UserType.ADMIN},
+        related_name='parking_lots_modified'
+    )
+
+    class Meta:
+        ordering = ['-lot_no']
+    
+    def __str__(self):
+        return ('%s'%(self.lot_no))
+    
+    def save(self, *args, **kwargs):
+        """
+            Generate lot no
+            Example: A3A01
+        """
+        if not self.lot_no:
+            # Get lot block + floor count
+            current_count = self.__class__.objects.filter(
+                block=self.block,
+                floor=self.floor
+            ).count()
+
+            if current_count < 99:
+                # Generate and assign
+                self.lot_no = str(self.block.block) + \
+                    str(self.floor.floor) + \
+                    '{0:02d}'.format(current_count + 1)
+            else:
+                # Permission denied when current_count 99
+                raise PermissionDenied(detail='Lot limit reached')
             
         super().save(*args, **kwargs)
 

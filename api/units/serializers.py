@@ -9,6 +9,7 @@ from .models import (
     Floor,
     UnitNumber,
     Unit,
+    ParkingLot,
     UnitActivity
 )
 
@@ -85,6 +86,7 @@ class UnitActivityNonNestedSerializer(serializers.ModelSerializer):
             'current_owner',
         ]
 
+
 class UnitActivityNestedSerializer(serializers.ModelSerializer):
     activity_by = CustomUserEmailSerializer(read_only=True)
     class Meta:
@@ -93,3 +95,13 @@ class UnitActivityNestedSerializer(serializers.ModelSerializer):
             'current_owner',
             'unit'
         ]
+
+
+class ParkingLotSerializer(serializers.ModelSerializer):
+    """
+        Serializer for parking lot
+    """
+    
+    class Meta:
+        model = ParkingLot
+        fields = '__all__'
