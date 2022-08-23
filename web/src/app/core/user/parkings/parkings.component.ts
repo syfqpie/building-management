@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -35,6 +35,7 @@ export class ParkingsComponent implements OnInit, OnDestroy  {
 
   // Checker
   isProcessing: boolean = false
+  isAddNew: boolean = false
   
   // Subscription
   subscription: Subscription | undefined
@@ -79,6 +80,10 @@ export class ParkingsComponent implements OnInit, OnDestroy  {
   // Table on select row
   onSelect(selected: number) {
     this.router.navigate(['management/parkings/detail', selected])
+  }
+
+  toggleAddModal() {
+    this.isAddNew = !this.isAddNew
   }
 
 }
