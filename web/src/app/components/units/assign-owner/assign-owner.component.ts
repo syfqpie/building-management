@@ -1,20 +1,22 @@
 import { 
-  AfterViewInit,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output,
-  ViewChild } from '@angular/core';
+  Output } from '@angular/core';
 import {
+  catchError,
+  concat,
   debounceTime,
   distinctUntilChanged,
   filter,
-  fromEvent,
-  map,
-  Subscription } from 'rxjs';
+  Observable,
+  of,
+  Subject,
+  Subscription, 
+  switchMap, 
+  tap } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
@@ -28,13 +30,14 @@ import { UnitsService } from 'src/app/shared/services/units/units.service';
   templateUrl: './assign-owner.component.html',
   styleUrls: ['./assign-owner.component.scss']
 })
-export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AssignOwnerComponent implements OnInit, OnDestroy {
 
   // Input
   @Input() unitId!: number
 
   // Data
-  searchedResidents: Resident[] = []
+  residents$?: Observable<Resident[]>
+  residentInput$: Subject<string> = new Subject<string>()
   selectedResident: Resident | undefined
 
   // Checker
@@ -44,10 +47,8 @@ export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
   
   // Subscription
   svcSubscription: Subscription = new Subscription
-  eventSubscription: Subscription | undefined
   
   // Event
-  @ViewChild('residentSearchInput', { static: false }) residentSearchInput: ElementRef | undefined
   @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
@@ -57,10 +58,8 @@ export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
     private residentSvc: ResidentsService
   ) { }
 
-  ngOnInit(): void { }
-
-  ngAfterViewInit(): void {
-    this.startSearchPipe()
+  ngOnInit(): void {
+    this.searchResident()
   }
 
   ngOnDestroy(): void {
@@ -68,38 +67,25 @@ export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.svcSubscription) {
       this.svcSubscription.unsubscribe()
     }
-    // Unsubscribe event subscription
-    if (this.eventSubscription) {
-      this.eventSubscription.unsubscribe()
-    }
   }
 
-  startSearchPipe() {
-    this.eventSubscription = fromEvent(this.residentSearchInput?.nativeElement, 'keyup').pipe(
-      map((event: any) => {
-        return event.target.value
-      }),
-      filter(
-        res => res.length > 2
-      ),
-      debounceTime(1000),
-      distinctUntilChanged()
-    ).subscribe(
-      (text: string) => {
-        this.isSearching = true
-
-        this.svcSubscription.add(this.residentSvc.search(text).subscribe({
-          next: () => {
-            this.isSearching = false
-          },
-          error: () => {
-            this.isSearching = false
-          },
-          complete: () => {
-            this.searchedResidents = this.residentSvc.residents
-          }
-        }))
-      }
+  searchResident() {
+    this.residents$ = concat(
+      of([]), // Default value,
+      this.residentInput$.pipe(
+        filter(res => {
+          return res !== null && res.length >= 3
+        }),
+        distinctUntilChanged(),
+        debounceTime(1000),
+        tap(() => this.isSearching = true),
+        switchMap(term => {
+          return this.residentSvc.search(term).pipe(
+            catchError(() => of([])), // Empty of error
+            tap(() => this.isSearching = false)
+          )
+        })
+      )
     )
   }
 
@@ -136,15 +122,13 @@ export class AssignOwnerComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onSelectResident(resident: Resident) {
     this.selectedResident = resident
-    // console.log(this.selectedResident)
   }
 
   cancelAssignOwner() {
     this.selectedResident = undefined
-    this.searchedResidents = []
     const timer = setTimeout(
       () => {
-        this.startSearchPipe()
+        this.searchResident()
       }, 500
     )
   }
