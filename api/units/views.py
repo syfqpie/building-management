@@ -30,12 +30,12 @@ from .models import (
 from .serializers import (
     BlockSerializer,
     FloorSerializer,
-    UnitActivityNestedSerializer,
-    UnitActivityNonNestedSerializer,
     UnitNumberSerializer,
     UnitSerializer,
     UnitExtendedSerializer,
-    ParkingLotSerializer
+    ParkingLotSerializer,
+    UnitActivityNestedSerializer,
+    UnitActivityNonNestedSerializer
 )
 
 
@@ -525,6 +525,44 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
+
+    # Activate lot
+    @action(methods=['GET'], detail=True)
+    def activate(self, request, *args, **kwargs):
+        lot = self.get_object()
+
+        if lot.is_active is True:
+            raise PermissionDenied(detail='Lot is already activated')
+        
+        lot.is_active = True
+        lot.save()
+
+        serializer = self.get_serializer(lot, many=False)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            { 'detail': 'Lot activated' },
+            status=status.HTTP_200_OK,
+            headers=headers
+        )
+
+    # Deactivate lot
+    @action(methods=['GET'], detail=True)
+    def deactivate(self, request, *args, **kwargs):
+        lot = self.get_object()
+
+        if lot.is_active is False:
+            raise PermissionDenied(detail='Lot is already deactivated')
+        
+        lot.is_active = False
+        lot.save()
+
+        serializer = self.get_serializer(lot, many=False)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            { 'detail': 'Lot deactivated' },
+            status=status.HTTP_200_OK,
+            headers=headers
+        )
 
 
 class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):

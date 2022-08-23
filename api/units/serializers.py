@@ -70,6 +70,16 @@ class UnitExtendedSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ParkingLotSerializer(serializers.ModelSerializer):
+    """
+        Serializer for parking lot
+    """
+    
+    class Meta:
+        model = ParkingLot
+        fields = '__all__'
+
+
 class UnitActivitySerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -95,13 +105,3 @@ class UnitActivityNestedSerializer(serializers.ModelSerializer):
             'current_owner',
             'unit'
         ]
-
-
-class ParkingLotSerializer(serializers.ModelSerializer):
-    """
-        Serializer for parking lot
-    """
-    
-    class Meta:
-        model = ParkingLot
-        fields = '__all__'
