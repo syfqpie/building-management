@@ -200,6 +200,12 @@ class ParkingLot(models.Model):
         on_delete=models.CASCADE,
         related_name='floor_parking_lots'
     )
+    owner = models.ForeignKey(
+        Resident,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='parkings_owned'
+    )
 
     # Logs
     is_active = models.BooleanField(default=True)
