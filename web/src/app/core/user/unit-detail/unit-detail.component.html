@@ -288,7 +288,7 @@
         <ng-template #isNoOwner>
             <div class="col-sm-12 col-md-9 d-flex">
                 <app-assign-owner
-                    *ngIf="isAssigning; else isNotAssigning"
+                    *ngIf="isAssigning && currentUnit; else isNotAssigning"
                     class="w-100 m-auto"
                     [unitId]="currentUnit!.id"
                     (changedEvent)="onOwnerChanged()">
