@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ParkingsComponent } from './parkings/parkings.component';
 import { ResidentDetailComponent } from './resident-detail/resident-detail.component';
 import { ResidentsComponent } from './residents/residents.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -114,6 +115,18 @@ export const UserRoutes: Routes = [
                         component: TicketDetailComponent,
                         data: {
                             title: 'Ticket detail'
+                        }
+                    }
+                ]
+            },
+            {
+                path: 'parkings',
+                children: [
+                    {
+                        path: '',
+                        component: ParkingsComponent,
+                        data: {
+                            title: 'Parkings'
                         }
                     }
                 ]
