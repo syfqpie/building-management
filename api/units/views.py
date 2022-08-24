@@ -591,6 +591,41 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
             headers=headers
         )
+    
+    # Assign owner
+    @action(methods=['POST'], detail=True, url_path='assign-owner')
+    def assign_owner(self, request, *args, **kwargs):
+        lot = self.get_object()
+
+        # Check if lot already have an owner and not replacing
+        if lot.owner:
+            raise PermissionDenied(
+                detail='Lot already have a owner. You should check out last owner first instead'
+            )
+
+        # Lot value validation
+        try:
+            owner_id = request.data['resident']
+        except Exception as e:
+            raise PermissionDenied(detail='Owner is required')
+        
+        lot_serializer = self.get_serializer(
+            lot,
+            data={ 'owner': owner_id },
+            partial=True
+        )
+        lot_serializer.is_valid(raise_exception=True)
+
+        # Saving
+        lot.owner = lot_serializer.validated_data['owner']
+        lot.save(update_fields=[
+            'owner',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+
+        serializer = ParkingLotExtendedSerializer(lot, many=False)
+        return Response(serializer.data)
 
 
 class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
