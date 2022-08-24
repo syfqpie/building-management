@@ -23,11 +23,25 @@ class BlockSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class BlockNoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Block
+        fields = ['id', 'block']
+
+
 class FloorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Floor
         fields = '__all__'
+
+
+class FloorNoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Floor
+        fields = ['id', 'floor']
 
 
 class UnitNumberSerializer(serializers.ModelSerializer):
@@ -75,6 +89,19 @@ class ParkingLotSerializer(serializers.ModelSerializer):
         Serializer for parking lot
     """
     
+    class Meta:
+        model = ParkingLot
+        fields = '__all__'
+
+
+class ParkingLotExtendedSerializer(serializers.ModelSerializer):
+    """
+        Serializer for parking lot extended
+    """
+    block = BlockNoSerializer(many=False, read_only=True)
+    floor = FloorNoSerializer(many=False, read_only=True)
+    owner = ResidentSerializer(many=False, read_only=True)
+
     class Meta:
         model = ParkingLot
         fields = '__all__'

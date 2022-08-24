@@ -30,6 +30,7 @@ from .models import (
 from .serializers import (
     BlockSerializer,
     FloorSerializer,
+    ParkingLotExtendedSerializer,
     UnitNumberSerializer,
     UnitSerializer,
     UnitExtendedSerializer,
@@ -508,6 +509,10 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = ParkingLot.objects.all()
     serializer_class = ParkingLotSerializer
+    serializer_class_admin = {
+        'list_ext': ParkingLotExtendedSerializer,
+        'retrieve_ext': ParkingLotExtendedSerializer
+    }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
     def get_permissions(self):
@@ -518,6 +523,15 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
     
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Check serializer class by action
+        if hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
+
+        # Return original class
+        return super().get_serializer_class()
+    
     def perform_create(self, serializer):
         request = serializer.context['request']
         serializer.save(created_by=request.user)
@@ -525,6 +539,20 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
+ 
+    # Get extended lots
+    @action(methods=['GET'], detail=False, url_path='extended')
+    def list_ext(self, request, *args, **kwargs):
+        lots = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(lots, many=True)
+        return Response(serializer.data)
+    
+    # Get extended lot
+    @action(methods=['GET'], detail=True, url_path='extended')
+    def retrieve_ext(self, request, *args, **kwargs):
+        lot = self.get_object()
+        serializer = self.get_serializer(lot, many=False)
+        return Response(serializer.data)
 
     # Activate lot
     @action(methods=['GET'], detail=True)
