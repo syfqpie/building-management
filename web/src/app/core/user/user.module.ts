@@ -25,6 +25,7 @@ import { AddParkingComponent } from '../../components/parkings/add-parking/add-p
 import { AddTicketComponent } from '../../components/tickets/add-ticket/add-ticket.component';
 import { ActivityTimelineComponent } from '../../components/tickets/activity-timeline/activity-timeline.component';
 import { AssignOwnerComponent } from '../../components/units/assign-owner/assign-owner.component';
+import { AssignLotOwnerComponent } from '../../components/parkings/assign-lot-owner/assign-lot-owner.component';
 import { BlocksTableComponent } from 'src/app/components/units/blocks-table/blocks-table.component';
 import { FloorsTableComponent } from 'src/app/components/units/floors-table/floors-table.component';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
@@ -75,6 +76,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     AddTicketComponent,
     ActivityTimelineComponent,
     AssignOwnerComponent,
+    AssignLotOwnerComponent,
     BlocksTableComponent,
     FloorsTableComponent,
     NotAuthorizedComponent,
