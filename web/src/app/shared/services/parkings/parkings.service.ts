@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
+import { DetailResponse } from '../auth/auth.model';
 
 import { Parking, ParkingExtended } from './parkings.model';
 
@@ -80,6 +81,34 @@ export class ParkingsService {
       tap((res: Parking) => {
         this.parking = res
         // console.log('Parking:', this.parking)
+      })
+    )
+  }
+
+  activate(id: number): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }${ id }/activate/`
+    return this.http.get<DetailResponse>(urlTemp).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Activate parking: ', res)
+      })
+    )
+  }
+
+  deactivate(id: number): Observable<DetailResponse> {
+    const urlTemp = `${ BASE_URL }${ id }/deactivate/`
+    return this.http.get<DetailResponse>(urlTemp).pipe(
+      tap((res: DetailResponse) => {
+        // console.log('Deactivate parking: ', res)
+      })
+    )
+  }
+
+  assignOwner(id: any, body: any): Observable<ParkingExtended>  {
+    const urlTemp = `${ BASE_URL }${ id }/assign-owner/`
+    return this.http.post<ParkingExtended>(urlTemp, body).pipe(
+      tap((res: ParkingExtended) => {
+        this.parkingExtended = res
+        // console.log('Assign owner:', this.parkingExtended)
       })
     )
   }
