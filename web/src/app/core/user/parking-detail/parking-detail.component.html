@@ -1,1 +1,151 @@
-<p>parking-detail works!</p>
+<div class="container-fluid">
+    <div class="row g-3">
+        <div class="col-12 text-end">
+            <button class="btn btn-outline-primary btn-sm"
+                *ngIf="currentParking?.isActive"
+                (click)="deactivate()">
+                <i class="fa-solid fa-lock"></i>
+                Deactivate
+            </button>
+            
+            <button class="btn btn-outline-primary btn-sm"
+                *ngIf="!currentParking?.isActive"
+                (click)="activate()">         
+                <i class="fa-solid fa-lock-open"></i>
+                Activate
+            </button>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Parking information
+                    </h5>
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Lot no.: 
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentParking?.lotNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Block:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentParking?.block?.block }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Floor:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentParking?.floor?.floor }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small d-block">
+                            Active:
+                        </label>
+                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2 my-1"
+                            [ngClass]="{
+                                'bg-success text-success
+                                    border-success': currentParking?.isActive,
+                                'bg-danger text-danger
+                                    border-danger': !currentParking?.isActive
+                            }">
+                            <span *ngIf="currentParking?.isActive; else isNotActive">
+                                <i class="fa-regular fa-circle-check my-auto"></i>
+                                Active
+                            </span>
+                            <ng-template #isNotActive>
+                                <span>
+                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                    Inactive
+                                </span>
+                            </ng-template>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="currentParking?.owner !== null; else isNoOwner"
+            class="col-sm-12 col-md-9">
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="rounded-circle
+                                border border-primary border-opacity-50 d-flex justify-content-center
+                                align-items-center mx-auto m-0 p-2 avatar"
+                                alt="Avatar">
+                                <div class="rounded-circle bg-primary bg-opacity-75
+                                    d-flex justify-content-center
+                                    align-items-center w-100 h-100">
+                                    <i class="fa-solid fa-square-parking fa-2x text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md">
+                            <p class="fw-bold small mb-0">
+                                <i class="fa-regular fa-id-card fa-fw"></i>
+                                {{ currentParking?.owner?.title | titleType }}
+                                {{ currentParking?.owner?.name }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-mobile-screen fa-fw"></i>
+                                {{ currentParking?.owner?.phoneNo }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-receipt fa-fw"></i>
+                                {{ 
+                                    (currentParking?.owner?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
+                                    'N/A'
+                                }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-envelope fa-fw"></i>
+                                {{ currentParking?.owner?.email }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #isNoOwner>
+            <div class="col-sm-12 col-md-9 d-flex">
+                <app-assign-lot-owner
+                    *ngIf="isAssigning && currentParking; else isNotAssigning"
+                    class="w-100 m-auto"
+                    [parkingId]="currentParking!.id"
+                    (changedEvent)="onOwnerChanged()">
+                </app-assign-lot-owner>
+
+                <ng-template #isNotAssigning>
+                    <div class="text-center w-100 m-auto">
+                        <img src="assets/images/illustrations/no-information.png"
+                            style="height: 14rem;">
+                        <p class="text-muted">No information yet</p>
+                        <button class="btn btn-primary"
+                            (click)="toggleAssignOwner()">
+                            Assign owner
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </ng-template>
+    </div>
+</div>
