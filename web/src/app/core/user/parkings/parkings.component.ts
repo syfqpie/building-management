@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { Parking } from 'src/app/shared/services/parkings/parkings.model';
+import { ParkingExtended } from 'src/app/shared/services/parkings/parkings.model';
 import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
 
 @Component({
@@ -16,11 +16,11 @@ import { ParkingsService } from 'src/app/shared/services/parkings/parkings.servi
 export class ParkingsComponent implements OnInit, OnDestroy  {
 
   // Data
-  parkings: Parking[] = []
+  parkings: ParkingExtended[] = []
 
   // Table
   ColumnMode = ColumnMode
-  tableRows: Parking[] = []
+  tableRows: ParkingExtended[] = []
   tableMessages = {
     totalMessage: 'total of records'
   }
@@ -61,7 +61,7 @@ export class ParkingsComponent implements OnInit, OnDestroy  {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription = this.parkingSvc.getAll().subscribe({
+    this.subscription = this.parkingSvc.getAllExtended().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -71,7 +71,7 @@ export class ParkingsComponent implements OnInit, OnDestroy  {
         this.isProcessing = false
       },
       complete: () => {
-        this.parkings = this.parkingSvc.parkings
+        this.parkings = this.parkingSvc.parkingsExtended
         this.tableRows = [...this.parkings]
       }
     })

@@ -45,6 +45,30 @@
                         </ng-template>
                     </ngx-datatable-column>
 
+                    <ngx-datatable-column name="Block"
+                        prop="block.block"
+                        [flexGrow]="1"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Floor"
+                        prop="floor.floor"
+                        [flexGrow]="1"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
                     <ngx-datatable-column name="Active"
                         prop="isActive"
                         [flexGrow]="2"
