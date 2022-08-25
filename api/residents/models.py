@@ -16,6 +16,11 @@ class GenderType(models.IntegerChoices):
     MALE = 2, 'Male'
 
 
+class VehicleType(models.IntegerChoices):
+    CAR = 1, 'Car'
+    MOTOR = 2, 'Motorcycle'
+    LORRY = 3, 'Lorry'
+
 class Resident(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
     resident_no = models.CharField(max_length=100, null=True)
@@ -71,3 +76,38 @@ class Resident(models.Model):
                 self.resident_no = prefix+'{0:05d}'.format(1)
             
         super().save(*args, **kwargs)
+
+
+class ResidentVehicle(models.Model):
+    id = models.AutoField(primary_key=True, editable=False)
+    plate_no = models.CharField(max_length=100, unique=True)
+    vehicle_type = models.IntegerField(choices=VehicleType.choices, default=VehicleType.CAR)
+    resident = models.ForeignKey(
+        Resident,
+        on_delete=models.CASCADE,
+        related_name='vehicles'
+    )
+
+    # Log
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'user_type': UserType.ADMIN},
+        related_name='resident_vehicles_created'
+    )
+    last_modified_by = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='resident_vehicles_last_modified'
+    )
+    
+    class Meta:
+        ordering = ['-plate_no']
+    
+    def __str__(self):
+        return ('%s - %s'%(self.resident.resident_no, self.plate_no))

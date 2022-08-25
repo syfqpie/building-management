@@ -6,7 +6,7 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 from decouple import config
 
-from .models import GenderType, Resident, TitleType
+from .models import GenderType, Resident, ResidentVehicle, TitleType
 
 
 class ResidentSerializer(serializers.ModelSerializer):
@@ -101,3 +101,29 @@ class ResidentCustomRegisterSerializer(RegisterSerializer):
         resident.save()
 
         return resident_user
+
+
+class ResidentVehicleSerializer(serializers.ModelSerializer):
+    """
+        Serializer for resident vehicle
+    """
+
+    class Meta:
+        model = ResidentVehicle
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+class ResidentVehicleSimplifiedSerializer(serializers.ModelSerializer):
+    """
+        Serializer for simplified resident vehicle
+    """
+
+    class Meta:
+        model = ResidentVehicle
+        fields = [
+            'id',
+            'plate_no',
+            'vehicle_type'
+        ]
+        read_only_fields = '__all__'

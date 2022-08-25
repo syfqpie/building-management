@@ -11,8 +11,6 @@ from drf_yasg.utils import swagger_auto_schema
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-
-from core.settings import DEBUG
 from core.helpers import (
     DjangoFilterDescriptionInspector,
     NoTitleAutoSchema,
@@ -24,13 +22,15 @@ from users.models import UserType
 from users.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
-    Resident
+    Resident,
+    ResidentVehicle
 )
 from .serializers import (
     ResidentAdminSerializer,
     ResidentSerializer,
     ResidentPublicSerializer,
-    ResidentCustomRegisterSerializer
+    ResidentCustomRegisterSerializer,
+    ResidentVehicleSerializer
 )
 
 
@@ -213,3 +213,77 @@ class ResidentCustomRegisterView(RegisterView):
             response_msg,
             status=status.HTTP_201_CREATED
         )
+
+
+class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = ResidentVehicle.objects.all()
+    serializer_class = ResidentVehicleSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = [
+        'vehicle_type',
+        'is_active'
+    ]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        if self.action == 'activate':
+            permission_classes.append(IsSuperAdmin)
+        elif self.action == 'deactivate':
+            permission_classes.append(IsSuperAdmin)
+
+        return [permission() for permission in permission_classes]
+
+    def perform_create(self, serializer):
+        request = serializer.context['request']
+        serializer.save(created_by=request.user)
+
+    def perform_update(self, serializer):
+        request = serializer.context['request']
+        serializer.save(last_modified_by=request.user)
+
+    # Activate vehicle
+    @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(
+        operation_description='Activate a vehicle',
+        operation_id='Activate vehicle',
+        tags=['Vehicles'])
+    def activate(self, request, *args, **kwargs):
+        vehicle = self.get_object()
+
+        if vehicle.is_active is True:
+            raise PermissionDenied(detail='Vehicle is already activated')
+        vehicle.is_active = True
+        vehicle.save()
+
+        serializer = self.get_serializer(vehicle, many=False)
+        return Response(serializer.data)
+
+    # Deactivate vehicle
+    @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(
+        operation_description='Deactivate a vehicle',
+        operation_id='Deactivate vehicle',
+        tags=['Vehicles'])
+    def deactivate(self, request, *args, **kwargs):
+        vehicle = self.get_object()
+
+        if vehicle.is_active is False:
+            raise PermissionDenied(detail='Vehicle is already deactivated')
+        vehicle.is_active = False
+        vehicle.save()
+
+        serializer = self.get_serializer(vehicle, many=False)
+        return Response(serializer.data)
+
