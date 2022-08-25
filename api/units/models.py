@@ -6,7 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from core.helpers import PathAndRename
 
-from residents.models import Resident
+from residents.models import Resident, ResidentVehicle
 from users.models import CustomUser, UserType
 
 
@@ -200,11 +200,17 @@ class ParkingLot(models.Model):
         on_delete=models.CASCADE,
         related_name='floor_parking_lots'
     )
-    owner = models.ForeignKey(
+    resident = models.ForeignKey(
         Resident,
         on_delete=models.SET_NULL,
         null=True,
         related_name='parkings_owned'
+    )
+    vehicle = models.OneToOneField(
+        ResidentVehicle,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='current_lot'
     )
 
     # Logs
