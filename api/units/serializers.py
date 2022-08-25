@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from residents.models import ResidentVehicle
 
 from users.serializers import CustomUserEmailSerializer
 
@@ -13,7 +14,7 @@ from .models import (
     UnitActivity
 )
 
-from residents.serializers import ResidentSerializer
+from residents.serializers import ResidentSerializer, ResidentVehicleSerializer
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -94,13 +95,28 @@ class ParkingLotSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ParkingLotAssignSerializer(serializers.ModelSerializer):
+    """
+        Serializer for parking lot assign_resident
+    """
+    vehicle = serializers.PrimaryKeyRelatedField(required=True, queryset=ResidentVehicle.objects.all())
+    
+    class Meta:
+        model = ParkingLot
+        fields = [
+            'resident',
+            'vehicle'
+        ]
+
+
 class ParkingLotExtendedSerializer(serializers.ModelSerializer):
     """
         Serializer for parking lot extended
     """
     block = BlockNoSerializer(many=False, read_only=True)
     floor = FloorNoSerializer(many=False, read_only=True)
-    owner = ResidentSerializer(many=False, read_only=True)
+    resident = ResidentSerializer(many=False, read_only=True)
+    vehicle = ResidentVehicleSerializer(many=False, read_only=True)
 
     class Meta:
         model = ParkingLot
