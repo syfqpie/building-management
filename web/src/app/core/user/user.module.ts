@@ -48,6 +48,7 @@ import { TicketStatusPipe } from '../../shared/handlers/pipes/ticket-status.pipe
 import { TicketPriorityPipe } from '../../shared/handlers/pipes/ticket-priority.pipe';
 import { TicketCategoryPipe } from '../../shared/handlers/pipes/ticket-category.pipe';
 import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
+import { VehicleTypePipe } from '../../shared/handlers/pipes/vehicle-type.pipe';
 
 // 3rd party
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -96,7 +97,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TicketStatusPipe,
     TicketPriorityPipe,
     TicketCategoryPipe,
-    TitleTypePipe
+    TitleTypePipe,
+    VehicleTypePipe
   ],
   imports: [
     CommonModule,
