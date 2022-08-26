@@ -103,12 +103,12 @@ export class ParkingsService {
     )
   }
 
-  assignOwner(id: any, body: any): Observable<ParkingExtended>  {
-    const urlTemp = `${ BASE_URL }${ id }/assign-owner/`
+  assignResident(id: any, body: any): Observable<ParkingExtended>  {
+    const urlTemp = `${ BASE_URL }${ id }/assign-resident/`
     return this.http.post<ParkingExtended>(urlTemp, body).pipe(
       tap((res: ParkingExtended) => {
         this.parkingExtended = res
-        // console.log('Assign owner:', this.parkingExtended)
+        // console.log('Assign resident:', this.parkingExtended)
       })
     )
   }
