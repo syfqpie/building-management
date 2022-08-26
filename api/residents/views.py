@@ -220,6 +220,7 @@ class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = ResidentVehicleSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = [
+        'resident',
         'vehicle_type',
         'is_active'
     ]

@@ -57,10 +57,14 @@ medias_router = router.register(
 # Residents
 from residents.views import (
     ResidentViewSet,
-    ResidentCustomRegisterView
+    ResidentCustomRegisterView,
+    ResidentVehicleViewSet
 )
 residents_router = router.register(
     r'residents', ResidentViewSet
+)
+resident_vehicles_router = router.register(
+    r'vehicles', ResidentVehicleViewSet
 )
 
 # Tickets
