@@ -16,12 +16,13 @@
             </button>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
+        <div class="col-sm-12 col-md-3">
+            <div class="card shadow-sm border-0 mb-3">
                 <div class="card-body">
                     <h5 class="card-title">
                         Parking information
                     </h5>
+
                     <div class="mb-2">
                         <label class="fw-bold text-uppercase small">
                             Lot no.: 
@@ -49,12 +50,12 @@
                         </p>
                     </div>
 
-                    <div class="mb-2">
+                    <div class="mb-0">
                         <label class="fw-bold text-uppercase small d-block">
                             Active:
                         </label>
                         <p class="small d-inline-flex px-2 py-1 bg-opacity-10
-                            border border-opacity-10 rounded-2 my-1"
+                            border border-opacity-10 rounded-2 mt-1 mb-0"
                             [ngClass]="{
                                 'bg-success text-success
                                     border-success': currentParking?.isActive,
@@ -75,76 +76,135 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div *ngIf="currentParking?.owner !== null; else isNoOwner"
-            class="col-sm-12 col-md-9">
-            <div class="card shadow-sm border-0 mb-3">
+            <div *ngIf="currentParking?.vehicle"
+                class="card shadow-sm border-0">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="rounded-circle
-                                border border-primary border-opacity-50 d-flex justify-content-center
-                                align-items-center mx-auto m-0 p-2 avatar"
-                                alt="Avatar">
-                                <div class="rounded-circle bg-primary bg-opacity-75
-                                    d-flex justify-content-center
-                                    align-items-center w-100 h-100">
-                                    <i class="fa-solid fa-square-parking fa-2x text-white"></i>
-                                </div>
-                            </div>
-                        </div>
+                    <h5 class="card-title">
+                        Vehicle information
+                    </h5>
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Plate no.: 
+                        </label>
+                        <p class="text-muted small mb-0">
+                            {{ currentParking?.vehicle?.plateNo }}
+                        </p>
+                    </div>
 
-                        <div class="col-md">
-                            <p class="fw-bold small mb-0">
-                                <i class="fa-regular fa-id-card fa-fw"></i>
-                                {{ currentParking?.owner?.title | titleType }}
-                                {{ currentParking?.owner?.name }}
-                            </p>
-
-                            <p class="text-muted small mb-0">
-                                <i class="fa-solid fa-mobile-screen fa-fw"></i>
-                                {{ currentParking?.owner?.phoneNo }}
-                            </p>
-
-                            <p class="text-muted small mb-0">
-                                <i class="fa-solid fa-receipt fa-fw"></i>
-                                {{ 
-                                    (currentParking?.owner?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
-                                    'N/A'
-                                }}
-                            </p>
-
-                            <p class="text-muted small mb-0">
-                                <i class="fa-solid fa-envelope fa-fw"></i>
-                                {{ currentParking?.owner?.email }}
-                            </p>
-                        </div>
+                    <div class="mb-0">
+                        <label class="fw-bold text-uppercase small">
+                            Type:
+                        </label>
+                        <p class="text-muted small mb-0">
+                            {{ currentParking?.vehicle?.vehicleType | vehicleType }}
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <ng-template #isNoOwner>
+        <ng-template [ngIf]="isAssigning && currentParking"
+            [ngIfElse]="isNotAssigning">
             <div class="col-sm-12 col-md-9 d-flex">
                 <app-assign-lot-owner
-                    *ngIf="isAssigning && currentParking; else isNotAssigning"
                     class="w-100 m-auto"
                     [parkingId]="currentParking!.id"
                     (changedEvent)="onOwnerChanged()">
                 </app-assign-lot-owner>
+            </div>
+        </ng-template>
 
-                <ng-template #isNotAssigning>
-                    <div class="text-center w-100 m-auto">
-                        <img src="assets/images/illustrations/no-information.png"
-                            style="height: 14rem;">
-                        <p class="text-muted">No information yet</p>
-                        <button class="btn btn-primary"
-                            (click)="toggleAssignOwner()">
-                            Assign owner
-                        </button>
+        <ng-template #isNotAssigning>
+            <div class="col-sm-12 col-md-6">
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-2">
+                                <div class="rounded-circle
+                                    border border-primary border-opacity-50 d-flex justify-content-center
+                                    align-items-center mx-auto m-0 p-2 avatar"
+                                    alt="Avatar">
+                                    <div class="rounded-circle bg-primary bg-opacity-75
+                                        d-flex justify-content-center
+                                        align-items-center w-100 h-100">
+                                        <i class="fa-solid fa-square-parking fa-2x text-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-sm-12 col-md">
+                                <div *ngIf="currentParking?.resident; else noResidentInformation">
+                                    <p class="fw-bold small mb-0">
+                                        <i class="fa-regular fa-id-card fa-fw"></i>
+                                        {{ currentParking?.resident?.title | titleType }}
+                                        {{ currentParking?.resident?.name }}
+                                    </p>
+        
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-solid fa-mobile-screen fa-fw"></i>
+                                        {{ currentParking?.resident?.phoneNo }}
+                                    </p>
+        
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-solid fa-receipt fa-fw"></i>
+                                        {{ 
+                                            (currentParking?.resident?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
+                                            'N/A'
+                                        }}
+                                    </p>
+        
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-solid fa-envelope fa-fw"></i>
+                                        {{ currentParking?.resident?.email }}
+                                    </p>
+                                </div>
+    
+                                <ng-template #noResidentInformation>
+                                    <div class="d-flex h-100 align-items-center">
+                                        <div class="d-block">
+                                            <p class="mb-2 small">
+                                                Parking is vacant
+                                            </p>
+                                            <button class="btn btn-primary btn-sm"
+                                                (click)="toggleAssignOwner()">
+                                                Assign now
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
                     </div>
-                </ng-template>
+                </div>
+    
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            Payment overview
+                        </h5>
+                        <div class="d-flex h-100 justify-content-center mb-4"
+                            style="height: 15rem">
+                            <div class="d-block">
+                                <img src="assets/images/illustrations/empty.png"
+                                style="height: 10rem;">
+                                <p class="text-muted text-center mb-0">
+                                    No data yet
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-sm-12 col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body" style="height: 300px">
+                        <h5 class="card-title mb-4">
+                            Payment history
+                        </h5>
+                    </div>
+                </div>
             </div>
         </ng-template>
     </div>

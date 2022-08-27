@@ -85,7 +85,7 @@ export class ParkingDetailComponent implements OnInit {
         
         this.notifySvc.success(
           'Success', 
-          'Unit activated'
+          'Parking activated'
         )
       },
       error: () => {
@@ -109,7 +109,7 @@ export class ParkingDetailComponent implements OnInit {
 
         this.notifySvc.success(
           'Success', 
-          'Unit deactivated'
+          'Parking deactivated'
         )
       },
       error: () => {
