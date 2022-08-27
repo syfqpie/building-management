@@ -1,89 +1,348 @@
-<div *ngIf="selectedResident; else noSelectedResident"
-    class="row text-center w-100">
+<div class="row g-3 justify-content-center">
+    <div class="col-sm-12 col-md-5">
+        <div class="position-relative m-4">
+            <div class="progress" style="height: 1px;">
+                <div class="progress-bar"
+                    role="progressbar"
+                    aria-label="Progress"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    attr.aria-valuenow="{{
+                        currentStep === 0 ? '0' : currentStep === 1 ? '50' : '100'
+                    }}"
+                    [ngStyle]="{ 
+                        'width': currentStep === 0 ? '0%' : currentStep === 1 ? '50%' : '100%'
+                    }">
+                </div>
+            </div>
+
+            <button type="button"
+                class="position-absolute top-0 start-0
+                translate-middle btn btn-sm btn-primary
+                rounded-pill"
+                style="width: 2rem; height: 2rem;">
+                1
+            </button>
+
+            <button type="button"
+                class="position-absolute top-0 start-50
+                translate-middle btn btn-sm rounded-pill"
+                style="width: 2rem; height: 2rem;"
+                [ngClass]="currentStep >= 1 ? 'btn-primary' : 'btn-secondary'">
+                2
+            </button>
+
+            <button type="button"
+                class="position-absolute top-0 start-100
+                translate-middle btn btn-sm rounded-pill"
+                style="width: 2rem; height: 2rem;"
+                [ngClass]="currentStep >= 2 ? 'btn-primary' : 'btn-secondary'">
+                3
+            </button>
+        </div>
+
+        <div *ngIf="currentStep === 0; else stepOne"
+            class="pt-3">
+            <p class="text-center mb-3">
+                Select resident
+            </p>
+
+            <form class="mb-3">
+                <ng-select [items]="residents$ | async" 
+                    bindLabel="residentNo"
+                    bindValue="id"
+                    [loading]="isSearching"
+                    [typeahead]="residentInput$"
+                    [minTermLength]="3"
+                    notFoundText="Not found"
+                    placeholder="Type ID to search"
+                    typeToSearchText="Please enter 3 or more characters"
+                    (change)="onSelectResident($event)">
+                    <ng-template ng-option-tmp let-item="item">
+                        <i class="fa-solid fa-building-user"></i>
+                        [{{ item.residentNo }}] {{ item.name }} - {{ item.email }}
+                    </ng-template>
+                </ng-select>
+            </form>
+
+            <div *ngIf="selectedResident">
+                <hr class="my-3" />
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Name:
+                    </label>
+                    <input class="form-control"
+                        value="{{ selectedResident.name }}"
+                        disabled />
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col">
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Email:
+                            </label>
+                            <input class="form-control"
+                                value="{{ selectedResident.email }}"
+                                disabled />
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Phone number:
+                            </label>
+                            <input class="form-control"
+                                value="{{ selectedResident.phoneNo }}"
+                                disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #stepOne>
+            <div *ngIf="currentStep === 1; else stepTwo"
+                class="pt-3">
+                <p class="text-center mb-3">
+                    Select vehicle
+                </p>
+
+                <form [formGroup]="assignForm"
+                    class="mb-3">
+                    <ng-select [items]="vehicles" 
+                        bindLabel="plateNo"
+                        bindValue="id"
+                        formControlName="vehicle"
+                        placeholder="Select vehicle"
+                        notFoundText="Not found"
+                        (change)="onSelectVehicle($event)">
+                        <ng-template ng-option-tmp let-item="item">
+                            <i class="fa-solid fa-building-user"></i>
+                            {{ item.plateNo }}
+                        </ng-template>
+                    </ng-select>
+
+                    <p *ngIf="!isAddVehicle"
+                        class="mt-2 small text-center">
+                        <span *ngIf="vehicles.length === 0">
+                            No vehicle found. 
+                        </span>
+                        <a class="link-secondary cursor-pointer mb-0"
+                            (click)="isAddVehicle = !isAddVehicle">
+                            Add new?
+                        </a>
+                    </p>
+                </form>
+            </div>
+
+            <div *ngIf="isAddVehicle"
+                class="mb-3">
+                <hr class="mb-3" />
+
+                <form [formGroup]="addForm">
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="mb-3 position-relative">
+                                <label class="form-label">
+                                    Plate no.
+                                </label>
+                                <input type="text"
+                                    class="form-control"
+                                    formControlName="plateNo"
+                                    placeholder="Eg: XXX1000"
+                                    [ngClass]="{
+                                        'is-invalid': addForm.controls['plateNo'].touched &&
+                                        addForm.controls['plateNo'].errors,
+                                        'is-valid': addForm.controls['plateNo'].touched &&
+                                        !addForm.controls['plateNo'].errors
+                                    }" />
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="addForm.controls['plateNo'].errors &&
+                                    (addForm.controls['plateNo'].dirty ||
+                                    addForm.controls['plateNo'].touched)" >
+                                    <ng-container *ngFor="let message of formMessages['plateNo']">
+                                        <span *ngIf="addForm.controls['plateNo'].hasError(message.type) &&
+                                            (addForm.controls['plateNo'].dirty ||
+                                            addForm.controls['plateNo'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="col">
+                            <div class="mb-3 position-relative">
+                                <label class="form-label">
+                                    Vehicle type
+                                </label>
+                                <select class="form-select"
+                                    formControlName="vehicleType"
+                                    [ngClass]="{
+                                        'is-invalid': addForm.controls['vehicleType'].touched &&
+                                        addForm.controls['vehicleType'].errors,
+                                        'is-valid': addForm.controls['vehicleType'].touched &&
+                                        !addForm.controls['vehicleType'].errors
+                                    }">
+                                    <option [ngValue]="null">
+                                        N/A
+                                    </option>
+                                    <option [ngValue]="vehicleType.CAR">
+                                        {{ vehicleType.CAR | vehicleType }}
+                                    </option>
+                                    <option [ngValue]="vehicleType.MOTOR">
+                                        {{ vehicleType.MOTOR | vehicleType }}
+                                    </option>
+                                    <option [ngValue]="vehicleType.LORRY">
+                                        {{ vehicleType.LORRY | vehicleType }}
+                                    </option>
+                                </select>
+
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="addForm.controls['vehicleType'].errors &&
+                                    (addForm.controls['vehicleType'].dirty ||
+                                    addForm.controls['vehicleType'].touched)" >
+                                    <ng-container *ngFor="let message of formMessages['vehicleType']">
+                                        <span *ngIf="addForm.controls['vehicleType'].hasError(message.type) &&
+                                            (addForm.controls['vehicleType'].dirty ||
+                                            addForm.controls['vehicleType'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="text-center">
+                    <button class="btn btn-outline-primary me-2"
+                        (click)="isAddVehicle = !isAddVehicle">
+                        Cancel
+                    </button>
+        
+                    <button class="btn btn-primary me-2"
+                        (click)="addVehicle()"
+                        [disabled]="isProcessing || !addForm.valid">
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Save
+                        </span>
+                        <ng-template #isLoading>
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        </ng-template>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #stepTwo>
+            <div class="pt-3">
+                <p class="text-center mb-0">
+                    Confirmation
+                </p>
+                <p class="text-center text-muted mb-3">
+                    Please confirm these details
+                </p>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Name:
+                    </label>
+                    <input class="form-control"
+                        value="{{ selectedResident?.name }}"
+                        disabled />
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col">
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Email:
+                            </label>
+                            <input class="form-control"
+                                value="{{ selectedResident?.email }}"
+                                disabled />
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Phone number:
+                            </label>
+                            <input class="form-control"
+                                value="{{ selectedResident?.phoneNo }}"
+                                disabled />
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="mb-3" />
+
+                <div class="row g-3 mb-3">
+                    <div class="col">
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Plate no.:
+                            </label>
+                            <input class="form-control"
+                                value="{{ selectedVehicle?.plateNo }}"
+                                disabled />
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Vehicle type:
+                            </label>
+                            <input class="form-control"
+                                value="{{ selectedVehicle?.vehicleType | vehicleType }}"
+                                disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <div *ngIf="!isAddVehicle"
+            class="text-center">
+            <button class="btn btn-outline-primary me-2"
+                [disabled]="currentStep == 0"
+                (click)="currentStep = currentStep - 1">
+                Back
+            </button>
+
+            <button *ngIf="currentStep !== 2"
+                class="btn btn-primary me-2"
+                [disabled]="(currentStep === 0 && !selectedResident) ||
+                (currentStep === 1 && !assignForm.valid)"
+                (click)="nextStep()">
+                Next
+            </button>
+
+            
+            <button *ngIf="currentStep === 2"
+                class="btn btn-primary me-2"
+                (click)="assignOwner()"
+                [disabled]="isProcessing || !assignForm.valid">
+                <span *ngIf="!isProcessing; else isLoading">
+                    Assign to lot
+                </span>
+                <ng-template #isLoading>
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                </ng-template>
+            </button>
+        </div>
+    </div>
+
     <div class="col-sm-12 col-md-auto d-flex">
         <div class="m-auto">
             <img src="assets/images/illustrations/confirmation.png"
                 style="width: 24rem" />
-            <p class="text-muted">Assign owner</p>
         </div>
-    </div>
-
-    <div class="col-sm-12 col-md text-start">
-        <div class="mb-2">
-            <label class="fw-bold text-uppercase small">
-                Resident no.: 
-            </label>
-            <p class="text-muted small">
-                {{ selectedResident.residentNo }}
-            </p>
-        </div>
-
-        <div class="mb-2">
-            <label class="fw-bold text-uppercase small">
-                Name:
-            </label>
-            <p class="text-muted small">
-                {{ selectedResident.name }}
-            </p>
-        </div>
-
-        <div class="mb-2">
-            <label class="fw-bold text-uppercase small">
-                Email:
-            </label>
-            <p class="text-muted small">
-                {{ selectedResident.email }}
-            </p>
-        </div>
-
-        <div class="mb-2">
-            <label class="fw-bold text-uppercase small">
-                Phone number:
-            </label>
-            <p class="text-muted small">
-                {{ selectedResident.phoneNo }}
-            </p>
-        </div>
-
-        <button class="btn btn-primary me-2"
-            [disabled]="isProcessing"
-            (click)="assignOwner()">
-            Confirm
-        </button>
-
-        <button class="btn btn-outline-primary"
-            [disabled]="isProcessing"
-            (click)="cancelAssignOwner()">
-            Cancel
-        </button>
     </div>
 </div>
-
-<ng-template #noSelectedResident>
-    <div class="row g-3 justify-content-center">
-        <div class="col-sm-12 col-md-5">
-            <form class="text-start">
-                <div>
-                    <label class="form-label">
-                        Resident
-                    </label>
-                    <ng-select [items]="residents$ | async" 
-                        bindLabel="residentNo"
-                        bindValue="id"
-                        [loading]="isSearching"
-                        [typeahead]="residentInput$"
-                        [minTermLength]="3"
-                        notFoundText="Not found"
-                        placeholder="Type ID to search"
-                        typeToSearchText="Please enter 3 or more characters"
-                        (change)="onSelectResident($event)">
-                        <ng-template ng-option-tmp let-item="item">
-                            <i class="fa-solid fa-building-user"></i>
-                            [{{ item.residentNo }}] {{ item.name }} - {{ item.email }}
-                        </ng-template>
-                    </ng-select>
-                </div>
-            </form>
-        </div>
-    </div>
-</ng-template>
