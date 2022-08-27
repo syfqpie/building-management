@@ -1,6 +1,7 @@
 import { BlockNo } from '../blocks/blocks.model';
 import { FloorNo } from '../floors/floors.model';
 import { Resident } from '../residents/residents.model';
+import { Vehicle } from '../vehicles/vehicles.model';
 
 export class Parking {
     constructor(
@@ -25,7 +26,7 @@ export class ParkingExtended {
         public block: BlockNo,
         public floor: FloorNo,
         public resident: Resident,
-        public vehicle: number,
+        public vehicle: Vehicle,
         public isActive: boolean,
         public createdAt: string,
         public createdBy: number,
