@@ -1,8 +1,8 @@
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from residents.models import ResidentVehicle
 
+from residents.serializers import ResidentSerializer, ResidentVehicleSerializer
 from users.serializers import CustomUserEmailSerializer
 
 from .models import (
@@ -13,8 +13,6 @@ from .models import (
     ParkingLot,
     UnitActivity
 )
-
-from residents.serializers import ResidentSerializer, ResidentVehicleSerializer
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -99,7 +97,6 @@ class ParkingLotAssignSerializer(serializers.ModelSerializer):
     """
         Serializer for parking lot assign_resident
     """
-    vehicle = serializers.PrimaryKeyRelatedField(required=True, queryset=ResidentVehicle.objects.all())
     
     class Meta:
         model = ParkingLot
@@ -107,6 +104,10 @@ class ParkingLotAssignSerializer(serializers.ModelSerializer):
             'resident',
             'vehicle'
         ]
+        extra_kwargs = {
+            'resident': { 'required': True },
+            'vehicle': { 'required': True }
+        }
 
 
 class ParkingLotExtendedSerializer(serializers.ModelSerializer):
