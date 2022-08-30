@@ -6,16 +6,16 @@ from residents.serializers import ResidentSerializer, ResidentVehicleSerializer
 from users.serializers import CustomUserEmailSerializer
 
 from .models import (
-    Block,
-    Floor,
-    UnitNumber,
-    Unit,
-    ParkingLot,
-    UnitActivity
+    Block, Floor, UnitNumber,
+    Unit, UnitActivity,
+    ParkingLot
 )
 
 
 class BlockSerializer(serializers.ModelSerializer):
+    """
+        Serializer for block
+    """
 
     class Meta:
         model = Block
@@ -23,6 +23,9 @@ class BlockSerializer(serializers.ModelSerializer):
 
 
 class BlockNoSerializer(serializers.ModelSerializer):
+    """
+        Serializer for block no
+    """
 
     class Meta:
         model = Block
@@ -30,6 +33,9 @@ class BlockNoSerializer(serializers.ModelSerializer):
 
 
 class FloorSerializer(serializers.ModelSerializer):
+    """
+        Serializer for floor
+    """
 
     class Meta:
         model = Floor
@@ -37,6 +43,9 @@ class FloorSerializer(serializers.ModelSerializer):
 
 
 class FloorNoSerializer(serializers.ModelSerializer):
+    """
+        Serializer for floor no
+    """
 
     class Meta:
         model = Floor
@@ -44,6 +53,9 @@ class FloorNoSerializer(serializers.ModelSerializer):
 
 
 class UnitNumberSerializer(serializers.ModelSerializer):
+    """
+        Serializer for unit number
+    """
 
     class Meta:
         model = UnitNumber
@@ -51,6 +63,9 @@ class UnitNumberSerializer(serializers.ModelSerializer):
 
 
 class UnitSerializer(serializers.ModelSerializer):
+    """
+        Serializer for unit
+    """
 
     class Meta:
         model = Unit
@@ -69,18 +84,62 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class UnitNoSerializer(serializers.ModelSerializer):
-    
+    """
+        Serializer for unit no
+    """
+
     class Meta:
         model = Unit
         fields = ['id', 'unit_no']
 
 
 class UnitExtendedSerializer(serializers.ModelSerializer):
+    """
+        Serializer for unit extended
+    """
     owner = ResidentSerializer(many=False, read_only=True)
     
     class Meta:
         model = Unit
         fields = '__all__'
+
+
+class UnitActivitySerializer(serializers.ModelSerializer):
+    """
+        Serializer for unit activity
+    """
+
+    class Meta:
+        model = UnitActivity
+        fields = '__all__'
+
+
+class UnitActivityNonNestedSerializer(serializers.ModelSerializer):
+    """
+        Serializer for unit activity non nested
+    """
+    unit = UnitNoSerializer(read_only=True)
+    activity_by = CustomUserEmailSerializer(read_only=True)
+
+    class Meta:
+        model = UnitActivity
+        exclude = [
+            'current_owner',
+        ]
+
+
+class UnitActivityNestedSerializer(serializers.ModelSerializer):
+    """
+        Serializer for unit activity nested
+    """
+    activity_by = CustomUserEmailSerializer(read_only=True)
+    
+    class Meta:
+        model = UnitActivity
+        exclude = [
+            'current_owner',
+            'unit'
+        ]
 
 
 class ParkingLotSerializer(serializers.ModelSerializer):
@@ -122,30 +181,3 @@ class ParkingLotExtendedSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingLot
         fields = '__all__'
-
-
-class UnitActivitySerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = UnitActivity
-        fields = '__all__'
-
-
-class UnitActivityNonNestedSerializer(serializers.ModelSerializer):
-    unit = UnitNoSerializer(read_only=True)
-    activity_by = CustomUserEmailSerializer(read_only=True)
-    class Meta:
-        model = UnitActivity
-        exclude = [
-            'current_owner',
-        ]
-
-
-class UnitActivityNestedSerializer(serializers.ModelSerializer):
-    activity_by = CustomUserEmailSerializer(read_only=True)
-    class Meta:
-        model = UnitActivity
-        exclude = [
-            'current_owner',
-            'unit'
-        ]

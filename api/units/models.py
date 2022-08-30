@@ -11,6 +11,9 @@ from users.models import CustomUser, UserType
 
 
 class ActivityType(models.IntegerChoices):
+    """
+        Choices for activity type
+    """
     MOVE_IN = 1, 'Move in'
     MOVE_OUT = 2, 'Move out'
     ACTIVATE = 3, 'Activate'
@@ -20,10 +23,12 @@ class ActivityType(models.IntegerChoices):
 
 
 class Block(models.Model):
+    """
+        A model for block
+    """
     id = models.AutoField(primary_key=True, editable=False)
     block = models.CharField(
-        max_length=10,
-        unique=True,
+        max_length=10, unique=True,
         error_messages={
             'unique': 'Block already exists'
         }
@@ -34,18 +39,18 @@ class Block(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='blocks_created'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='blocks_created'
     )
     last_modified_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='blocks_modified'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='blocks_modified'
     )
     
     class Meta:
@@ -56,10 +61,12 @@ class Block(models.Model):
 
 
 class Floor(models.Model):
+    """
+        A model for floor
+    """
     id = models.AutoField(primary_key=True, editable=False)
     floor = models.CharField(
-        max_length=10,
-        unique=True,
+        max_length=10, unique=True,
         error_messages={
             'unique': 'Floor already exists'
         }
@@ -70,18 +77,18 @@ class Floor(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='floors_created'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='floors_created'
     )
     last_modified_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='floors_modified'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='floors_modified'
     )
 
     class Meta:
@@ -92,10 +99,12 @@ class Floor(models.Model):
 
 
 class UnitNumber(models.Model):
+    """
+        A model for unit number
+    """
     id = models.AutoField(primary_key=True, editable=False)
     unit_number = models.CharField(
-        max_length=10,
-        unique=True,
+        max_length=10, unique=True,
         error_messages={
             'unique': 'Unit number already exists'
         }
@@ -106,18 +115,18 @@ class UnitNumber(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='unit_numbers_created'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='unit_numbers_created'
     )
     last_modified_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='unit_numbers_modified'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='unit_numbers_modified'
     )
     
     class Meta:
@@ -128,47 +137,45 @@ class UnitNumber(models.Model):
 
 
 class Unit(models.Model):
+    """
+        A model for unit
+    """
     id = models.AutoField(primary_key=True, editable=False)
     unit_no = models.CharField(max_length=100, null=True)
     square_feet = models.IntegerField(default=0)
 
     block = models.ForeignKey(
-        Block,
-        on_delete=models.CASCADE
+        Block, on_delete=models.CASCADE
     )
     floor = models.ForeignKey(
-        Floor,
-        on_delete=models.CASCADE
+        Floor, on_delete=models.CASCADE
     )
     unit_number = models.ForeignKey(
-        UnitNumber,
-        on_delete=models.CASCADE
+        UnitNumber, on_delete=models.CASCADE
     )
     owner = models.ForeignKey(
-        Resident,
-        on_delete=models.SET_NULL,
+        Resident, on_delete=models.SET_NULL,
         null=True
     )
 
-    is_maintenance = models.BooleanField(default=False)
-
     # Logs
     is_active = models.BooleanField(default=True)
+    is_maintenance = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='units_created'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='units_created'
     )
     last_modified_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='units_modified'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='units_modified'
     )
         
     class Meta:
@@ -186,31 +193,64 @@ class Unit(models.Model):
         super().save(*args, **kwargs)
 
 
+class UnitActivity(models.Model):
+    """
+        A model for unit activity
+    """
+    id = models.AutoField(primary_key=True, editable=False)
+    unit = models.ForeignKey(
+        Unit, on_delete=models.CASCADE,
+        related_name='unit_activities'
+    )
+    current_owner = models.ForeignKey(
+        Resident, on_delete=models.SET_NULL,
+        null=True, related_name='owner_activities'
+    )
+
+    activity_type = models.IntegerField(
+        choices=ActivityType.choices
+    )
+    notes = models.TextField(null=True)
+
+    # Logs
+    activity_at = models.DateTimeField(auto_now_add=True)
+    activity_by = models.ForeignKey(
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='activities'
+    )
+    
+    class Meta:
+        ordering = ['-id']
+    
+    def __str__(self):
+        return f'[{ self.unit }] { self.moved_in_at }'
+
+
 class ParkingLot(models.Model):
+    """
+        A model for parking lot
+    """
     id = models.AutoField(primary_key=True, editable=False)
     lot_no = models.CharField(max_length=100, editable=False)
 
     block = models.ForeignKey(
-        Block,
-        on_delete=models.CASCADE,
+        Block, on_delete=models.CASCADE,
         related_name='block_parking_lots'
     )
     floor = models.ForeignKey(
-        Floor,
-        on_delete=models.CASCADE,
+        Floor, on_delete=models.CASCADE,
         related_name='floor_parking_lots'
     )
     resident = models.ForeignKey(
-        Resident,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name='parkings_owned'
+        Resident, on_delete=models.SET_NULL,
+        null=True, related_name='parkings_owned'
     )
     vehicle = models.OneToOneField(
-        ResidentVehicle,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name='current_lot'
+        ResidentVehicle, on_delete=models.SET_NULL,
+        null=True, related_name='current_lot'
     )
 
     # Logs
@@ -218,18 +258,18 @@ class ParkingLot(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='parking_lots_created'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='parking_lots_created'
     )
     last_modified_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='parking_lots_modified'
+        CustomUser, on_delete=models.SET_NULL,
+        limit_choices_to={
+            'user_type': UserType.ADMIN
+        },
+        null=True, related_name='parking_lots_modified'
     )
 
     class Meta:
@@ -260,40 +300,3 @@ class ParkingLot(models.Model):
                 raise PermissionDenied(detail='Lot limit reached')
             
         super().save(*args, **kwargs)
-
-
-class UnitActivity(models.Model):
-    id = models.AutoField(primary_key=True, editable=False)
-    unit = models.ForeignKey(
-        Unit, 
-        on_delete=models.CASCADE,
-        related_name='unit_activities'
-    )
-    current_owner = models.ForeignKey(
-        Resident,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name='owner_activities'
-    )
-
-    activity_type = models.IntegerField(
-        choices=ActivityType.choices
-    )
-    notes = models.TextField(null=True)
-
-    # Logs
-    activity_at = models.DateTimeField(auto_now_add=True)
-    activity_by = models.ForeignKey(
-        CustomUser, 
-        on_delete=models.SET_NULL,
-        null=True,
-        limit_choices_to={'user_type': UserType.ADMIN},
-        related_name='activities'
-    )
-    
-    class Meta:
-        ordering = ['-id']
-    
-    def __str__(self):
-        return f'[{ self.unit }] { self.moved_in_at }'
-

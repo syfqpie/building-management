@@ -18,26 +18,16 @@ from core.helpers import camel_to_capitalize
 from users.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
-    Block,
-    Floor,
-    UnitNumber,
-    Unit,
-    ParkingLot,
-    UnitActivity,
-    ActivityType
+    Block, Floor, UnitNumber,
+    Unit, UnitActivity, ActivityType,
+    ParkingLot
 )
 
 from .serializers import (
-    BlockSerializer,
-    FloorSerializer,
-    UnitNumberSerializer,
-    UnitSerializer,
-    UnitExtendedSerializer,
-    ParkingLotSerializer,
-    ParkingLotAssignSerializer,
-    ParkingLotExtendedSerializer,
-    UnitActivityNestedSerializer,
-    UnitActivityNonNestedSerializer
+    BlockSerializer, FloorSerializer, UnitNumberSerializer,
+    UnitSerializer, UnitExtendedSerializer,
+    UnitActivityNestedSerializer, UnitActivityNonNestedSerializer,
+    ParkingLotSerializer, ParkingLotAssignSerializer, ParkingLotExtendedSerializer
 )
 
 
@@ -507,6 +497,69 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return JsonResponse(data_)
 
 
+class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = UnitActivity.objects.all()
+    serializer_class = UnitActivityNestedSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        return [permission() for permission in permission_classes]
+    
+    def get_queryset(self):
+        queryset = self.queryset
+
+        # Queryset for nested
+        if 'parent_lookup_id' in self.kwargs:
+            queryset = queryset.filter(unit__id=self.kwargs['parent_lookup_id'])[:5]
+        else:
+            pass
+
+        return queryset
+
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Get serializer for non nested
+        if 'parent_lookup_id' not in self.kwargs:
+            return UnitActivityNonNestedSerializer
+        else:
+            pass
+
+        # Return original class
+        return super().get_serializer_class()
+
+
+    # Get unit activity overview
+    @action(methods=['GET'], detail=False, url_path='overview')
+    def get_overview(self, request, *args, **kwargs):
+        # Get this year's activities
+        current_date = now()
+        activities = UnitActivity.objects.all().filter(activity_at__year=current_date.year)
+
+        # Prepare response data
+        by_type = []
+        agg_data = activities.aggregate(
+            move_in=Count('id', filter=Q(activity_type=ActivityType.MOVE_IN)),
+            move_out=Count('id', filter=Q(activity_type=ActivityType.MOVE_OUT), distinct=True),
+            activate=Count('id', filter=Q(activity_type=ActivityType.ACTIVATE)),
+            deactivate=Count('id', filter=Q(activity_type=ActivityType.DEACTIVATE)),
+            enable_maintenance=Count('id', filter=Q(activity_type=ActivityType.ENABLE_MAINTENANCE)),
+            disable_maintenance=Count('id', filter=Q(activity_type=ActivityType.DISABLE_MAINTENANCE))
+        )
+
+        for key in agg_data:
+            by_type.append({
+                'name': camel_to_capitalize(key),
+                'value': agg_data[key]
+            })
+        
+        return JsonResponse(by_type, safe=False)
+
+
 class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = ParkingLot.objects.all()
     serializer_class = ParkingLotSerializer
@@ -625,67 +678,3 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         serializer = ParkingLotExtendedSerializer(lot, many=False)
         return Response(serializer.data)
-
-
-class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = UnitActivity.objects.all()
-    serializer_class = UnitActivityNestedSerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-
-    def get_permissions(self):
-        permission_classes = [
-            IsAuthenticated,
-            IsAdminStaff
-        ]
-
-        return [permission() for permission in permission_classes]
-    
-    def get_queryset(self):
-        queryset = self.queryset
-
-        # Queryset for nested
-        if 'parent_lookup_id' in self.kwargs:
-            queryset = queryset.filter(unit__id=self.kwargs['parent_lookup_id'])[:5]
-        else:
-            pass
-
-        return queryset
-
-    # Override get_serializer_class for default action
-    def get_serializer_class(self):
-        # Get serializer for non nested
-        if 'parent_lookup_id' not in self.kwargs:
-            return UnitActivityNonNestedSerializer
-        else:
-            pass
-
-        # Return original class
-        return super().get_serializer_class()
-
-
-    # Get unit activity overview
-    @action(methods=['GET'], detail=False, url_path='overview')
-    def get_overview(self, request, *args, **kwargs):
-        # Get this year's activities
-        current_date = now()
-        activities = UnitActivity.objects.all().filter(activity_at__year=current_date.year)
-
-        # Prepare response data
-        by_type = []
-        agg_data = activities.aggregate(
-            move_in=Count('id', filter=Q(activity_type=ActivityType.MOVE_IN)),
-            move_out=Count('id', filter=Q(activity_type=ActivityType.MOVE_OUT), distinct=True),
-            activate=Count('id', filter=Q(activity_type=ActivityType.ACTIVATE)),
-            deactivate=Count('id', filter=Q(activity_type=ActivityType.DEACTIVATE)),
-            enable_maintenance=Count('id', filter=Q(activity_type=ActivityType.ENABLE_MAINTENANCE)),
-            disable_maintenance=Count('id', filter=Q(activity_type=ActivityType.DISABLE_MAINTENANCE))
-        )
-
-        for key in agg_data:
-            by_type.append({
-                'name': camel_to_capitalize(key),
-                'value': agg_data[key]
-            })
-        
-        return JsonResponse(by_type, safe=False)
-    
