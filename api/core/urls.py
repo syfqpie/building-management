@@ -94,7 +94,8 @@ from units.views import (
     FloorViewSet,
     UnitNumberViewSet,
     ParkingLotViewSet,
-    UnitActivityViewSet
+    UnitActivityViewSet,
+    ParkingLotPassViewSet
 )
 units_router = router.register(
     r'units', UnitViewSet
@@ -116,6 +117,9 @@ parking_lots_router = router.register(
 )
 unit_activities_router = router.register(
     r'unit-activities', UnitActivityViewSet
+)
+parking_lot_passes_router = router.register(
+    r'parking-lot-passes', ParkingLotPassViewSet
 )
 
 # Users
