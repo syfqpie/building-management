@@ -8,7 +8,7 @@ from users.serializers import CustomUserEmailSerializer
 from .models import (
     Block, Floor, UnitNumber,
     Unit, UnitActivity,
-    ParkingLot
+    ParkingLot, ParkingLotPass
 )
 
 
@@ -133,7 +133,7 @@ class UnitActivityNestedSerializer(serializers.ModelSerializer):
         Serializer for unit activity nested
     """
     activity_by = CustomUserEmailSerializer(read_only=True)
-    
+
     class Meta:
         model = UnitActivity
         exclude = [
@@ -150,23 +150,7 @@ class ParkingLotSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingLot
         fields = '__all__'
-
-
-class ParkingLotAssignSerializer(serializers.ModelSerializer):
-    """
-        Serializer for parking lot assign_resident
-    """
-    
-    class Meta:
-        model = ParkingLot
-        fields = [
-            'resident',
-            'vehicle'
-        ]
-        extra_kwargs = {
-            'resident': { 'required': True },
-            'vehicle': { 'required': True }
-        }
+        read_only_fields = ['is_occupied']
 
 
 class ParkingLotExtendedSerializer(serializers.ModelSerializer):
@@ -175,9 +159,17 @@ class ParkingLotExtendedSerializer(serializers.ModelSerializer):
     """
     block = BlockNoSerializer(many=False, read_only=True)
     floor = FloorNoSerializer(many=False, read_only=True)
-    resident = ResidentSerializer(many=False, read_only=True)
-    vehicle = ResidentVehicleSerializer(many=False, read_only=True)
 
     class Meta:
         model = ParkingLot
+        fields = '__all__'
+
+
+class ParkingLotPassSerializer(serializers.ModelSerializer):
+    """
+        Serializer for parking lot pass
+    """
+    
+    class Meta:
+        model = ParkingLotPass
         fields = '__all__'
