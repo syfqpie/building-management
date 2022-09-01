@@ -20,14 +20,15 @@ from users.permissions import IsAdminStaff, IsSuperAdmin
 from .models import (
     Block, Floor, UnitNumber,
     Unit, UnitActivity, ActivityType,
-    ParkingLot
+    ParkingLot, ParkingLotPass
 )
 
 from .serializers import (
     BlockSerializer, FloorSerializer, UnitNumberSerializer,
     UnitSerializer, UnitExtendedSerializer,
     UnitActivityNestedSerializer, UnitActivityNonNestedSerializer,
-    ParkingLotSerializer, ParkingLotAssignSerializer, ParkingLotExtendedSerializer
+    ParkingLotSerializer, ParkingLotExtendedSerializer,
+    ParkingLotPassSerializer
 )
 
 
@@ -566,7 +567,7 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class_admin = {
         'list_ext': ParkingLotExtendedSerializer,
         'retrieve_ext': ParkingLotExtendedSerializer,
-        'assign_resident': ParkingLotAssignSerializer
+        'assign_resident': ParkingLotPassSerializer
     }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
@@ -618,7 +619,13 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             raise PermissionDenied(detail='Lot is already activated')
         
         lot.is_active = True
-        lot.save()
+        lot.last_modified_at = now()
+        lot.last_modified_by = request.user
+        lot.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(lot, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -637,7 +644,13 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             raise PermissionDenied(detail='Lot is already deactivated')
         
         lot.is_active = False
-        lot.save()
+        lot.last_modified_at = now()
+        lot.last_modified_by = request.user
+        lot.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
 
         serializer = self.get_serializer(lot, many=False)
         headers = self.get_success_headers(serializer.data)
@@ -652,29 +665,107 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def assign_resident(self, request, *args, **kwargs):
         lot = self.get_object()
 
-        # Check if lot already have an resident and not replacing
-        if lot.resident:
+        # Check if lot is occupied else append lot id to request data
+        if lot.is_occupied:
             raise PermissionDenied(
-                detail='Lot already have a resident. You should check out last resident first instead'
+                detail='Lot is occupied'
             )
+        else:
+            request.data['parking_lot'] = lot.id
         
-        # Lot value validation
-        serializer = self.get_serializer(
-            lot,
-            data=request.data,
-            partial=False
-        )
-        serializer.is_valid(raise_exception=True)
+        # Validate data
+        pass_serializer = self.get_serializer(data=request.data)
+        pass_serializer.is_valid(raise_exception=True)
+        validated_data = pass_serializer.validated_data
 
-        # Saving
-        lot.resident = serializer.validated_data['resident']
-        lot.vehicle = serializer.validated_data['vehicle']
+        # Check if resident and vehicle's resident is not match
+        if validated_data['resident'] != validated_data['vehicle'].resident:
+            raise PermissionDenied(
+                detail='Resident and vehicle is not matched'
+            )
+
+        # Check if access card is not active
+        passes = ParkingLotPass.objects.all().filter(
+            access_card_no=validated_data['access_card_no'],
+            is_active=True
+        )
+        if passes.exists():
+            raise PermissionDenied(
+                detail='Access card is currently used'
+            )
+
+        # Create pass
+        ParkingLotPass.objects.create(
+            access_card_no=validated_data['access_card_no'],
+            resident=validated_data['resident'],
+            vehicle=validated_data['vehicle'],
+            parking_lot=validated_data['parking_lot'],
+            created_by=request.user
+        )
+
+        # # Update and save
+        lot.is_occupied = True
+        lot.last_modified_at = now()
+        lot.last_modified_by = request.user
         lot.save(update_fields=[
-            'resident',
-            'vehicle',
+            'is_occupied',
             'last_modified_at',
             'last_modified_by'
         ])
 
         serializer = ParkingLotExtendedSerializer(lot, many=False)
         return Response(serializer.data)
+
+    # Checkout resident
+    @action(methods=['GET'], detail=True, url_path='checkout-resident')
+    def checkout_resident(self, request, *args, **kwargs):
+        lot = self.get_object()
+        current_pass = lot.lot_passes.first()
+        current_time = now()
+
+        # Check if lot is occupied
+        if not lot.is_occupied:
+            raise PermissionDenied(
+                detail='Lot is not occupied'
+            )
+
+        # Update pass
+        current_pass.ended_at = current_time
+        current_pass.is_active = False
+        current_pass.last_modified_at = current_time
+        current_pass.last_modified_by = request.user
+
+        # Update lot
+        lot.is_occupied = False
+        lot.last_modified_at = current_time
+        lot.last_modified_by = request.user
+
+        # Save pass and lot
+        current_pass.save(update_fields=[
+            'ended_at',
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+        lot.save(update_fields=[
+            'is_occupied',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+
+        serializer = ParkingLotExtendedSerializer(lot, many=False)
+        return Response(serializer.data)
+
+
+class ParkingLotPassViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = ParkingLotPass.objects.all()
+    serializer_class = ParkingLotPassSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        return [permission() for permission in permission_classes]
