@@ -69,6 +69,18 @@
                         </ng-template>
                     </ngx-datatable-column>
 
+                    <ngx-datatable-column name="Type"
+                        prop="lotType"
+                        [flexGrow]="1"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value | vehicleType }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
                     <ngx-datatable-column name="Active"
                         prop="isActive"
                         [flexGrow]="2"
@@ -98,7 +110,7 @@
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Vacant"
-                        prop="resident"
+                        prop="isOccupied"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
