@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DetailResponse } from '../auth/auth.model';
 
-import { Parking, ParkingExtended } from './parkings.model';
+import { Parking, ParkingExtended, ParkingPassCurrent } from './parkings.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/parking-lots/`
 
@@ -20,6 +20,7 @@ export class ParkingsService {
   parkings: Parking[] = []
   parkingExtended: ParkingExtended | undefined
   parkingsExtended: ParkingExtended[] = []
+  currentPass: ParkingPassCurrent | undefined
   
   constructor(
     private http: HttpClient
@@ -109,6 +110,16 @@ export class ParkingsService {
       tap((res: ParkingExtended) => {
         this.parkingExtended = res
         // console.log('Assign resident:', this.parkingExtended)
+      })
+    )
+  }
+
+  getCurrentPass(id: number): Observable<ParkingPassCurrent> {
+    const urlTemp = `${ BASE_URL }${ id }/get-current-pass/`
+    return this.http.get<ParkingPassCurrent>(urlTemp).pipe(
+      tap((res: ParkingPassCurrent) => {
+        this.currentPass = res
+        // console.log('Current pass: ', this.currentPass)
       })
     )
   }
