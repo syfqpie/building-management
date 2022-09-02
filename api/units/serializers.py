@@ -173,3 +173,17 @@ class ParkingLotPassSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingLotPass
         fields = '__all__'
+
+
+class ParkingLotPassCurrentSerializer(serializers.ModelSerializer):
+    """
+        Serializer for parking lot pass
+    """
+    resident = ResidentSerializer(many=False, read_only=True)
+    vehicle = ResidentVehicleSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = ParkingLotPass
+        exclude = [
+            'parking_lot'
+        ]

@@ -4,7 +4,7 @@ from django.utils.timezone import now
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -28,7 +28,7 @@ from .serializers import (
     UnitSerializer, UnitExtendedSerializer,
     UnitActivityNestedSerializer, UnitActivityNonNestedSerializer,
     ParkingLotSerializer, ParkingLotExtendedSerializer,
-    ParkingLotPassSerializer
+    ParkingLotPassSerializer, ParkingLotPassCurrentSerializer
 )
 
 
@@ -567,7 +567,8 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class_admin = {
         'list_ext': ParkingLotExtendedSerializer,
         'retrieve_ext': ParkingLotExtendedSerializer,
-        'assign_resident': ParkingLotPassSerializer
+        'assign_resident': ParkingLotPassSerializer,
+        'get_current_pass': ParkingLotPassCurrentSerializer
     }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
@@ -683,6 +684,12 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             raise PermissionDenied(
                 detail='Resident and vehicle is not matched'
             )
+        
+        # Check if parking lot and vehicle have the same type
+        if lot.lot_type != validated_data['vehicle'].vehicle_type:
+            raise PermissionDenied(
+                detail='Type is not matched'
+            )
 
         # Check if access card is not active
         passes = ParkingLotPass.objects.all().filter(
@@ -754,6 +761,23 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         ])
 
         serializer = ParkingLotExtendedSerializer(lot, many=False)
+        return Response(serializer.data)
+    
+    @action(methods=['GET'], detail=True, url_path='get-current-pass')
+    def get_current_pass(self, request, *args, **kwargs):
+        lot = self.get_object()
+        
+        # Retrieve
+        try:
+            current_pass = ParkingLotPass.objects.all().get(
+                parking_lot=lot, is_active=True
+            )
+        except ParkingLotPass.DoesNotExist:
+            raise NotFound(
+                detail='No pass related'
+            )
+
+        serializer = self.get_serializer(current_pass, many=False)
         return Response(serializer.data)
 
 
