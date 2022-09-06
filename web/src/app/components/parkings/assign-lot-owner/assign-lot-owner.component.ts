@@ -65,6 +65,7 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
   
   // Event
   @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
+  @Output() cancelEvent: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
     private fb: FormBuilder,
@@ -175,6 +176,17 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
       }))
   }
 
+  toggleAddVehicle() {
+    this.isAddVehicle = !this.isAddVehicle
+
+    // Enable / disable vehicle field
+    if (this.isAddVehicle) {
+      this.assignForm.controls['vehicle'].disable()
+    } else {
+      this.assignForm.controls['vehicle'].enable()
+    }
+  }
+
   addVehicle() {
     this.isProcessing = true
     this.loadingBar.useRef('http').start()
@@ -200,7 +212,9 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
 
           // Reset form and disable add vehicle
           this.resetForm()
-          this.isAddVehicle = false
+
+          // Toggle
+          this.toggleAddVehicle()
         }
       }))
   }
@@ -244,13 +258,8 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
     }))
   }
 
-  cancelAssignOwner() {
-    this.selectedResident = undefined
-    const timer = setTimeout(
-      () => {
-        this.searchResident()
-      }, 500
-    )
+  cancelAssign() {
+    this.cancelEvent.emit(true)
   }
 
   resetForm() {

@@ -131,7 +131,7 @@
                             No vehicle found. 
                         </span>
                         <a class="link-secondary cursor-pointer mb-0"
-                            (click)="isAddVehicle = !isAddVehicle">
+                            (click)="toggleAddVehicle()">
                             Add new?
                         </a>
                     </p>
@@ -220,7 +220,7 @@
 
                 <div class="text-center">
                     <button class="btn btn-outline-primary me-2"
-                        (click)="isAddVehicle = !isAddVehicle">
+                        (click)="toggleAddVehicle()">
                         Cancel
                     </button>
         
@@ -310,8 +310,14 @@
 
         <div *ngIf="!isAddVehicle"
             class="text-center">
-            <button class="btn btn-outline-primary me-2"
-                [disabled]="currentStep == 0"
+            <button *ngIf="currentStep === 0"
+                class="btn btn-outline-primary me-2"
+                (click)="cancelAssign()">
+                Cancel
+            </button>
+
+            <button *ngIf="currentStep !== 0"
+                class="btn btn-outline-primary me-2"
                 (click)="currentStep = currentStep - 1">
                 Back
             </button>
