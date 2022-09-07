@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { ParkingExtended } from 'src/app/shared/services/parkings/parkings.model';
+import { ParkingExtended, ParkingPassCurrent } from 'src/app/shared/services/parkings/parkings.model';
 import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
 
 @Component({
@@ -13,10 +13,11 @@ import { ParkingsService } from 'src/app/shared/services/parkings/parkings.servi
   templateUrl: './parking-detail.component.html',
   styleUrls: ['./parking-detail.component.scss']
 })
-export class ParkingDetailComponent implements OnInit {
+export class ParkingDetailComponent implements OnInit, OnDestroy {
 
   // Data
   currentParking: ParkingExtended | undefined
+  currentPass: ParkingPassCurrent | undefined
 
   // Checker
   isProcessing: boolean = false
@@ -70,6 +71,30 @@ export class ParkingDetailComponent implements OnInit {
       },
       complete: () => {
         this.currentParking = this.parkingSvc.parkingExtended
+
+        // Get pass data if parking is occupied
+        if (this.currentParking?.isOccupied) {
+          this.getPass()
+        }
+      }
+    }))
+  }
+
+  getPass() {
+    this.loadingBar.useRef('http').start()
+    this.isProcessing = true
+
+    this.subscription.add(this.parkingSvc.getCurrentPass(this.currentParking?.id!).subscribe({
+      next: () => {
+        this.loadingBar.useRef('http').complete()
+        this.isProcessing = false
+      },
+      error: () => {
+        this.loadingBar.useRef('http').stop()
+        this.isProcessing = false
+      },
+      complete: () => {
+        this.currentPass = this.parkingSvc.currentPass
       }
     }))
   }
