@@ -7,6 +7,7 @@ import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { ParkingExtended, ParkingPassCurrent } from 'src/app/shared/services/parkings/parkings.model';
 import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
+import { ModalSize } from 'src/app/components/reusables/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-parking-detail',
@@ -22,10 +23,14 @@ export class ParkingDetailComponent implements OnInit, OnDestroy {
   // Checker
   isProcessing: boolean = false
   isAssigning: boolean = false
+  isConfirmOpen: boolean = false
 
   // Subscription
   subscription: Subscription = new Subscription
   routeSubscription: Subscription | undefined
+
+  // Predefined
+  modalSize = ModalSize
 
   constructor(
     private loadingBar: LoadingBarService,
@@ -147,6 +152,33 @@ export class ParkingDetailComponent implements OnInit, OnDestroy {
     }))
   }
 
+  checkoutResident() {
+    this.loadingBar.useRef('http').start()
+    this.isProcessing = true
+
+    this.subscription.add(
+      this.parkingSvc.checkoutResident(this.currentParking?.id!).subscribe({
+        next: () => {
+          this.loadingBar.useRef('http').complete()
+          this.isProcessing = false
+  
+          this.notifySvc.success(
+            'Success', 
+            'Resident checked out'
+          )
+        },
+        error: () => {
+          this.loadingBar.useRef('http').stop()
+          this.isProcessing = false
+        },
+        complete: () => {
+          this.currentParking = this.parkingSvc.parkingExtended
+          this.toggleConfirm()
+        }
+      })
+    )
+  }
+
   // Triggered when new owner assigned
   onOwnerChanged() {
     this.toggleAssignOwner()
@@ -155,6 +187,20 @@ export class ParkingDetailComponent implements OnInit, OnDestroy {
 
   toggleAssignOwner() {
     this.isAssigning = !this.isAssigning
+  }
+
+  toggleConfirm() {
+    this.isConfirmOpen = !this.isConfirmOpen
+  }
+
+  cancelDialog() {
+    console.log('Cancelled')
+    this.toggleConfirm()
+  }
+
+  confirmDialog() {
+    console.log('Confirmed')
+    this.checkoutResident()
   }
 
 }

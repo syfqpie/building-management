@@ -1,19 +1,43 @@
 <div class="container-fluid">
     <div class="row g-3">
         <div class="col-12 text-end">
-            <button class="btn btn-outline-primary btn-sm"
-                *ngIf="currentParking?.isActive"
-                (click)="deactivate()">
-                <i class="fa-solid fa-lock"></i>
-                Deactivate
-            </button>
-            
-            <button class="btn btn-outline-primary btn-sm"
-                *ngIf="!currentParking?.isActive"
-                (click)="activate()">         
-                <i class="fa-solid fa-lock-open"></i>
-                Activate
-            </button>
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle btn-sm"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-custom p-0">
+                    <li *ngIf="currentParking?.isActive">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="deactivate()">
+                            <i class="fa-solid fa-lock"></i>
+                            Deactivate
+                        </button>
+                    </li>
+
+                    <li *ngIf="!currentParking?.isActive">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="activate()">
+                            <i class="fa-solid fa-lock-open"></i>
+                            Activate
+                        </button>
+                    </li>
+
+                    <li *ngIf="currentParking?.isOccupied">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="toggleConfirm()">
+                            <i class="fa-solid fa-user-minus"></i>
+                            Check out
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div class="col-sm-12 col-md-3">
@@ -219,3 +243,11 @@
         </ng-template>
     </div>
 </div>
+
+<app-confirm-dialog
+    [isProcessing]="isProcessing"
+    [isOpen]="isConfirmOpen"
+    [modalSize]="modalSize.SM"
+    (onCancel)="cancelDialog()"
+    (onConfirm)="confirmDialog()">
+</app-confirm-dialog>
