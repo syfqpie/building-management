@@ -18,6 +18,7 @@ import { TicketsOverviewComponent } from './tickets-overview/tickets-overview.co
 import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
@@ -56,6 +57,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+
 @NgModule({
   declarations: [
     AboutSystemComponent,
@@ -72,6 +74,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     UnitsComponent,
     UnitsConfigurationComponent,
     UnitDetailComponent,
+    VehiclesComponent,
     // Child components
     AccountSettingsComponent,
     AddParkingComponent,
