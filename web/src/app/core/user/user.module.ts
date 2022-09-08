@@ -49,6 +49,7 @@ import { TicketPriorityPipe } from '../../shared/handlers/pipes/ticket-priority.
 import { TicketCategoryPipe } from '../../shared/handlers/pipes/ticket-category.pipe';
 import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 import { VehicleTypePipe } from '../../shared/handlers/pipes/vehicle-type.pipe';
+import { ConfirmDialogComponent } from '../../components/reusables/confirm-dialog/confirm-dialog.component';
 
 // 3rd party
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -98,7 +99,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TicketPriorityPipe,
     TicketCategoryPipe,
     TitleTypePipe,
-    VehicleTypePipe
+    VehicleTypePipe,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
