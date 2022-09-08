@@ -135,50 +135,25 @@ export const flipInY = trigger('flipInY', [])
 export const flipOutX = trigger('flipOutX', [])
 export const flipOutY = trigger('flipOutY', [])
 
-export const testAnimation = trigger('testAnimation', [
-  transition(':enter', [
-    style({ 'backface-visibility': 'visible' }),
-    animate(
-      '1s 0s ease-in',
-      keyframes([
-        style({
-          opacity: 0,
-          transform:
-            'perspective(400px) rotate3d(1, 0, 0, 90deg)',
-          offset: 0,
-        }),
-        style({
-          opacity: 1,
-          transform:
-            'perspective(400px) rotate3d(1, 0, 0, -20deg)',
-          offset: 0.4,
-        }),
-        style({
-          transform:
-            'perspective(400px) rotate3d(1, 0, 0, 10deg)',
-          offset: 0.6,
-        }),
-        style({
-          transform:
-            'perspective(400px) rotate3d(1, 0, 0, -5deg)',
-          offset: 0.8,
-        }),
-        style({
-          transform: 'perspective(400px) rotate3d(0, 0, 0, 0)',
-          offset: 1,
-        }),
-      ])
-    ),
-  ]),
-  transition(':leave', [
-    style({ 
-      opacity: AUTO_STYLE,
-    }),
-    animate('0s ease-out', style({ 
-      opacity: 0,
-    }))
-  ])
-])
+// export const testAnimation = trigger('testAnimation', [
+//   transition(':enter', [
+//     animate(
+//       '0.8s 0s',
+//       keyframes([
+//         style({
+//           opacity: 0,
+//           transform: 'translate3d(0, -100%, 0)',
+//           offset: 0,
+//         }),
+//         style({
+//           opacity: 1,
+//           transform: 'translate3d(0, 0, 0)',
+//           offset: 1,
+//         }),
+//       ])
+//     ),
+//   ])
+// ])
 
 // transition(':enter', [
 //   style({ 

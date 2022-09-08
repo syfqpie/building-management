@@ -9,7 +9,7 @@ import {
 export const fadeIn = trigger('fadeIn', [
     transition('* => *', [
         animate(
-            '0.3s 0s',
+            '0.2s 0s',
             keyframes([
               style({
                 opacity: 0,
