@@ -114,6 +114,16 @@ export class ParkingsService {
     )
   }
 
+  checkoutResident(id: any): Observable<ParkingExtended> {
+    const urlTemp = `${ BASE_URL }${ id }/checkout-resident/`
+    return this.http.get<ParkingExtended>(urlTemp).pipe(
+      tap((res: ParkingExtended) => {
+        this.parkingExtended = res
+        // console.log('Checkout resident:', this.parkingExtended)
+      })
+    )
+  }
+
   getCurrentPass(id: number): Observable<ParkingPassCurrent> {
     const urlTemp = `${ BASE_URL }${ id }/get-current-pass/`
     return this.http.get<ParkingPassCurrent>(urlTemp).pipe(
