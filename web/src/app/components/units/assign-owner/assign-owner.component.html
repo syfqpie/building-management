@@ -1,0 +1,89 @@
+<div *ngIf="selectedResident; else noSelectedResident"
+    class="row text-center w-100">
+    <div class="col-sm-12 col-md-auto d-flex">
+        <div class="m-auto">
+            <img src="assets/images/illustrations/confirmation.png"
+                style="width: 24rem" />
+            <p class="text-muted">Assign owner</p>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md text-start">
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Resident no.: 
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.residentNo }}
+            </p>
+        </div>
+
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Name:
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.name }}
+            </p>
+        </div>
+
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Email:
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.email }}
+            </p>
+        </div>
+
+        <div class="mb-2">
+            <label class="fw-bold text-uppercase small">
+                Phone number:
+            </label>
+            <p class="text-muted small">
+                {{ selectedResident.phoneNo }}
+            </p>
+        </div>
+
+        <button class="btn btn-primary me-2"
+            [disabled]="isProcessing"
+            (click)="assignOwner()">
+            Confirm
+        </button>
+
+        <button class="btn btn-outline-primary"
+            [disabled]="isProcessing"
+            (click)="cancelAssignOwner()">
+            Cancel
+        </button>
+    </div>
+</div>
+
+<ng-template #noSelectedResident>
+    <div class="row g-3 justify-content-center">
+        <div class="col-sm-12 col-md-5">
+            <form class="text-start">
+                <div>
+                    <label class="form-label">
+                        Resident
+                    </label>
+                    <ng-select [items]="residents$ | async" 
+                        bindLabel="residentNo"
+                        bindValue="id"
+                        [loading]="isSearching"
+                        [typeahead]="residentInput$"
+                        [minTermLength]="3"
+                        notFoundText="Not found"
+                        placeholder="Type ID to search"
+                        typeToSearchText="Please enter 3 or more characters"
+                        (change)="onSelectResident($event)">
+                        <ng-template ng-option-tmp let-item="item">
+                            <i class="fa-solid fa-building-user"></i>
+                            [{{ item.residentNo }}] {{ item.name }} - {{ item.email }}
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

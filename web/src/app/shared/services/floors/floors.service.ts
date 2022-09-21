@@ -1,81 +1,61 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Floor } from './floors.model';
+
+const BASE_URL = `${ environment.baseUrl }v1/floors/`
 
 @Injectable({
   providedIn: 'root'
 })
 export class FloorsService {
 
-  // URL
-  public urlFloors: string = environment.baseUrl + 'v1/floors/'
-
   // Data
-  floor: Floor
-  floors: Floor[] = []
+  public floor: Floor | undefined
+  public floors: Floor[] = []
 
   constructor(
     private http: HttpClient
   ) { }
 
   create(body: any): Observable<Floor> {
-    return this.http.post<any>(this.urlFloors, body).pipe(
-      tap((res) => {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.post<Floor>(urlTemp, body).pipe(
+      tap((res: Floor) => {
         this.floor = res
-        // console.log('Floor: ', this.floor)
+        // console.log('Floor:', this.floor)
       })
     )
   }
 
   getAll(): Observable<Floor[]> {
-    return this.http.get<Floor[]>(this.urlFloors).pipe(
-      tap((res) => {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.get<Floor[]>(urlTemp).pipe(
+      tap((res: Floor[]) => {
         this.floors = res
-        // console.log('Floors: ', this.floors)
+        // console.log('Floors:', this.floors)
       })
     )
   }
 
-  getOne(id: string): Observable<Floor> {
-    let urlTemp = this.urlFloors + id + '/'
+  getOne(id: string | undefined): Observable<Floor> {
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Floor>(urlTemp).pipe(
-      tap((res) => {
+      tap((res: Floor) => {
         this.floor = res
-        // console.log('Floor: ', this.floor)
+        // console.log('Floor:', this.floor)
       })
     )
   }
 
   patch(id: number, body: any): Observable<Floor> {
-    let urlTemp = this.urlFloors + id + '/'
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.patch<Floor>(urlTemp, body).pipe(
-      tap((res) => {
+      tap((res: Floor) => {
         this.floor = res
-        // console.log('Floor: ', this.floor)
-      })
-    )
-  }
-
-
-  activate(id: string): Observable<Floor> {
-    let urlTemp = this.urlFloors + id + '/activate/'
-    return this.http.get<Floor>(urlTemp).pipe(
-      tap((res) => {
-        this.floor = res
-        // console.log('Floor: ', this.floor)
-      })
-    )
-  }
-
-  deactivate(id: string): Observable<Floor> {
-    let urlTemp = this.urlFloors + id + '/deactivate/'
-    return this.http.get<Floor>(urlTemp).pipe(
-      tap((res) => {
-        this.floor = res
-        // console.log('Floor: ', this.floor)
+        // console.log('Floor:', this.floor)
       })
     )
   }

@@ -1,0 +1,11 @@
+{% extends "account/email/base_message.html" %}
+{% block content %}
+{% autoescape off %}
+<p>
+    You're receiving this e-mail because your email has been registered as an Admin on {{ site_domain }}.
+</p>
+<p>
+    To confirm this is correct, go to {{ verification_url }}
+</p>
+{% endautoescape %}
+{% endblock %}

@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<ngx-loading-bar 
+  [color]="barConfig.color" 
+  [includeSpinner]="barConfig.includeSpinner"
+  [height]="barConfig.height"
+  [ref]="barConfig.ref">
+</ngx-loading-bar>
+<div class="font-monospace bg-theme">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,122 @@
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Register admin
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="registerForm">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Email
+                        </label>
+                        <input type="email"
+                            class="form-control"
+                            formControlName="username"
+                            placeholder="example@test.com"
+                            [ngClass]="{
+                                'is-invalid': registerForm.controls['username'].touched &&
+                                registerForm.controls['username'].errors,
+                                'is-valid': registerForm.controls['username'].touched &&
+                                !registerForm.controls['username'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="registerForm.controls['username'].errors &&
+                            (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
+                            <ng-container *ngFor="let message of formMessages['username']">
+                                <span *ngIf="registerForm.controls['username'].hasError(message.type) &&
+                                    (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+        
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Full name
+                        </label>
+                        <input type="email"
+                            class="form-control"
+                            formControlName="fullName"
+                            placeholder="John Doe"
+                            [ngClass]="{
+                                'is-invalid': registerForm.controls['fullName'].touched &&
+                                registerForm.controls['fullName'].errors,
+                                'is-valid': registerForm.controls['fullName'].touched &&
+                                !registerForm.controls['fullName'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="registerForm.controls['fullName'].errors &&
+                            (registerForm.controls['fullName'].dirty || registerForm.controls['fullName'].touched)">
+                            <ng-container *ngFor="let message of formMessages['fullName']">
+                                <span *ngIf="registerForm.controls['fullName'].hasError(message.type) &&
+                                    (registerForm.controls['fullName'].dirty || registerForm.controls['fullName'].touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Privilege
+                        </label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                    type="checkbox"
+                                    id="checkboxAdmin"
+                                    formControlName="isStaff">
+                                <label class="form-check-label"
+                                    for="checkboxAdmin">
+                                    Staff
+                                </label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" 
+                                    type="checkbox"
+                                    id="checkboxSuperadmin" 
+                                    formControlName="isSuperuser">
+                                <label class="form-check-label" 
+                                    for="checkboxSuperadmin">
+                                    Superadmin
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="registerAdmin()"
+                    [disabled]="isProcessing || !registerForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Register
+                    </span>
+
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+                
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+</div>

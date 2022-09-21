@@ -1,0 +1,172 @@
+<div class="container-fluid">
+    <app-unit-add
+        (changedEvent)="getData()"
+        [blocks]="blocks"
+        [floors]="floors"
+        [unitNumbers]="unitNumbers">
+    </app-unit-add>
+
+    <div class="row mb-3">
+        <div class="col text-end">
+            <button class="btn btn-outline-primary btn-sm"
+                (click)="toggleModal()">
+                <i class="fa-solid fa-square-plus"></i>
+                Add unit
+            </button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="card-title">
+                List of units
+            </h5>
+            <h6 class="card-subtitle mb-3 text-muted">
+                Manage units here
+            </h6>
+            <div *ngIf="tableRows.length > 0; else isNoRowData">
+                <ngx-datatable
+                    class="bootstrap rounded-2"
+                    [rows]="tableRows"
+                    [columnMode]="ColumnMode.flex"
+                    [limit]="5"
+                    rowHeight="auto"
+                    [footerHeight]="50"
+                    [messages]="tableMessages"
+                    [cssClasses]="tableClass">
+                    <ngx-datatable-column name="Unit no."
+                        prop="unitNo"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Maintenance"
+                        prop="isMaintenance"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-success text-success
+                                        border-success': !value,
+                                    'bg-danger text-danger
+                                        border-danger': value
+                                }">
+                                <span *ngIf="value; else isNotMaintenance">
+                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                    Maintenance
+                                </span>
+                                <ng-template #isNotMaintenance>
+                                    <span>
+                                        <i class="fa-regular fa-circle-check my-auto"></i>
+                                        Not maintenance
+                                    </span>
+                                </ng-template>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Active"
+                        prop="isActive"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-success text-success
+                                        border-success': value,
+                                    'bg-danger text-danger
+                                        border-danger': !value
+                                }">
+                                <span *ngIf="value; else isNotActive">
+                                    <i class="fa-regular fa-circle-check my-auto"></i>
+                                    Active
+                                </span>
+                                <ng-template #isNotActive>
+                                    <span>
+                                        <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                        Inactive
+                                    </span>
+                                </ng-template>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Vacant"
+                        prop="owner"
+                        [flexGrow]="2"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                                border border-opacity-10 rounded-2"
+                                [ngClass]="{
+                                    'bg-success text-success
+                                        border-success': !value,
+                                    'bg-warning text-warning
+                                        border-warning': value
+                                }">
+                                <span *ngIf="!value; else isNotVacant">
+                                    <i class="fa-solid fa-building-circle-check my-auto"></i>
+                                    Vacant
+                                </span>
+                                <ng-template #isNotVacant>
+                                    <span>
+                                        <i class="fa-solid fa-building-circle-xmark my-auto"></i>
+                                        Occupied
+                                    </span>
+                                </ng-template>
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Created at"
+                        prop="createdAt"
+                        [flexGrow]="3"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="mb-0">
+                                {{ value | date : 'dd/MM/yyyy' }}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Action"
+                        prop="id"
+                        [flexGrow]="2"
+                        [sortable]="false"
+                        [draggable]="false"
+                        [resizeable]="false">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <button class="btn btn-outline-primary btn-sm"
+                                (click)="onSelect(value)">
+                                View
+                            </button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            
+            <ng-template #isNoRowData>
+                <div *ngIf="!isProcessing;">
+                    <div class="text-center">
+                        <img src="assets/images/illustrations/empty.png"
+                            style="height: 14rem;">
+                        <p class="text-muted">Empty data</p>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

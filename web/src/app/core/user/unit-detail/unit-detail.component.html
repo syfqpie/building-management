@@ -1,0 +1,311 @@
+<div class="container-fluid">
+    <div class="row g-3">
+        <div class="col-12 text-end">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle btn-sm"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-custom p-0">
+                    <li *ngIf="currentUnit?.isActive">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="deactivate()">
+                            <i class="fa-solid fa-lock"></i>
+                            Deactivate
+                        </button>
+                    </li>
+
+                    <li *ngIf="!currentUnit?.isActive">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="activate()">
+                            <i class="fa-solid fa-lock-open"></i>
+                            Activate
+                        </button>
+                    </li>
+
+                    <li *ngIf="currentUnit?.isMaintenance">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="disableMaintenance()">
+                            <i class="fa-solid fa-lock-open"></i>
+                            Disable maintenance
+                        </button>
+                    </li>
+
+                    <li *ngIf="!currentUnit?.isMaintenance">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="enableMaintenance()">
+                            <i class="fa-solid fa-lock"></i>
+                            Enable maintenance
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Unit information
+                    </h5>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Unit no.: 
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.unitNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Square feet:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.squareFeet }} sf
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small d-block">
+                            Maintenance:
+                        </label>
+                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2 my-1"
+                            [ngClass]="{
+                                'bg-success text-success
+                                    border-success': !currentUnit?.isMaintenance,
+                                'bg-danger text-danger
+                                    border-danger': currentUnit?.isMaintenance
+                            }">
+                            <span *ngIf="currentUnit?.isMaintenance; else isNotMaintenance">
+                                <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                Maintenance
+                            </span>
+                            <ng-template #isNotMaintenance>
+                                <span>
+                                    <i class="fa-regular fa-circle-check my-auto"></i>
+                                    Not maintenance
+                                </span>
+                            </ng-template>
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small d-block">
+                            Active:
+                        </label>
+                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2 my-1"
+                            [ngClass]="{
+                                'bg-success text-success
+                                    border-success': currentUnit?.isActive,
+                                'bg-danger text-danger
+                                    border-danger': !currentUnit?.isActive
+                            }">
+                            <span *ngIf="currentUnit?.isActive; else isNotActive">
+                                <i class="fa-regular fa-circle-check my-auto"></i>
+                                Active
+                            </span>
+                            <ng-template #isNotActive>
+                                <span>
+                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                    Inactive
+                                </span>
+                            </ng-template>
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Created at:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.createdAt | date : 'dd/MM/yyyy, h:mm a'}}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Last modified at:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentUnit?.lastModifiedAt | date : 'dd/MM/yyyy, h:mm a' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="currentUnit?.owner !== null; else isNoOwner"
+            class="col-sm-12 col-md-9">
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="rounded-circle
+                                border border-primary border-opacity-50 d-flex justify-content-center
+                                align-items-center mx-auto m-0 p-2 avatar"
+                                alt="Avatar">
+                                <div class="rounded-circle bg-primary bg-opacity-75
+                                    d-flex justify-content-center
+                                    align-items-center w-100 h-100">
+                                    <i class="fa-solid fa-house-user fa-2x text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md">
+                            <p class="fw-bold small mb-0">
+                                <i class="fa-regular fa-id-card fa-fw"></i>
+                                {{ currentUnit?.owner?.title | titleType }}
+                                {{ currentUnit?.owner?.name }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-mobile-screen fa-fw"></i>
+                                {{ currentUnit?.owner?.phoneNo }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-receipt fa-fw"></i>
+                                {{ 
+                                    (currentUnit?.owner?.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
+                                    'N/A'
+                                }}
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                <i class="fa-solid fa-envelope fa-fw"></i>
+                                {{ currentUnit?.owner?.email }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-sm-12 col-md-8">
+                    <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                (click)="changeTab('residents')"
+                                [ngClass]="{
+                                    'active': currentTab === 'residents'
+                                }">
+                                Residents 
+                            </button>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                disabled
+                                (click)="changeTab('bills')"
+                                [ngClass]="{
+                                    'active': currentTab === 'bills'
+                                }">
+                                Bills (coming soon)
+                            </button>
+                        </li>
+                    </ul>
+        
+                    <div class="row g-3">
+                        <div class="col-sm-12 col-md-12">
+                            <app-unit-residents></app-unit-residents>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <h5 class="card-header bg-white mb-0">
+                            Activities
+                        </h5>
+                        <ul class="list-group list-group-flush">
+                            <ng-template ngFor
+                                let-activity
+                                let-index="index"
+                                [ngForOf]="activities">
+                                <li class="list-group-item">
+                                    <span class="ms-0 badge bg-opacity-10 border
+                                        border-opacity-10 mb-2"
+                                        [ngClass]="{
+                                            'bg-info text-info': activity.activityType === activityType.MOVE_IN,
+                                            'bg-warning text-warning': activity.activityType === activityType.MOVE_OUT,
+                                            'bg-success text-success': activity.activityType === activityType.ACTIVATE,
+                                            'bg-danger text-danger': activity.activityType === activityType.DEACTIVATE,
+                                            'bg-dark text-dark': activity.activityType === activityType.ENABLE_MAINTENANCE,
+                                            'bg-secondary text-secondary': activity.activityType === activityType.DISABLE_MAINTENANCE
+                                        }">
+                                        <i class="fa-solid" [ngClass]="{
+                                            'fa-people-carry-box': (
+                                                activity.activityType === activityType.MOVE_IN ||
+                                                activity.activityType === activityType.MOVE_OUT
+                                            ),
+                                            'fa-triangle-exclamation': (
+                                                activity.activityType === activityType.ACTIVATE ||
+                                                activity.activityType === activityType.DEACTIVATE ||
+                                                activity.activityType === activityType.ENABLE_MAINTENANCE ||
+                                                activity.activityType === activityType.DISABLE_MAINTENANCE
+                                            )
+                                        }"></i>
+                                        {{ activity.activityType | activityType }}
+                                    </span>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-regular fa-circle-user"></i>
+                                        {{ activity.activityBy.email }}
+                                    </p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-regular fa-clock"></i>
+                                        {{ activity.activityAt | date : 'dd/MM/yyyy, h:mm a' }}
+                                    </p>
+                                </li>
+                                <button *ngIf="index === 4"
+                                    class="list-group-item
+                                        list-group-item-action text-center
+                                        bg-outline-primary"
+                                    (click)="viewMoreActivities()">
+                                    <p class="mb-0">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                        View more
+                                    </p>
+                                </button> 
+                            </ng-template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #isNoOwner>
+            <div class="col-sm-12 col-md-9 d-flex">
+                <app-assign-owner
+                    *ngIf="isAssigning && currentUnit; else isNotAssigning"
+                    class="w-100 m-auto"
+                    [unitId]="currentUnit!.id"
+                    (changedEvent)="onOwnerChanged()">
+                </app-assign-owner>
+
+                <ng-template #isNotAssigning>
+                    <div class="text-center w-100 m-auto">
+                        <img src="assets/images/illustrations/no-information.png"
+                            style="height: 14rem;">
+                        <p class="text-muted">No information yet</p>
+                        <button class="btn btn-primary"
+                            (click)="toggleAssignOwner()">
+                            Assign owner
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </ng-template>
+    </div>
+</div>

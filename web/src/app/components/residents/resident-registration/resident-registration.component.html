@@ -1,0 +1,197 @@
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Register resident
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="registerForm">
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Email
+                        </label>
+                        <input type="email"
+                            class="form-control"
+                            formControlName="username"
+                            placeholder="example@test.com"
+                            [ngClass]="{
+                                'is-invalid': registerForm.controls['username'].touched &&
+                                registerForm.controls['username'].errors,
+                                'is-valid': registerForm.controls['username'].touched &&
+                                !registerForm.controls['username'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="registerForm.controls['username'].errors &&
+                            (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
+                            <ng-container *ngFor="let message of formMessages['username']">
+                                <span *ngIf="registerForm.controls['username'].hasError(message.type) &&
+                                    (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 position-relative">
+                        <label class="form-label">
+                            Full name
+                        </label>
+                        <input type="text"
+                            class="form-control"
+                            formControlName="name"
+                            placeholder="John Doe"
+                            [ngClass]="{
+                                'is-invalid': registerForm.controls['name'].touched &&
+                                registerForm.controls['name'].errors,
+                                'is-valid': registerForm.controls['name'].touched &&
+                                !registerForm.controls['name'].errors
+                            }" />
+                        <div class="invalid-tooltip invalid-tooltip-right"
+                            *ngIf="registerForm.controls['name'].errors &&
+                            (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)">
+                            <ng-container *ngFor="let message of formMessages['name']">
+                                <span *ngIf="registerForm.controls['name'].hasError(message.type) &&
+                                    (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)">
+                                    • {{ message.message }}
+                                </span>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-12 col-md-6">
+                            <div>
+                                <label class="form-label">
+                                    Title
+                                </label>
+                                <select class="form-select"
+                                    formControlName="title">
+                                    <option [ngValue]="null">
+                                        Secret
+                                    </option>
+                                    <option [ngValue]="titleType.MR">
+                                        Mr.
+                                    </option>
+                                    <option [ngValue]="titleType.MRS">
+                                        Mrs.
+                                    </option>
+                                    <option [ngValue]="titleType.MS">
+                                        Ms.
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6">
+                            <div>
+                                <label class="form-label">
+                                    Gender
+                                </label>
+                                <select class="form-select"
+                                    formControlName="gender">
+                                    <option [ngValue]="null">
+                                        Secret
+                                    </option>
+                                    <option [ngValue]="genderType.FEMALE">
+                                        Female
+                                    </option>
+                                    <option [ngValue]="genderType.MALE">
+                                        Male
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="position-relative">
+                                <label class="form-label">
+                                    Phone number
+                                </label>
+                                <input type="text"
+                                    class="form-control"
+                                    formControlName="phoneNo"
+                                    placeholder="Phone number"
+                                    [ngClass]="{
+                                        'is-invalid': registerForm.controls['phoneNo'].touched &&
+                                        registerForm.controls['phoneNo'].errors,
+                                        'is-valid': registerForm.controls['phoneNo'].touched &&
+                                        !registerForm.controls['phoneNo'].errors
+                                    }" />
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="registerForm.controls['phoneNo'].errors &&
+                                    (registerForm.controls['phoneNo'].dirty || registerForm.controls['phoneNo'].touched)">
+                                    <ng-container *ngFor="let message of formMessages['phoneNo']">
+                                        <span *ngIf="registerForm.controls['phoneNo'].hasError(message.type) &&
+                                            (registerForm.controls['phoneNo'].dirty || registerForm.controls['phoneNo'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6">
+                            <div class="position-relative">
+                                <label class="form-label">
+                                    NRIC
+                                </label>
+                                <input type="text"
+                                    class="form-control"
+                                    formControlName="nric"
+                                    placeholder="NRIC"
+                                    [ngClass]="{
+                                        'is-invalid': registerForm.controls['nric'].touched &&
+                                        registerForm.controls['nric'].errors,
+                                        'is-valid': registerForm.controls['nric'].touched &&
+                                        !registerForm.controls['nric'].errors
+                                    }" />
+                                <div class="invalid-tooltip invalid-tooltip-right"
+                                    *ngIf="registerForm.controls['nric'].errors &&
+                                    (registerForm.controls['nric'].dirty || registerForm.controls['nric'].touched)">
+                                    <ng-container *ngFor="let message of formMessages['nric']">
+                                        <span *ngIf="registerForm.controls['nric'].hasError(message.type) &&
+                                            (registerForm.controls['nric'].dirty || registerForm.controls['nric'].touched)">
+                                            • {{ message.message }}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="registerResident()"
+                    [disabled]="isProcessing || !registerForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Register
+                    </span>
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+</div>

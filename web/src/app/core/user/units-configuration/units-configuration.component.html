@@ -1,0 +1,100 @@
+<div class="container-fluid">
+    <div class="row g-3">
+        <div class="col-12 text-end">
+            <button class="btn btn-outline-primary btn-sm"
+                *ngIf="currentTab === 'blocks'; else notBlocks"
+                (click)="toggleBlockModal()">
+                <i class="fa-solid fa-square-plus"></i>
+                Add block
+            </button>
+
+            <ng-template #notBlocks>
+                <button class="btn btn-outline-primary btn-sm"
+                    *ngIf="currentTab === 'floors'; else notFloors"
+                    (click)="toggleFloorModal()">
+                    <i class="fa-solid fa-square-plus"></i>
+                    Add floor
+                </button>
+
+                <ng-template #notFloors>
+                    <button class="btn btn-outline-primary btn-sm"
+                        *ngIf="currentTab === 'unit-numbers'"
+                        (click)="toggleUnitNumberModal()">
+                        <i class="fa-solid fa-square-plus"></i>
+                        Add unit numbers
+                    </button>
+                </ng-template>
+            </ng-template>
+        </div>
+
+        <div class="col-sm-12 col-md-2">
+			<div class="card shadow-sm border-0">
+				<ul class="nav nav-pills flex-column">
+					<li class="nav-item">
+						<button class="nav-link w-100 rounded-0 rounded-top"
+							type="button"
+							role="tab"
+							[ngClass]="{
+                                'active': currentTab === 'blocks'
+                            }"
+                            (click)="changeTab('blocks')">
+							Blocks
+						</button>
+					</li>
+
+					<li class="nav-item">
+						<button class="nav-link w-100 rounded-0"
+							type="button"
+							role="tab"
+							[ngClass]="{
+                                'active': currentTab === 'floors'
+                            }"
+                            (click)="changeTab('floors')">
+							Floors
+						</button>
+					</li>
+
+                    <li class="nav-item">
+						<button class="nav-link w-100 rounded-0 rounded-bottom"
+							type="button"
+							role="tab"
+							[ngClass]="{
+                                'active': currentTab === 'unit-numbers'
+                            }"
+                            (click)="changeTab('unit-numbers')">
+							Unit numbers
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="col-sm-12 col-md-10">
+            <div class="tab-content">
+                <div class="tab-pane fade"
+                    role="tabpanel"
+                    [ngClass]="{
+                        'show active': currentTab === 'blocks'
+                    }">
+                    <app-blocks-table></app-blocks-table>
+                </div>
+
+                <div class="tab-pane fade"
+                    role="tabpanel"
+                    [ngClass]="{
+                        'show active': currentTab === 'floors'
+                    }">
+                    <app-floors-table></app-floors-table>
+                </div>
+                
+                <div class="tab-pane fade"
+                    role="tabpanel"
+                    [ngClass]="{
+                        'show active': currentTab === 'unit-numbers'
+                    }">
+                    <app-unit-numbers-table></app-unit-numbers-table>
+                </div>
+            </div>
+		</div>
+    </div>
+</div>

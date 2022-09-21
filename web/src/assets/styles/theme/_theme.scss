@@ -1,0 +1,166 @@
+// Theme body
+.mobile-sidebar {
+    padding-top: 3.67rem;
+    z-index: 1019 !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
+
+.bg-theme {
+    background: #f1f5f9 !important;
+}
+
+a:not(.active) {
+    color: #6c757d !important;
+}
+a:hover:not(.active) {
+    color: #bdbdbd !important;
+}
+
+// Margin
+.ms-50px {
+    margin-left: 50px;
+}
+.ms-100px {
+    margin-left: 100px;
+}
+.ms-200px {
+    margin-left: 200px;
+}
+.ms-300px {
+    margin-left: 300px;
+}
+
+// Height and width
+.min-h-50px {
+    min-height: 50px;
+}
+
+.min-h-100px {
+    min-height: 100px;
+}
+
+.min-h-200px {
+    min-height: 200px;
+}
+
+.min-h-300px {
+    min-height: 300px;
+}
+
+.min-w-50px {
+    min-width: 50px;
+}
+
+.min-w-100px {
+    min-width: 100px;
+}
+
+.min-w-200px {
+    min-width: 200px;
+}
+
+.min-w-300px {
+    min-width: 300px;
+}
+
+.min-vh-full {
+    min-height: calc(100vh - 7.3rem);
+}
+
+.h-50px {
+    height: 50px;
+}
+
+.h-100px {
+    height: 100px;
+}
+
+.h-200px {
+    height: 200px;
+}
+
+.h-300px {
+    height: 300px;
+}
+
+.w-50px {
+    width: 50px;
+}
+
+.w-100px {
+    width: 100px;
+}
+
+.w-200px {
+    width: 200px;
+}
+
+.w-300px {
+    width: 300px;
+}
+
+// Badge
+.status-badge {
+    border-radius: 2px;
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+}
+
+
+.status-badge-info {
+    background-color: #b3e5fc;
+    color: #23547b;
+}
+
+.status-badge-secondary {
+    background-color: #eccfff;
+    color: #694382;
+}
+
+.status-badge-success {
+    background-color: #c8e6c9;
+    color: #256029;
+}
+
+.status-badge-warning {
+    background-color: #ffd8b2;
+    color: #805b36;
+}
+
+.status-badge-danger {
+    background-color: #ffcdd2;
+    color: #c63737;
+}
+
+// Sidebar
+// Not collapsed
+a[aria-expanded="false"] {
+    i.fas.fa-angle-right {
+      margin-left: auto;
+      transition: transform .35s ease;
+    } 
+}
+
+// Collapsed
+a[aria-expanded="true"] {
+    i.fas.fa-angle-right {
+        transform: rotate(90deg);
+        transition: transform .35s ease;
+    } 
+}
+
+.avatar {
+    border-style: dashed solid !important;
+    width: 5rem;
+    height: 5rem;
+}

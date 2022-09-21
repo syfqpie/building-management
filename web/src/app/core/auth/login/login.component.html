@@ -1,0 +1,121 @@
+<div class="container-fluid bg-dark vh-100">
+    <div class="row h-100">
+        <div class="col-sm-12 col-md-4 d-flex align-items-center justify-content-center bg-white">
+            <!-- Form -->
+            <form [formGroup]="loginForm"
+                class="need-validation row justify-content-center">
+                <div class="col-10 col-md-7">
+                    <img src="assets/images/illustrations/building-town.png"
+                        class="w-100 d-block d-md-none" />
+                    <img class="mx-auto d-none d-md-block mb-3"
+                        src="assets/images/default/logo-primary.png"
+                        style="height: 5rem; width: 5rem" />
+                    <p class="text-muted mb-0 text-center">
+                        Welcome back!
+                    </p>
+                    <p class="text-muted text-center">
+                        Log in to your account
+                    </p>
+                </div>
+                
+                <div class="col-10 col-md-7 mb-3 position-relative">
+                    <label for="formEmail" class="form-label">
+                        Email
+                    </label>
+                    <input id="formEmail"
+                        type="email"
+                        class="form-control"
+                        placeholder="example@test.com"
+                        formControlName="username"
+                        (keyup.enter)="onFormEnter()"
+                        [ngClass]="{
+                            'is-invalid': loginForm.controls['username'].touched &&
+                            loginForm.controls['username'].errors,
+                            'is-valid': loginForm.controls['username'].touched &&
+                            !loginForm.controls['username'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="loginForm.controls['username'].errors &&
+                        (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
+                        <ng-container *ngFor="let message of formMessages['username']">
+                            <span *ngIf="loginForm.controls['username'].hasError(message.type) &&
+                                (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)">
+                                • {{ message.message }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-10 col-md-7 mb-3 position-relative">
+                    <label for="formPassword" class="form-label">
+                        Password
+                    </label>
+                    <input id="formPassword"
+                        type="password"
+                        class="form-control"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        formControlName="password"
+                        (keyup.enter)="onFormEnter()"
+                        [ngClass]="{
+                            'is-invalid': loginForm.controls['password'].touched &&
+                            loginForm.controls['password'].errors,
+                            'is-valid': loginForm.controls['password'].touched &&
+                            !loginForm.controls['password'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="loginForm.controls['password'].errors &&
+                        (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+                        <ng-container *ngFor="let message of formMessages['password']">
+                            <span *ngIf="loginForm.controls['password'].hasError(message.type) &&
+                                (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+                                • {{ message.message }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-10 col-md-7 d-grid gap-0">
+                    <button class="btn btn-primary"
+                        type="button"
+                        (click)="login()"
+                        [disabled]="isProcessing || !loginForm.valid" >
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Login
+                        </span>
+                        <ng-template #isLoading>
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        </ng-template>
+                    </button>
+
+                    <hr class="my-3" />
+
+                    <p class="mb-0 text-center">
+                        <small class="text-muted">
+                            Forgot password?
+                            <a [routerLink]="'/auth/reset'"
+                                class="link-primary">
+                                Reset
+                            </a>
+                        </small>
+                    </p>
+                    
+                    <p class="mb-3 text-center">
+                        <small class="text-muted">
+                            No verification email?
+                            <a [routerLink]="'/auth/resend-verification'"
+                                class="link-primary">
+                                Resend
+                            </a>
+                        </small>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-8 d-md-flex align-items-center justify-content-center d-none">
+            <!-- Image -->
+            <img src="assets/images/illustrations/building-town.png"
+                style="height: 25rem;" />
+        </div>
+    </div>
+</div>

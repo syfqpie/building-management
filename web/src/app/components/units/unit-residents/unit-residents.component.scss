@@ -1,0 +1,8 @@
+.btn-group.btn-group-custom {
+    > button.btn:first-child {
+        border-top-left-radius: 0 !important;
+    }
+    > button.btn:last-child {
+        border-top-right-radius: 0 !important;
+    }
+}

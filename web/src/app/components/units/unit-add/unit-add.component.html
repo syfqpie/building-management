@@ -1,0 +1,173 @@
+<div class="modal fade show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add new unit
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="addForm">
+                    <div class="row g-3">
+                        <div class="col-sm-12 col-md-6 position-relative">
+                            <label class="form-label">
+                                Square feet
+                            </label>
+                            <input type="number"
+                                class="form-control"
+                                formControlName="squareFeet"
+                                placeholder="1000"
+                                [ngClass]="{
+                                    'is-invalid': addForm.controls['squareFeet'].touched &&
+                                    addForm.controls['squareFeet'].errors,
+                                    'is-valid': addForm.controls['squareFeet'].touched &&
+                                    !addForm.controls['squareFeet'].errors
+                                }" />
+                            <div class="invalid-tooltip invalid-tooltip-right"
+                                *ngIf="addForm.controls['squareFeet'].errors &&
+                                (addForm.controls['squareFeet'].dirty || addForm.controls['squareFeet'].touched)">
+                                <ng-container *ngFor="let message of formMessages['squareFeet']">
+                                    <span *ngIf="addForm.controls['squareFeet'].hasError(message.type) &&
+                                        (addForm.controls['squareFeet'].dirty || addForm.controls['squareFeet'].touched)">
+                                        • {{ message.message }}
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 position-relative">
+                            <label class="form-label">
+                                Block
+                            </label>
+                            <select type="number"
+                                class="form-select"
+                                formControlName="block"
+                                [ngClass]="{
+                                    'is-invalid': addForm.controls['block'].touched &&
+                                    addForm.controls['block'].errors,
+                                    'is-valid': addForm.controls['block'].touched &&
+                                    !addForm.controls['block'].errors
+                                }">
+                                <option value="null" hidden>-</option>
+                                <ng-template ngFor
+                                    let-block
+                                    [ngForOf]="blocks">
+                                    <option [value]="block.id">
+                                        {{ block.block }}
+                                    </option>
+                                </ng-template>
+                            </select>
+                            <div class="invalid-tooltip invalid-tooltip-right"
+                                *ngIf="addForm.controls['block'].errors &&
+                                (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
+                                <ng-container *ngFor="let message of formMessages['block']">
+                                    <span *ngIf="addForm.controls['block'].hasError(message.type) &&
+                                        (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
+                                        • {{ message.message }}
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 position-relative">
+                            <label class="form-label">
+                                Floor
+                            </label>
+                            <select type="number"
+                                class="form-select"
+                                formControlName="floor"
+                                [ngClass]="{
+                                    'is-invalid': addForm.controls['floor'].touched &&
+                                    addForm.controls['floor'].errors,
+                                    'is-valid': addForm.controls['floor'].touched &&
+                                    !addForm.controls['floor'].errors
+                                }">
+                                <option value="null" hidden>-</option>
+                                <ng-template ngFor
+                                    let-floor
+                                    [ngForOf]="floors">
+                                    <option [value]="floor.id">
+                                        {{ floor.floor }}
+                                    </option>
+                                </ng-template>
+                            </select>
+                            <div class="invalid-tooltip invalid-tooltip-right"
+                                *ngIf="addForm.controls['block'].errors &&
+                                (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
+                                <ng-container *ngFor="let message of formMessages['block']">
+                                    <span *ngIf="addForm.controls['floor'].hasError(message.type) &&
+                                        (addForm.controls['floor'].dirty || addForm.controls['floor'].touched)">
+                                        • {{ message.message }}
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 position-relative">
+                            <label class="form-label">
+                                Unit number
+                            </label>
+                            <select type="number"
+                                class="form-select"
+                                formControlName="unitNumber"
+                                [ngClass]="{
+                                    'is-invalid': addForm.controls['unitNumber'].touched &&
+                                    addForm.controls['unitNumber'].errors,
+                                    'is-valid': addForm.controls['unitNumber'].touched &&
+                                    !addForm.controls['unitNumber'].errors
+                                }">
+                                <option value="null" hidden>-</option>
+                                <ng-template ngFor
+                                    let-unitNumber
+                                    [ngForOf]="unitNumbers">
+                                    <option [value]="unitNumber.id">
+                                        {{ unitNumber.unitNumber }}
+                                    </option>
+                                </ng-template>
+                            </select>
+                            <div class="invalid-tooltip invalid-tooltip-right"
+                                *ngIf="addForm.controls['block'].errors &&
+                                (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
+                                <ng-container *ngFor="let message of formMessages['block']">
+                                    <span *ngIf="addForm.controls['block'].hasError(message.type) &&
+                                        (addForm.controls['block'].dirty || addForm.controls['block'].touched)">
+                                        • {{ message.message }}
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-primary"
+                    (click)="addUnit()"
+                    [disabled]="isProcessing || !addForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Add
+                    </span>
+
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
+
+                <button type="button"
+                    class="btn btn-outline-primary"
+                    (click)="toggleModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show d-block"
+    role="dialog"
+    *ngIf="isModalOpen">
+</div>

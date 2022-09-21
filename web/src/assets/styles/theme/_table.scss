@@ -1,0 +1,73 @@
+.ngx-datatable.bootstrap {
+    font-size: 0.90rem !important;
+    .datatable-header {
+        background: #f1f5f9 !important;
+        color: #212529 !important;
+
+        .datatable-header-cell {
+            border-bottom: 1px solid #edeff1 !important;
+            &.sortable:hover {
+                .datatable-header-cell-wrapper {
+                    color: rgb(86, 97, 217, 0.5) !important;
+                }
+            }
+            &.sort-active {
+                .datatable-header-cell-wrapper .datatable-header-cell-label,
+                .sort-btn.sort-asc,
+                .sort-btn.sort-desc {
+                    color: #5661d9 !important;
+                    text-decoration: underline !important;
+                }
+            }
+        }
+    }
+
+    .datatable-body {
+        .datatable-body-row {
+            border-top: 0 !important;
+            border-bottom: 1px solid #edeff1 !important;
+
+            &.active {
+                background-color: rgba(86, 97, 217, 0.15) !important;
+                color: #000 !important;
+            }
+            &.datatable-row-even:not(.active) {
+                background-color: #fff !important;
+            }
+        }
+    }
+
+    .datatable-footer {
+        background: none !important;
+        color: #212529 !important;
+        margin-top: -5px !important;
+        .page-count {
+            padding: 0 0.7rem !important;
+        }
+        .datatable-pager {
+            ul {
+                li {
+                  margin: 10px 0px;
+                  &:not(.disabled) {
+                    &:hover {
+                      a {
+                        background-color: rgb(86, 97, 217, 0.5) !important;
+                        color: #fff !important;
+                      }
+                    }
+                    &.active {
+                        a {
+                            background-color: #5661d9 !important;
+                            color: #fff !important;
+                        }
+                    }
+                  }
+                }
+            }
+        }
+    }
+
+    &.selectable .datatable-body .datatable-body-row:hover {
+        cursor: pointer !important;
+    }
+}

@@ -1,0 +1,28 @@
+<!-- Pages and footer -->
+<div>
+    <!-- Top navbar -->
+    <app-user-navbar
+        [isMenuOpen]="isMenuOpen"
+        (toggleMenuEvent)="receiveToggle()">
+    </app-user-navbar>
+    <!-- Sidebar -->
+    <div class="border-end border-dark shadow-sm"
+        @slideLeftRight
+        *ngIf="isMenuOpen">
+        <app-user-sidebar
+            class="flex-column position-fixed"
+            [ngClass]="{ 'sticky-top mobile-sidebar': isMobileResolution === true }">
+        </app-user-sidebar>
+    </div>
+
+    <div style="transition: 0.3s ease-in;"
+        [ngStyle]="isMenuOpen === true && isMobileResolution === false 
+        ? {'margin-left': '17rem'}
+        : {'margin-left': '0'}">
+        <div class="px-3 py-4 min-vh-full">
+            <router-outlet></router-outlet>
+        </div>
+        
+        <app-user-footer></app-user-footer>
+    </div>
+</div>

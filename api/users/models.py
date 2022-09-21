@@ -1,35 +1,31 @@
-from __future__ import unicode_literals
-import json
-import uuid
-
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-from django.contrib.postgres.fields import ArrayField
-from simple_history.models import HistoricalRecords
 
-from core.helpers import PathAndRename
+class UserType(models.IntegerChoices):
+    ADMIN = 1, 'Admin'
+    PUBLIC = 2, 'Public'
+
 
 class CustomUser(AbstractUser):
-
     # Account information
     id = models.AutoField(primary_key=True, editable=False)
     full_name = models.CharField(max_length=255, blank=True)
 
-    USER_TYPE = [
-        ('AD', 'Admin'),
-        ('PB', 'Public')      
-    ]
-    user_type = models.CharField(choices=USER_TYPE, max_length=2, default='PB')
+    user_type = models.IntegerField(choices=UserType.choices, default=UserType.PUBLIC)
 
     # Contact information
-    email = models.EmailField(max_length=100, null=True)
+    email = models.EmailField(max_length=100)
 
-    history = HistoricalRecords()
+    # Log
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified_at = models.DateTimeField(auto_now=True)
+
+    # history = HistoricalRecords()
 
     class Meta:
-        ordering = ['full_name']
+        ordering = ['id']
 
     def __str__(self):
-        return self.full_name
-
+        return ('%s'%(self.full_name))

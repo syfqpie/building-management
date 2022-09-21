@@ -1,0 +1,28 @@
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+    <div class="text-center">
+        <img src="assets/images/illustrations/404.png" 
+            style="height: 22rem;" />
+        
+        <p class="fs-3">
+            <span class="text-danger">Opps!</span>
+            Page not found.
+        </p>
+
+        <p class="lead">
+            The page you’re looking for doesn’t exist.
+        </p>
+
+        <button *ngIf="isGotToken; else isGotNoToken"
+            [routerLink]="'/dashboard'"
+            class="btn btn-primary">
+            Back to dashboard
+        </button>
+        
+        <ng-template #isGotNoToken>
+            <button [routerLink]="'/auth/login'"
+                class="btn btn-primary">
+                Back to home
+            </button>
+        </ng-template>
+    </div>
+</div>

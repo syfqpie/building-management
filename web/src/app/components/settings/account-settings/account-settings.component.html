@@ -1,0 +1,95 @@
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <h5 class="card-title">
+            Account information
+        </h5>
+        <p class="card-text"
+            *ngIf="accountInfo?.isStaff && accountInfo?.userType === 1">
+            <small class="d-inline-flex px-2 py-1 text-success
+                bg-success bg-opacity-10 border border-success
+                border-opacity-10 rounded-2">
+                <span *ngIf="accountInfo?.isSuperuser; else isNotSuperuser">
+                    <i class="fa-solid fa-user-astronaut my-auto"></i>
+                    Superadmin
+                </span>
+                <ng-template #isNotSuperuser>
+                    <span>
+                        <i class="fa-solid fa-user-shield my-auto"></i>
+                        Admin
+                    </span>
+                </ng-template>
+            </small>
+        </p>
+
+        <form [formGroup]="informationForm"
+            class="need-validation row">
+            <div class="mb-3 col-sm-12 col-md-4">
+                <label class="form-label">
+                    Email
+                </label>
+                <input type="text"
+                    class="form-control"
+                    value="{{ accountInfo?.email }}"
+                    disabled />
+            </div>
+
+            <div class="d-none d-md-block"></div>
+            
+            <div class="mb-3 col-sm-12 col-md-4 position-relative">
+                <label class="form-label">
+                    Full name
+                </label>
+                <input type="text"
+                    class="form-control"
+                    placeholder="Full name"
+                    formControlName="fullName"
+                    [ngClass]="{
+                        'is-invalid': informationForm.controls['fullName'].touched &&
+                        informationForm.controls['fullName'].errors,
+                        'is-valid': informationForm.controls['fullName'].touched &&
+                        !informationForm.controls['fullName'].errors
+                    }" />
+                <div class="invalid-tooltip"
+                    *ngIf="informationForm.controls['fullName'].errors &&
+                    (informationForm.controls['fullName'].dirty || informationForm.controls['fullName'].touched)">
+                    <ng-container *ngFor="let message of formMessages['fullName']">
+                        <span *ngIf="informationForm.controls['fullName'].hasError(message.type) &&
+                            (informationForm.controls['fullName'].dirty || informationForm.controls['fullName'].touched)">
+                            • {{ message.message }}
+                        </span>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="d-none d-md-block"></div>
+
+            <div class="mb-3 col-sm-12 col-md-4">
+                <label class="form-label">
+                    Joined at
+                </label>
+                <input type="text"
+                    class="form-control"
+                    value="{{ accountInfo?.dateJoined | date : 'dd/MM/yyyy' }}"
+                    disabled />
+            </div>
+
+            <div class="d-none d-md-block"></div>
+
+            <div class="col-sm-12 col-md-4">
+                <div class="d-grid gap-2">
+                    <button type="button"
+                        class="btn btn-primary"
+                        (click)="submitChange()"
+                        [disabled]="isProcessing || !informationForm.valid" >
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Update
+                        </span>
+                        <ng-template #isLoading>
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        </ng-template>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

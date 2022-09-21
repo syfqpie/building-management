@@ -1,81 +1,61 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { UnitNumber } from './unit-numbers.model';
+
+const BASE_URL = `${ environment.baseUrl }v1/unit-numbers/`
 
 @Injectable({
   providedIn: 'root'
 })
 export class UnitNumbersService {
 
-  // URL
-  public urlUnitNumbers: string = environment.baseUrl + 'v1/unit-numbers/'
-
   // Data
-  unitNumber: UnitNumber
-  unitNumbers: UnitNumber[] = []
+  public unitNumber: UnitNumber | undefined
+  public unitNumbers: UnitNumber[] = []
 
   constructor(
     private http: HttpClient
   ) { }
 
   create(body: any): Observable<UnitNumber> {
-    return this.http.post<any>(this.urlUnitNumbers, body).pipe(
-      tap((res) => {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.post<UnitNumber>(urlTemp, body).pipe(
+      tap((res: UnitNumber) => {
         this.unitNumber = res
-        // console.log('Unit number: ', this.unitNumber)
+        // console.log('Unit number:', this.unitNumber)
       })
     )
   }
 
   getAll(): Observable<UnitNumber[]> {
-    return this.http.get<UnitNumber[]>(this.urlUnitNumbers).pipe(
-      tap((res) => {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.get<UnitNumber[]>(urlTemp).pipe(
+      tap((res: UnitNumber[]) => {
         this.unitNumbers = res
-        // console.log('Unit numbers: ', this.unitNumbers)
+        // console.log('Unit numbers:', this.unitNumbers)
       })
     )
   }
 
-  getOne(id: string): Observable<UnitNumber> {
-    let urlTemp = this.urlUnitNumbers + id + '/'
+  getOne(id: string | undefined): Observable<UnitNumber> {
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<UnitNumber>(urlTemp).pipe(
-      tap((res) => {
+      tap((res: UnitNumber) => {
         this.unitNumber = res
-        // console.log('Unit number: ', this.unitNumber)
+        // console.log('Unit number:', this.unitNumber)
       })
     )
   }
 
   patch(id: number, body: any): Observable<UnitNumber> {
-    let urlTemp = this.urlUnitNumbers + id + '/'
+    const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.patch<UnitNumber>(urlTemp, body).pipe(
-      tap((res) => {
+      tap((res: UnitNumber) => {
         this.unitNumber = res
-        // console.log('Unit number: ', this.unitNumber)
-      })
-    )
-  }
-
-
-  activate(id: string): Observable<UnitNumber> {
-    let urlTemp = this.urlUnitNumbers + id + '/activate/'
-    return this.http.get<UnitNumber>(urlTemp).pipe(
-      tap((res) => {
-        this.unitNumber = res
-        // console.log('Unit number: ', this.unitNumber)
-      })
-    )
-  }
-
-  deactivate(id: string): Observable<UnitNumber> {
-    let urlTemp = this.urlUnitNumbers + id + '/deactivate/'
-    return this.http.get<UnitNumber>(urlTemp).pipe(
-      tap((res) => {
-        this.unitNumber = res
-        // console.log('Unit number: ', this.unitNumber)
+        // console.log('Unit number:', this.unitNumber)
       })
     )
   }

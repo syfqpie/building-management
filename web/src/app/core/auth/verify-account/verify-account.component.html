@@ -1,0 +1,128 @@
+<div class="container-fluid bg-dark vh-100">
+    <div class="row h-100">
+        <div class="col-sm-12 col-md-4 d-flex align-items-center justify-content-center bg-white">
+            <!-- Form -->
+            <form [formGroup]="verifyForm"
+                class="need-validation row justify-content-center">
+                <div class="col-10 col-md-7">
+                    <img src="assets/images/illustrations/verify-account.png"
+                        class="w-100 d-block d-md-none" />
+                    <img class="mx-auto d-none d-md-block mb-3"
+                        src="assets/images/default/logo-primary.png"
+                        style="height: 5rem; width: 5rem" />
+                    <p class="text-muted text-center">
+                        <span *ngIf="!isProcessing; else isLoading">
+                            <span *ngIf="isVerified; else isNotVerified">
+                                Your account has been verified
+                            </span>
+                            <ng-template #isNotVerified>
+                                Account verification
+                            </ng-template>
+                        </span>
+                        <ng-template #isLoading>
+                            <span>
+                                Verifying your account...
+                            </span>
+                        </ng-template>
+                    </p>
+                </div>
+
+                <div class="col-10 col-md-7 mb-3 position-relative">
+                    <label for="formNewPassword1" class="form-label">
+                        Password
+                    </label>
+                    <input id="formNewPassword1"
+                        type="password"
+                        class="form-control"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        formControlName="newPassword1"
+                        [ngClass]="{
+                            'is-invalid': verifyForm.controls['newPassword1'].touched &&
+                            verifyForm.controls['newPassword1'].errors,
+                            'is-valid': verifyForm.controls['newPassword1'].touched &&
+                            !verifyForm.controls['newPassword1'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="verifyForm.controls['newPassword1'].errors &&
+                        (verifyForm.controls['newPassword1'].dirty || verifyForm.controls['newPassword1'].touched)">
+                        <ng-container *ngFor="let message of formMessages['newPassword1']">
+                            <span *ngIf="verifyForm.controls['newPassword1'].hasError(message.type) &&
+                                (verifyForm.controls['newPassword1'].dirty || verifyForm.controls['newPassword1'].touched)">
+                                • {{ message.message }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-10 col-md-7 mb-3 position-relative">
+                    <label for="formNewPassword2" class="form-label">
+                        Confirm password
+                    </label>
+                    <input id="formNewPassword2"
+                        type="password"
+                        class="form-control"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        formControlName="newPassword2"
+                        [ngClass]="{
+                            'is-invalid': verifyForm.controls['newPassword2'].touched &&
+                            verifyForm.controls['newPassword2'].errors,
+                            'is-valid': verifyForm.controls['newPassword2'].touched &&
+                            !verifyForm.controls['newPassword2'].errors
+                        }" />
+                    <div class="invalid-tooltip invalid-tooltip-right"
+                        *ngIf="verifyForm.controls['newPassword2'].errors &&
+                        (verifyForm.controls['newPassword2'].dirty || verifyForm.controls['newPassword2'].touched)">
+                        <ng-container *ngFor="let message of formMessages['newPassword2']">
+                            <span *ngIf="verifyForm.controls['newPassword2'].hasError(message.type) &&
+                                (verifyForm.controls['newPassword2'].dirty || verifyForm.controls['newPassword2'].touched)">
+                                • {{ message.message }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-10 col-md-7 d-grid gap-0">
+                    <button class="btn btn-primary"
+                        type="button"
+                        (click)="verify()"
+                        [disabled]="isProcessing || !verifyForm.valid || isVerified" >
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Confirm verification
+                        </span>
+                        <ng-template #isLoading>
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        </ng-template>
+                    </button>
+
+                    <hr class="my-3" />
+
+                    <p class="mb-0 text-center">
+                        <small class="text-muted">
+                            Back to
+                            <a [routerLink]="'/auth/login'"
+                                class="link-primary">
+                                Login
+                            </a>
+                        </small>
+                    </p>
+                    
+                    <p class="mb-3 text-center">
+                        <small class="text-muted">
+                            Forgot password?
+                            <a [routerLink]="'/auth/reset'"
+                                class="link-primary">
+                                Reset
+                            </a>
+                        </small>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-8 d-md-flex align-items-center justify-content-center d-none">
+            <!-- Image -->
+            <img src="assets/images/illustrations/verify-account.png"
+                style="height: 25rem;" />
+        </div>
+    </div>
+</div>
