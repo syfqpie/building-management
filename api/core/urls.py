@@ -57,10 +57,14 @@ medias_router = router.register(
 # Residents
 from residents.views import (
     ResidentViewSet,
-    ResidentCustomRegisterView
+    ResidentCustomRegisterView,
+    ResidentVehicleViewSet
 )
 residents_router = router.register(
     r'residents', ResidentViewSet
+)
+resident_vehicles_router = router.register(
+    r'vehicles', ResidentVehicleViewSet
 )
 
 # Tickets
@@ -89,7 +93,9 @@ from units.views import (
     BlockViewSet,
     FloorViewSet,
     UnitNumberViewSet,
-    UnitActivityViewSet
+    ParkingLotViewSet,
+    UnitActivityViewSet,
+    ParkingLotPassViewSet
 )
 units_router = router.register(
     r'units', UnitViewSet
@@ -106,8 +112,14 @@ floors_router = router.register(
 unit_numbers_router = router.register(
     r'unit-numbers', UnitNumberViewSet
 )
+parking_lots_router = router.register(
+    r'parking-lots', ParkingLotViewSet
+)
 unit_activities_router = router.register(
     r'unit-activities', UnitActivityViewSet
+)
+parking_lot_passes_router = router.register(
+    r'parking-lot-passes', ParkingLotPassViewSet
 )
 
 # Users

@@ -9,3 +9,10 @@ export class Floor {
         public lastModifiedBy: number
     ) {}
 }
+
+export class FloorNo {
+    constructor(
+        public id: number,
+        public floor: string
+    ) {}
+}

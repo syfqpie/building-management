@@ -9,3 +9,10 @@ export class Block {
         public lastModifiedBy: number
     ) {}
 }
+
+export class BlockNo {
+    constructor(
+        public id: number,
+        public block: string
+    ) {}
+}

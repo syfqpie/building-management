@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { NotAuthorizedComponent } from 'src/app/components/errors/not-authorized/not-authorized.component';
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ParkingDetailComponent } from './parking-detail/parking-detail.component';
+import { ParkingsComponent } from './parkings/parkings.component';
 import { ResidentDetailComponent } from './resident-detail/resident-detail.component';
 import { ResidentsComponent } from './residents/residents.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -14,6 +16,7 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitsComponent } from './units/units.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 
 export const UserRoutes: Routes = [
     {
@@ -114,6 +117,32 @@ export const UserRoutes: Routes = [
                         component: TicketDetailComponent,
                         data: {
                             title: 'Ticket detail'
+                        }
+                    }
+                ]
+            },
+            {
+                path: 'parkings',
+                children: [
+                    {
+                        path: '',
+                        component: ParkingsComponent,
+                        data: {
+                            title: 'Parkings'
+                        }
+                    },
+                    {
+                        path: 'detail/:id',
+                        component: ParkingDetailComponent,
+                        data: {
+                            title: 'Parking detail'
+                        }
+                    },
+                    {
+                        path: 'vehicles',
+                        component: VehiclesComponent,
+                        data: {
+                            title: 'Vehicles'
                         }
                     }
                 ]

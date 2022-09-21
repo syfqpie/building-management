@@ -1,0 +1,253 @@
+<div class="container-fluid">
+    <div class="row g-3">
+        <div class="col-12 text-end">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle btn-sm"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-custom p-0">
+                    <li *ngIf="currentParking?.isActive">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="deactivate()">
+                            <i class="fa-solid fa-lock"></i>
+                            Deactivate
+                        </button>
+                    </li>
+
+                    <li *ngIf="!currentParking?.isActive">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="activate()">
+                            <i class="fa-solid fa-lock-open"></i>
+                            Activate
+                        </button>
+                    </li>
+
+                    <li *ngIf="currentParking?.isOccupied">
+                        <button class="dropdown-item"
+                            [disabled]="isProcessing"
+                            (click)="toggleConfirm()">
+                            <i class="fa-solid fa-user-minus"></i>
+                            Check out
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Parking information
+                    </h5>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Lot no.: 
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentParking?.lotNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Block:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentParking?.block?.block }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Floor:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentParking?.floor?.floor }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Lot type:
+                        </label>
+                        <p class="text-muted small">
+                            {{ currentParking?.lotType | vehicleType }}
+                        </p>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="fw-bold text-uppercase small d-block">
+                            Active:
+                        </label>
+                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2 mt-1 mb-0"
+                            [ngClass]="{
+                                'bg-success text-success
+                                    border-success': currentParking?.isActive,
+                                'bg-danger text-danger
+                                    border-danger': !currentParking?.isActive
+                            }">
+                            <span *ngIf="currentParking?.isActive; else isNotActive">
+                                <i class="fa-regular fa-circle-check my-auto"></i>
+                                Active
+                            </span>
+                            <ng-template #isNotActive>
+                                <span>
+                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                    Inactive
+                                </span>
+                            </ng-template>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="currentPass"
+                class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Vehicle information
+                    </h5>
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Plate no.: 
+                        </label>
+                        <p class="text-muted small mb-0">
+                            {{ currentPass.vehicle.plateNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="fw-bold text-uppercase small">
+                            Type:
+                        </label>
+                        <p class="text-muted small mb-0">
+                            {{ currentPass.vehicle.vehicleType | vehicleType }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template [ngIf]="isAssigning && currentParking"
+            [ngIfElse]="isNotAssigning">
+            <div class="col-sm-12 col-md-9 d-flex">
+                <app-assign-lot-owner
+                    class="w-100 m-auto"
+                    [parkingId]="currentParking!.id"
+                    (changedEvent)="onOwnerChanged()"
+                    (cancelEvent)="toggleAssignOwner()">
+                </app-assign-lot-owner>
+            </div>
+        </ng-template>
+
+        <ng-template #isNotAssigning>
+            <div class="col-sm-12 col-md-6">
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-2">
+                                <div class="rounded-circle
+                                    border border-primary border-opacity-50 d-flex justify-content-center
+                                    align-items-center mx-auto m-0 p-2 avatar"
+                                    alt="Avatar">
+                                    <div class="rounded-circle bg-primary bg-opacity-75
+                                        d-flex justify-content-center
+                                        align-items-center w-100 h-100">
+                                        <i class="fa-solid fa-square-parking fa-2x text-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-sm-12 col-md">
+                                <div *ngIf="currentParking?.isOccupied && currentPass; else noResidentInformation">
+                                    <p class="fw-bold small mb-0">
+                                        <i class="fa-regular fa-id-card fa-fw"></i>
+                                        {{ currentPass.resident.title | titleType }}
+                                        {{ currentPass.resident.name }}
+                                    </p>
+        
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-solid fa-mobile-screen fa-fw"></i>
+                                        {{ currentPass.resident.phoneNo }}
+                                    </p>
+        
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-solid fa-receipt fa-fw"></i>
+                                        {{ 
+                                            (currentPass.resident.lastPaymentAt | date : 'dd/MM/yyyy, h:mm a') ||
+                                            'N/A'
+                                        }}
+                                    </p>
+        
+                                    <p class="text-muted small mb-0">
+                                        <i class="fa-solid fa-envelope fa-fw"></i>
+                                        {{ currentPass.resident.email }}
+                                    </p>
+                                </div>
+    
+                                <ng-template #noResidentInformation>
+                                    <div class="d-flex h-100 align-items-center">
+                                        <div class="d-block">
+                                            <p class="mb-2 small">
+                                                Parking is vacant
+                                            </p>
+                                            <button class="btn btn-primary btn-sm"
+                                                (click)="toggleAssignOwner()">
+                                                Assign now
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            Payment overview
+                        </h5>
+                        <div class="d-flex h-100 justify-content-center mb-4"
+                            style="height: 15rem">
+                            <div class="d-block">
+                                <img src="assets/images/illustrations/empty.png"
+                                style="height: 10rem;">
+                                <p class="text-muted text-center mb-0">
+                                    No data yet
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-sm-12 col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body" style="height: 300px">
+                        <h5 class="card-title mb-4">
+                            Payment history
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<app-confirm-dialog
+    [isProcessing]="isProcessing"
+    [isOpen]="isConfirmOpen"
+    [modalSize]="modalSize.SM"
+    (onCancel)="cancelDialog()"
+    (onConfirm)="confirmDialog()">
+</app-confirm-dialog>

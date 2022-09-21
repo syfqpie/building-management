@@ -4,7 +4,7 @@ from django.utils.timezone import now
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -18,22 +18,17 @@ from core.helpers import camel_to_capitalize
 from users.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
-    Block,
-    Floor,
-    UnitNumber,
-    Unit,
-    UnitActivity,
-    ActivityType
+    Block, Floor, UnitNumber,
+    Unit, UnitActivity, ActivityType,
+    ParkingLot, ParkingLotPass
 )
 
 from .serializers import (
-    BlockSerializer,
-    FloorSerializer,
-    UnitActivityNestedSerializer,
-    UnitActivityNonNestedSerializer,
-    UnitNumberSerializer,
-    UnitSerializer,
-    UnitExtendedSerializer
+    BlockSerializer, FloorSerializer, UnitNumberSerializer,
+    UnitSerializer, UnitExtendedSerializer,
+    UnitActivityNestedSerializer, UnitActivityNonNestedSerializer,
+    ParkingLotSerializer, ParkingLotExtendedSerializer,
+    ParkingLotPassSerializer, ParkingLotPassCurrentSerializer
 )
 
 
@@ -564,4 +559,237 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
             })
         
         return JsonResponse(by_type, safe=False)
+
+
+class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = ParkingLot.objects.all()
+    serializer_class = ParkingLotSerializer
+    serializer_class_admin = {
+        'list_ext': ParkingLotExtendedSerializer,
+        'retrieve_ext': ParkingLotExtendedSerializer,
+        'assign_resident': ParkingLotPassSerializer,
+        'get_current_pass': ParkingLotPassCurrentSerializer
+    }
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        return [permission() for permission in permission_classes]
     
+    # Override get_serializer_class for default action
+    def get_serializer_class(self):
+        # Check serializer class by action
+        if hasattr(self, 'serializer_class_admin'):
+            return self.serializer_class_admin.get(self.action, self.serializer_class)
+
+        # Return original class
+        return super().get_serializer_class()
+    
+    def perform_create(self, serializer):
+        request = serializer.context['request']
+        serializer.save(created_by=request.user)
+
+    def perform_update(self, serializer):
+        request = serializer.context['request']
+        serializer.save(last_modified_by=request.user)
+ 
+    # Get extended lots
+    @action(methods=['GET'], detail=False, url_path='extended')
+    def list_ext(self, request, *args, **kwargs):
+        lots = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(lots, many=True)
+        return Response(serializer.data)
+    
+    # Get extended lot
+    @action(methods=['GET'], detail=True, url_path='extended')
+    def retrieve_ext(self, request, *args, **kwargs):
+        lot = self.get_object()
+        serializer = self.get_serializer(lot, many=False)
+        return Response(serializer.data)
+
+    # Activate lot
+    @action(methods=['GET'], detail=True)
+    def activate(self, request, *args, **kwargs):
+        lot = self.get_object()
+
+        if lot.is_active is True:
+            raise PermissionDenied(detail='Lot is already activated')
+        
+        lot.is_active = True
+        lot.last_modified_at = now()
+        lot.last_modified_by = request.user
+        lot.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+
+        serializer = self.get_serializer(lot, many=False)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            { 'detail': 'Lot activated' },
+            status=status.HTTP_200_OK,
+            headers=headers
+        )
+
+    # Deactivate lot
+    @action(methods=['GET'], detail=True)
+    def deactivate(self, request, *args, **kwargs):
+        lot = self.get_object()
+
+        if lot.is_active is False:
+            raise PermissionDenied(detail='Lot is already deactivated')
+        
+        lot.is_active = False
+        lot.last_modified_at = now()
+        lot.last_modified_by = request.user
+        lot.save(update_fields=[
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+
+        serializer = self.get_serializer(lot, many=False)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            { 'detail': 'Lot deactivated' },
+            status=status.HTTP_200_OK,
+            headers=headers
+        )
+    
+    # Assign resident
+    @action(methods=['POST'], detail=True, url_path='assign-resident')
+    def assign_resident(self, request, *args, **kwargs):
+        lot = self.get_object()
+
+        # Check if lot is occupied else append lot id to request data
+        if lot.is_occupied:
+            raise PermissionDenied(
+                detail='Lot is occupied'
+            )
+        else:
+            request.data['parking_lot'] = lot.id
+        
+        # Validate data
+        pass_serializer = self.get_serializer(data=request.data)
+        pass_serializer.is_valid(raise_exception=True)
+        validated_data = pass_serializer.validated_data
+
+        # Check if resident and vehicle's resident is not match
+        if validated_data['resident'] != validated_data['vehicle'].resident:
+            raise PermissionDenied(
+                detail='Resident and vehicle is not matched'
+            )
+        
+        # Check if parking lot and vehicle have the same type
+        if lot.lot_type != validated_data['vehicle'].vehicle_type:
+            raise PermissionDenied(
+                detail='Type is not matched'
+            )
+
+        # Check if access card is not active
+        passes = ParkingLotPass.objects.all().filter(
+            access_card_no=validated_data['access_card_no'],
+            is_active=True
+        )
+        if passes.exists():
+            raise PermissionDenied(
+                detail='Access card is currently used'
+            )
+
+        # Create pass
+        ParkingLotPass.objects.create(
+            access_card_no=validated_data['access_card_no'],
+            resident=validated_data['resident'],
+            vehicle=validated_data['vehicle'],
+            parking_lot=validated_data['parking_lot'],
+            created_by=request.user
+        )
+
+        # # Update and save
+        lot.is_occupied = True
+        lot.last_modified_at = now()
+        lot.last_modified_by = request.user
+        lot.save(update_fields=[
+            'is_occupied',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+
+        serializer = ParkingLotExtendedSerializer(lot, many=False)
+        return Response(serializer.data)
+
+    # Checkout resident
+    @action(methods=['GET'], detail=True, url_path='checkout-resident')
+    def checkout_resident(self, request, *args, **kwargs):
+        lot = self.get_object()
+        current_pass = lot.lot_passes.first()
+        current_time = now()
+
+        # Check if lot is occupied
+        if not lot.is_occupied:
+            raise PermissionDenied(
+                detail='Lot is not occupied'
+            )
+
+        # Update pass
+        current_pass.ended_at = current_time
+        current_pass.is_active = False
+        current_pass.last_modified_at = current_time
+        current_pass.last_modified_by = request.user
+
+        # Update lot
+        lot.is_occupied = False
+        lot.last_modified_at = current_time
+        lot.last_modified_by = request.user
+
+        # Save pass and lot
+        current_pass.save(update_fields=[
+            'ended_at',
+            'is_active',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+        lot.save(update_fields=[
+            'is_occupied',
+            'last_modified_at',
+            'last_modified_by'
+        ])
+
+        serializer = ParkingLotExtendedSerializer(lot, many=False)
+        return Response(serializer.data)
+    
+    @action(methods=['GET'], detail=True, url_path='get-current-pass')
+    def get_current_pass(self, request, *args, **kwargs):
+        lot = self.get_object()
+        
+        # Retrieve
+        try:
+            current_pass = ParkingLotPass.objects.all().get(
+                parking_lot=lot, is_active=True
+            )
+        except ParkingLotPass.DoesNotExist:
+            raise NotFound(
+                detail='No pass related'
+            )
+
+        serializer = self.get_serializer(current_pass, many=False)
+        return Response(serializer.data)
+
+
+class ParkingLotPassViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = ParkingLotPass.objects.all()
+    serializer_class = ParkingLotPassSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
+    def get_permissions(self):
+        permission_classes = [
+            IsAuthenticated,
+            IsAdminStaff
+        ]
+
+        return [permission() for permission in permission_classes]
