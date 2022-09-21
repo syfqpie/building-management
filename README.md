@@ -1,5 +1,7 @@
 # Building Management System 🏢
 
+A building management system developed using Django Rest Framework and Angular.
+
 <div align="center">
   <img src="https://github.com/syfqpie/building-management/blob/master/screenshots/login.png"
     width="700" />
