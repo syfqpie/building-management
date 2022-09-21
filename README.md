@@ -1,14 +1,14 @@
 # Building Management System 🏢
 
-## Preview
-
 <div align="center">
-  <img src="https://github.com/syfqpie/building-management/blob/BM-20-Parkings-Feature/screenshots/login.png"
+  <img src="https://github.com/syfqpie/building-management/blob/master/screenshots/login.png"
     width="700" />
 </div>
 <br />
 
-| <a target="_blank" href="https://github.com/syfqpie/building-management"><img src="https://github.com/syfqpie/building-management/blob/BM-20-Parkings-Feature/screenshots/units-configuration.png"/></a> | <a target="_blank" href="https://github.com/syfqpie/building-management"><img src="https://github.com/syfqpie/building-management/blob/BM-20-Parkings-Feature/screenshots/tickets-overview.png"/></a> |
+## Preview
+
+| <a target="_blank" href="https://github.com/syfqpie/building-management"><img src="https://github.com/syfqpie/building-management/blob/master/screenshots/units-configuration.png"/></a> | <a target="_blank" href="https://github.com/syfqpie/building-management"><img src="https://github.com/syfqpie/building-management/blob/master/screenshots/tickets-overview.png"/></a> |
 | --- | --- |
 |  Units | Tickets |
 
