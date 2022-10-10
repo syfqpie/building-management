@@ -116,10 +116,12 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
-        if user.user_type == UserType.PUBLIC:
+        if user.is_authenticated and user.user_type == UserType.PUBLIC:
             queryset = self.queryset.filter(resident_user=user)
-        else:
+        elif user.is_authenticated and user.user_type == UserType.ADMIN:
             queryset = self.queryset
+        else:
+            queryset = self.queryset.none()
 
         return queryset
 
