@@ -1,9 +1,7 @@
 from datetime import datetime, timezone
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import (
-    PasswordResetForm
-)
+from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.utils.decorators import method_decorator
@@ -27,12 +25,8 @@ from rest_framework_simplejwt.views import (
 )
 
 from dj_rest_auth.registration.serializers import VerifyEmailSerializer
-from dj_rest_auth.registration.views import (
-    VerifyEmailView
-)
-from dj_rest_auth.serializers import (
-    PasswordResetSerializer
-)
+from dj_rest_auth.registration.views import VerifyEmailView
+from dj_rest_auth.serializers import PasswordResetSerializer
 from dj_rest_auth.views import (
     LoginView,
     LogoutView,
@@ -70,11 +64,89 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return token
 
+
 @method_decorator(
     name='post', 
     decorator=swagger_auto_schema(
         operation_id='Login',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['username', 'password'],
+            properties={
+                'username': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Registered user email',
+                    example='user@example.com'
+                ),
+                'password': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Password',
+                    example='XXXXXXXXXXXXX'
+                )
+            },
+        ),
+        responses={
+            status.HTTP_201_CREATED: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'accessToken': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description='Generated access token',
+                        example=(
+                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.'
+                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                        )
+                    ),
+                    'refreshToken': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description='Generated refresh token',
+                        example=(
+                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.'
+                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                        )
+                    ),
+                    'user': openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        description='User information',
+                        properties={
+                            'pk': openapi.Schema(
+                                type=openapi.TYPE_INTEGER,
+                                example=1
+                            ),
+                            'username': openapi.Schema(
+                                type=openapi.TYPE_STRING,
+                                example='user@example.com'
+                            ),
+                            'email': openapi.Schema(
+                                type=openapi.TYPE_STRING,
+                                example='user@example.com'
+                            ),
+                            'firstName': openapi.Schema(
+                                type=openapi.TYPE_STRING,
+                                example='John'
+                            ),
+                            'lastName': openapi.Schema(
+                                type=openapi.TYPE_STRING,
+                                example='Doe'
+                            )
+                        }
+                    )
+                }
+            ),
+            status.HTTP_400_BAD_REQUEST: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'nonFieldErrors': openapi.Schema(
+                        type=openapi.TYPE_ARRAY,
+                        description='Non field errors',
+                        items=[''],
+                        example=[
+                            'Unable to log in with provided credentials.'
+                        ]
+                    ),
+                }
+            )
+        },
         tags=['Authentication']
     )
 )
@@ -90,6 +162,7 @@ class MyLoginView(LoginView):
     Return the token object key.
     """
     pass
+
 
 @method_decorator(
     name='post', 
@@ -110,6 +183,7 @@ class MyLogoutView(LogoutView):
     """
     http_method_names = ['post']
 
+
 @method_decorator(
     name='post', 
     decorator=swagger_auto_schema(
@@ -127,6 +201,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
     """
     serializer_class = MyTokenObtainPairSerializer
 
+
 @method_decorator(
     name='post', 
     decorator=swagger_auto_schema(
@@ -143,6 +218,7 @@ class MyTokenRefreshView(TokenRefreshView):
     token if the refresh token is valid.
     """
     pass
+
 
 @method_decorator(
     name='post', 
@@ -189,6 +265,7 @@ class MyPasswordResetSerializer(PasswordResetSerializer):
     def password_reset_form_class(self):
         return MyResetPasswordForm
 
+
 @method_decorator(
     name='post', 
     decorator=swagger_auto_schema(
@@ -208,6 +285,7 @@ class MyPasswordResetView(PasswordResetView):
     Returns the success/fail message.
     """
     serializer_class = MyPasswordResetSerializer
+
 
 @method_decorator(
     name='post', 
