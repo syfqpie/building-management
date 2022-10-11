@@ -44,7 +44,7 @@ from core.helpers import (
     NoUnderscoreBeforeNumberCamelCaseJSONParser
 )
 
-from .docs import DocuConfigLogin, DocuConfigLogout, DocuConfigVerifyEmail
+from .docs import DocuConfigLogin, DocuConfigLogout, DocuConfigTokenRefresh, DocuConfigTokenVerify, DocuConfigVerifyEmail
 from .forms import MyResetPasswordForm
 from .models import CustomUser
 from .serializers import (
@@ -116,36 +116,30 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 @method_decorator(
     name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Refresh token',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
+    decorator=DocuConfigTokenRefresh.POST
 )
 class MyTokenRefreshView(TokenRefreshView):
     """
     Refresh token
 
-    Takes a refresh type JSON web token and returns an access type JSON web
-    token if the refresh token is valid.
+    Takes a refresh type JSON web token and returns an access
+    type JSON web token if the refresh token is valid.
     """
     pass
 
 
 @method_decorator(
     name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Verify token',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
+    decorator=DocuConfigTokenVerify.POST
 )
 class MyTokenVerifyView(TokenVerifyView):
     """
     Verify token
 
-    Takes a token and indicates if it is valid.  This view provides no
-    information about a token's fitness for a particular use.
+    Takes a token and indicates if it is valid. 
+    
+    This view provides no information about a token's fitness
+    for a particular use.
     """
     pass
 

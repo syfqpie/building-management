@@ -10,7 +10,7 @@ DEF_TAG = 'Authentication'
 
 class DocuConfigLogin(enum.Enum):
     """LoginView's drf-yasg documentation configuration"""
-    
+
     POST = swagger_auto_schema(
         operation_id='Login',
         request_body=openapi.Schema(
@@ -130,6 +130,79 @@ class DocuConfigLogout(enum.Enum):
                             )
                         ),
                     }
+                )
+            )
+        },
+        tags=[DEF_TAG]
+    )
+
+
+class DocuConfigTokenRefresh(enum.Enum):
+    """TokenRefreshView's drf-yasg documentation configuration"""
+
+    POST = swagger_auto_schema(
+        operation_id='Refresh token',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['refresh'],
+            properties={
+                'refresh': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Refresh token',
+                    example=(
+                        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.'
+                        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                    )
+                )
+            },
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'access': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Refreshed access token',
+                            example=(
+                                'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.'
+                                'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                            )
+                        ),
+                    }
+                )
+            )
+        },
+        tags=[DEF_TAG]
+    )
+
+
+class DocuConfigTokenVerify(enum.Enum):
+    """TokenVerifyView's drf-yasg documentation configuration"""
+
+    POST = swagger_auto_schema(
+        operation_id='Verify token',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['token'],
+            properties={
+                'token': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Access token',
+                    example=(
+                        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.'
+                        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                    )
+                )
+            },
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={}
                 )
             )
         },
