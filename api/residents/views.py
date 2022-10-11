@@ -11,6 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
+from residents.docs import DocuConfigResidentCustomRegister
 from utils.helpers import (
     DjangoFilterDescriptionInspector, NoTitleAutoSchema,
     NoUnderscoreBeforeNumberCamelCaseJSONParser, ResultsPagination
@@ -106,10 +107,11 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_class(self):
         user = self.request.user
 
-        if user.user_type == UserType.ADMIN and hasattr(self, 'serializer_class_admin'):
-            return self.serializer_class_admin.get(self.action, self.serializer_class)
-        elif user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
-            return self.serializer_class_public.get(self.action, self.serializer_class)
+        if not user.is_anonymous:
+            if user.user_type == UserType.ADMIN and hasattr(self, 'serializer_class_admin'):
+                return self.serializer_class_admin.get(self.action, self.serializer_class)
+            elif user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
+                return self.serializer_class_public.get(self.action, self.serializer_class)
         
         return super().get_serializer_class()
 
@@ -168,13 +170,7 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-@method_decorator(
-    name='post',
-    decorator=swagger_auto_schema(
-        operation_id='Register new account for a resident',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Residents']
-    ))
+@method_decorator(name='post', decorator=DocuConfigResidentCustomRegister.POST)
 class ResidentCustomRegisterView(RegisterView):
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     serializer_class = ResidentCustomRegisterSerializer

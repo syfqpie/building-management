@@ -14,6 +14,7 @@ from drf_yasg.utils import swagger_auto_schema
 from django.utils.decorators import method_decorator
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
+from users.docs import DocuConfigAdminCustomRegister
 
 from utils.helpers import (
     DjangoFilterDescriptionInspector,
@@ -222,14 +223,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-@method_decorator(
-    name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Register new account for admin',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
-)
+@method_decorator(name='post', decorator=DocuConfigAdminCustomRegister.POST)
 class AdminCustomRegisterView(RegisterView):
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     serializer_class = AdminCustomRegisterSerializer
@@ -240,7 +234,7 @@ class AdminCustomRegisterView(RegisterView):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]  
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
 
