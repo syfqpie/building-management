@@ -398,7 +398,7 @@ class DocuConfigVerifyEmail(enum.Enum):
                 description='Return detail',
                 examples={
                     'application/json': {
-                        'detail': 'string'
+                        'detail': 'ok'
                     }
                 }
             )
