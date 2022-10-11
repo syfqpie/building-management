@@ -44,6 +44,7 @@ from core.helpers import (
     NoUnderscoreBeforeNumberCamelCaseJSONParser
 )
 
+from .docs import DocuConfigLogin, DocuConfigLogout, DocuConfigVerifyEmail
 from .forms import MyResetPasswordForm
 from .models import CustomUser
 from .serializers import (
@@ -67,110 +68,23 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 @method_decorator(
     name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Login',
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=['username', 'password'],
-            properties={
-                'username': openapi.Schema(
-                    type=openapi.TYPE_STRING,
-                    description='Registered user email',
-                    example='user@example.com'
-                ),
-                'password': openapi.Schema(
-                    type=openapi.TYPE_STRING,
-                    description='Password',
-                    example='XXXXXXXXXXXXX'
-                )
-            },
-        ),
-        responses={
-            status.HTTP_201_CREATED: openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'accessToken': openapi.Schema(
-                        type=openapi.TYPE_STRING,
-                        description='Generated access token',
-                        example=(
-                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.'
-                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                        )
-                    ),
-                    'refreshToken': openapi.Schema(
-                        type=openapi.TYPE_STRING,
-                        description='Generated refresh token',
-                        example=(
-                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.'
-                            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                        )
-                    ),
-                    'user': openapi.Schema(
-                        type=openapi.TYPE_OBJECT,
-                        description='User information',
-                        properties={
-                            'pk': openapi.Schema(
-                                type=openapi.TYPE_INTEGER,
-                                example=1
-                            ),
-                            'username': openapi.Schema(
-                                type=openapi.TYPE_STRING,
-                                example='user@example.com'
-                            ),
-                            'email': openapi.Schema(
-                                type=openapi.TYPE_STRING,
-                                example='user@example.com'
-                            ),
-                            'firstName': openapi.Schema(
-                                type=openapi.TYPE_STRING,
-                                example='John'
-                            ),
-                            'lastName': openapi.Schema(
-                                type=openapi.TYPE_STRING,
-                                example='Doe'
-                            )
-                        }
-                    )
-                }
-            ),
-            status.HTTP_400_BAD_REQUEST: openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'nonFieldErrors': openapi.Schema(
-                        type=openapi.TYPE_ARRAY,
-                        description='Non field errors',
-                        items=[''],
-                        example=[
-                            'Unable to log in with provided credentials.'
-                        ]
-                    ),
-                }
-            )
-        },
-        tags=['Authentication']
-    )
+    decorator=DocuConfigLogin.POST
 )
 class MyLoginView(LoginView):
     """
     Login
     
     Check the credentials and return JWT if the credentials 
-    are valid and authenticated. Calls auth login method to
-    register User ID in session
-
-    Accept the following POST parameters: username, password
-    Return the token object key.
+    are valid and authenticated.
+    
+    Calls auth login method to register User ID in session.
     """
     pass
 
 
 @method_decorator(
     name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Logout',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
+    decorator=DocuConfigLogout.POST
 )
 class MyLogoutView(LogoutView):
     """
@@ -178,8 +92,6 @@ class MyLogoutView(LogoutView):
     
     Calls logout method and delete the token object
     assigned to the current User object.
-
-    Accepts/Returns nothing.
     """
     http_method_names = ['post']
 
@@ -441,19 +353,7 @@ class MyVerifyEmailView(VerifyEmailView):
     """
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     
-    @swagger_auto_schema(
-        request_body=CustomVerifyEmailSerializer,
-        responses={
-            status.HTTP_200_OK: openapi.Response(
-                description='Return detail',
-                examples={
-                    "application/json": {
-                        'detail': 'string'
-                    }
-                }
-            )
-        },
-        tags=['Authentication'])
+    @swagger_auto_schema(**DocuConfigVerifyEmail.POST.value)
     def post(self, request, *args, **kwargs):
         serializers = CustomVerifyEmailSerializer(data=request.data)
         serializers.is_valid(raise_exception=True)
