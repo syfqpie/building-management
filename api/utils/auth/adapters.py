@@ -1,19 +1,17 @@
-from django.conf import settings
-from allauth.account.adapter import DefaultAccountAdapter
-from allauth.account import app_settings
-from allauth.utils import build_absolute_uri
 from django.contrib.sites.shortcuts import get_current_site
-from decouple import config
 from django.utils.encoding import force_str
 
-from core.settings import EMAIL_SUBJECT_PREFIX
+from allauth.account import app_settings
+from allauth.account.adapter import DefaultAccountAdapter
 
-from .models import UserType
+from users.models import UserType
 
 
 class MyAccountAdapter(DefaultAccountAdapter):
+    """Override DefaultAccountAdapter default methods"""
 
     def send_confirmation_mail(self, request, emailconfirmation, signup):
+        # Get information and set ctx
         current_site = get_current_site(request)
         activate_url = self.get_email_confirmation_url(request, emailconfirmation)
         current_user = emailconfirmation.email_address.user
@@ -25,6 +23,7 @@ class MyAccountAdapter(DefaultAccountAdapter):
             'verification_url': 'https://{}auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
         }
 
+        # Use different templates for different user types
         if current_user.user_type == UserType.PUBLIC:
             ctx['verification_url'] = 'https://{}auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
             if signup:
@@ -42,9 +41,11 @@ class MyAccountAdapter(DefaultAccountAdapter):
             else:
                 email_template = 'account/email/email_confirmation'
 
+        # Set verification email
         self.send_mail(email_template, emailconfirmation.email_address.email, ctx)
 
     def format_email_subject(self, subject):
+        # Get informations
         prefix = app_settings.EMAIL_SUBJECT_PREFIX
         forced_str = force_str(subject)
         
