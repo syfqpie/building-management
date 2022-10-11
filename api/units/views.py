@@ -15,7 +15,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from core.helpers import camel_to_capitalize
 
-from users.permissions import IsAdminStaff, IsSuperAdmin
+from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
     Block, Floor, UnitNumber,

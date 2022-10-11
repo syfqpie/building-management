@@ -17,7 +17,7 @@ from core.helpers import (
 )
 
 from users.models import UserType
-from users.permissions import IsAdminStaff, IsSuperAdmin
+from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
     Resident, ResidentVehicle

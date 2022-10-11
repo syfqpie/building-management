@@ -33,7 +33,7 @@ from .serializers import (
     EmailVerificationSerializer,
     AdminCustomRegisterSerializer
 )
-from .permissions import (
+from utils.auth.permissions import (
     IsAdminStaff,
     IsSuperAdmin,
     IsCustomUserOwnerOrAdmin
