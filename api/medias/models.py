@@ -6,12 +6,18 @@ from core.helpers import PathAndRename
 
 from users.models import CustomUser
 
+
 class Media(models.Model):
+    """
+    Media model class
+    """
+
     id = models.AutoField(primary_key=True, editable=False)
     filename = models.CharField(max_length=100, null=True)
     file_extension = models.CharField(max_length=10, null=True)
     attachment = models.FileField(null=True, upload_to=PathAndRename('medias'))
 
+    # Log
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(

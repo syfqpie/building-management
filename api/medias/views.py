@@ -5,16 +5,15 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import (
-    Media
-)
-
-from .serializers import (
-    MediaSerializer
-)
+from .models import Media
+from .serializers import MediaSerializer
 
 
 class MediaViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """
+    Viewset for Media model
+    """
+
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
@@ -35,3 +34,4 @@ class MediaViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
+    
