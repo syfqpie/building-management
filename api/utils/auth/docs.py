@@ -20,11 +20,13 @@ class DocuConfigLogin(enum.Enum):
                 'username': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description='Registered user email',
+                    format='email',
                     example='user@example.com'
                 ),
                 'password': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description='Password',
+                    format='password',
                     example='XXXXXXXXXXXXX'
                 )
             },
@@ -232,8 +234,8 @@ class DocuConfigPasswordResetConfirm(enum.Enum):
                 'uid': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description='Account user ID',
-                    format='email',
-                    example='user@example.com'
+                    format='id',
+                    example=1
                 ),
                 'token': openapi.Schema(
                     type=openapi.TYPE_STRING,
@@ -333,6 +335,7 @@ class DocuConfigTokenVerify(enum.Enum):
         tags=[DEF_TAG]
     )
 
+
 class DocuConfigResendVerification(enum.Enum):
     """ResendVerificationView's drf-yasg documentation configuration"""
 
@@ -360,6 +363,7 @@ class DocuConfigResendVerification(enum.Enum):
         },
         'tags': [DEF_TAG]
     }
+
 
 class DocuConfigVerifyEmail(enum.Enum):
     """VerifyEmailView's drf-yasg documentation configuration"""
