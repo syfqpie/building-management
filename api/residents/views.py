@@ -11,7 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from core.helpers import (
+from utils.helpers import (
     DjangoFilterDescriptionInspector, NoTitleAutoSchema,
     NoUnderscoreBeforeNumberCamelCaseJSONParser, ResultsPagination
 )

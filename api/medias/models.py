@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 
-from core.helpers import PathAndRename
+from utils.helpers import PathAndRename
 
 from users.models import CustomUser
 

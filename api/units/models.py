@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from rest_framework.exceptions import PermissionDenied
 
-from core.helpers import PathAndRename
+from utils.helpers import PathAndRename
 
 from residents.models import Resident, ResidentVehicle, VehicleType
 from users.models import CustomUser, UserType

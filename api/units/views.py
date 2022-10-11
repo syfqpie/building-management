@@ -13,7 +13,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from core.helpers import camel_to_capitalize
+from utils.helpers import camel_to_capitalize
 
 from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
