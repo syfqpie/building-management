@@ -1,12 +1,6 @@
-from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import PasswordResetSerializer
-
-from allauth.account import app_settings
-from allauth.account.adapter import get_adapter
-
 
 from .forms import MyResetPasswordForm
 
