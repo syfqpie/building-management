@@ -27,7 +27,7 @@ class MyResetPasswordForm(AllAuthPasswordResetForm):
             temp_key = token_generator.make_token(user)
 
             # send the password reset email
-            url = f'https://{current_site.domain}/auth/reset?uid={user_pk_to_url_str(user)}&key={temp_key}'
+            url = f'https://{current_site.domain}auth/reset?uid={user_pk_to_url_str(user)}&key={temp_key}'
             
             # Set context
             context = {
