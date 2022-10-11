@@ -6,22 +6,31 @@ from utils.helpers import PathAndRename
 
 
 class TitleType(models.IntegerChoices):
+    """Title type choices"""
+
     MR = 1, 'Mr.'
     MRS = 2, 'Mrs.'
     MS = 3, 'Ms.'
 
 
 class GenderType(models.IntegerChoices):
+    """Gender type choices"""
+
     FEMALE = 1, 'Female'
     MALE = 2, 'Male'
 
 
 class VehicleType(models.IntegerChoices):
+    """Vehicle type choices"""
+    
     CAR = 1, 'Car'
     MOTOR = 2, 'Motorcycle'
     LORRY = 3, 'Lorry'
 
+
 class Resident(models.Model):
+    """Resident model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     resident_no = models.CharField(max_length=100, null=True)
     is_owner = models.BooleanField(default=False)
@@ -66,6 +75,8 @@ class Resident(models.Model):
         return ('%s - %s'%(self.resident_no, self.name))
 
     def save(self, *args, **kwargs):
+        """Override to generate resident_no with prefix"""
+        
         if not self.resident_no:
             prefix = 'RSD'
             prev_instances = self.__class__.objects.filter(resident_no__contains=prefix)
@@ -79,6 +90,8 @@ class Resident(models.Model):
 
 
 class ResidentVehicle(models.Model):
+    """ResidentVehicle model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     plate_no = models.CharField(max_length=100, unique=True)
     vehicle_type = models.IntegerField(choices=VehicleType.choices, default=VehicleType.CAR)
