@@ -16,10 +16,10 @@ from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 
-from core.helpers import dict_snake_to_camel, camel_to_capitalize
+from utils.helpers import dict_snake_to_camel, camel_to_capitalize
 
 from users.models import UserType
-from users.permissions import IsAdminStaff, IsSuperAdmin
+from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
 from .models import (
     TicketPriority, TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment

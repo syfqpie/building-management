@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from core.helpers import (
+from utils.helpers import (
     DjangoFilterDescriptionInspector,
     NoTitleAutoSchema,
     NoUnderscoreBeforeNumberCamelCaseJSONParser,
@@ -33,7 +33,7 @@ from .serializers import (
     EmailVerificationSerializer,
     AdminCustomRegisterSerializer
 )
-from .permissions import (
+from utils.auth.permissions import (
     IsAdminStaff,
     IsSuperAdmin,
     IsCustomUserOwnerOrAdmin

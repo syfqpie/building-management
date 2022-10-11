@@ -3,19 +3,27 @@ import os
 import re
 
 from django.utils.deconstruct import deconstructible
+from rest_framework.pagination import PageNumberPagination
+
 from django_filters.rest_framework import DjangoFilterBackend
 from djangorestframework_camel_case.parser import CamelCaseJSONParser
 
 from drf_yasg import openapi
 from drf_yasg.app_settings import swagger_settings
-from drf_yasg.inspectors import CoreAPICompatInspector, FieldInspector, NotHandled, SwaggerAutoSchema
-from rest_framework.pagination import PageNumberPagination
+from drf_yasg.inspectors import (
+    CoreAPICompatInspector,
+    FieldInspector,
+    NotHandled,
+    SwaggerAutoSchema
+)
+
 
 @deconstructible
 class PathAndRename(object):
     """
     Rename file name to have a formatted file name
     """
+
     def __init__(self, sub_path):
         self.path = sub_path
 
@@ -27,7 +35,7 @@ class PathAndRename(object):
         # return the whole path to the file
         return os.path.join(self.path, filename)
 
-# Documentation
+
 class DjangoFilterDescriptionInspector(CoreAPICompatInspector):
     def get_filter_parameters(self, filter_backend):
         if isinstance(filter_backend, DjangoFilterBackend):
@@ -40,8 +48,11 @@ class DjangoFilterDescriptionInspector(CoreAPICompatInspector):
 
         return NotHandled
 
+
 class NoUnderscoreBeforeNumberCamelCaseJSONParser(CamelCaseJSONParser):
+    """Fix no underscore before number when using CamelCaseJSONParser"""
     json_underscoreize = { 'no_underscore_before_number': True }
+
 
 class NoSchemaTitleInspector(FieldInspector):
     def process_result(self, result, method_name, obj, **kwargs):
@@ -60,11 +71,13 @@ class NoSchemaTitleInspector(FieldInspector):
 class NoTitleAutoSchema(SwaggerAutoSchema):
     field_inspectors = [NoSchemaTitleInspector] + swagger_settings.DEFAULT_FIELD_INSPECTORS
 
+
 class ResultsPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
     ordering = ['-added_on']
+
 
 def dict_snake_to_camel(payload_dict):
     reg = re.compile(r'_([a-z])')
@@ -74,12 +87,14 @@ def dict_snake_to_camel(payload_dict):
     
     return payload_dict
 
+
 def dict_camel_to_snake(payload_dict):
     for key in list(payload_dict):
         new_key = re.sub(r'(?<!^)(?=[A-Z])', '_', key).lower()
         payload_dict[new_key] = payload_dict.pop(key)
     
     return payload_dict
+
 
 def camel_to_capitalize(payload):
     return payload.replace('_', ' ').capitalize()

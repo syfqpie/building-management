@@ -1,5 +1,5 @@
-from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
-from .models import CustomUser, UserType
+from rest_framework.permissions import IsAdminUser, BasePermission
+from users.models import UserType
 
 
 class IsSuperAdmin(IsAdminUser):
@@ -8,7 +8,6 @@ class IsSuperAdmin(IsAdminUser):
     """
     def has_permission(self, request, view):
         return bool(
-            request.user and
             request.user.is_superuser and 
             request.user.is_staff and
             request.user.user_type == UserType.ADMIN
@@ -21,10 +20,10 @@ class IsAdminStaff(IsAdminUser):
     """
     def has_permission(self, request, view):
         return bool(
-            request.user and
             request.user.is_staff and
             request.user.user_type == UserType.ADMIN
         )
+
 
 class IsCustomUserOwnerOrAdmin(BasePermission):
     """
