@@ -53,6 +53,7 @@ from .docs import (
     DocuConfigVerifyEmail,
     DocuConfigPasswordChange
 )
+from .serializers import MyPasswordResetSerializer
 
 
 @method_decorator(name='post', decorator=DocuConfigLogin.POST)
@@ -77,3 +78,37 @@ class MyLogoutView(LogoutView):
     assigned to the current User object.
     """
     http_method_names = ['post']
+
+
+@method_decorator(name='post', decorator=DocuConfigPasswordReset.POST)
+class MyPasswordResetView(PasswordResetView):
+    """
+    Request to reset password
+    
+    Request a password resest link to be sent to registered email.
+    """
+    serializer_class = MyPasswordResetSerializer
+
+
+@method_decorator(name='post', decorator=DocuConfigTokenRefresh.POST)
+class MyTokenRefreshView(TokenRefreshView):
+    """
+    Refresh token
+
+    Takes a refresh type JSON web token and returns an access
+    type JSON web token if the refresh token is valid.
+    """
+    pass
+
+
+@method_decorator(name='post', decorator=DocuConfigTokenVerify.POST)
+class MyTokenVerifyView(TokenVerifyView):
+    """
+    Verify token
+
+    Takes a token and indicates if it is valid. 
+    
+    This view provides no information about a token's fitness
+    for a particular use.
+    """
+    pass
