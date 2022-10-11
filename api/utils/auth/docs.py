@@ -174,7 +174,7 @@ class DocuConfigPasswordChange(enum.Enum):
 
 
 class DocuConfigPasswordReset(enum.Enum):
-    """PasswordChangeView's drf-yasg documentation configuration"""
+    """PasswordResetView's drf-yasg documentation configuration"""
 
     POST = swagger_auto_schema(
         operation_id='Request to reset password',
@@ -187,6 +187,59 @@ class DocuConfigPasswordReset(enum.Enum):
                     description='Registered email',
                     format='email',
                     example='user@example.com'
+                )
+            },
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            example='Password reset e-mail has been sent.'
+                        )
+                    }
+                )
+            )
+        },
+        tags=[DEF_TAG]
+    )
+
+
+class DocuConfigPasswordResetConfirm(enum.Enum):
+    """PasswordResetConfirmView's drf-yasg documentation configuration"""
+
+    POST = swagger_auto_schema(
+        operation_id='Confirm reset password',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['newPassword1', 'newPassword2', 'uid', 'token'],
+            properties={
+                'newPassword1': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='New password',
+                    format='password',
+                    example='XXXXXXXXXXXXX'
+                ),
+                'newPassword2': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Confirm new password',
+                    format='password',
+                    example='XXXXXXXXXXXXX'
+                ),
+                'uid': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Account user ID',
+                    format='email',
+                    example='user@example.com'
+                ),
+                'token': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Received token',
+                    format='byte',
+                    example='XXXXXXXXXXXXXXXXXXXXXXXXXXX'
                 )
             },
         ),
@@ -280,6 +333,33 @@ class DocuConfigTokenVerify(enum.Enum):
         tags=[DEF_TAG]
     )
 
+class DocuConfigResendVerification(enum.Enum):
+    """ResendVerificationView's drf-yasg documentation configuration"""
+
+    POST = {
+        'request_body': openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['email'],
+            properties={
+                'email': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='User\'s email',
+                    example='user@example.com'
+                )
+            },
+        ),
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Return detail',
+                examples={
+                    'application/json': {
+                        'detail': 'string'
+                    }
+                }
+            )
+        },
+        'tags': [DEF_TAG]
+    }
 
 class DocuConfigVerifyEmail(enum.Enum):
     """VerifyEmailView's drf-yasg documentation configuration"""
