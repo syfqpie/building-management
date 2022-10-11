@@ -11,62 +11,36 @@ from drf_yasg.utils import swagger_auto_schema
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from residents.docs import DocuConfigResidentCustomRegister
-from utils.helpers import (
-    DjangoFilterDescriptionInspector, NoTitleAutoSchema,
-    NoUnderscoreBeforeNumberCamelCaseJSONParser, ResultsPagination
-)
-
 from users.models import UserType
 from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
+from utils.helpers import NoUnderscoreBeforeNumberCamelCaseJSONParser
 
+from .docs import (
+    DocuConfigResident,
+    DocuConfigResidentCustomRegister
+)
 from .models import (
     Resident, ResidentVehicle
 )
 from .serializers import (
-    ResidentSerializer, ResidentAdminSerializer,
-    ResidentPublicSerializer, ResidentCustomRegisterSerializer,
+    ResidentSerializer,
+    ResidentAdminSerializer,
+    ResidentPublicSerializer,
+    ResidentCustomRegisterSerializer,
     ResidentVehicleSerializer
 )
 
 
-@method_decorator(
-    name='list', 
-    decorator=swagger_auto_schema(
-        operation_id='Get all residents',
-        operation_description='Retrieve all residents information',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='retrieve', 
-    decorator=swagger_auto_schema(
-        operation_id='Get resident',
-        operation_description='Retrieve a resident information',
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='create', 
-    decorator=swagger_auto_schema(
-        operation_id='Create resident',
-        operation_description='Create a new resident entry',
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='partial_update', 
-    decorator=swagger_auto_schema(
-        operation_id='Patch resident',
-        operation_description='Partial update a resident information',
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='destroy', 
-    decorator=swagger_auto_schema(
-        operation_id='Delete resident',
-        operation_description='Delete a resident',
-        tags=['Residents']
-    ))
+@method_decorator(name='list', decorator=DocuConfigResident.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigResident.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigResident.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigResident.PARTIAL_UPDATE)
+@method_decorator(name='destroy', decorator=DocuConfigResident.DESTROY)
 class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """
+    Viewset for Resident model
+    """
+
     queryset = Resident.objects.all()
     serializer_class = ResidentSerializer
     serializer_class_admin = {
@@ -116,6 +90,8 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def get_queryset(self):
+        """Override get_queryset to filter results according to user_type"""
+
         user = self.request.user
 
         if user.is_authenticated and user.user_type == UserType.PUBLIC:
@@ -128,18 +104,32 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
+    
+    def create(self, request, *args, **kwargs):
+        """Override to disable method"""
+        response = {'message': 'Not allowed'}
+        return Response(response, status=status.HTTP_403_FORBIDDEN)
 
-    # Activate resident
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Activate resident',
-        operation_description='Activate a resident', tags=['Residents'])
+    @swagger_auto_schema(**DocuConfigResident.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate resident
+        
+        Return 403 if already activated
+        """
+
+        # Instantiate resident
         resident = self.get_object()
 
         if resident.is_active is True:
@@ -154,9 +144,15 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     # Deactivate resident
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Deactivate resident',
-        operation_description='Deactivate a resident', tags=['Residents'])
+    @swagger_auto_schema(**DocuConfigResident.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate resident
+        
+        Return 403 if already deactivated
+        """
+        
+        # Instantiate resident
         resident = self.get_object()
 
         if resident.is_active is False:
