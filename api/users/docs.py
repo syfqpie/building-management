@@ -137,6 +137,77 @@ class DocuConfigLogout(enum.Enum):
     )
 
 
+class DocuConfigPasswordChange(enum.Enum):
+    """PasswordChangeView's drf-yasg documentation configuration"""
+
+    POST = swagger_auto_schema(
+        operation_id='Change password',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['newPassword1', 'newPassword2'],
+            properties={
+                'newPassword1': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='New password',
+                    format='password',
+                    example='XXXXXXXXXXXXX'
+                ),
+                'newPassword2': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Confirm new password',
+                    format='password',
+                    example='XXXXXXXXXXXXX'
+                )
+            },
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={}
+                )
+            )
+        },
+        tags=[DEF_TAG]
+    )
+
+
+class DocuConfigPasswordReset(enum.Enum):
+    """PasswordChangeView's drf-yasg documentation configuration"""
+
+    POST = swagger_auto_schema(
+        operation_id='Request to reset password',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['email'],
+            properties={
+                'email': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Registered email',
+                    format='email',
+                    example='user@example.com'
+                )
+            },
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            example='Password reset e-mail has been sent.'
+                        )
+                    }
+                )
+            )
+        },
+        tags=[DEF_TAG]
+    )
+
+
 class DocuConfigTokenRefresh(enum.Enum):
     """TokenRefreshView's drf-yasg documentation configuration"""
 

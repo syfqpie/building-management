@@ -44,7 +44,10 @@ from core.helpers import (
     NoUnderscoreBeforeNumberCamelCaseJSONParser
 )
 
-from .docs import DocuConfigLogin, DocuConfigLogout, DocuConfigTokenRefresh, DocuConfigTokenVerify, DocuConfigVerifyEmail
+from .docs import (
+    DocuConfigLogin, DocuConfigLogout, DocuConfigPasswordReset, DocuConfigTokenRefresh,
+    DocuConfigTokenVerify, DocuConfigVerifyEmail, DocuConfigPasswordChange
+)
 from .forms import MyResetPasswordForm
 from .models import CustomUser
 from .serializers import (
@@ -146,19 +149,13 @@ class MyTokenVerifyView(TokenVerifyView):
 
 @method_decorator(
     name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Change password',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
+    decorator=DocuConfigPasswordChange.POST
 )
 class MyPasswordChangeView(PasswordChangeView):
     """
     Change password
 
-    Accepts the following POST parameters: newPassword1, newPassword2
-
-    Returns the success/fail message.
+    Change user account password.
     """
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
 
@@ -174,21 +171,13 @@ class MyPasswordResetSerializer(PasswordResetSerializer):
 
 @method_decorator(
     name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Request to reset password',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
+    decorator=DocuConfigPasswordReset.POST
 )
 class MyPasswordResetView(PasswordResetView):
     """
     Request to reset password
     
-    Calls password save method.
-
-    Accepts the following POST parameters: email
-
-    Returns the success/fail message.
+    Request a password resest link to be sent to registered email.
     """
     serializer_class = MyPasswordResetSerializer
 
