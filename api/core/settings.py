@@ -18,7 +18,6 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -141,37 +140,40 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
+# Media
+# https://docs.djangoproject.com/en/4.1/topics/files/
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Media
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# User model
+# https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#substituting-a-custom-user-model
 
-# Misc
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# Email
+# https://docs.djangoproject.com/en/4.1/ref/settings/#email
 
-
-DEFAULT_FROM_EMAIL = ''
+DEFAULT_FROM_EMAIL = 'noreply@test.com'
 EMAIL_SUBJECT_PREFIX = ''
 EMAIL_USE_LOCALTIME = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_USE_TLS = True
+EMAIL_HOST = config('EMAIL_HOST', 'localhost')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', None)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', None)
+EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 
 # Django Rest Framework
 # https://www.django-rest-framework.org/
@@ -188,14 +190,6 @@ DEFAULT_PERMISSION_CLASSES = [
    'rest_framework.permissions.IsAuthenticated',
 ]
 
-# if DEBUG:
-#     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
-#         'rest_framework.renderers.BrowsableAPIRenderer',
-#     )
-#     DEFAULT_PERMISSION_CLASSES = [
-#         'rest_framework.permissions.AllowAny',
-#     ]
-
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -206,11 +200,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_PARSER_CLASSES': (
-        # If you use MultiPartFormParser or FormParser, we also have a camel case version
         'djangorestframework_camel_case.parser.CamelCaseFormParser',
         'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-        # Any other parsers
     ),
 }
 
@@ -224,7 +216,7 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
-ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
+ACCOUNT_ADAPTER = 'utils.auth.adapters.MyAccountAdapter'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
@@ -232,7 +224,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 # https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
 
 REST_AUTH_SERIALIZERS = {
-    'JWT_TOKEN_CLAIMS_SERIALIZER': 'users.auth.MyTokenObtainPairSerializer'
+    'JWT_TOKEN_CLAIMS_SERIALIZER': 'utils.auth.serializers.MyTokenObtainPairSerializer'
 }
 REST_USE_JWT = True
 
