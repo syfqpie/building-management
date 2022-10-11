@@ -114,7 +114,7 @@ class DocuConfigLogout(enum.Enum):
     """LogoutView's drf-yasg documentation configuration"""
     
     POST = swagger_auto_schema(
-        operation_id='Login',
+        operation_id='Logout',
         request_body=None,
         responses={
             status.HTTP_200_OK: openapi.Response(
@@ -253,7 +253,7 @@ class DocuConfigPasswordResetConfirm(enum.Enum):
                     properties={
                         'detail': openapi.Schema(
                             type=openapi.TYPE_STRING,
-                            example='Password reset e-mail has been sent.'
+                            example='Password has been reset with the new password.'
                         )
                     }
                 )
