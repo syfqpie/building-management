@@ -20,7 +20,8 @@ from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 from .docs import (
     DocuConfigBlock,
     DocuConfigFloor,
-    DocuConfigUnitNumber
+    DocuConfigUnitNumber,
+    DocuConfigUnit
 )
 from .models import (
     Block, Floor, UnitNumber,
@@ -318,7 +319,14 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
  
 
+@method_decorator(name='list', decorator=DocuConfigUnit.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigUnit.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigUnit.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigUnit.PARTIAL_UPDATE)
+@method_decorator(name='destroy', decorator=DocuConfigUnit.DESTROY)
 class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for Unit model"""
+
     queryset = Unit.objects.all()
     serializer_class = UnitSerializer
     serializer_class_admin = {
@@ -351,8 +359,9 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    # Override get_serializer_class for default action
     def get_serializer_class(self):
+        """Override get_serializer_class for default action"""
+
         # Check serializer class by action
         if hasattr(self, 'serializer_class_admin'):
             return self.serializer_class_admin.get(self.action, self.serializer_class)
@@ -361,30 +370,45 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return super().get_serializer_class()
     
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
  
-    # Get extended units
     @action(methods=['GET'], detail=False, url_path='extended')
+    @swagger_auto_schema(**DocuConfigUnit.LIST_EXT.value)
     def list_ext(self, request, *args, **kwargs):
+        """Extend list"""
+
         units = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(units, many=True)
         return Response(serializer.data)
     
-    # Get extended unit
     @action(methods=['GET'], detail=True, url_path='extended')
+    @swagger_auto_schema(**DocuConfigUnit.RETRIEVE_EXT.value)
     def retrieve_ext(self, request, *args, **kwargs):
+        """Extend retrieve"""
+
         unit = self.get_object()
         serializer = self.get_serializer(unit, many=False)
         return Response(serializer.data)
 
-    # Enable maintenance
     @action(methods=['GET'], detail=True, url_path='enable-maintenance')
+    @swagger_auto_schema(**DocuConfigUnit.ENABLE_MAINTENANCE.value)
     def enable_maintenance(self, request, *args, **kwargs):
+        """
+        Enable maintenance unit
+        
+        Return 403 if already enabled
+        """
+
+        # Instantiate unit
         unit = self.get_object()
         
         if unit.is_maintenance is True:
@@ -415,9 +439,16 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Disable maintenance
     @action(methods=['GET'], detail=True, url_path='disable-maintenance')
+    @swagger_auto_schema(**DocuConfigUnit.DISABLE_MAINTENANCE.value)
     def disable_maintenance(self, request, *args, **kwargs):
+        """
+        Disable maintenance unit
+        
+        Return 403 if already disabled
+        """
+
+        # Instantiate unit
         unit = self.get_object()
 
         if unit.is_maintenance is False:
@@ -448,9 +479,16 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Activate unit
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigUnit.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate unit
+        
+        Return 403 if already activated
+        """
+
+        # Instantiate unit
         unit = self.get_object()
         
         if unit.is_active is True:
@@ -481,9 +519,16 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate unit
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigUnit.ACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate unit
+        
+        Return 403 if already deactivated
+        """
+
+        # Instantiate unit
         unit = self.get_object()
 
         if unit.is_active is False:
@@ -514,9 +559,16 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Assign owner
     @action(methods=['POST'], detail=True, url_path='assign-owner')
+    @swagger_auto_schema(**DocuConfigUnit.ASSIGN_OWNER.value)
     def assign_owner(self, request, *args, **kwargs):
+        """
+        Assign owner to unit
+        
+        Return 403 if already owned by a resident
+        """
+
+        # Instantiate unit
         unit = self.get_object()
         notes = request.data.get('notes', None)
 
@@ -561,9 +613,12 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = UnitExtendedSerializer(unit, many=False)
         return Response(serializer.data)
     
-    # Get ownership count
     @action(methods=['GET'], detail=False, url_path='ownership-count')
+    @swagger_auto_schema(**DocuConfigUnit.OWNERSHIP_COUNT.value)
     def ownership_count(self, request, *args, **kwargs):
+        """Get ownership count"""
+
+        # Get queryset
         units = self.get_queryset()
 
         data_ = {
