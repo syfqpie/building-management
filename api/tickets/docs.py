@@ -12,6 +12,7 @@ from .models import TicketStatus, TicketCategory, TicketPriority
 # Constant
 TICKET_TAG_TAG = 'Ticket tags'
 TICKET_TAG = 'Tickets'
+TICKET_ACTIVITY_TAG = 'Ticket activities'
 TICKET_TAG_OBJS = {
     'id': openapi.Schema(
         type=openapi.TYPE_INTEGER,
@@ -171,6 +172,43 @@ TICKET_EXT_OBJS = {
                 example='user@example.com'
             )
         }
+    )
+}
+TICKET_ACTIVITY_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Activity ID',
+        read_only=True,
+        example=1
+    ),
+    'ticket': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Related ticket ID',
+        example=1
+    ),
+    'status': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Current status',
+        enum=TicketStatus.choices,
+        default=TicketStatus.OPENED,
+        example=TicketStatus.CLOSED
+    ),
+    'notes': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Notes appended',
+        example='Update note'
+    ),
+    'createdAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry creation date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'createdBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Activity entry created by ID',
+        read_only=True,
+        example=1
     )
 }
 OVERVIEW_OBJS = {
@@ -498,3 +536,42 @@ class DocuConfigTicket(enum.Enum):
         },
         'tags': [TICKET_TAG]
     }
+
+
+class DocuConfigTicketActivity(enum.Enum):
+    """TicketActivityView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List ticket activities',
+        operation_description='List all ticket activities',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=TICKET_ACTIVITY_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[TICKET_ACTIVITY_TAG], 
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a ticket activity',
+        operation_description='Retrieve a ticket activity information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=TICKET_ACTIVITY_OBJS
+                )
+            )
+        },
+        tags=[TICKET_ACTIVITY_TAG], 
+    )

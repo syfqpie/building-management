@@ -21,7 +21,7 @@ from utils.helpers import dict_snake_to_camel, camel_to_capitalize
 from users.models import UserType
 from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
-from .docs import DocuConfigTicketTag, DocuConfigTicket
+from .docs import DocuConfigTicketTag, DocuConfigTicket, DocuConfigTicketActivity
 from .models import (
     TicketPriority, TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
 )
@@ -218,7 +218,7 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         z = (x - y) / y * 100
         None = infinty
         """
-        
+
         # Get this year's tickets
         current_date = now()
         tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
@@ -356,15 +356,11 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return JsonResponse(by_priority, safe=False)
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Ticket Activities'], operation_id='Get ticket activities',
-    operation_description='List all ticket activities'
-))
-@method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Ticket Activities'], operation_id='Get ticket activity',
-    operation_description='Retrieve ticket activity information'
-))
+@method_decorator(name='list', decorator=DocuConfigTicketActivity.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigTicketActivity.RETRIEVE)
 class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    """Viewset for TicketActivity model"""
+
     queryset = TicketActivity.objects.all()
     serializer_class = TicketActivitySerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
