@@ -1,18 +1,19 @@
-from django.contrib.auth.forms import SetPasswordForm
-from django.utils.timezone import now
-from django.utils.translation import gettext as _
+from decouple import config
 
-from allauth.account import app_settings
+from django.utils.translation import gettext as _
+from rest_framework import serializers
+
 from allauth.account.models import EmailAddress
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.registration.serializers import RegisterSerializer
-from rest_framework import serializers
-from decouple import config
 
 from .models import CustomUser, UserType
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    """
+    Base serializer for CustomUser model
+    """
 
     class Meta:
         model = CustomUser
@@ -33,6 +34,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 class CustomUserNotSuperAdminSerializer(serializers.ModelSerializer):
+    """
+    Admin serialiser for CustomUser model
+
+    Restrict fields for update
+    """
 
     class Meta:
         model = CustomUser
@@ -57,6 +63,10 @@ class CustomUserNotSuperAdminSerializer(serializers.ModelSerializer):
 
 
 class EmailVerificationSerializer(serializers.ModelSerializer):
+    """
+    Base serializer for EmailAddress model
+    """
+    
     user = CustomUserSerializer(read_only=True)
 
     class Meta:
@@ -68,41 +78,11 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
         ]
 
 
-class CustomResendVerificationSerializer(serializers.Serializer):
-    email = serializers.EmailField(max_length=app_settings.EMAIL_MAX_LENGTH)
-
-
-class CustomVerifyEmailSerializer(serializers.Serializer):
-    key = serializers.CharField()
-    new_password1 = serializers.CharField(max_length=128)
-    new_password2 = serializers.CharField(max_length=128)
-
-
-class CustomSetPasswordSerializer(serializers.Serializer):
-    new_password1 = serializers.CharField(max_length=128)
-    new_password2 = serializers.CharField(max_length=128)
-
-    set_password_form_class = SetPasswordForm
-
-    def __init__(self, *args, **kwargs):
-        super(CustomSetPasswordSerializer, self).__init__(*args, **kwargs)
-        self.request = self.context.get('request')
-        self.user = self.request['user']
-
-    def validate(self, attrs):
-        self.set_password_form = self.set_password_form_class(
-            user=self.user, data=attrs
-        )
-
-        if not self.set_password_form.is_valid():
-            raise serializers.ValidationError(self.set_password_form.errors)
-        return attrs
-
-    def save(self):
-        self.set_password_form.save()
-
-
 class AdminCustomRegisterSerializer(RegisterSerializer):
+    """
+    Serializer for AdminCustomRegisterView
+    """
+
     admin_user = serializers.PrimaryKeyRelatedField(read_only=True)
     full_name = serializers.CharField()
     is_superuser = serializers.BooleanField(required=False)
@@ -133,19 +113,21 @@ class AdminCustomRegisterSerializer(RegisterSerializer):
         # Call default first
         admin_user = super().save(request)
 
-        # To save this values
+        # Append values and save
         admin_user.full_name = self.cleaned_data.get('full_name')
         admin_user.is_superuser = self.cleaned_data.get('is_superuser')
         admin_user.user_type = self.cleaned_data.get('user_type')
         admin_user.is_staff = self.cleaned_data.get('is_staff')
-
         admin_user.save()
 
         return admin_user
 
 
 class CustomUserEmailSerializer(serializers.ModelSerializer):
-
+    """
+    Serializer CustomUser with id and email only
+    """
+    
     class Meta:
         model = CustomUser
         fields = [
@@ -153,3 +135,4 @@ class CustomUserEmailSerializer(serializers.ModelSerializer):
 		    'email'
         ]
         read_only_fields = ['email']
+    

@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -6,26 +8,22 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-import datetime
-
 from allauth.account.models import EmailAddress
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from django.utils.decorators import method_decorator
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from core.helpers import (
-    DjangoFilterDescriptionInspector,
-    NoTitleAutoSchema,
-    NoUnderscoreBeforeNumberCamelCaseJSONParser,
-    ResultsPagination
+from utils.auth.permissions import (
+    IsAdminStaff,
+    IsSuperAdmin,
+    IsCustomUserOwnerOrAdmin
+) 
+from utils.helpers import (
+    NoUnderscoreBeforeNumberCamelCaseJSONParser
 )
 
-from .models import (
-    UserType,
-    CustomUser
-)
+from .docs import DocuConfigAdminCustomRegister, DocuConfigUser
+from .models import UserType, CustomUser
 from .serializers import (
     CustomUserEmailSerializer,
     CustomUserSerializer,
@@ -33,54 +31,15 @@ from .serializers import (
     EmailVerificationSerializer,
     AdminCustomRegisterSerializer
 )
-from .permissions import (
-    IsAdminStaff,
-    IsSuperAdmin,
-    IsCustomUserOwnerOrAdmin
-) 
 
-@method_decorator(
-    name='list', 
-    decorator=swagger_auto_schema(
-        operation_id='Get all users',
-        operation_description='Retrieve all users information',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Users']
-    )
-)
-@method_decorator(
-    name='retrieve', 
-    decorator=swagger_auto_schema(
-        operation_id='Get user',
-        operation_description='Retrieve a user information',
-        tags=['Users']
-    )
-)
-@method_decorator(
-    name='create', 
-    decorator=swagger_auto_schema(
-        operation_id='Create user',
-        operation_description='Create a new user entry',
-        tags=['Users']
-    )
-)
-@method_decorator(
-    name='partial_update', 
-    decorator=swagger_auto_schema(
-        operation_id='Patch user',
-        operation_description='Partial update a user information',
-        tags=['Users']
-    )
-)
-@method_decorator(
-    name='destroy', 
-    decorator=swagger_auto_schema(
-        operation_id='Delete user',
-        operation_description='Delete a user',
-        tags=['Users']
-    )
-)
+@method_decorator(name='list', decorator=DocuConfigUser.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigUser.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigUser.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigUser.PARTIAL_UPDATE)
+@method_decorator(name='destroy', decorator=DocuConfigUser.DESTROY)
 class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for CustomUser model"""
+
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     serializer_class_by_action = {
@@ -91,6 +50,15 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     filterset_fields = [
         'user_type',
         'is_active'
+    ]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'delete',
+        'head',
+        'options',
+        'trace',
     ]
 
     def get_permissions(self):
@@ -111,8 +79,9 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]    
     
-    # Override get_queryset
     def get_queryset(self):
+        """Override get_queryset to filter results according to user_type"""
+
         user = self.request.user
 
         if user.is_anonymous:
@@ -122,12 +91,14 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             # Filter for public user
             queryset = self.queryset.filter(id=user.id)
         else:
+            # Admin results
             queryset = self.queryset
 
         return queryset
     
-    # Override get_serializer_class for default action
     def get_serializer_class(self):
+        """Override get_serializer_class for default action"""
+
         # Get request user
         user = self.request.user
 
@@ -138,18 +109,28 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         # Return original class
         return super().get_serializer_class()
     
-    # Activate account
+    def create(self, request, *args, **kwargs):
+        """Override to disable method"""
+
+        response = {'message': 'Not allowed'}
+        return Response(response, status=status.HTTP_403_FORBIDDEN)
+    
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(
-        operation_description='Activate a user account',
-        operation_id='Activate user account',
-        tags=['Users'])
+    @swagger_auto_schema(**DocuConfigUser.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate resident
+        
+        Return 403 if already activated
+        """
+
+        # Instantiate resident
         user = self.get_object()
 
         if user.is_active is True:
             raise PermissionDenied(detail='User account is already activated')
         
+        # Update and save
         user.is_active = True
         user.save()
 
@@ -161,18 +142,22 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate account
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(
-        operation_description='Deactivate a user account',
-        operation_id='Deactivate user account',
-        tags=['Users'])
+    @swagger_auto_schema(**DocuConfigUser.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate resident
+        
+        Return 403 if already deactivated
+        """
+        
+        # Instantiate resident
         user = self.get_object()
 
         if user.is_active is False:
             raise PermissionDenied(detail='User account is already deactivated')
         
+        # Update and save
         user.is_active = False
         user.save()
 
@@ -184,53 +169,44 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Get account information
     @action(methods=['GET'], detail=False, url_path='get-account-info')
-    @swagger_auto_schema(
-        operation_description='Get self account information',
-        operation_id='Get account information',
-        tags=['Users'])
+    @swagger_auto_schema(**DocuConfigUser.ACCOUNT_INFORMATION.value)
     def get_account_information(self, request, *args, **kwargs):
+        """Get account information"""
+
+        # Instantiate user
         user = request.user
 
         serializer = self.get_serializer(user, many=False)
         return Response(serializer.data)
     
-
-    # Get all users with verification status
     @action(methods=['GET'], detail=False, url_path='get-users-verification')
-    @swagger_auto_schema(
-        operation_description='Get all users verification',
-        operation_id='Get all users with verification',
-        tags=['Users'])
+    @swagger_auto_schema(**DocuConfigUser.USER_VERIFICATIONS.value)
     def get_users_verification(self, request, *args, **kwargs):
+        """Get all users with verification status"""
+
+        # Query all email address
         email_address = EmailAddress.objects.all()
 
         serializer = EmailVerificationSerializer(email_address, many=True)
         return Response(serializer.data)
 
-    # Get all users simplified
     @action(methods=['GET'], detail=False, url_path='get-simplified')
-    @swagger_auto_schema(
-        operation_description='Get all users simplified',
-        operation_id='Get all users simplified',
-        tags=['Users'])
+    @swagger_auto_schema(**DocuConfigUser.USER_SIMPLIFIED.value)
     def get_simplified(self, request, *args, **kwargs):
+        """Get all users simplified"""
+
+        # Get queryset
         users = self.filter_queryset(self.get_queryset())
 
         serializer = CustomUserEmailSerializer(users, many=True)
         return Response(serializer.data)
 
 
-@method_decorator(
-    name='post', 
-    decorator=swagger_auto_schema(
-        operation_id='Register new account for admin',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Authentication']
-    )
-)
+@method_decorator(name='post', decorator=DocuConfigAdminCustomRegister.POST)
 class AdminCustomRegisterView(RegisterView):
+    """Custom view for Admin registration"""
+
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     serializer_class = AdminCustomRegisterSerializer
 
@@ -240,10 +216,11 @@ class AdminCustomRegisterView(RegisterView):
             IsSuperAdmin
         ]
 
-        return [permission() for permission in permission_classes]  
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
-
+        """Append custom response message"""
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 

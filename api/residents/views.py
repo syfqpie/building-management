@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -6,66 +8,41 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from core.helpers import (
-    DjangoFilterDescriptionInspector, NoTitleAutoSchema,
-    NoUnderscoreBeforeNumberCamelCaseJSONParser, ResultsPagination
-)
-
 from users.models import UserType
-from users.permissions import IsAdminStaff, IsSuperAdmin
+from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
+from utils.helpers import NoUnderscoreBeforeNumberCamelCaseJSONParser
 
+from .docs import (
+    DocuConfigResident,
+    DocuConfigResidentCustomRegister,
+    DocuConfigResidentVehicle
+)
 from .models import (
     Resident, ResidentVehicle
 )
 from .serializers import (
-    ResidentSerializer, ResidentAdminSerializer,
-    ResidentPublicSerializer, ResidentCustomRegisterSerializer,
+    ResidentSerializer,
+    ResidentAdminSerializer,
+    ResidentPublicSerializer,
+    ResidentCustomRegisterSerializer,
     ResidentVehicleSerializer
 )
 
 
-@method_decorator(
-    name='list', 
-    decorator=swagger_auto_schema(
-        operation_id='Get all residents',
-        operation_description='Retrieve all residents information',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='retrieve', 
-    decorator=swagger_auto_schema(
-        operation_id='Get resident',
-        operation_description='Retrieve a resident information',
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='create', 
-    decorator=swagger_auto_schema(
-        operation_id='Create resident',
-        operation_description='Create a new resident entry',
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='partial_update', 
-    decorator=swagger_auto_schema(
-        operation_id='Patch resident',
-        operation_description='Partial update a resident information',
-        tags=['Residents']
-    ))
-@method_decorator(
-    name='destroy', 
-    decorator=swagger_auto_schema(
-        operation_id='Delete resident',
-        operation_description='Delete a resident',
-        tags=['Residents']
-    ))
+@method_decorator(name='list', decorator=DocuConfigResident.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigResident.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigResident.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigResident.PARTIAL_UPDATE)
+@method_decorator(name='destroy', decorator=DocuConfigResident.DESTROY)
 class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """
+    Viewset for Resident model
+    """
+
     queryset = Resident.objects.all()
     serializer_class = ResidentSerializer
     serializer_class_admin = {
@@ -106,36 +83,56 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_class(self):
         user = self.request.user
 
-        if user.user_type == UserType.ADMIN and hasattr(self, 'serializer_class_admin'):
-            return self.serializer_class_admin.get(self.action, self.serializer_class)
-        elif user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
-            return self.serializer_class_public.get(self.action, self.serializer_class)
+        if not user.is_anonymous:
+            if user.user_type == UserType.ADMIN and hasattr(self, 'serializer_class_admin'):
+                return self.serializer_class_admin.get(self.action, self.serializer_class)
+            elif user.user_type == UserType.PUBLIC and hasattr(self, 'serializer_class_public'):
+                return self.serializer_class_public.get(self.action, self.serializer_class)
         
         return super().get_serializer_class()
 
     def get_queryset(self):
+        """Override get_queryset to filter results according to user_type"""
+
         user = self.request.user
 
-        if user.user_type == UserType.PUBLIC:
+        if user.is_authenticated and user.user_type == UserType.PUBLIC:
             queryset = self.queryset.filter(resident_user=user)
-        else:
+        elif user.is_authenticated and user.user_type == UserType.ADMIN:
             queryset = self.queryset
+        else:
+            queryset = self.queryset.none()
 
         return queryset
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
+    
+    def create(self, request, *args, **kwargs):
+        """Override to disable method"""
+        
+        response = {'message': 'Not allowed'}
+        return Response(response, status=status.HTTP_403_FORBIDDEN)
 
-    # Activate resident
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Activate resident',
-        operation_description='Activate a resident', tags=['Residents'])
+    @swagger_auto_schema(**DocuConfigResident.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate resident
+        
+        Return 403 if already activated
+        """
+
+        # Instantiate resident
         resident = self.get_object()
 
         if resident.is_active is True:
@@ -150,9 +147,15 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     # Deactivate resident
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Deactivate resident',
-        operation_description='Deactivate a resident', tags=['Residents'])
+    @swagger_auto_schema(**DocuConfigResident.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate resident
+        
+        Return 403 if already deactivated
+        """
+        
+        # Instantiate resident
         resident = self.get_object()
 
         if resident.is_active is False:
@@ -166,14 +169,10 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-@method_decorator(
-    name='post',
-    decorator=swagger_auto_schema(
-        operation_id='Register new account for a resident',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
-        tags=['Residents']
-    ))
+@method_decorator(name='post', decorator=DocuConfigResidentCustomRegister.POST)
 class ResidentCustomRegisterView(RegisterView):
+    """Custom view for Resident registration"""
+
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     serializer_class = ResidentCustomRegisterSerializer
 
@@ -186,7 +185,8 @@ class ResidentCustomRegisterView(RegisterView):
         return [permission() for permission in permission_classes]  
 
     def create(self, request, *args, **kwargs):
-
+        """Append custom response message"""
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -201,7 +201,12 @@ class ResidentCustomRegisterView(RegisterView):
         )
 
 
+@method_decorator(name='list', decorator=DocuConfigResidentVehicle.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigResidentVehicle.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigResidentVehicle.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigResidentVehicle.PARTIAL_UPDATE)
 class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for ResidentVehicle model"""
     queryset = ResidentVehicle.objects.all()
     serializer_class = ResidentVehicleSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -231,18 +236,25 @@ class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
 
-    # Activate vehicle
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Activate vehicle',
-        operation_description='Activate a vehicle', tags=['Vehicles'])
+    @swagger_auto_schema(**DocuConfigResidentVehicle.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate resident
+        
+        Return 403 if already activated
+        """
+        
+        # Instantiate vehicle
         vehicle = self.get_object()
 
         if vehicle.is_active is True:
@@ -255,11 +267,16 @@ class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = self.get_serializer(vehicle, many=False)
         return Response(serializer.data)
 
-    # Deactivate vehicle
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Deactivate vehicle',
-        operation_description='Deactivate a vehicle', tags=['Vehicles'])
+    @swagger_auto_schema(**DocuConfigResidentVehicle.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate resident vehicle
+        
+        Return 403 if already deactivated
+        """
+        
+        # Instantiate vehicle
         vehicle = self.get_object()
 
         if vehicle.is_active is False:

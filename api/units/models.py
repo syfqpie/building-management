@@ -1,19 +1,13 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models
 from rest_framework.exceptions import PermissionDenied
-
-from core.helpers import PathAndRename
 
 from residents.models import Resident, ResidentVehicle, VehicleType
 from users.models import CustomUser, UserType
 
 
 class ActivityType(models.IntegerChoices):
-    """
-        Choices for activity type
-    """
+    """Activity type choices"""
+
     MOVE_IN = 1, 'Move in'
     MOVE_OUT = 2, 'Move out'
     ACTIVATE = 3, 'Activate'
@@ -23,9 +17,8 @@ class ActivityType(models.IntegerChoices):
 
 
 class Block(models.Model):
-    """
-        A model for block
-    """
+    """Block Model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     block = models.CharField(
         max_length=10,
@@ -66,9 +59,8 @@ class Block(models.Model):
 
 
 class Floor(models.Model):
-    """
-        A model for floor
-    """
+    """Floor model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     floor = models.CharField(
         max_length=10,
@@ -109,9 +101,8 @@ class Floor(models.Model):
 
 
 class UnitNumber(models.Model):
-    """
-        A model for unit number
-    """
+    """Unit number model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     unit_number = models.CharField(
         max_length=10,
@@ -152,9 +143,8 @@ class UnitNumber(models.Model):
 
 
 class Unit(models.Model):
-    """
-        A model for unit
-    """
+    """Unit model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     unit_no = models.CharField(max_length=100, null=True)
     square_feet = models.IntegerField(default=0)
@@ -208,6 +198,11 @@ class Unit(models.Model):
         return ('%s'%(self.unit_no))
 
     def save(self, *args, **kwargs):
+        """
+        Generate unit_no
+
+        Example: A-1-1
+        """
         if not self.unit_no:
             self.unit_no = str(self.block.block) + '-' + str(self.floor.floor) + '-' + str(self.unit_number.unit_number)
         else:
@@ -217,9 +212,8 @@ class Unit(models.Model):
 
 
 class UnitActivity(models.Model):
-    """
-        A model for unit activity
-    """
+    """Unit activity model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     unit = models.ForeignKey(
         Unit,
@@ -258,9 +252,8 @@ class UnitActivity(models.Model):
 
 
 class ParkingLot(models.Model):
-    """
-        A model for parking lot
-    """
+    """Parking lot model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     lot_no = models.CharField(max_length=100, editable=False)
 
@@ -311,8 +304,9 @@ class ParkingLot(models.Model):
     
     def save(self, *args, **kwargs):
         """
-            Generate lot no
-            Example: A3A01
+        Generate lot no
+
+        Example: A3A01
         """
         if not self.lot_no:
             # Get lot block + floor count
@@ -334,9 +328,8 @@ class ParkingLot(models.Model):
 
 
 class ParkingLotPass(models.Model):
-    """
-        A model for parking lot pass
-    """
+    """Parking lot pass model"""
+    
     id = models.AutoField(primary_key=True, editable=False)
     access_card_no = models.CharField(max_length=25)
 

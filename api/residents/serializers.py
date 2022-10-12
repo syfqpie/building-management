@@ -1,23 +1,42 @@
-from django.utils.timezone import now
+from decouple import config
 from django.utils.translation import gettext as _
+from rest_framework import serializers
 
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.registration.serializers import RegisterSerializer
-from rest_framework import serializers
-from decouple import config
 
 from .models import GenderType, Resident, ResidentVehicle, TitleType
 
 
 class ResidentSerializer(serializers.ModelSerializer):
+    """
+    Base serializer for Resident model
+
+    Restrict fields for update
+    """
 
     class Meta:
         model = Resident
         fields = '__all__'
-        read_only_fields = ('id', 'email')
+        read_only_fields = [
+            'id',
+            'email',
+            'is_owner',
+            'is_active',
+            'last_payment_at',
+            'last_modified_at',
+            'resident_user',
+            'created_by',
+            'last_modified_by'
+        ]
 
 
 class ResidentAdminSerializer(serializers.ModelSerializer):
+    """
+    Admin serializer for ResidentViewSet
+
+    Restrict fields for view
+    """
 
     class Meta:
         model = Resident
@@ -31,21 +50,29 @@ class ResidentAdminSerializer(serializers.ModelSerializer):
             'is_active',
             'created_at'
         ]
-        read_only_fields = ('id', 'email')
+        read_only_fields = '__all__'
 
 
 class ResidentPublicSerializer(serializers.ModelSerializer):
+    """
+    Public serializer for ResidentViewSet
 
+    Restrict fields for views
+    """
     class Meta:
         model = Resident
         exclude = [
             'created_by',
             'is_active',
         ]
-        read_only_fields = ('id', 'email')
+        read_only_fields = '__all__'
 
 
 class ResidentCustomRegisterSerializer(RegisterSerializer):
+    """
+    Serializer for ResidentCustomRegisterView
+    """
+
     resident_user = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
     title = serializers.ChoiceField(choices=TitleType.choices, allow_null=True)
@@ -105,7 +132,7 @@ class ResidentCustomRegisterSerializer(RegisterSerializer):
 
 class ResidentVehicleSerializer(serializers.ModelSerializer):
     """
-        Serializer for resident vehicle
+    Base serializer for ResidentVehicle model
     """
 
     class Meta:
@@ -116,7 +143,7 @@ class ResidentVehicleSerializer(serializers.ModelSerializer):
 
 class ResidentVehicleSimplifiedSerializer(serializers.ModelSerializer):
     """
-        Serializer for simplified resident vehicle
+    A simplified serializer for ResidentVehicle
     """
 
     class Meta:

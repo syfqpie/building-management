@@ -6,6 +6,8 @@ from .models import Ticket, TicketActivity, TicketStatus
 
 @receiver(post_save, sender=Ticket, dispatch_uid='create_ticket_activity')
 def create_ticket_activity(sender, created, **kwargs):
+    """Create ticket activity signal"""
+
     update_fields = kwargs.get('update_fields', None)
     instance = kwargs.get('instance', None)
     activity_setup = getattr(instance, '_activity_setup', None)

@@ -6,15 +6,19 @@ from residents.serializers import ResidentSerializer, ResidentVehicleSerializer
 from users.serializers import CustomUserEmailSerializer
 
 from .models import (
-    Block, Floor, UnitNumber,
-    Unit, UnitActivity,
-    ParkingLot, ParkingLotPass
+    Block,
+    Floor,
+    UnitNumber,
+    Unit,
+    UnitActivity,
+    ParkingLot,
+    ParkingLotPass
 )
 
 
 class BlockSerializer(serializers.ModelSerializer):
     """
-        Serializer for block
+    Base serializer for Block model
     """
 
     class Meta:
@@ -24,7 +28,9 @@ class BlockSerializer(serializers.ModelSerializer):
 
 class BlockNoSerializer(serializers.ModelSerializer):
     """
-        Serializer for block no
+    Serializer for Block model
+
+    Restrict fields to id and block only
     """
 
     class Meta:
@@ -34,7 +40,7 @@ class BlockNoSerializer(serializers.ModelSerializer):
 
 class FloorSerializer(serializers.ModelSerializer):
     """
-        Serializer for floor
+    Base serializer for Floor
     """
 
     class Meta:
@@ -44,7 +50,9 @@ class FloorSerializer(serializers.ModelSerializer):
 
 class FloorNoSerializer(serializers.ModelSerializer):
     """
-        Serializer for floor no
+    Serializer for Floor model
+
+    Restrict fields to id and floor only
     """
 
     class Meta:
@@ -54,7 +62,7 @@ class FloorNoSerializer(serializers.ModelSerializer):
 
 class UnitNumberSerializer(serializers.ModelSerializer):
     """
-        Serializer for unit number
+    Base serializer for UnitNumber model
     """
 
     class Meta:
@@ -64,7 +72,9 @@ class UnitNumberSerializer(serializers.ModelSerializer):
 
 class UnitSerializer(serializers.ModelSerializer):
     """
-        Serializer for unit
+    Base serializer for Unit model
+
+    Unique validators; block, floor, unit_number
     """
 
     class Meta:
@@ -85,7 +95,9 @@ class UnitSerializer(serializers.ModelSerializer):
 
 class UnitNoSerializer(serializers.ModelSerializer):
     """
-        Serializer for unit no
+    Serializer for Unit model
+
+    Restrict fields to id and unit_no only
     """
 
     class Meta:
@@ -95,7 +107,9 @@ class UnitNoSerializer(serializers.ModelSerializer):
 
 class UnitExtendedSerializer(serializers.ModelSerializer):
     """
-        Serializer for unit extended
+    Serializer for Unit model
+
+    Extended owner field for view
     """
     owner = ResidentSerializer(many=False, read_only=True)
     
@@ -106,7 +120,7 @@ class UnitExtendedSerializer(serializers.ModelSerializer):
 
 class UnitActivitySerializer(serializers.ModelSerializer):
     """
-        Serializer for unit activity
+    Base serializer for UnitActivity model
     """
 
     class Meta:
@@ -116,7 +130,9 @@ class UnitActivitySerializer(serializers.ModelSerializer):
 
 class UnitActivityNonNestedSerializer(serializers.ModelSerializer):
     """
-        Serializer for unit activity non nested
+    Serializer for UnitActivity
+
+    Extended unit and activity_by fields for view
     """
     unit = UnitNoSerializer(read_only=True)
     activity_by = CustomUserEmailSerializer(read_only=True)
@@ -130,7 +146,9 @@ class UnitActivityNonNestedSerializer(serializers.ModelSerializer):
 
 class UnitActivityNestedSerializer(serializers.ModelSerializer):
     """
-        Serializer for unit activity nested
+    Serializer for UnitActivity model
+
+    Extended activity_by field for view
     """
     activity_by = CustomUserEmailSerializer(read_only=True)
 
@@ -144,7 +162,7 @@ class UnitActivityNestedSerializer(serializers.ModelSerializer):
 
 class ParkingLotSerializer(serializers.ModelSerializer):
     """
-        Serializer for parking lot
+    Base serializer for ParkingLot model
     """
     
     class Meta:
@@ -155,7 +173,9 @@ class ParkingLotSerializer(serializers.ModelSerializer):
 
 class ParkingLotExtendedSerializer(serializers.ModelSerializer):
     """
-        Serializer for parking lot extended
+    Serializer for ParkingLot model
+
+    Extended block and floor fields for view
     """
     block = BlockNoSerializer(many=False, read_only=True)
     floor = FloorNoSerializer(many=False, read_only=True)
@@ -167,7 +187,7 @@ class ParkingLotExtendedSerializer(serializers.ModelSerializer):
 
 class ParkingLotPassSerializer(serializers.ModelSerializer):
     """
-        Serializer for parking lot pass
+    Base serializer for ParkingLotPass model
     """
     
     class Meta:
@@ -177,7 +197,9 @@ class ParkingLotPassSerializer(serializers.ModelSerializer):
 
 class ParkingLotPassCurrentSerializer(serializers.ModelSerializer):
     """
-        Serializer for parking lot pass
+    Serializer for ParkingLotPass model
+
+    Extended resident and vehicle fields for view
     """
     resident = ResidentSerializer(many=False, read_only=True)
     vehicle = ResidentVehicleSerializer(many=False, read_only=True)

@@ -1,4 +1,3 @@
-from django.utils.timezone import now
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
@@ -8,15 +7,19 @@ from units.serializers import UnitNoSerializer
 from users.serializers import CustomUserEmailSerializer
 
 from .models import (
-    TicketStatus, TicketPriority, TicketCategory,
-    TicketTag, Ticket, TicketActivity, TicketComment
+    TicketStatus,
+    TicketTag,
+    Ticket,
+    TicketActivity,
+    TicketComment
 )
 
 
 class TicketTagSerializer(serializers.ModelSerializer):
     """
-        Serializer for ticket tag
+    Base serializer for TicketTag model
     """
+
     class Meta:
         model = TicketTag
         fields = '__all__'
@@ -25,8 +28,9 @@ class TicketTagSerializer(serializers.ModelSerializer):
 
 class TicketSerializer(serializers.ModelSerializer):
     """
-        Serializer for ticket
+    Base serializer for Ticket model
     """
+
     class Meta:
         model = Ticket
         fields = '__all__'
@@ -35,8 +39,9 @@ class TicketSerializer(serializers.ModelSerializer):
 
 class TicketStatusSerializer(serializers.ModelSerializer):
     """
-        Serializer for update status action
+    Serializer for update status action
     """
+
     status = serializers.ChoiceField(required=True, choices=TicketStatus.choices, allow_null=False)
     notes = serializers.CharField(required=True, allow_null=False)
     
@@ -48,8 +53,9 @@ class TicketStatusSerializer(serializers.ModelSerializer):
 
 class TicketActivitySerializer(serializers.ModelSerializer):
     """
-        Serializer for ticket activity
+    Base serializer for TicketActivity model
     """
+
     class Meta:
         model = TicketActivity
         fields = '__all__'
@@ -68,7 +74,7 @@ class TicketActivitySerializer(serializers.ModelSerializer):
 
 class TicketCommentSerializer(serializers.ModelSerializer):
     """
-        Serializer for ticket comment
+    Base serializer for TicketComment model
     """
     class Meta:
         model = TicketComment
@@ -78,8 +84,9 @@ class TicketCommentSerializer(serializers.ModelSerializer):
 
 class TicketCommentExtendedSerializer(serializers.ModelSerializer):
     """
-        Serializer for ticket comment extended
+    Extended serializer for TicketComment model
     """
+
     created_by = CustomUserEmailSerializer(many=False, read_only=True)
     
     class Meta:
@@ -90,8 +97,9 @@ class TicketCommentExtendedSerializer(serializers.ModelSerializer):
 
 class TicketExtendedSerializer(serializers.ModelSerializer):
     """
-        Serializer for extended ticket
+    Extended serializer for Ticket model
     """
+    
     ticket_activities = TicketActivitySerializer(many=True, read_only=True)
     unit = UnitNoSerializer(many=False, read_only=True)
     assignee = CustomUserEmailSerializer(many=False, read_only=True)

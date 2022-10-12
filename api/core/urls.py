@@ -26,19 +26,18 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from users.auth import (
-    MyCheckEmailVerificationView,
+from utils.auth.views import (
     MyLoginView,
     MyLogoutView,
-    MyResendVerificationView,
-    MyTokenObtainPairView,
-    MyTokenRefreshView,
-    MyTokenVerifyView,
     MyPasswordChangeView,
     MyPasswordResetView,
     MyPasswordResetConfirmView,
+    MyTokenRefreshView,
+    MyTokenVerifyView,
+    MyResendVerificationView,
     MyVerifyEmailView
 )
+
 
 class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
     pass
@@ -149,7 +148,6 @@ urlpatterns = [
     path('auth/registration/admin/', AdminCustomRegisterView.as_view(), name='admin_register'),
     path('auth/registration/resident/', ResidentCustomRegisterView.as_view(), name='resident_register'),
     path('auth/registration/verify-email/', MyVerifyEmailView.as_view(), name='account_email_verification_sent'),
-    path('auth/registration/check-email-verification/', MyCheckEmailVerificationView.as_view(), name='check_verification'),
     path('auth/registration/resend-verification/', MyResendVerificationView.as_view(), name='resend_verification'),
     re_path(r'^auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(),
         name='account_confirm_email'),
@@ -161,7 +159,6 @@ urlpatterns = [
 
     re_path(r'v1/', include(router.urls)),
     # re_path(r'auth/', include('dj_rest_auth.urls')),
-    re_path('auth/obtain/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     re_path('auth/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
     re_path('auth/verify/', MyTokenVerifyView.as_view(), name='token_verify'),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),

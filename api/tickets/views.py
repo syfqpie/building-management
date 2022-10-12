@@ -1,5 +1,10 @@
 import calendar
 
+from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.utils.timezone import now
+from django.utils.decorators import method_decorator
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,46 +13,44 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from django.db.models import Count, Q, Sum
-from django.http import JsonResponse
-from django.utils.timezone import now
-from django.utils.decorators import method_decorator
-
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 
-from core.helpers import dict_snake_to_camel, camel_to_capitalize
+from utils.auth.permissions import IsAdminStaff
+from utils.helpers import dict_snake_to_camel, camel_to_capitalize
 
-from users.models import UserType
-from users.permissions import IsAdminStaff, IsSuperAdmin
-
+from .docs import (
+    DocuConfigTicketTag,
+    DocuConfigTicket,
+    DocuConfigTicketActivity,
+    DocuConfigTicketComment
+)
 from .models import (
-    TicketPriority, TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
+    TicketPriority,
+    TicketStatus,
+    TicketTag,
+    Ticket,
+    TicketActivity,
+    TicketComment
 )
 from .serializers import (
-    TicketCommentExtendedSerializer, TicketExtendedSerializer, TicketTagSerializer, TicketSerializer,
-    TicketActivitySerializer, TicketCommentSerializer,
+    TicketCommentExtendedSerializer,
+    TicketExtendedSerializer,
+    TicketTagSerializer,
+    TicketSerializer,
+    TicketActivitySerializer,
+    TicketCommentSerializer,
     TicketStatusSerializer
 )
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Get ticket tags',
-    operation_description='List all ticket tags'
-))
-@method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Get ticket tag',
-    operation_description='Retrieve ticket tag information'
-))
-@method_decorator(name='create', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Create a ticket tag',
-    operation_description='Create a new ticket tag'
-))
-@method_decorator(name='partial_update', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Edit ticket tag',
-    operation_description='Edit ticket tag information'
-))
+@method_decorator(name='list', decorator=DocuConfigTicketTag.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigTicketTag.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigTicketTag.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigTicketTag.PARTIAL_UPDATE)
 class TicketTagViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for TicketTag model"""
+    
     queryset = TicketTag.objects.all()
     serializer_class = TicketTagSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -69,31 +72,25 @@ class TicketTagViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Tickets'], operation_id='Get tickets',
-    operation_description='List all tickets'
-))
-@method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Tickets'], operation_id='Get ticket',
-    operation_description='Retrieve ticket information'
-))
-@method_decorator(name='create', decorator=swagger_auto_schema(
-    tags=['Tickets'], operation_id='Create a ticket',
-    operation_description='Create a new ticket'
-))
-@method_decorator(name='partial_update', decorator=swagger_auto_schema(
-    tags=['Tickets'], operation_id='Edit ticket',
-    operation_description='Edit ticket information'
-))
+@method_decorator(name='list', decorator=DocuConfigTicket.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigTicket.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigTicket.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigTicket.PARTIAL_UPDATE)
 class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for Ticket model"""
+
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
     serializer_class_validator = {
@@ -121,16 +118,20 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
-        # Check serializer class by action
+        """Override get_serializer_class for default action"""
+
         if hasattr(self, 'serializer_class_admin'):
             return self.serializer_class_admin.get(self.action, self.serializer_class)
 
         # Return original class
         return super().get_serializer_class()
     
-    # For validation only
     def get_serializer_validator_class(self):
-        # Check serializer validation class by action
+        """
+        Override get_serializer_validator_class for
+        serializer validation class by action
+        """
+
         if hasattr(self, 'serializer_class_validator'):
             return self.serializer_class_validator.get(self.action, self.serializer_class)
 
@@ -138,19 +139,22 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
-        # Saving user to created_by
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
-        # Saving user to last_modified_by
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
     
     def get_serializer(self, *args, **kwargs):
+        """Override get_serializer to get serializer validator"""
+
         is_partial = kwargs.get('partial', None)
 
-        # Check to get serializer validator
         if self.action == 'update_status' and not is_partial == None:
             serializer_class = self.get_serializer_validator_class()
             kwargs.setdefault('context', self.get_serializer_context())
@@ -159,21 +163,21 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         # Return default method
         return super().get_serializer(*args, **kwargs)
     
-    # Get extended ticket
-    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket extended',
-        operation_description='Get ticket extended information')
+    @swagger_auto_schema(**DocuConfigTicket.RETRIEVE_EXT.value)
     @action(methods=['GET'], detail=True, url_path='extended')
     def retrieve_ext(self, request, *args, **kwargs):
+        """Get extended ticket"""
+
         ticket = self.get_object()
         serializer = self.get_serializer(ticket, many=False)
         return Response(serializer.data)
     
-    # Update status
-    @swagger_auto_schema(tags=['Tickets'], operation_id='Update ticket status',
-        operation_description='Update a ticket status')
+    @swagger_auto_schema(**DocuConfigTicket.UPDATE_STATUS.value)
     @action(methods=['PATCH'], detail=True, url_path='update-status')
     def update_status(self, request, *args, **kwargs):
-        # Get ticket instance
+        """Update ticket status"""
+
+        # Instantiate ticket
         ticket = self.get_object()
 
         # Serialize and check if form is valid
@@ -212,20 +216,21 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Get ticket overview
-    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket overview',
-        operation_description='Get ticket overview information')
+    @swagger_auto_schema(**DocuConfigTicket.OVERVIEW.value)
     @action(methods=['GET'], detail=False, url_path='overview')
     def get_overview(self, request, *args, **kwargs):
         """
-            Month over Month growth
+        Get ticket overview
 
-            x = new month
-            y = old month
-            z = difference percentage
-            z = (x - y) / y * 100
-            None = infinty
+        Month over Month growth
+
+        x = new month
+        y = old month
+        z = difference percentage
+        z = (x - y) / y * 100
+        None = infinty
         """
+
         # Get this year's tickets
         current_date = now()
         tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
@@ -283,11 +288,11 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return JsonResponse(dict_snake_to_camel(overview_total))
     
-    # Get ticket status overview
-    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket status overview',
-        operation_description='Get ticket status overview information')
+    @swagger_auto_schema(**DocuConfigTicket.STATUS_OVERVIEW.value)
     @action(methods=['GET'], detail=False, url_path='status-overview')
     def get_status_overview(self, request, *args, **kwargs):
+        """Get ticket status overview"""
+
         # Get this year's tickets
         current_date = now()
         tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
@@ -335,11 +340,11 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         
         return JsonResponse(status_monthly, safe=False)
     
-    # Get ticket priority overview
-    @swagger_auto_schema(tags=['Tickets'], operation_id='Get ticket priority overview',
-        operation_description='Get ticket priority overview information')
+    @swagger_auto_schema(**DocuConfigTicket.PRIORITY_OVERVIEW.value)
     @action(methods=['GET'], detail=False, url_path='priority-overview')
     def get_priority_overview(self, request, *args, **kwargs):
+        """Get ticket priority overview"""
+
         # Get this year's tickets
         current_date = now()
         tickets = Ticket.objects.all().filter(created_at__year=current_date.year)
@@ -363,15 +368,11 @@ class TicketViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return JsonResponse(by_priority, safe=False)
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Ticket Activities'], operation_id='Get ticket activities',
-    operation_description='List all ticket activities'
-))
-@method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Ticket Activities'], operation_id='Get ticket activity',
-    operation_description='Retrieve ticket activity information'
-))
+@method_decorator(name='list', decorator=DocuConfigTicketActivity.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigTicketActivity.RETRIEVE)
 class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    """Viewset for TicketActivity model"""
+
     queryset = TicketActivity.objects.all()
     serializer_class = TicketActivitySerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -385,15 +386,11 @@ class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Ticket Comments'], operation_id='Get ticket comments',
-    operation_description='List all ticket comments'
-))
-@method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Ticket Comments'], operation_id='Get ticket comment',
-    operation_description='Retrieve ticket comment information'
-))
+@method_decorator(name='list', decorator=DocuConfigTicketComment.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigTicketComment.RETRIEVE)
 class TicketCommentViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    """Viewset for TicketComment model"""
+
     queryset = TicketComment.objects.all()
     serializer_class = TicketCommentSerializer
     serializer_class_admin = {
@@ -410,6 +407,8 @@ class TicketCommentViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
+        """Override get_queryset to filter results according to parent_lookup_id or not"""
+
         queryset = self.queryset
 
         # Queryset for nested
@@ -421,18 +420,19 @@ class TicketCommentViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return queryset
     
     def get_serializer_class(self):
-        # Check serializer class by action
+        """Override get_serializer_class for default action"""
+
         if hasattr(self, 'serializer_class_admin'):
             return self.serializer_class_admin.get(self.action, self.serializer_class)
 
         # Return original class
         return super().get_serializer_class()
 
-    # Post comment
-    @swagger_auto_schema(tags=['Ticket Comments'], operation_id='Add comment',
-        operation_description='Add ticket commit')
+    @swagger_auto_schema(**DocuConfigTicketComment.ADD_COMMENT.value)
     @action(methods=['POST'], detail=False, url_path='add-comment')
     def add_comment(self, request, *args, **kwargs):
+        """Post a comment to a ticket"""
+
         # Get ticket instance
         ticket_id = kwargs.get('parent_lookup_id', None)
 
