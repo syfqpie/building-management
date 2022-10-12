@@ -29,11 +29,6 @@ from dj_rest_auth.views import (
 
 from drf_yasg.utils import swagger_auto_schema
 
-from users.serializers import (
-    CustomResendVerificationSerializer,
-    CustomSetPasswordSerializer,
-    CustomVerifyEmailSerializer
-)
 from users.models import (
     CustomUser
 )
@@ -52,7 +47,12 @@ from .docs import (
     DocuConfigVerifyEmail,
     DocuConfigPasswordChange
 )
-from .serializers import MyPasswordResetSerializer
+from .serializers import (
+    MyResendVerificationSerializer,
+    MyVerifyEmailSerializer,
+    MySetPasswordSerializer,
+    MyPasswordResetSerializer
+)
 
 
 @method_decorator(name='post', decorator=DocuConfigLogin.POST)
@@ -147,7 +147,7 @@ class MyResendVerificationView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         # Check email existance first
         try:
-            serializer = CustomResendVerificationSerializer(data=request.data)
+            serializer = MyResendVerificationSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = CustomUser.objects.get(email=serializer.validated_data['email'])
             email_address = EmailAddress.objects.get(email=serializer.validated_data['email'])
@@ -177,7 +177,7 @@ class MyVerifyEmailView(VerifyEmailView):
     @swagger_auto_schema(**DocuConfigVerifyEmail.POST.value)
     def post(self, request, *args, **kwargs):
         # Email form validation
-        serializers = CustomVerifyEmailSerializer(data=request.data)
+        serializers = MyVerifyEmailSerializer(data=request.data)
         serializers.is_valid(raise_exception=True)
 
         # Get email instance
@@ -196,7 +196,7 @@ class MyVerifyEmailView(VerifyEmailView):
         user.activated_at = datetime.now(timezone.utc)
 
         # Password validation
-        set_password_serializer = CustomSetPasswordSerializer(
+        set_password_serializer = MySetPasswordSerializer(
             data={
                 'new_password1': request.data['new_password1'],
                 'new_password2': request.data['new_password2']
