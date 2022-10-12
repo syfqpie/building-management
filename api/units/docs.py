@@ -178,7 +178,13 @@ class DocuConfigBlock(enum.Enum):
                 description='Ok',
                 schema=openapi.Schema(
                     type=openapi.TYPE_OBJECT,
-                    properties=BLOCK_OBJS
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Block activated'
+                        )
+                    }
                 )
             ),
             status.HTTP_403_FORBIDDEN: openapi.Response(
@@ -205,7 +211,13 @@ class DocuConfigBlock(enum.Enum):
                 description='Ok',
                 schema=openapi.Schema(
                     type=openapi.TYPE_OBJECT,
-                    properties=BLOCK_OBJS
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Block deactivated'
+                        )
+                    }
                 )
             ),
             status.HTTP_403_FORBIDDEN: openapi.Response(
@@ -307,7 +319,13 @@ class DocuConfigFloor(enum.Enum):
                 description='Ok',
                 schema=openapi.Schema(
                     type=openapi.TYPE_OBJECT,
-                    properties=FLOOR_OBJS
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Floor activated'
+                        )
+                    }
                 )
             ),
             status.HTTP_403_FORBIDDEN: openapi.Response(
@@ -334,7 +352,13 @@ class DocuConfigFloor(enum.Enum):
                 description='Ok',
                 schema=openapi.Schema(
                     type=openapi.TYPE_OBJECT,
-                    properties=FLOOR_OBJS
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Floor deactivated'
+                        )
+                    }
                 )
             ),
             status.HTTP_403_FORBIDDEN: openapi.Response(
