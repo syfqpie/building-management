@@ -1,5 +1,10 @@
 import calendar
 
+from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.utils.timezone import now
+from django.utils.decorators import method_decorator
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,26 +13,33 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets, status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from django.db.models import Count, Q, Sum
-from django.http import JsonResponse
-from django.utils.timezone import now
-from django.utils.decorators import method_decorator
-
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 
+from utils.auth.permissions import IsAdminStaff
 from utils.helpers import dict_snake_to_camel, camel_to_capitalize
 
-from users.models import UserType
-from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
-
-from .docs import DocuConfigTicketTag, DocuConfigTicket, DocuConfigTicketActivity
+from .docs import (
+    DocuConfigTicketTag,
+    DocuConfigTicket,
+    DocuConfigTicketActivity,
+    DocuConfigTicketComment
+)
 from .models import (
-    TicketPriority, TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
+    TicketPriority,
+    TicketStatus,
+    TicketTag,
+    Ticket,
+    TicketActivity,
+    TicketComment
 )
 from .serializers import (
-    TicketCommentExtendedSerializer, TicketExtendedSerializer, TicketTagSerializer, TicketSerializer,
-    TicketActivitySerializer, TicketCommentSerializer,
+    TicketCommentExtendedSerializer,
+    TicketExtendedSerializer,
+    TicketTagSerializer,
+    TicketSerializer,
+    TicketActivitySerializer,
+    TicketCommentSerializer,
     TicketStatusSerializer
 )
 
@@ -374,15 +386,11 @@ class TicketActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Ticket Comments'], operation_id='Get ticket comments',
-    operation_description='List all ticket comments'
-))
-@method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Ticket Comments'], operation_id='Get ticket comment',
-    operation_description='Retrieve ticket comment information'
-))
+@method_decorator(name='list', decorator=DocuConfigTicketComment.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigTicketComment.RETRIEVE)
 class TicketCommentViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    """Viewset for TicketComment model"""
+
     queryset = TicketComment.objects.all()
     serializer_class = TicketCommentSerializer
     serializer_class_admin = {
@@ -399,6 +407,8 @@ class TicketCommentViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
+        """Override get_queryset to filter results according to parent_lookup_id or not"""
+
         queryset = self.queryset
 
         # Queryset for nested
@@ -410,18 +420,19 @@ class TicketCommentViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return queryset
     
     def get_serializer_class(self):
-        # Check serializer class by action
+        """Override get_serializer_class for default action"""
+
         if hasattr(self, 'serializer_class_admin'):
             return self.serializer_class_admin.get(self.action, self.serializer_class)
 
         # Return original class
         return super().get_serializer_class()
 
-    # Post comment
-    @swagger_auto_schema(tags=['Ticket Comments'], operation_id='Add comment',
-        operation_description='Add ticket commit')
+    @swagger_auto_schema(**DocuConfigTicketComment.ADD_COMMENT.value)
     @action(methods=['POST'], detail=False, url_path='add-comment')
     def add_comment(self, request, *args, **kwargs):
+        """Post a comment to a ticket"""
+
         # Get ticket instance
         ticket_id = kwargs.get('parent_lookup_id', None)
 

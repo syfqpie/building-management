@@ -1,5 +1,4 @@
 import enum
-from urllib import request
 
 from rest_framework import status
 from drf_yasg import openapi
@@ -13,6 +12,7 @@ from .models import TicketStatus, TicketCategory, TicketPriority
 TICKET_TAG_TAG = 'Ticket tags'
 TICKET_TAG = 'Tickets'
 TICKET_ACTIVITY_TAG = 'Ticket activities'
+TICKET_COMMENT_TAG = 'Ticket comments'
 TICKET_TAG_OBJS = {
     'id': openapi.Schema(
         type=openapi.TYPE_INTEGER,
@@ -209,6 +209,54 @@ TICKET_ACTIVITY_OBJS = {
         description='Activity entry created by ID',
         read_only=True,
         example=1
+    )
+}
+TICKET_COMMENT_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Comment ID',
+        read_only=True,
+        example=1
+    ),
+    'ticket': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Related ticket ID',
+        example=1
+    ),
+    'replyTo': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Replied to ticket comment ID',
+        example=1
+    ),
+    'comment': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='All settled',
+        example='Urgent'
+    ),
+    'createdAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry creation date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'createdBy': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        description='Commenter information',
+        read_only=True,
+        properties={
+            'id': openapi.Schema(
+                type=openapi.TYPE_INTEGER,
+                description='Commenter ID',
+                read_only=True,
+                example=1
+            ),
+            'email': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='Commenter email',
+                read_only=True,
+                example='user@example.com'
+            ),
+        }
     )
 }
 OVERVIEW_OBJS = {
@@ -575,3 +623,82 @@ class DocuConfigTicketActivity(enum.Enum):
         },
         tags=[TICKET_ACTIVITY_TAG], 
     )
+
+
+class DocuConfigTicketComment(enum.Enum):
+    """TicketCommentView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List ticket comments',
+        operation_description='List all ticket comments',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=TICKET_COMMENT_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[TICKET_COMMENT_TAG], 
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a ticket comment',
+        operation_description='Retrieve a ticket comment information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=TICKET_COMMENT_OBJS
+                )
+            )
+        },
+        tags=[TICKET_COMMENT_TAG], 
+    )
+    ADD_COMMENT = {
+        'operation_id': 'Add comment',
+        'operation_description': 'Add comment to ticket',
+        'request_body': openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['ticket', 'comment'],
+            properties={
+                'ticket': openapi.Schema(
+                    type=openapi.TYPE_INTEGER,
+                    description='Related ticket to comment',
+                    example=1
+                ),
+                'replyTo': openapi.Schema(
+                    type=openapi.TYPE_INTEGER,
+                    description='Related comment to reply to',
+                    example=2
+                ),
+                'comment': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Comment to submit',
+                    example='Finished all tasks'
+                )
+            }
+        ),
+        'responses': {
+            status.HTTP_201_CREATED: openapi.Response(
+                description='Created',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            example='Comment added'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [TICKET_COMMENT_TAG]
+    }
