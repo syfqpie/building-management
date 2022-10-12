@@ -6,6 +6,9 @@ from .models import Unit, UnitActivity
 
 @receiver(post_save, sender=Unit, dispatch_uid='create_unit_activity')
 def create_unit_activity(sender, created, **kwargs):
+    """Create unit activity signal"""
+
+    # Append values
     update_fields = kwargs.get('update_fields', None)
     instance = kwargs.get('instance', None)
     activity_setup = getattr(instance, '_activity_setup', None)
