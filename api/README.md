@@ -11,16 +11,17 @@ To be updated
 Create virtual environment
 
 ```bash
-  virtualenv env --python=python3
+  virtualenv env --python=python3 --copies
 ```
 
-Get into your created virtual environment Windows
+Get into your created virtual environment - Windows
 
 ```bash
   env\Scripts\activate
 ```
 
-Macbook / Ubuntu
+Get into your created virtual environment - Mac / Ubuntu
+
 ```bash
   source env/bin/activate
 ```
@@ -29,6 +30,24 @@ Install all packages from requirements.txt
 
 ```bash
   pip install -r requirements.txt
+```
+
+Make migrations
+
+```bash
+  python manage.py makemigrations
+```
+
+Migrate the migrations
+
+```bash
+  python manage.py migrate
+```
+
+Create superuser
+
+```bash
+  python manage.py createsuperuser
 ```
 
 Run the django rest framework
