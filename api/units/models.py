@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 from django.db import models
 from rest_framework.exceptions import PermissionDenied
 
-from utils.helpers import PathAndRename
-
 from residents.models import Resident, ResidentVehicle, VehicleType
 from users.models import CustomUser, UserType
+from utils.helpers import PathAndRename
 
 
 class ActivityType(models.IntegerChoices):
@@ -334,6 +331,7 @@ class ParkingLot(models.Model):
 
 class ParkingLotPass(models.Model):
     """Parking lot pass model"""
+    
     id = models.AutoField(primary_key=True, editable=False)
     access_card_no = models.CharField(max_length=25)
 

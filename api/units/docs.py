@@ -20,7 +20,7 @@ PARKING_LOT_TAG = 'Parking lots'
 PARKING_LOT_PASS_TAG = 'Parking lot passes'
 BLOCK_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Block ID',
         read_only=True,
         example=1
@@ -50,20 +50,20 @@ BLOCK_OBJS = {
     ),
     'createdBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Block entry created by',
+        description='Block entry created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Block entry last modified by',
+        description='Block entry last modified by ID',
         read_only=True,
         example=1
     )
 }
 FLOOR_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Floor ID',
         read_only=True,
         example=1
@@ -93,20 +93,20 @@ FLOOR_OBJS = {
     ),
     'createdBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Floor entry created by',
+        description='Floor entry created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Floor entry last modified by',
+        description='Floor entry last modified by ID',
         read_only=True,
         example=1
     )
 }
 UNIT_NUMBER_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Unit number ID',
         read_only=True,
         example=1
@@ -136,20 +136,20 @@ UNIT_NUMBER_OBJS = {
     ),
     'createdBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit number entry created by',
+        description='Unit number entry created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit number entry last modified by',
+        description='Unit number entry last modified by ID',
         read_only=True,
         example=1
     )
 }
 UNIT_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Unit ID',
         read_only=True,
         example=1
@@ -167,22 +167,22 @@ UNIT_OBJS = {
     ),
     'block': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit block',
+        description='Unit block ID',
         example=1
     ),
     'floor': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit floor',
+        description='Unit floor ID',
         example=1
     ),
     'unitNumber': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit unit number',
+        description='Unit unit number ID',
         example=1
     ),
     'owner': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit owner',
+        description='Unit owner ID',
         read_only=True,
         example=1
     ),
@@ -212,13 +212,13 @@ UNIT_OBJS = {
     ),
     'createdBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit entry created by',
+        description='Unit entry created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Unit entry last modified by',
+        description='Unit entry last modified by ID',
         read_only=True,
         example=1
     )
@@ -233,7 +233,7 @@ UNIT_EXT_OBJS = {
 }
 UNIT_ACTIVITY_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Activity ID',
         read_only=True,
         example=1
@@ -244,7 +244,7 @@ UNIT_ACTIVITY_OBJS = {
         read_only=True,
         properties={
             'id': openapi.Schema(
-                type=openapi.TYPE_NUMBER,
+                type=openapi.TYPE_INTEGER,
                 description='Unit ID',
                 read_only=True,
                 example=1
@@ -263,7 +263,7 @@ UNIT_ACTIVITY_OBJS = {
         read_only=True,
         properties={
             'id': openapi.Schema(
-                type=openapi.TYPE_NUMBER,
+                type=openapi.TYPE_INTEGER,
                 description='User ID',
                 read_only=True,
                 example=1
@@ -285,7 +285,7 @@ UNIT_ACTIVITY_OBJS = {
     ),
     'notes': openapi.Schema(
         type=openapi.TYPE_STRING,
-        description='Activity ID',
+        description='Notes',
         read_only=True,
         example='Activated'
     ),
@@ -298,7 +298,7 @@ UNIT_ACTIVITY_OBJS = {
 }
 PARKING_LOT_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Lot ID',
         read_only=True,
         example=1
@@ -317,14 +317,14 @@ PARKING_LOT_OBJS = {
         example=VehicleType.CAR
     ),
     'block': openapi.Schema(
-        type=openapi.TYPE_STRING,
-        description='Lot block',
-        example='A'
+        type=openapi.TYPE_INTEGER,
+        description='Lot block ID',
+        example=1
     ),
     'floor': openapi.Schema(
-        type=openapi.TYPE_STRING,
+        type=openapi.TYPE_INTEGER,
         description='Lot floor',
-        example='2'
+        example=1
     ),
     'isOccupied': openapi.Schema(
         type=openapi.TYPE_BOOLEAN,
@@ -352,13 +352,13 @@ PARKING_LOT_OBJS = {
     ),
     'createdBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Lot created by',
+        description='Lot created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Lot last modified by',
+        description='Lot last modified by ID',
         read_only=True,
         example=1
     )
@@ -369,7 +369,7 @@ PARKING_LOT_EXT_OBJS = {
         description='Lot block information',
         properties={
             'id': openapi.Schema(
-                type=openapi.TYPE_NUMBER,
+                type=openapi.TYPE_INTEGER,
                 description='Block ID',
                 read_only=True,
                 example=1
@@ -387,7 +387,7 @@ PARKING_LOT_EXT_OBJS = {
         description='Lot floor information',
         properties={
             'id': openapi.Schema(
-                type=openapi.TYPE_NUMBER,
+                type=openapi.TYPE_INTEGER,
                 description='Floor ID',
                 read_only=True,
                 example=1
@@ -403,7 +403,7 @@ PARKING_LOT_EXT_OBJS = {
 }
 PARKING_LOT_PASS_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Pass ID',
         read_only=True,
         example=1
@@ -458,13 +458,13 @@ PARKING_LOT_PASS_OBJS = {
     ),
     'createdBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Pass created by',
+        description='Pass created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Pass last modified by',
+        description='Pass last modified by ID',
         read_only=True,
         example=1
     )

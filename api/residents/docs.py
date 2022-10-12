@@ -14,20 +14,20 @@ RESIDENT_TAG = 'Residents'
 VEHICLE_TAG = 'Vehicles'
 RESIDENTS_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Resident ID',
         read_only=True,
         example=1
     ),
     'residentNo': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_STRING,
         description='Resident ID',
         read_only=True,
         example='RSDXXXXX'
     ),
     'isOwner': openapi.Schema(
         type=openapi.TYPE_BOOLEAN,
-        description='Is resident an owner',
+        description='Is resident owner?',
         read_only=True,
         example=False
     ),
@@ -48,7 +48,7 @@ RESIDENTS_OBJS = {
     ),
     'isActive': openapi.Schema(
         type=openapi.TYPE_BOOLEAN,
-        description='Is resident is active',
+        description='Is resident active?',
         read_only=True,
         example=False
     ),
@@ -86,33 +86,33 @@ RESIDENTS_EXT_OBJS = {
         example='2019-08-24T14:15:22Z'
     ),
     'residentUser': openapi.Schema(
-        type=openapi.TYPE_STRING,
+        type=openapi.TYPE_INTEGER,
         description='Resident user ID',
         read_only=True,
         example=1
     ),
     'createdBy': openapi.Schema(
-        type=openapi.TYPE_STRING,
-        description='Resident entry created by',
+        type=openapi.TYPE_INTEGER,
+        description='Resident entry created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedAt': openapi.Schema(
-        type=openapi.TYPE_BOOLEAN,
+        type=openapi.TYPE_STRING,
         description='Entry last modified date and time',
         read_only=True,
         example='2019-08-24T14:15:22Z'
     ),
     'lastModifiedBy': openapi.Schema(
-        type=openapi.TYPE_BOOLEAN,
-        description='Resident entry last modified by',
+        type=openapi.TYPE_INTEGER,
+        description='Resident entry last modified by ID',
         read_only=True,
         example=1
     )
 }
 VEHICLE_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Vehicle ID',
         read_only=True,
         example=1
@@ -137,7 +137,7 @@ VEHICLE_OBJS = {
     ),
     'resident': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Vehicle owner',
+        description='Vehicle owner ID',
         example=1
     ),
     'createdAt': openapi.Schema(
@@ -154,13 +154,13 @@ VEHICLE_OBJS = {
     ),
     'createdBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Vehicle entry created by',
+        description='Vehicle entry created by ID',
         read_only=True,
         example=1
     ),
     'lastModifiedBy': openapi.Schema(
         type=openapi.TYPE_INTEGER,
-        description='Vehicle entry last modified by',
+        description='Vehicle entry last modified by ID',
         read_only=True,
         example=1
     )

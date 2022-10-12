@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,7 +10,6 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from allauth.account.models import EmailAddress
 from drf_yasg.utils import swagger_auto_schema
-from django.utils.decorators import method_decorator
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 

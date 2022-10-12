@@ -1,7 +1,6 @@
-from django.utils.translation import gettext as _
-
-from rest_framework import serializers
 from decouple import config
+from django.utils.translation import gettext as _
+from rest_framework import serializers
 
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.registration.serializers import RegisterSerializer
