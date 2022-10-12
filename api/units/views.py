@@ -21,7 +21,8 @@ from .docs import (
     DocuConfigBlock,
     DocuConfigFloor,
     DocuConfigUnitNumber,
-    DocuConfigUnit
+    DocuConfigUnit,
+    DocuConfigUnitActivity
 )
 from .models import (
     Block, Floor, UnitNumber,
@@ -635,7 +636,11 @@ class UnitViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return JsonResponse(data_)
 
 
+@method_decorator(name='list', decorator=DocuConfigUnitActivity.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigUnitActivity.RETRIEVE)
 class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    """Viewset for UnitActivity model"""
+
     queryset = UnitActivity.objects.all()
     serializer_class = UnitActivityNestedSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -649,6 +654,8 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return [permission() for permission in permission_classes]
     
     def get_queryset(self):
+        """Override get_queryset to filter results according to parent_lookup_id or not"""
+
         queryset = self.queryset
 
         # Queryset for nested
@@ -659,8 +666,9 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
 
         return queryset
 
-    # Override get_serializer_class for default action
     def get_serializer_class(self):
+        """Override get_serializer_class for default action"""
+
         # Get serializer for non nested
         if 'parent_lookup_id' not in self.kwargs:
             return UnitActivityNonNestedSerializer
@@ -670,10 +678,11 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         # Return original class
         return super().get_serializer_class()
 
-
-    # Get unit activity overview
     @action(methods=['GET'], detail=False, url_path='overview')
+    @swagger_auto_schema(**DocuConfigUnitActivity.OVERVIEW.value)
     def get_overview(self, request, *args, **kwargs):
+        """Get unit activity overview"""
+
         # Get this year's activities
         current_date = now()
         activities = UnitActivity.objects.all().filter(activity_at__year=current_date.year)

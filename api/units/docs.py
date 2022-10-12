@@ -7,11 +7,15 @@ from drf_yasg.utils import swagger_auto_schema
 from residents.docs import RESIDENTS_EXT_OBJS, RESIDENTS_OBJS
 from utils.helpers import DjangoFilterDescriptionInspector
 
+from .models import ActivityType
+
+
 # Constant
 BLOCK_TAG = 'Blocks'
 FLOOR_TAG = 'Floors'
 UNIT_NUMBER_TAG = 'Unit numbers'
 UNIT_TAG = 'Units'
+UNIT_ACTIVITY_TAG = 'Unit activities'
 BLOCK_OBJS = {
     'id': openapi.Schema(
         type=openapi.TYPE_NUMBER,
@@ -224,6 +228,71 @@ UNIT_EXT_OBJS = {
         read_only=True,
         properties=RESIDENTS_OBJS | RESIDENTS_EXT_OBJS
     ),
+}
+UNIT_ACTIVITY_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_NUMBER,
+        description='Activity ID',
+        read_only=True,
+        example=1
+    ),
+    'unit': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        description='Unit information',
+        read_only=True,
+        properties={
+            'id': openapi.Schema(
+                type=openapi.TYPE_NUMBER,
+                description='Unit ID',
+                read_only=True,
+                example=1
+            ),
+            'unitNo': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='Unit no.',
+                read_only=True,
+                example='A-1-1'
+            )
+        }
+    ),
+    'activityBy': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        description='Entry activity by',
+        read_only=True,
+        properties={
+            'id': openapi.Schema(
+                type=openapi.TYPE_NUMBER,
+                description='User ID',
+                read_only=True,
+                example=1
+            ),
+            'email': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='User email',
+                read_only=True,
+                example='user@example.com'
+            )
+        }
+    ),
+    'activityType': openapi.Schema(
+        type=openapi.TYPE_NUMBER,
+        description='Activity type',
+        enum=ActivityType.choices,
+        read_only=True,
+        example=ActivityType.ACTIVATE
+    ),
+    'notes': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Activity ID',
+        read_only=True,
+        example='Activated'
+    ),
+    'activityAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry activity date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    )
 }
 
 
@@ -986,3 +1055,69 @@ class DocuConfigUnit(enum.Enum):
         },
         'tags': [UNIT_TAG]
     }
+
+
+class DocuConfigUnitActivity(enum.Enum):
+    """UnitActivityView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List all units activities',
+        operation_description='List all units activities information',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=UNIT_ACTIVITY_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[UNIT_ACTIVITY_TAG]
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a unit activity',
+        operation_description='Retrieve a unit activity information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=UNIT_ACTIVITY_OBJS
+                )
+            )
+        },
+        tags=[UNIT_ACTIVITY_TAG]
+    )
+    OVERVIEW = {
+        'operation_id': 'Unit activity overview',
+        'operation_description': 'Get unit activity overview',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'name': openapi.Schema(
+                            description='Activity name',
+                            type=openapi.TYPE_STRING,
+                            example='Move in'
+                        ),
+                        'value': openapi.Schema(
+                            description='Overview count',
+                            type=openapi.TYPE_INTEGER,
+                            example=4
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [UNIT_ACTIVITY_TAG]
+    }
+
+
