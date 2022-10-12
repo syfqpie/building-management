@@ -1,16 +1,11 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 from django.db import models
 
-from utils.helpers import PathAndRename
-
 from users.models import CustomUser
+from utils.helpers import PathAndRename
 
 
 class Media(models.Model):
-    """
-    Media model class
-    """
+    """Media model"""
 
     id = models.AutoField(primary_key=True, editable=False)
     filename = models.CharField(max_length=100, null=True)

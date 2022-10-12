@@ -6,7 +6,7 @@ from .models import Media
 
 class MediaSerializer(serializers.ModelSerializer):
     """
-    Serializer for Media model
+    Base serializer for Media model
     """
     
     class Meta:
