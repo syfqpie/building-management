@@ -21,6 +21,7 @@ from utils.helpers import dict_snake_to_camel, camel_to_capitalize
 from users.models import UserType
 from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
+from .docs import DocuConfigTicketTag
 from .models import (
     TicketPriority, TicketStatus, TicketTag, Ticket, TicketActivity, TicketComment
 )
@@ -31,23 +32,13 @@ from .serializers import (
 )
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Get ticket tags',
-    operation_description='List all ticket tags'
-))
-@method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Get ticket tag',
-    operation_description='Retrieve ticket tag information'
-))
-@method_decorator(name='create', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Create a ticket tag',
-    operation_description='Create a new ticket tag'
-))
-@method_decorator(name='partial_update', decorator=swagger_auto_schema(
-    tags=['Ticket Tags'], operation_id='Edit ticket tag',
-    operation_description='Edit ticket tag information'
-))
+@method_decorator(name='list', decorator=DocuConfigTicketTag.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigTicketTag.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigTicketTag.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigTicketTag.PARTIAL_UPDATE)
 class TicketTagViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for TicketTag model"""
+    
     queryset = TicketTag.objects.all()
     serializer_class = TicketTagSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -69,10 +60,14 @@ class TicketTagViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+        
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
 
