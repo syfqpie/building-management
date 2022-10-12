@@ -52,6 +52,14 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         'user_type',
         'is_active'
     ]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
