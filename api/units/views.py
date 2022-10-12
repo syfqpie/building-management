@@ -17,7 +17,7 @@ from drf_yasg.utils import swagger_auto_schema
 from utils.helpers import camel_to_capitalize
 from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
-from .docs import DocuConfigBlock
+from .docs import DocuConfigBlock, DocuConfigFloor
 from .models import (
     Block, Floor, UnitNumber,
     Unit, UnitActivity, ActivityType,
@@ -126,7 +126,13 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
 
 
+@method_decorator(name='list', decorator=DocuConfigFloor.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigFloor.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigFloor.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigFloor.PARTIAL_UPDATE)
 class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for Floor model"""
+
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -148,21 +154,33 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
 
-    # Activate floor
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigFloor.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate floor
+        
+        Return 403 if already activated
+        """
+
+        # Instantiate floor
         floor = self.get_object()
 
         if floor.is_active is True:
             raise PermissionDenied(detail='Floor is already activated')
         
+        # Update and save
         floor.is_active = True
         floor.save()
 
@@ -174,14 +192,22 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate block
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigFloor.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate floor
+        
+        Return 403 if already deactivated
+        """
+
+        # Instantiate floor
         floor = self.get_object()
 
         if floor.is_active is False:
             raise PermissionDenied(detail='Floor is already deactivated')
         
+        # Update and save
         floor.is_active = False
         floor.save()
 

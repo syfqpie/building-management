@@ -8,6 +8,7 @@ from utils.helpers import DjangoFilterDescriptionInspector
 
 # Constant
 BLOCK_TAG = 'Blocks'
+FLOOR_TAG = 'Floors'
 BLOCK_OBJS = {
     'id': openapi.Schema(
         type=openapi.TYPE_NUMBER,
@@ -23,6 +24,49 @@ BLOCK_OBJS = {
     'isActive': openapi.Schema(
         type=openapi.TYPE_BOOLEAN,
         description='Is block active?',
+        read_only=True,
+        example=True
+    ),
+    'createdAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry creation date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'lastModifiedAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry last modified date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'createdBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Block entry created by',
+        read_only=True,
+        example=1
+    ),
+    'lastModifiedBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Block entry last modified by',
+        read_only=True,
+        example=1
+    )
+}
+FLOOR_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_NUMBER,
+        description='Floor ID',
+        read_only=True,
+        example=1
+    ),
+    'floor': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Floor',
+        example='1'
+    ),
+    'isActive': openapi.Schema(
+        type=openapi.TYPE_BOOLEAN,
+        description='Is floor active?',
         read_only=True,
         example=True
     ),
@@ -179,5 +223,134 @@ class DocuConfigBlock(enum.Enum):
             )
         },
         'tags': [BLOCK_TAG]
+    }
+    
+
+class DocuConfigFloor(enum.Enum):
+    """FloorView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List all floors',
+        operation_description='List all floors information',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=FLOOR_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[FLOOR_TAG]
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a floor',
+        operation_description='Retrieve a floor information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=FLOOR_OBJS
+                )
+            )
+        },
+        tags=[FLOOR_TAG]
+    )
+    CREATE = swagger_auto_schema(
+        operation_id='Create floor',
+        operation_description='Create a new floor entry',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=FLOOR_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=FLOOR_OBJS
+                )
+            )
+        },
+        tags=[FLOOR_TAG]
+    )
+    PARTIAL_UPDATE = swagger_auto_schema(
+        operation_id='Patch floor',
+        operation_description='Partial update a floor entry',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=FLOOR_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=FLOOR_OBJS
+                )
+            )
+        },
+        tags=[FLOOR_TAG]
+    )
+    ACTIVATE = {
+        'operation_id': 'Activate floor',
+        'operation_description': 'Activate a floor',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=FLOOR_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Floor is already activated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [FLOOR_TAG]
+    }
+    DEACTIVATE = {
+        'operation_id': 'Deactivate floor',
+        'operation_description': 'Deactivate a floor',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=FLOOR_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Floor is already deactivated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [FLOOR_TAG]
     }
     
