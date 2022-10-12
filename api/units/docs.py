@@ -4,11 +4,11 @@ from rest_framework import status
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+from residents.models import VehicleType
 from residents.docs import RESIDENTS_EXT_OBJS, RESIDENTS_OBJS
 from utils.helpers import DjangoFilterDescriptionInspector
 
 from .models import ActivityType
-
 
 # Constant
 BLOCK_TAG = 'Blocks'
@@ -16,6 +16,7 @@ FLOOR_TAG = 'Floors'
 UNIT_NUMBER_TAG = 'Unit numbers'
 UNIT_TAG = 'Units'
 UNIT_ACTIVITY_TAG = 'Unit activities'
+PARKING_LOT_TAG = 'Parking lots'
 PARKING_LOT_PASS_TAG = 'Parking lot passes'
 BLOCK_OBJS = {
     'id': openapi.Schema(
@@ -293,6 +294,111 @@ UNIT_ACTIVITY_OBJS = {
         description='Entry activity date and time',
         read_only=True,
         example='2019-08-24T14:15:22Z'
+    )
+}
+PARKING_LOT_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_NUMBER,
+        description='Lot ID',
+        read_only=True,
+        example=1
+    ),
+    'lotNo': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Lot no.',
+        read_only=True,
+        example='XXXXX'
+    ),
+    'lotType': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Lot type',
+        enum=VehicleType.choices,
+        default=VehicleType.CAR,
+        example=VehicleType.CAR
+    ),
+    'block': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Lot block',
+        example='A'
+    ),
+    'floor': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Lot floor',
+        example='2'
+    ),
+    'isOccupied': openapi.Schema(
+        type=openapi.TYPE_BOOLEAN,
+        description='Is lot occupied?',
+        read_only=True,
+        example=True
+    ),
+    'isActive': openapi.Schema(
+        type=openapi.TYPE_BOOLEAN,
+        description='Is lot active?',
+        read_only=True,
+        example=True
+    ),
+    'createdAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Lot creation date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'lastModifiedAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Lot last modification date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'createdBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Lot created by',
+        read_only=True,
+        example=1
+    ),
+    'lastModifiedBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Lot last modified by',
+        read_only=True,
+        example=1
+    )
+}
+PARKING_LOT_EXT_OBJS = {
+    'block': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        description='Lot block information',
+        properties={
+            'id': openapi.Schema(
+                type=openapi.TYPE_NUMBER,
+                description='Block ID',
+                read_only=True,
+                example=1
+            ),
+            'block': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='Block',
+                read_only=True,
+                example='A'
+            ),
+        }
+    ),
+    'floor': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        description='Lot floor information',
+        properties={
+            'id': openapi.Schema(
+                type=openapi.TYPE_NUMBER,
+                description='Floor ID',
+                read_only=True,
+                example=1
+            ),
+            'floor': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='Floor',
+                read_only=True,
+                example='1'
+            ),
+        }
     )
 }
 PARKING_LOT_PASS_OBJS = {
@@ -1187,6 +1293,294 @@ class DocuConfigUnitActivity(enum.Enum):
             )
         },
         'tags': [UNIT_ACTIVITY_TAG]
+    }
+
+
+class DocuConfigParkingLot(enum.Enum):
+    """ParkingLotView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List all lots',
+        operation_description='List all lots information',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=PARKING_LOT_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[PARKING_LOT_TAG]
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a lot',
+        operation_description='Retrieve a lot information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_OBJS
+                )
+            )
+        },
+        tags=[PARKING_LOT_TAG]
+    )
+    CREATE = swagger_auto_schema(
+        operation_id='Create lot',
+        operation_description='Create a new lot entry',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=PARKING_LOT_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_OBJS
+                )
+            )
+        },
+        tags=[PARKING_LOT_TAG]
+    )
+    PARTIAL_UPDATE = swagger_auto_schema(
+        operation_id='Patch lot',
+        operation_description='Partial update a lot entry',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=PARKING_LOT_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_OBJS
+                )
+            )
+        },
+        tags=[PARKING_LOT_TAG]
+    )
+    DESTROY = swagger_auto_schema(
+        operation_id='Remove lot',
+        operation_description='Destroy a lot entry',
+        responses={
+            status.HTTP_204_NO_CONTENT: openapi.Response(
+                description='No content',
+                schema=None
+            )
+        },
+        tags=[PARKING_LOT_TAG]
+    )
+    ACTIVATE = {
+        'operation_id': 'Activate lot',
+        'operation_description': 'Activate a lot',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Lot activated'
+                        )
+                    }
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Lot is already activated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [PARKING_LOT_TAG]
+    }
+    DEACTIVATE = {
+        'operation_id': 'Deactivate lot',
+        'operation_description': 'Deactivate a lot',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Lot deactivated'
+                        )
+                    }
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Lot is already deactivated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [PARKING_LOT_TAG]
+    }
+    LIST_EXT = {
+        'operation_id': 'List all lots extended',
+        'operation_description': 'List all lots extended information',
+        'filter_inspectors': [DjangoFilterDescriptionInspector],
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=PARKING_LOT_OBJS | PARKING_LOT_EXT_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        'tags': [PARKING_LOT_TAG]
+    }
+    RETRIEVE_EXT = {
+        'operation_id': 'Retrieve a lot extended',
+        'operation_description': 'Retrieve a lot extended information',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_OBJS | PARKING_LOT_EXT_OBJS
+                )
+            )
+        },
+        'tags': [PARKING_LOT_TAG]
+    }
+    ASSIGN_RESIDENT = {
+        'operation_id': 'Assign resident',
+        'operation_description': 'Assign resident to lot',
+        'request_body': openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['accessCardNo', 'resident', 'vehicle'],
+            properties={
+                'accessCardNo': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Access card no.',
+                    example='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                ),
+                'resident': openapi.Schema(
+                    type=openapi.TYPE_INTEGER,
+                    description='Resident ID',
+                    example=1
+                ),
+                'vehicle': openapi.Schema(
+                    type=openapi.TYPE_INTEGER,
+                    description='Vehicle ID',
+                    example=1
+                ),
+            }
+        ),
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_OBJS | PARKING_LOT_EXT_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Lot is occupied'
+                        ),
+                    }
+                )
+            )
+        },
+        'tags': [PARKING_LOT_TAG]
+    }
+    CHECKOUT_RESIDENT = {
+        'operation_id': 'Checkout resident',
+        'operation_description': 'Checkout resident from lot',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_OBJS | PARKING_LOT_EXT_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Lot is not occupied'
+                        ),
+                    }
+                )
+            )
+        },
+        'tags': [PARKING_LOT_TAG]
+    }
+    CURRENT_PASS = {
+        'operation_id': 'Current pass',
+        'operation_description': 'Get current pass from lot',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_OBJS | PARKING_LOT_EXT_OBJS
+                )
+            ),
+            status.HTTP_404_NOT_FOUND: openapi.Response(
+                description='Not found',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='No pass related'
+                        ),
+                    }
+                )
+            )
+        },
+        'tags': [PARKING_LOT_TAG]
     }
 
 

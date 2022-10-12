@@ -23,6 +23,7 @@ from .docs import (
     DocuConfigUnitNumber,
     DocuConfigUnit,
     DocuConfigUnitActivity,
+    DocuConfigParkingLot,
     DocuConfigParkingLotPass
 )
 from .models import (
@@ -708,7 +709,14 @@ class UnitActivityViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
         return JsonResponse(by_type, safe=False)
 
 
+@method_decorator(name='list', decorator=DocuConfigParkingLot.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigParkingLot.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigParkingLot.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigParkingLot.PARTIAL_UPDATE)
+@method_decorator(name='destroy', decorator=DocuConfigParkingLot.DESTROY)
 class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for ParkingLot model"""
+
     queryset = ParkingLot.objects.all()
     serializer_class = ParkingLotSerializer
     serializer_class_admin = {
@@ -718,6 +726,14 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         'get_current_pass': ParkingLotPassCurrentSerializer
     }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'head',
+        'options',
+        'trace',
+    ]
 
     def get_permissions(self):
         permission_classes = [
@@ -727,8 +743,9 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
     
-    # Override get_serializer_class for default action
     def get_serializer_class(self):
+        """Override get_serializer_class for default action"""
+
         # Check serializer class by action
         if hasattr(self, 'serializer_class_admin'):
             return self.serializer_class_admin.get(self.action, self.serializer_class)
@@ -737,35 +754,51 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return super().get_serializer_class()
     
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
  
-    # Get extended lots
     @action(methods=['GET'], detail=False, url_path='extended')
+    @swagger_auto_schema(**DocuConfigParkingLot.LIST_EXT.value)
     def list_ext(self, request, *args, **kwargs):
+        """Extend list"""
+
         lots = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(lots, many=True)
         return Response(serializer.data)
     
-    # Get extended lot
     @action(methods=['GET'], detail=True, url_path='extended')
+    @swagger_auto_schema(**DocuConfigParkingLot.RETRIEVE_EXT.value)
     def retrieve_ext(self, request, *args, **kwargs):
+        """Extend retrieve"""
+
         lot = self.get_object()
         serializer = self.get_serializer(lot, many=False)
         return Response(serializer.data)
 
-    # Activate lot
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigParkingLot.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate lot
+        
+        Return 403 if already activated
+        """
+
+        # Instantiate lot
         lot = self.get_object()
 
         if lot.is_active is True:
             raise PermissionDenied(detail='Lot is already activated')
         
+        # Update value and save
         lot.is_active = True
         lot.last_modified_at = now()
         lot.last_modified_by = request.user
@@ -783,14 +816,22 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate lot
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigParkingLot.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate lot
+        
+        Return 403 if already deactivated
+        """
+
+        # Instantiate lot
         lot = self.get_object()
 
         if lot.is_active is False:
             raise PermissionDenied(detail='Lot is already deactivated')
         
+        # Update value and save
         lot.is_active = False
         lot.last_modified_at = now()
         lot.last_modified_by = request.user
@@ -808,9 +849,12 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
     
-    # Assign resident
     @action(methods=['POST'], detail=True, url_path='assign-resident')
+    @swagger_auto_schema(**DocuConfigParkingLot.ASSIGN_RESIDENT.value)
     def assign_resident(self, request, *args, **kwargs):
+        """Assign resident to lot"""
+
+        # Instantiate lot
         lot = self.get_object()
 
         # Check if lot is occupied else append lot id to request data
@@ -872,7 +916,11 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     # Checkout resident
     @action(methods=['GET'], detail=True, url_path='checkout-resident')
+    @swagger_auto_schema(**DocuConfigParkingLot.CHECKOUT_RESIDENT.value)
     def checkout_resident(self, request, *args, **kwargs):
+        """Checkout resident from lot"""
+
+        # Instantiate lot
         lot = self.get_object()
         current_pass = lot.lot_passes.first()
         current_time = now()
@@ -911,7 +959,11 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @action(methods=['GET'], detail=True, url_path='get-current-pass')
+    @swagger_auto_schema(**DocuConfigParkingLot.CURRENT_PASS.value)
     def get_current_pass(self, request, *args, **kwargs):
+        """Get lot current pass"""
+
+        # Instantiate lot
         lot = self.get_object()
         
         # Retrieve
