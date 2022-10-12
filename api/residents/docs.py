@@ -5,12 +5,13 @@ from rest_framework import status
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-from residents.models import TitleType, GenderType
+from residents.models import TitleType, GenderType, VehicleType
 from utils.helpers import DjangoFilterDescriptionInspector
 
 # Constant
 AUTH_TAG = 'Authentication'
 RESIDENT_TAG = 'Residents'
+VEHICLE_TAG = 'Vehicles'
 RESIDENTS_OBJS = {
     'id': openapi.Schema(
         type=openapi.TYPE_NUMBER,
@@ -63,7 +64,8 @@ RESIDENTS_EXT_OBJS = {
         type=openapi.TYPE_INTEGER,
         description='Resident title',
         enum=TitleType.choices,
-        example=1
+        default=TitleType.MR,
+        example=TitleType.MRS
     ),
     'nric': openapi.Schema(
         type=openapi.TYPE_STRING,
@@ -74,7 +76,8 @@ RESIDENTS_EXT_OBJS = {
         type=openapi.TYPE_INTEGER,
         description='Resident gender',
         enum=GenderType.choices,
-        example=1
+        default=GenderType.MALE,
+        example=GenderType.FEMALE
     ),
     'lastPaymentAt': openapi.Schema(
         type=openapi.TYPE_STRING,
@@ -107,7 +110,61 @@ RESIDENTS_EXT_OBJS = {
         example=1
     )
 }
-
+VEHICLE_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_NUMBER,
+        description='Vehicle ID',
+        read_only=True,
+        example=1
+    ),
+    'plateNo': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Vehicle plate no.',
+        example='XXXXXXX'
+    ),
+    'vehicleType': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Vehicle type',
+        enum=VehicleType.choices,
+        default=VehicleType.CAR,
+        example=VehicleType.CAR
+    ),
+    'isActive': openapi.Schema(
+        type=openapi.TYPE_BOOLEAN,
+        description='Is vehicle active?',
+        read_only=True,
+        example=True
+    ),
+    'resident': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Vehicle owner',
+        example=1
+    ),
+    'createdAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry creation date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'lastModifiedAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry last modified date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'createdBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Vehicle entry created by',
+        read_only=True,
+        example=1
+    ),
+    'lastModifiedBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Vehicle entry last modified by',
+        read_only=True,
+        example=1
+    )
+}
 
 class DocuConfigResidentCustomRegister(enum.Enum):
     """ResidentCustomRegisterView's drf-yasg documentation configuration"""
@@ -173,8 +230,8 @@ class DocuConfigResident(enum.Enum):
     """ResidentView's drf-yasg documentation configuration"""
 
     LIST = swagger_auto_schema(
-        operation_id='Get all residents',
-        operation_description='Retrieve all residents information',
+        operation_id='List all residents',
+        operation_description='List all residents information',
         filter_inspectors=[DjangoFilterDescriptionInspector],
         responses={
             status.HTTP_200_OK: openapi.Response(
@@ -193,9 +250,8 @@ class DocuConfigResident(enum.Enum):
         tags=[RESIDENT_TAG]
     )
     RETRIEVE = swagger_auto_schema(
-        operation_id='Get resident',
+        operation_id='Retrieve resident',
         operation_description='Retrieve a resident information',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
         responses={
             status.HTTP_200_OK: openapi.Response(
                 description='Ok',
@@ -210,7 +266,6 @@ class DocuConfigResident(enum.Enum):
     PARTIAL_UPDATE = swagger_auto_schema(
         operation_id='Patch resident',
         operation_description='Partial update a resident information',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties=RESIDENTS_OBJS | RESIDENTS_EXT_OBJS
@@ -229,7 +284,6 @@ class DocuConfigResident(enum.Enum):
     DESTROY = swagger_auto_schema(
         operation_id='Delete resident',
         operation_description='Delete a resident',
-        filter_inspectors=[DjangoFilterDescriptionInspector],
         tags=[RESIDENT_TAG]
     )
     ACTIVATE = {
@@ -289,3 +343,132 @@ class DocuConfigResident(enum.Enum):
 
     # Disabled
     CREATE = swagger_auto_schema(auto_schema=None)
+
+
+class DocuConfigResidentVehicle(enum.Enum):
+    """ResidentVehicleView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List all resident vehicles',
+        operation_description='Retrieve all resident vehicles information',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=VEHICLE_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[VEHICLE_TAG]
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a resident vehicle',
+        operation_description='Retrieve a resident vehicle information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=VEHICLE_OBJS
+                )
+            )
+        },
+        tags=[VEHICLE_TAG]
+    )
+    CREATE = swagger_auto_schema(
+        operation_id='Create resident vehicle',
+        operation_description='Create a new resident vehicle entry',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=VEHICLE_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=VEHICLE_OBJS
+                )
+            )
+        },
+        tags=[VEHICLE_TAG]
+    )
+    PARTIAL_UPDATE = swagger_auto_schema(
+        operation_id='Patch resident vehicle',
+        operation_description='Partial update a resident vehicle information',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=VEHICLE_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=VEHICLE_OBJS
+                )
+            )
+        },
+        tags=[VEHICLE_TAG]
+    )
+    ACTIVATE = {
+        'operation_id': 'Activate vehicle',
+        'operation_description': 'Activate a vehicle',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=VEHICLE_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Vehicle is already activated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [VEHICLE_TAG]
+    }
+    DEACTIVATE = {
+        'operation_id': 'Deactivate vehicle',
+        'operation_description': 'Deactivate a vehicle',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=VEHICLE_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Vehicle is already deactivated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [VEHICLE_TAG]
+    }
