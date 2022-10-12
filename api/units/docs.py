@@ -16,6 +16,7 @@ FLOOR_TAG = 'Floors'
 UNIT_NUMBER_TAG = 'Unit numbers'
 UNIT_TAG = 'Units'
 UNIT_ACTIVITY_TAG = 'Unit activities'
+PARKING_LOT_PASS_TAG = 'Parking lot passes'
 BLOCK_OBJS = {
     'id': openapi.Schema(
         type=openapi.TYPE_NUMBER,
@@ -292,6 +293,74 @@ UNIT_ACTIVITY_OBJS = {
         description='Entry activity date and time',
         read_only=True,
         example='2019-08-24T14:15:22Z'
+    )
+}
+PARKING_LOT_PASS_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_NUMBER,
+        description='Pass ID',
+        read_only=True,
+        example=1
+    ),
+    'accessCardNo': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Access card no.',
+        read_only=True,
+        example='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    ),
+    'parkingLot': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Lot ID',
+        read_only=True,
+        example=1
+    ),
+    'resident': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Resident owner ID',
+        read_only=True,
+        example=1
+    ),
+    'vehicle': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Vehicle ID',
+        read_only=True,
+        example=1
+    ),
+    'isActive': openapi.Schema(
+        type=openapi.TYPE_BOOLEAN,
+        description='Is pass active?',
+        read_only=True,
+        example=True
+    ),
+    'startedAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Pass start date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'endedAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Pass end date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'lastModifiedAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Pass last modification date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'createdBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Pass created by',
+        read_only=True,
+        example=1
+    ),
+    'lastModifiedBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Pass last modified by',
+        read_only=True,
+        example=1
     )
 }
 
@@ -1121,3 +1190,40 @@ class DocuConfigUnitActivity(enum.Enum):
     }
 
 
+class DocuConfigParkingLotPass(enum.Enum):
+    """ParkingLotPassView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List all passes',
+        operation_description='List all parking lot passes information',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=PARKING_LOT_PASS_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[PARKING_LOT_PASS_TAG]
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a pass',
+        operation_description='Retrieve a parking lot pass information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=PARKING_LOT_PASS_OBJS
+                )
+            )
+        },
+        tags=[PARKING_LOT_PASS_TAG]
+    )

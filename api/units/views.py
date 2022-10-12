@@ -22,7 +22,8 @@ from .docs import (
     DocuConfigFloor,
     DocuConfigUnitNumber,
     DocuConfigUnit,
-    DocuConfigUnitActivity
+    DocuConfigUnitActivity,
+    DocuConfigParkingLotPass
 )
 from .models import (
     Block, Floor, UnitNumber,
@@ -927,7 +928,11 @@ class ParkingLotViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+@method_decorator(name='list', decorator=DocuConfigParkingLotPass.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigParkingLotPass.RETRIEVE)
 class ParkingLotPassViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    """Viewset for ParkingLotPass model"""
+
     queryset = ParkingLotPass.objects.all()
     serializer_class = ParkingLotPassSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
