@@ -17,7 +17,8 @@ from utils.helpers import NoUnderscoreBeforeNumberCamelCaseJSONParser
 
 from .docs import (
     DocuConfigResident,
-    DocuConfigResidentCustomRegister
+    DocuConfigResidentCustomRegister,
+    DocuConfigResidentVehicle
 )
 from .models import (
     Resident, ResidentVehicle
@@ -168,6 +169,7 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
 @method_decorator(name='post', decorator=DocuConfigResidentCustomRegister.POST)
 class ResidentCustomRegisterView(RegisterView):
+    """"""
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     serializer_class = ResidentCustomRegisterSerializer
 
@@ -180,7 +182,7 @@ class ResidentCustomRegisterView(RegisterView):
         return [permission() for permission in permission_classes]  
 
     def create(self, request, *args, **kwargs):
-
+        """"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -195,7 +197,12 @@ class ResidentCustomRegisterView(RegisterView):
         )
 
 
+@method_decorator(name='list', decorator=DocuConfigResidentVehicle.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigResidentVehicle.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigResidentVehicle.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigResidentVehicle.PARTIAL_UPDATE)
 class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for ResidentVehicle model"""
     queryset = ResidentVehicle.objects.all()
     serializer_class = ResidentVehicleSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -225,18 +232,25 @@ class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
 
-    # Activate vehicle
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Activate vehicle',
-        operation_description='Activate a vehicle', tags=['Vehicles'])
+    @swagger_auto_schema(**DocuConfigResidentVehicle.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate resident
+        
+        Return 403 if already activated
+        """
+        
+        # Instantiate vehicle
         vehicle = self.get_object()
 
         if vehicle.is_active is True:
@@ -249,11 +263,16 @@ class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = self.get_serializer(vehicle, many=False)
         return Response(serializer.data)
 
-    # Deactivate vehicle
     @action(methods=['GET'], detail=True)
-    @swagger_auto_schema(operation_id='Deactivate vehicle',
-        operation_description='Deactivate a vehicle', tags=['Vehicles'])
+    @swagger_auto_schema(**DocuConfigResidentVehicle.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate resident vehicle
+        
+        Return 403 if already deactivated
+        """
+        
+        # Instantiate vehicle
         vehicle = self.get_object()
 
         if vehicle.is_active is False:
