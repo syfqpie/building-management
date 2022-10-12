@@ -1,10 +1,8 @@
-
 from django.db import models
 from rest_framework.exceptions import PermissionDenied
 
 from residents.models import Resident, ResidentVehicle, VehicleType
 from users.models import CustomUser, UserType
-from utils.helpers import PathAndRename
 
 
 class ActivityType(models.IntegerChoices):

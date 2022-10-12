@@ -27,16 +27,27 @@ from .docs import (
     DocuConfigParkingLotPass
 )
 from .models import (
-    Block, Floor, UnitNumber,
-    Unit, UnitActivity, ActivityType,
-    ParkingLot, ParkingLotPass
+    Block,
+    Floor,
+    UnitNumber,
+    Unit,
+    UnitActivity,
+    ActivityType,
+    ParkingLot,
+    ParkingLotPass
 )
 from .serializers import (
-    BlockSerializer, FloorSerializer, UnitNumberSerializer,
-    UnitSerializer, UnitExtendedSerializer,
-    UnitActivityNestedSerializer, UnitActivityNonNestedSerializer,
-    ParkingLotSerializer, ParkingLotExtendedSerializer,
-    ParkingLotPassSerializer, ParkingLotPassCurrentSerializer
+    BlockSerializer,
+    FloorSerializer,
+    UnitNumberSerializer,
+    UnitSerializer,
+    UnitExtendedSerializer,
+    UnitActivityNestedSerializer,
+    UnitActivityNonNestedSerializer,
+    ParkingLotSerializer,
+    ParkingLotExtendedSerializer,
+    ParkingLotPassSerializer,
+    ParkingLotPassCurrentSerializer
 )
 
 

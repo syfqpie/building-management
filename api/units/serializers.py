@@ -6,9 +6,13 @@ from residents.serializers import ResidentSerializer, ResidentVehicleSerializer
 from users.serializers import CustomUserEmailSerializer
 
 from .models import (
-    Block, Floor, UnitNumber,
-    Unit, UnitActivity,
-    ParkingLot, ParkingLotPass
+    Block,
+    Floor,
+    UnitNumber,
+    Unit,
+    UnitActivity,
+    ParkingLot,
+    ParkingLotPass
 )
 
 

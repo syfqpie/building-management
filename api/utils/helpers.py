@@ -37,6 +37,8 @@ class PathAndRename(object):
 
 
 class DjangoFilterDescriptionInspector(CoreAPICompatInspector):
+    """Inspect filter parameters"""
+
     def get_filter_parameters(self, filter_backend):
         if isinstance(filter_backend, DjangoFilterBackend):
             result = super(DjangoFilterDescriptionInspector, self).get_filter_parameters(filter_backend)
@@ -68,11 +70,14 @@ class NoSchemaTitleInspector(FieldInspector):
         # return back the same object that we got - i.e. a reference if we got a reference
         return result
 
+
 class NoTitleAutoSchema(SwaggerAutoSchema):
     field_inspectors = [NoSchemaTitleInspector] + swagger_settings.DEFAULT_FIELD_INSPECTORS
 
 
 class ResultsPagination(PageNumberPagination):
+    """Results pagination configs"""
+
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
@@ -80,6 +85,8 @@ class ResultsPagination(PageNumberPagination):
 
 
 def dict_snake_to_camel(payload_dict):
+    """Convert snake_case to camelCase"""
+
     reg = re.compile(r'_([a-z])')
     for key in list(payload_dict):
         new_key = reg.sub(lambda k: k.group(1).upper(), key)
@@ -89,6 +96,8 @@ def dict_snake_to_camel(payload_dict):
 
 
 def dict_camel_to_snake(payload_dict):
+    """Convert camelCase to snake_case"""
+
     for key in list(payload_dict):
         new_key = re.sub(r'(?<!^)(?=[A-Z])', '_', key).lower()
         payload_dict[new_key] = payload_dict.pop(key)
@@ -97,4 +106,6 @@ def dict_camel_to_snake(payload_dict):
 
 
 def camel_to_capitalize(payload):
+    """Convert camelCase to Capitalize_Case"""
+
     return payload.replace('_', ' ').capitalize()

@@ -3,12 +3,11 @@ from django.utils.timezone import now
 
 from units.models import Unit
 from users.models import CustomUser, UserType
-from rest_framework.exceptions import PermissionDenied
+
 
 class TicketStatus(models.IntegerChoices):
-    """
-        Choices for ticket status
-    """
+    """Ticket status choices"""
+
     OPENED = 1, 'Opened'
     IN_PROGRESS = 2, 'In progress'
     RESOLVED = 3, 'Resolved'
@@ -17,9 +16,8 @@ class TicketStatus(models.IntegerChoices):
 
 
 class TicketPriority(models.IntegerChoices):
-    """
-        Choices for ticket priority
-    """
+    """Ticket priority choices"""
+
     CRIT = 1, 'Critical'
     HIGH = 2, 'High'
     NORMAL = 3, 'Normal'
@@ -28,18 +26,16 @@ class TicketPriority(models.IntegerChoices):
 
 
 class TicketCategory(models.IntegerChoices):
-    """
-        Choices for ticket category
-    """
+    """Ticket category choices"""
+
     SYS = 1, 'System'
     UNIT = 2, 'Unit'
     FACI = 3, 'Facility'
 
 
 class TicketTag(models.Model):
-    """
-        A model for ticket tag
-    """
+    """TicketTag model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     tag = models.CharField(max_length=20)
 
@@ -69,9 +65,8 @@ class TicketTag(models.Model):
 
 
 class Ticket(models.Model):
-    """
-        A model for ticket
-    """
+    """Ticket model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     ticket_no = models.CharField(max_length=100, unique=True, editable=False)
     title = models.CharField(max_length=100)
@@ -126,8 +121,8 @@ class Ticket(models.Model):
 
     def save(self, *args, **kwargs):
         """
-            Generate ticket no
-            Example: TICKET22080003
+        Generate ticket no
+        Example: TICKET22080003
         """
         if not self.ticket_no:
             prefix = 'TICKET{}'.format(now().strftime('%y%m'))
@@ -142,6 +137,8 @@ class Ticket(models.Model):
     
 
 class TicketActivity(models.Model):
+    """TicketActivity model"""
+
     id = models.AutoField(primary_key=True, editable=False)
     ticket = models.ForeignKey(
         Ticket,
@@ -165,6 +162,8 @@ class TicketActivity(models.Model):
 
 
 class TicketComment(models.Model):
+    """TicketComment model"""
+    
     id = models.AutoField(primary_key=True, editable=False)
     ticket = models.ForeignKey(
         Ticket, on_delete=models.CASCADE,

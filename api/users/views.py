@@ -38,9 +38,7 @@ from .serializers import (
 @method_decorator(name='partial_update', decorator=DocuConfigUser.PARTIAL_UPDATE)
 @method_decorator(name='destroy', decorator=DocuConfigUser.DESTROY)
 class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """
-    Viewset for CustomUser model
-    """
+    """Viewset for CustomUser model"""
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
