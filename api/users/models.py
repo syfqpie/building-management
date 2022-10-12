@@ -3,11 +3,15 @@ from django.contrib.auth.models import AbstractUser
 
 
 class UserType(models.IntegerChoices):
+    """User type choices"""
+
     ADMIN = 1, 'Admin'
     PUBLIC = 2, 'Public'
 
 
 class CustomUser(AbstractUser):
+    """CustomUser model"""
+
     # Account information
     id = models.AutoField(primary_key=True, editable=False)
     full_name = models.CharField(max_length=255, blank=True)

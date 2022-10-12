@@ -118,6 +118,7 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         """Override to disable method"""
+        
         response = {'message': 'Not allowed'}
         return Response(response, status=status.HTTP_403_FORBIDDEN)
 
