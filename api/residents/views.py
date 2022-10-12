@@ -169,7 +169,8 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
 @method_decorator(name='post', decorator=DocuConfigResidentCustomRegister.POST)
 class ResidentCustomRegisterView(RegisterView):
-    """"""
+    """Custom view for Resident registration"""
+
     parser_classes = [NoUnderscoreBeforeNumberCamelCaseJSONParser]
     serializer_class = ResidentCustomRegisterSerializer
 
@@ -182,7 +183,8 @@ class ResidentCustomRegisterView(RegisterView):
         return [permission() for permission in permission_classes]  
 
     def create(self, request, *args, **kwargs):
-        """"""
+        """Append custom response message"""
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
