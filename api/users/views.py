@@ -56,6 +56,7 @@ class CustomUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         'get',
         'post',
         'patch',
+        'delete',
         'head',
         'options',
         'trace',
