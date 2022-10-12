@@ -1,0 +1,183 @@
+import enum
+
+from rest_framework import status
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
+from utils.helpers import DjangoFilterDescriptionInspector
+
+# Constant
+BLOCK_TAG = 'Blocks'
+BLOCK_OBJS = {
+    'id': openapi.Schema(
+        type=openapi.TYPE_NUMBER,
+        description='Block ID',
+        read_only=True,
+        example=1
+    ),
+    'block': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Block',
+        example='A'
+    ),
+    'isActive': openapi.Schema(
+        type=openapi.TYPE_BOOLEAN,
+        description='Is block active?',
+        read_only=True,
+        example=True
+    ),
+    'createdAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry creation date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'lastModifiedAt': openapi.Schema(
+        type=openapi.TYPE_STRING,
+        description='Entry last modified date and time',
+        read_only=True,
+        example='2019-08-24T14:15:22Z'
+    ),
+    'createdBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Block entry created by',
+        read_only=True,
+        example=1
+    ),
+    'lastModifiedBy': openapi.Schema(
+        type=openapi.TYPE_INTEGER,
+        description='Block entry last modified by',
+        read_only=True,
+        example=1
+    )
+}
+
+
+class DocuConfigBlock(enum.Enum):
+    """BlockView's drf-yasg documentation configuration"""
+
+    LIST = swagger_auto_schema(
+        operation_id='List all blocks',
+        operation_description='List all blocks information',
+        filter_inspectors=[DjangoFilterDescriptionInspector],
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=[
+                        openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties=BLOCK_OBJS
+                        )
+                    ]
+                )
+            )
+        },
+        tags=[BLOCK_TAG]
+    )
+    RETRIEVE = swagger_auto_schema(
+        operation_id='Retrieve a block',
+        operation_description='Retrieve a block information',
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=BLOCK_OBJS
+                )
+            )
+        },
+        tags=[BLOCK_TAG]
+    )
+    CREATE = swagger_auto_schema(
+        operation_id='Create block',
+        operation_description='Create a new block entry',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=BLOCK_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=BLOCK_OBJS
+                )
+            )
+        },
+        tags=[BLOCK_TAG]
+    )
+    PARTIAL_UPDATE = swagger_auto_schema(
+        operation_id='Patch block',
+        operation_description='Partial update a block entry',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties=BLOCK_OBJS
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=BLOCK_OBJS
+                )
+            )
+        },
+        tags=[BLOCK_TAG]
+    )
+    ACTIVATE = {
+        'operation_id': 'Activate block',
+        'operation_description': 'Activate a block',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=BLOCK_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Block is already activated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [BLOCK_TAG]
+    }
+    DEACTIVATE = {
+        'operation_id': 'Deactivate block',
+        'operation_description': 'Deactivate a block',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=BLOCK_OBJS
+                )
+            ),
+            status.HTTP_403_FORBIDDEN: openapi.Response(
+                description='Forbidden',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='Message detail',
+                            example='Block is already deactivated'
+                        )
+                    }
+                )
+            )
+        },
+        'tags': [BLOCK_TAG]
+    }
+    

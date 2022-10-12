@@ -1,5 +1,6 @@
 from django.db.models import Count, Q
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 
 from rest_framework import viewsets, status
@@ -8,21 +9,20 @@ from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
 
 from utils.helpers import camel_to_capitalize
-
 from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
+from .docs import DocuConfigBlock
 from .models import (
     Block, Floor, UnitNumber,
     Unit, UnitActivity, ActivityType,
     ParkingLot, ParkingLotPass
 )
-
 from .serializers import (
     BlockSerializer, FloorSerializer, UnitNumberSerializer,
     UnitSerializer, UnitExtendedSerializer,
@@ -32,7 +32,13 @@ from .serializers import (
 )
 
 
+@method_decorator(name='list', decorator=DocuConfigBlock.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigBlock.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigBlock.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigBlock.PARTIAL_UPDATE)
 class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for Block model"""
+    
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -54,21 +60,33 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
     
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+        
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
     
-    # Activate block
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigBlock.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate block
+        
+        Return 403 if already activated
+        """
+        
+        # Instantiate block
         block = self.get_object()
 
         if block.is_active is True:
             raise PermissionDenied(detail='Block is already activated')
         
+        # Update and save
         block.is_active = True
         block.save()
 
@@ -80,14 +98,22 @@ class BlockViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate block
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigBlock.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate block
+        
+        Return 403 if already deactivated
+        """
+
+        # Instantiate block
         block = self.get_object()
 
         if block.is_active is False:
             raise PermissionDenied(detail='Block is already deactivated')
-        
+
+        # Update and save
         block.is_active = False
         block.save()
 
