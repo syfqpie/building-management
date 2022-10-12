@@ -17,7 +17,11 @@ from drf_yasg.utils import swagger_auto_schema
 from utils.helpers import camel_to_capitalize
 from utils.auth.permissions import IsAdminStaff, IsSuperAdmin
 
-from .docs import DocuConfigBlock, DocuConfigFloor
+from .docs import (
+    DocuConfigBlock,
+    DocuConfigFloor,
+    DocuConfigUnitNumber
+)
 from .models import (
     Block, Floor, UnitNumber,
     Unit, UnitActivity, ActivityType,
@@ -220,7 +224,13 @@ class FloorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
 
 
+@method_decorator(name='list', decorator=DocuConfigUnitNumber.LIST)
+@method_decorator(name='retrieve', decorator=DocuConfigUnitNumber.RETRIEVE)
+@method_decorator(name='create', decorator=DocuConfigUnitNumber.CREATE)
+@method_decorator(name='partial_update', decorator=DocuConfigUnitNumber.PARTIAL_UPDATE)
 class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """Viewset for UnitNumber model"""
+
     queryset = UnitNumber.objects.all()
     serializer_class = UnitNumberSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -242,21 +252,33 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
+        """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
+        """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
     
-    # Activate unit number
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigUnitNumber.ACTIVATE.value)
     def activate(self, request, *args, **kwargs):
+        """
+        Activate unit number
+        
+        Return 403 if already activated
+        """
+
+        # Instantiate unit number
         unit_number = self.get_object()
 
         if unit_number.is_active is True:
             raise PermissionDenied(detail='Unit number is already activated')
         
+        # Update and save
         unit_number.is_active = True
         unit_number.save()
 
@@ -268,14 +290,22 @@ class UnitNumberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             headers=headers
         )
 
-    # Deactivate unit number
     @action(methods=['GET'], detail=True)
+    @swagger_auto_schema(**DocuConfigUnitNumber.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
+        """
+        Deactivate unit number
+        
+        Return 403 if already deactivated
+        """
+
+        # Instantiate unit number
         unit_number = self.get_object()
 
         if unit_number.is_active is False:
             raise PermissionDenied(detail='Unit number is already deactivated')
         
+        # Update and save
         unit_number.is_active = False
         unit_number.save()
 
