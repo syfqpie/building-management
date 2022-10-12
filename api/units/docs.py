@@ -277,7 +277,7 @@ UNIT_ACTIVITY_OBJS = {
         }
     ),
     'activityType': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='Activity type',
         enum=ActivityType.choices,
         read_only=True,
@@ -1152,7 +1152,7 @@ class DocuConfigUnit(enum.Enum):
             required=['resident'],
             properties={
                 'resident': openapi.Schema(
-                    type=openapi.TYPE_NUMBER,
+                    type=openapi.TYPE_INTEGER,
                     description='Resident ID',
                     example=1
                 ),

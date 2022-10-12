@@ -13,13 +13,13 @@ AUTH_TAG = 'Authentication'
 USER_TAG = 'Users'
 USERS_OBJS = {
     'id': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_INTEGER,
         description='User ID',
         read_only=True,
         example=1
     ),
     'fullName': openapi.Schema(
-        type=openapi.TYPE_NUMBER,
+        type=openapi.TYPE_STRING,
         description='User full name',
         example='John Doe'
     ),
@@ -304,7 +304,7 @@ class DocuConfigUser(enum.Enum):
                             type=openapi.TYPE_OBJECT,
                             properties={
                                 'id': openapi.Schema(
-                                    type=openapi.TYPE_NUMBER,
+                                    type=openapi.TYPE_INTEGER,
                                     description='User ID',
                                     read_only=True,
                                     example=1
