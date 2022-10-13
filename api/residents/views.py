@@ -39,9 +39,7 @@ from .serializers import (
 @method_decorator(name='partial_update', decorator=DocuConfigResident.PARTIAL_UPDATE)
 @method_decorator(name='destroy', decorator=DocuConfigResident.DESTROY)
 class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """
-    Viewset for Resident model
-    """
+    """Viewset for Resident model"""
 
     queryset = Resident.objects.all()
     serializer_class = ResidentSerializer
@@ -81,6 +79,11 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
     
     def get_serializer_class(self):
+        """
+        Override get_serializer_class to get
+        serializer class for different user type
+        """
+
         user = self.request.user
 
         if not user.is_anonymous:
@@ -145,7 +148,6 @@ class ResidentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = self.get_serializer(resident, many=False)
         return Response(serializer.data)
 
-    # Deactivate resident
     @action(methods=['GET'], detail=True)
     @swagger_auto_schema(**DocuConfigResident.DEACTIVATE.value)
     def deactivate(self, request, *args, **kwargs):
@@ -207,6 +209,7 @@ class ResidentCustomRegisterView(RegisterView):
 @method_decorator(name='partial_update', decorator=DocuConfigResidentVehicle.PARTIAL_UPDATE)
 class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """Viewset for ResidentVehicle model"""
+
     queryset = ResidentVehicle.objects.all()
     serializer_class = ResidentVehicleSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -237,11 +240,13 @@ class ResidentVehicleViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Override perform_create to update created_by"""
+
         request = serializer.context['request']
         serializer.save(created_by=request.user)
 
     def perform_update(self, serializer):
         """Override perform_update to update last_modified_by"""
+
         request = serializer.context['request']
         serializer.save(last_modified_by=request.user)
 
