@@ -50,7 +50,7 @@ class ResidentAdminSerializer(serializers.ModelSerializer):
             'is_active',
             'created_at'
         ]
-        read_only_fields = '__all__'
+        # read_only_fields = '__all__'
 
 
 class ResidentPublicSerializer(serializers.ModelSerializer):
@@ -65,7 +65,7 @@ class ResidentPublicSerializer(serializers.ModelSerializer):
             'created_by',
             'is_active',
         ]
-        read_only_fields = '__all__'
+        # read_only_fields = '__all__'
 
 
 class ResidentCustomRegisterSerializer(RegisterSerializer):
@@ -141,6 +141,19 @@ class ResidentVehicleSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
+class ResidentVehicleExtendedSerializer(serializers.ModelSerializer):
+    """
+    Extended serializer for ResidentVehicle model
+    """
+
+    resident = ResidentAdminSerializer(many=False)
+
+    class Meta:
+        model = ResidentVehicle
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
 class ResidentVehicleSimplifiedSerializer(serializers.ModelSerializer):
     """
     A simplified serializer for ResidentVehicle
@@ -153,4 +166,4 @@ class ResidentVehicleSimplifiedSerializer(serializers.ModelSerializer):
             'plate_no',
             'vehicle_type'
         ]
-        read_only_fields = '__all__'
+        # read_only_fields = '__all__'
