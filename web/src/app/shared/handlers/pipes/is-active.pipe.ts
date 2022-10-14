@@ -1,5 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Transforms boolean to a string representative
+ *
+ * ### Pre-defined options
+ *
+ * | Value      | String representative  |
+ * |------------|------------------------|
+ * | true       | Active                 |
+ * | false      | Inactive               |
+ * | null       | -                      |
+ * | undefined  | -                      |
+ * 
+ */
 @Pipe({
   name: 'isActivePipe'
 })
