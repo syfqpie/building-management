@@ -3,16 +3,17 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Vehicle } from './vehicles.model';
-import { DetailResponse } from '../auth/auth.model';
-import { UnitActivityNested } from '../activities/activities.model';
+import { Vehicle } from './vehicle.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/vehicles/`
 
+/**
+ * A service for vehicle related methods
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class VehiclesService {
+export class VehicleService {
 
   // Data
   public vehicle: Vehicle | undefined
@@ -22,6 +23,11 @@ export class VehiclesService {
     private http: HttpClient
   ) { }
 
+  /**
+   * Returns a list of vehicles
+   *
+   * @returns List of vehicles
+   */
   list(filterStr?: string): Observable<Vehicle[]> {
     const qStr = filterStr ? `?${filterStr}` : ''
     const urlTemp = `${ BASE_URL }${ qStr }`
@@ -33,6 +39,26 @@ export class VehiclesService {
     )
   }
 
+  /**
+   * Returns a specific vehicle
+   *
+   * @returns A vehicle
+   */
+  retrieve(id: number): Observable<Vehicle> {
+    const urlTemp = `${ BASE_URL }${ id }/`
+    return this.http.get<Vehicle>(urlTemp).pipe(
+      tap((res: Vehicle) => {
+        this.vehicle = res
+        console.log('Vehicle:', this.vehicle)
+      })
+    )
+  }
+
+  /**
+   * Create a new vehicle entry
+   *
+   * @returns A vehicle
+   */
   create(body: any): Observable<Vehicle> {
     const urlTemp = `${ BASE_URL }`
     return this.http.post<Vehicle>(urlTemp, body).pipe(
