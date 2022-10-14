@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { VehicleType } from '../../services/vehicles/vehicles.model';
+import { VehicleType } from '../../services/vehicle/vehicle.model';
 
 /**
  * Transforms an integer to a string representative of VehicleType

@@ -1,7 +1,7 @@
 import { BlockNo } from '../blocks/blocks.model';
 import { FloorNo } from '../floors/floors.model';
 import { Resident } from '../residents/residents.model';
-import { Vehicle } from '../vehicles/vehicles.model';
+import { Vehicle } from '../vehicle/vehicle.model';
 
 export class Parking {
     constructor(

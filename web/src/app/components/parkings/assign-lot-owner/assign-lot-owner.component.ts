@@ -9,10 +9,10 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { Resident } from 'src/app/shared/services/residents/residents.model';
-import { Vehicle, VehicleType } from 'src/app/shared/services/vehicles/vehicles.model';
+import { Vehicle, VehicleType } from 'src/app/shared/services/vehicle/vehicle.model';
 import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
 import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
-import { VehiclesService } from 'src/app/shared/services/vehicles/vehicles.service';
+import { VehicleService } from 'src/app/shared/services/vehicle/vehicle.service';
 
 @Component({
   selector: 'app-assign-lot-owner',
@@ -73,7 +73,7 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
     private notifySvc: NotifyService,
     private parkingSvc: ParkingsService,
     private residentSvc: ResidentsService,
-    private vehicleSvc: VehiclesService
+    private vehicleSvc: VehicleService
   ) { }
 
   ngOnInit(): void {
