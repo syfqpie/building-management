@@ -76,6 +76,7 @@ export class BlockService {
   /**
    * Partial update a block
    *
+   * @param id - block ID
    * @param body - payload
    * @param body.block - block name
    * 
