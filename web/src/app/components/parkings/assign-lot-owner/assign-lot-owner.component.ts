@@ -10,7 +10,7 @@ import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { Resident } from 'src/app/shared/services/residents/residents.model';
 import { Vehicle, VehicleType } from 'src/app/shared/services/vehicle/vehicle.model';
-import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
+import { ParkingService } from 'src/app/shared/services/parking/parking.service';
 import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
 import { VehicleService } from 'src/app/shared/services/vehicle/vehicle.service';
 
@@ -71,7 +71,7 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private parkingSvc: ParkingsService,
+    private parkingSvc: ParkingService,
     private residentSvc: ResidentsService,
     private vehicleSvc: VehicleService
   ) { }
