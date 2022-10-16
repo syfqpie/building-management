@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { Resident } from 'src/app/shared/services/residents/residents.model';
-import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
+import { Resident } from 'src/app/shared/services/resident/resident.model';
+import { ResidentService } from 'src/app/shared/services/resident/resident.service';
 
 @Component({
   selector: 'app-resident-detail',
@@ -27,7 +27,7 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private route: ActivatedRoute,
-    private residentSvc: ResidentsService
+    private residentSvc: ResidentService
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.residentSvc.getOne(id).subscribe({
+    this.subscription.add(this.residentSvc.retrieve(id).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false

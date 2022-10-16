@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { Resident } from 'src/app/shared/services/residents/residents.model';
-import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
+import { Resident } from 'src/app/shared/services/resident/resident.model';
+import { ResidentService } from 'src/app/shared/services/resident/resident.service';
 import { ResidentRegistrationComponent } from 'src/app/components/residents/resident-registration/resident-registration.component';
 
 @Component({
@@ -46,7 +46,7 @@ export class ResidentsComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private router: Router,
-    private residentSvc: ResidentsService
+    private residentSvc: ResidentService
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +64,7 @@ export class ResidentsComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription = this.residentSvc.getAll().subscribe({
+    this.subscription = this.residentSvc.list().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false

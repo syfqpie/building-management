@@ -8,10 +8,10 @@ import { collapsedAnimation } from 'src/app/shared/animations/animation';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { Resident } from 'src/app/shared/services/residents/residents.model';
+import { Resident } from 'src/app/shared/services/resident/resident.model';
 import { Vehicle, VehicleType } from 'src/app/shared/services/vehicle/vehicle.model';
 import { ParkingService } from 'src/app/shared/services/parking/parking.service';
-import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
+import { ResidentService } from 'src/app/shared/services/resident/resident.service';
 import { VehicleService } from 'src/app/shared/services/vehicle/vehicle.service';
 
 @Component({
@@ -72,7 +72,7 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
     private parkingSvc: ParkingService,
-    private residentSvc: ResidentsService,
+    private residentSvc: ResidentService,
     private vehicleSvc: VehicleService
   ) { }
 

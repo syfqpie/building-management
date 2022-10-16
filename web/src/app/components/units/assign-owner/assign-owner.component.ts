@@ -21,8 +21,8 @@ import {
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { Resident } from 'src/app/shared/services/residents/residents.model';
-import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
+import { Resident } from 'src/app/shared/services/resident/resident.model';
+import { ResidentService } from 'src/app/shared/services/resident/resident.service';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
 @Component({
@@ -55,7 +55,7 @@ export class AssignOwnerComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
     private unitSvc: UnitsService,
-    private residentSvc: ResidentsService
+    private residentSvc: ResidentService
   ) { }
 
   ngOnInit(): void {
