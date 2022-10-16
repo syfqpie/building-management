@@ -10,6 +10,9 @@ import { DetailResponse, LoginResponse, LoginUser } from './auth.model';
 
 const BASE_URL = `${ environment.baseUrl }auth/`
 
+/**
+ * A service for Authentication related methods
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -27,6 +30,15 @@ export class AuthService {
     private router: Router
   ) { }
 
+  /**
+   * Request to login
+   * 
+   * @param body - payload
+   * @param body.username - account email
+   * @param body.password - registered password
+   *
+   * @returns A login response (JWT) {@link LoginResponse}
+   */
   login(body: any): Observable<LoginResponse> {
     const urlTemp = `${ BASE_URL }login/`
     return this.http.post<LoginResponse>(urlTemp, body).pipe(
@@ -44,6 +56,15 @@ export class AuthService {
     )
   }
 
+  /**
+   * Logout of system
+   * 
+   * Remove token from localStorage.
+   * Reset user variable
+   * Navigate to login page
+   *
+   * @returns Nothing
+   */
   logout() {
     // Remove all token in local storage
     this.jwtSvc.destroyToken()
@@ -57,6 +78,17 @@ export class AuthService {
     return window.location.reload()
   }
 
+  /**
+   * Request reset password
+   * 
+   * An email will be sent to a registered account email
+   * with instructions to reset password
+   * 
+   * @param body - payload
+   * @param body.email - account email
+   *
+   * @returns A detail response {@link DetailResponse}
+   */
   requestReset(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }password/reset/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
@@ -66,6 +98,17 @@ export class AuthService {
     )
   }
 
+  /**
+   * Confirm reset password
+   * 
+   * @param body - payload
+   * @param body.uid - user ID
+   * @param body.token - received token from email
+   * @param body.newPassword1 - new password
+   * @param body.newPassword2 - confirm new password
+   *
+   * @returns A detail response {@link DetailResponse}
+   */
   confirmReset(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }password/reset/confirm/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
@@ -75,6 +118,15 @@ export class AuthService {
     )
   }
 
+  /**
+   * Change password
+   * 
+   * @param body - payload
+   * @param body.newPassword1 - new password
+   * @param body.newPassword2 - confirm new password
+   *
+   * @returns A detail response {@link DetailResponse}
+   */
   changePassword(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }password/change/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
@@ -84,6 +136,16 @@ export class AuthService {
     )
   }
 
+  /**
+   * Verify account
+   * 
+   * @param body - payload
+   * @param body.key - received key from email
+   * @param body.newPassword1 - new password
+   * @param body.newPassword2 - confirm new password
+   *
+   * @returns A detail response {@link DetailResponse}
+   */
   verifyAccount(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }registration/verify-email/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
@@ -93,6 +155,14 @@ export class AuthService {
     )
   }
 
+  /**
+   * Resend verification email
+   * 
+   * @param body - payload
+   * @param body.email - registered account email
+   *
+   * @returns A detail response {@link DetailResponse}
+   */
   resendVerification(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }registration/resend-verification/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
@@ -102,6 +172,19 @@ export class AuthService {
     )
   }
 
+  /**
+   * Register admin
+   * 
+   * An email will be send to the registered email
+   * with verification instruction
+   * 
+   * @param body - payload
+   * @param body.username - user's email
+   * @param body.fullName - user's full name
+   * @param body.isSuperuser - is user superuser?
+   *
+   * @returns A detail response {@link DetailResponse}
+   */
   registerAdmin(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }registration/admin/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(
@@ -111,6 +194,22 @@ export class AuthService {
     )
   }
 
+  /**
+   * Register resident
+   * 
+   * An email will be send to the registered email
+   * with verification instruction
+   * 
+   * @param body - payload
+   * @param body.username - user's email
+   * @param body.name - user's full name
+   * @param body.title - user's title
+   * @param body.gender - user's gender
+   * @param body.phoneNo - user's phone no.
+   * @param body.nric - user's NRIC
+   *
+   * @returns A detail response {@link DetailResponse}
+   */
   registerResident(body: any): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }registration/resident/`
     return this.http.post<DetailResponse>(urlTemp, body).pipe(

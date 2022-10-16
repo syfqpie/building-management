@@ -7,6 +7,9 @@ import { Block } from './blocks.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/blocks/`
 
+/**
+ * A service for Block related methods
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +23,14 @@ export class BlocksService {
     private http: HttpClient
   ) { }
 
+  /**
+   * Create new block entry
+   *
+   * @param body - payload
+   * @param body.block - block name
+   * 
+   * @returns New created block entry
+   */
   create(body: any): Observable<Block> {
     const urlTemp = `${ BASE_URL }`
     return this.http.post<Block>(urlTemp, body).pipe(
@@ -30,7 +41,15 @@ export class BlocksService {
     )
   }
 
+  /**
+   * Returns a list of blocks
+   *
+   * @returns List of blocks
+   */
   getAll(): Observable<Block[]> {
+    /**
+     * TODO: change method name to list
+     */
     const urlTemp = `${ BASE_URL }`
     return this.http.get<Block[]>(urlTemp).pipe(
       tap((res: Block[]) => {
@@ -40,7 +59,17 @@ export class BlocksService {
     )
   }
 
+  /**
+   * Returns a block
+   * 
+   * @param id - block ID
+   *
+   * @returns A block
+   */
   getOne(id: string | undefined): Observable<Block> {
+    /**
+     * TODO: change method name to retrieve
+     */
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Block>(urlTemp).pipe(
       tap((res: Block) => {
@@ -50,6 +79,14 @@ export class BlocksService {
     )
   }
 
+  /**
+   * Partial update a block
+   *
+   * @param body - payload
+   * @param body.block - block name
+   * 
+   * @returns Updated block
+   */
   patch(id: number, body: any): Observable<Block> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.patch<Block>(urlTemp, body).pipe(
