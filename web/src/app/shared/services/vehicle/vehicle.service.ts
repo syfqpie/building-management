@@ -8,7 +8,7 @@ import { Vehicle, VehicleExtended } from './vehicle.model';
 const BASE_URL = `${ environment.baseUrl }v1/vehicles/`
 
 /**
- * A service for vehicle related methods
+ * A service for Vehicle related methods
  */
 @Injectable({
   providedIn: 'root'
