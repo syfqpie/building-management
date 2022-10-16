@@ -8,11 +8,11 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Block } from 'src/app/shared/services/block/block.model';
 import { Floor } from 'src/app/shared/services/floor/floor.model';
 import { Unit } from 'src/app/shared/services/units/units.model';
-import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
+import { UnitNumber } from 'src/app/shared/services/unit-number/unit-number.model';
 import { BlockService } from 'src/app/shared/services/block/block.service';
 import { FloorService } from 'src/app/shared/services/floor/floor.service';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
-import { UnitNumbersService } from 'src/app/shared/services/unit-numbers/unit-numbers.service';
+import { UnitNumberService } from 'src/app/shared/services/unit-number/unit-number.service';
 import { UnitAddComponent } from 'src/app/components/units/unit-add/unit-add.component';
 
 @Component({
@@ -57,7 +57,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
     private unitSvc: UnitsService,
     private blockSvc: BlockService,
     private floorSvc: FloorService,
-    private unitNumberSvc: UnitNumbersService
+    private unitNumberSvc: UnitNumberService
   ) { }
 
   ngOnInit(): void {
@@ -79,7 +79,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
       this.unitSvc.getAll(),
       this.blockSvc.list(),
       this.floorSvc.list(),
-      this.unitNumberSvc.getAll()
+      this.unitNumberSvc.list()
     ]).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
