@@ -5,11 +5,11 @@ import { forkJoin, Subscription } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { Block } from 'src/app/shared/services/blocks/blocks.model';
+import { Block } from 'src/app/shared/services/block/block.model';
 import { Floor } from 'src/app/shared/services/floors/floors.model';
 import { Unit } from 'src/app/shared/services/units/units.model';
 import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
-import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
+import { BlockService } from 'src/app/shared/services/block/block.service';
 import { FloorsService } from 'src/app/shared/services/floors/floors.service';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 import { UnitNumbersService } from 'src/app/shared/services/unit-numbers/unit-numbers.service';
@@ -55,7 +55,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private router: Router,
     private unitSvc: UnitsService,
-    private blockSvc: BlocksService,
+    private blockSvc: BlockService,
     private floorSvc: FloorsService,
     private unitNumberSvc: UnitNumbersService
   ) { }
@@ -77,7 +77,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
 
     this.subscription = forkJoin([
       this.unitSvc.getAll(),
-      this.blockSvc.getAll(),
+      this.blockSvc.list(),
       this.floorSvc.getAll(),
       this.unitNumberSvc.getAll()
     ]).subscribe({

@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Block } from './blocks.model';
+import { Block } from './block.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/blocks/`
 
@@ -13,7 +13,7 @@ const BASE_URL = `${ environment.baseUrl }v1/blocks/`
 @Injectable({
   providedIn: 'root'
 })
-export class BlocksService {
+export class BlockService {
 
   // Data
   public block: Block | undefined
@@ -46,10 +46,7 @@ export class BlocksService {
    *
    * @returns List of blocks
    */
-  getAll(): Observable<Block[]> {
-    /**
-     * TODO: change method name to list
-     */
+  list(): Observable<Block[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<Block[]>(urlTemp).pipe(
       tap((res: Block[]) => {
@@ -66,10 +63,7 @@ export class BlocksService {
    *
    * @returns A block
    */
-  getOne(id: string | undefined): Observable<Block> {
-    /**
-     * TODO: change method name to retrieve
-     */
+  retrieve(id: string | undefined): Observable<Block> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Block>(urlTemp).pipe(
       tap((res: Block) => {

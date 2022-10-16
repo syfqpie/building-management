@@ -5,9 +5,9 @@ import { forkJoin, Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { Block } from 'src/app/shared/services/blocks/blocks.model';
+import { Block } from 'src/app/shared/services/block/block.model';
 import { Floor } from 'src/app/shared/services/floors/floors.model';
-import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
+import { BlockService } from 'src/app/shared/services/block/block.service';
 import { FloorsService } from 'src/app/shared/services/floors/floors.service';
 import { ParkingService } from 'src/app/shared/services/parking/parking.service';
 
@@ -51,7 +51,7 @@ export class AddParkingComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private blockSvc: BlocksService,
+    private blockSvc: BlockService,
     private floorSvc: FloorsService,
     private parkingSvc: ParkingService
   ) { }
@@ -81,7 +81,7 @@ export class AddParkingComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.subscription.add(forkJoin([
-      this.blockSvc.getAll(),
+      this.blockSvc.list(),
       this.floorSvc.getAll()
     ]).subscribe({
       next: () => {
