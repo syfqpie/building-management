@@ -1,5 +1,5 @@
 import { BlockNo } from '../block/block.model';
-import { FloorNo } from '../floors/floors.model';
+import { FloorNo } from '../floor/floor.model';
 import { Resident } from '../residents/residents.model';
 import { Vehicle, VehicleType } from '../vehicle/vehicle.model';
 

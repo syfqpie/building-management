@@ -3,14 +3,17 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Floor } from './floors.model';
+import { Floor } from './floor.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/floors/`
 
+/**
+ * A service for Floor related methods
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class FloorsService {
+export class FloorService {
 
   // Data
   public floor: Floor | undefined
@@ -20,6 +23,14 @@ export class FloorsService {
     private http: HttpClient
   ) { }
 
+  /**
+   * Create new floor entry
+   *
+   * @param body - payload
+   * @param body.floor - floor name
+   * 
+   * @returns New created floor entry
+   */
   create(body: any): Observable<Floor> {
     const urlTemp = `${ BASE_URL }`
     return this.http.post<Floor>(urlTemp, body).pipe(
@@ -30,7 +41,12 @@ export class FloorsService {
     )
   }
 
-  getAll(): Observable<Floor[]> {
+  /**
+   * Returns a list of floors
+   *
+   * @returns List of floors
+   */
+  list(): Observable<Floor[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<Floor[]>(urlTemp).pipe(
       tap((res: Floor[]) => {
@@ -40,7 +56,14 @@ export class FloorsService {
     )
   }
 
-  getOne(id: string | undefined): Observable<Floor> {
+  /**
+   * Returns a floor
+   * 
+   * @param id - floor ID
+   *
+   * @returns A floor
+   */
+  retrieve(id: string | undefined): Observable<Floor> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Floor>(urlTemp).pipe(
       tap((res: Floor) => {
@@ -50,6 +73,14 @@ export class FloorsService {
     )
   }
 
+  /**
+   * Partial update a floor
+   *
+   * @param body - payload
+   * @param body.floor - floor name
+   * 
+   * @returns Updated floor
+   */
   patch(id: number, body: any): Observable<Floor> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.patch<Floor>(urlTemp, body).pipe(

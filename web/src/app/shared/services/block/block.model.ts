@@ -33,7 +33,7 @@ export class Block {
  */
 export class BlockNo {
     /**
-     * The constructor of the `Block` class.
+     * The constructor of the `BlockNo` class.
      *
      * @param id the block's database ID
      * @param block the block's name

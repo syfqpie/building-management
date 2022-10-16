@@ -6,7 +6,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { Block } from 'src/app/shared/services/block/block.model';
-import { Floor } from 'src/app/shared/services/floors/floors.model';
+import { Floor } from 'src/app/shared/services/floor/floor.model';
 import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 

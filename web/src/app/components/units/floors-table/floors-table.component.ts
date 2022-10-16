@@ -6,8 +6,8 @@ import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { Floor } from 'src/app/shared/services/floors/floors.model';
-import { FloorsService } from 'src/app/shared/services/floors/floors.service';
+import { Floor } from 'src/app/shared/services/floor/floor.model';
+import { FloorService } from 'src/app/shared/services/floor/floor.service';
 
 @Component({
   selector: 'app-floors-table',
@@ -62,7 +62,7 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private floorSvc: FloorsService
+    private floorSvc: FloorService
   ) { }
 
   ngOnInit(): void {
@@ -81,7 +81,7 @@ export class FloorsTableComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.floorSvc.getAll().subscribe({
+    this.subscription.add(this.floorSvc.list().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
