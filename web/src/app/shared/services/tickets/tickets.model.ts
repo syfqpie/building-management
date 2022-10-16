@@ -1,5 +1,5 @@
 import { UnitNo } from '../units/units.model';
-import { UserEmail } from '../users/users.model';
+import { UserEmail } from '../user/user.model';
 
 export class Ticket {
     constructor(

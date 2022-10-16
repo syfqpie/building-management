@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 
-import { EmailVerification } from 'src/app/shared/services/users/users.model';
+import { EmailVerification } from 'src/app/shared/services/user/user.model';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
-import { UsersService } from 'src/app/shared/services/users/users.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'app-system-admin',
@@ -44,7 +44,7 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   
   constructor(
     private loadingBar: LoadingBarService,
-    private userSvc: UsersService
+    private userSvc: UserService
   ) { }
 
   ngOnInit(): void {

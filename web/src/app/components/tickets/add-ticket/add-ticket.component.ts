@@ -9,10 +9,10 @@ import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { TicketCategory, TicketPriority } from 'src/app/shared/services/tickets/tickets.model';
 import { UnitNo } from 'src/app/shared/services/units/units.model';
-import { UserEmail } from 'src/app/shared/services/users/users.model';
+import { UserEmail } from 'src/app/shared/services/user/user.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
-import { UsersService } from 'src/app/shared/services/users/users.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'app-add-ticket',
@@ -75,7 +75,7 @@ export class AddTicketComponent implements OnInit, OnDestroy {
     private notifySvc: NotifyService,
     private ticketSvc: TicketsService,
     private unitSvc: UnitsService,
-    private userSvc: UsersService
+    private userSvc: UserService
   ) { }
 
   ngOnInit(): void {

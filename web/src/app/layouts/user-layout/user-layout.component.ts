@@ -1,8 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit, } from '@angular/core';
 import { slideLeftRightAnimation } from 'src/app/shared/animations/animation';
 
-import { User } from 'src/app/shared/services/users/users.model';
-import { UsersService } from 'src/app/shared/services/users/users.service';
+import { User } from 'src/app/shared/services/user/user.model';
+import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'app-user-layout',
@@ -29,7 +29,7 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private userSvc: UsersService,
+    private userSvc: UserService,
   ) {
     if (window.innerWidth < 1200) {
       this.isMobileResolution = true
