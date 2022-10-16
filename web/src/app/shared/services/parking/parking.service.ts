@@ -6,14 +6,17 @@ import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DetailResponse } from '../auth/auth.model';
 
-import { Parking, ParkingExtended, ParkingPassCurrent } from './parkings.model';
+import { Parking, ParkingExtended, ParkingPassCurrent } from './parking.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/parking-lots/`
 
+/**
+ * A service for Parking related methods
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class ParkingsService {
+export class ParkingService {
 
   // Data
   parking: Parking | undefined
@@ -26,6 +29,16 @@ export class ParkingsService {
     private http: HttpClient
   ) { }
 
+  /**
+   * Create new parking entry
+   *
+   * @param body - payload
+   * @param body.block - block ID
+   * @param body.floor - floor ID
+   * @param body.lotType - [optional] lot type VehicleType
+   * 
+   * @returns New created parking entry
+   */
   create(body: any): Observable<Parking> {
     const urlTemp = `${ BASE_URL }`
     return this.http.post<Parking>(urlTemp, body).pipe(
@@ -36,7 +49,12 @@ export class ParkingsService {
     )
   }
 
-  getAll(): Observable<Parking[]> {
+  /**
+   * Returns a list of parkings
+   *
+   * @returns List of parkings
+   */
+  list(): Observable<Parking[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<Parking[]>(urlTemp).pipe(
       tap((res: Parking[]) => {
@@ -46,7 +64,12 @@ export class ParkingsService {
     )
   }
 
-  getAllExtended(): Observable<ParkingExtended[]> {
+  /**
+   * Returns a list of extended parkings
+   *
+   * @returns List of extended parkings
+   */
+  listExtended(): Observable<ParkingExtended[]> {
     const urlTemp = `${ BASE_URL }extended/`
     return this.http.get<ParkingExtended[]>(urlTemp).pipe(
       tap((res: ParkingExtended[]) => {
@@ -56,7 +79,14 @@ export class ParkingsService {
     )
   }
 
-  getOne(id: number): Observable<Parking> {
+  /**
+   * Returns a parking
+   * 
+   * @param id - parking ID
+   *
+   * @returns A parking
+   */
+  retrieve(id: number): Observable<Parking> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Parking>(urlTemp).pipe(
       tap((res: Parking) => {
@@ -66,7 +96,14 @@ export class ParkingsService {
     )
   }
 
-  getOneExtended(id: number): Observable<ParkingExtended> {
+  /**
+   * Returns an extended parking
+   * 
+   * @param id - parking ID
+   *
+   * @returns An extended parking
+   */
+  retrieveExtended(id: number): Observable<ParkingExtended> {
     const urlTemp = `${ BASE_URL }${ id }/extended/`
     return this.http.get<ParkingExtended>(urlTemp).pipe(
       tap((res: ParkingExtended) => {
@@ -76,6 +113,17 @@ export class ParkingsService {
     )
   }
 
+  /**
+   * Partial update a parking
+   *
+   * @param id - parking ID
+   * @param body - payload
+   * @param body.block - [optional] block ID
+   * @param body.floor - [optional] floor ID
+   * @param body.lotType - [optional] lot type VehicleType
+   * 
+   * @returns Updated parking
+   */
   patch(id: number, body: any): Observable<Parking> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.patch<Parking>(urlTemp, body).pipe(
@@ -86,6 +134,13 @@ export class ParkingsService {
     )
   }
 
+  /**
+   * Activate a parking lot
+   *
+   * @param id - parking lot ID
+   * 
+   * @returns Detail response message
+   */
   activate(id: number): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ id }/activate/`
     return this.http.get<DetailResponse>(urlTemp).pipe(
@@ -95,6 +150,13 @@ export class ParkingsService {
     )
   }
 
+  /**
+   * Deactivate a parking lot
+   *
+   * @param id - parking lot ID
+   * 
+   * @returns Detail response message
+   */
   deactivate(id: number): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ id }/deactivate/`
     return this.http.get<DetailResponse>(urlTemp).pipe(
@@ -104,6 +166,16 @@ export class ParkingsService {
     )
   }
 
+  /**
+   * Assign resident to parking lot
+   * 
+   * @param id - parking ID
+   * @param body - payload
+   * @param body.resident - resident ID
+   * @param body.vehicle - vehicle ID
+   *
+   * @returns Updated extended parking
+   */
   assignResident(id: any, body: any): Observable<ParkingExtended>  {
     const urlTemp = `${ BASE_URL }${ id }/assign-resident/`
     return this.http.post<ParkingExtended>(urlTemp, body).pipe(
@@ -114,6 +186,13 @@ export class ParkingsService {
     )
   }
 
+  /**
+   * Checkout resident from parking lot
+   *
+   * @param id - parking ID
+   * 
+   * @returns Updated extended parking
+   */
   checkoutResident(id: any): Observable<ParkingExtended> {
     const urlTemp = `${ BASE_URL }${ id }/checkout-resident/`
     return this.http.get<ParkingExtended>(urlTemp).pipe(
@@ -124,6 +203,13 @@ export class ParkingsService {
     )
   }
 
+  /**
+   * Returns current parking pass
+   *
+   * @param id - parking pass ID
+   * 
+   * @returns Current parking pass
+   */
   getCurrentPass(id: number): Observable<ParkingPassCurrent> {
     const urlTemp = `${ BASE_URL }${ id }/get-current-pass/`
     return this.http.get<ParkingPassCurrent>(urlTemp).pipe(
