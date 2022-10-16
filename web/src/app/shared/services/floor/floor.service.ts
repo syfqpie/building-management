@@ -76,6 +76,7 @@ export class FloorService {
   /**
    * Partial update a floor
    *
+   * @param id - floor ID
    * @param body - payload
    * @param body.floor - floor name
    * 

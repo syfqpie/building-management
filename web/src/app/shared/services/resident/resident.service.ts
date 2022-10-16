@@ -96,6 +96,8 @@ export class ResidentService {
    * - name
    * - email
    * 
+   * @param searchText - Search text to search
+   * 
    * @returns List of filtered residents
    */
   search(searchText: string): Observable<Resident[]> {
