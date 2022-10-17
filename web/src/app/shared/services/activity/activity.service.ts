@@ -4,15 +4,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { UnitActivity } from '../activities/activities.model';
+import { UnitActivity } from './activity.model';
 import { SingleSeries } from '@swimlane/ngx-charts';
 
 const BASE_URL = `${ environment.baseUrl }v1/unit-activities/`
 
+/**
+ * A service for UnitActivity related methods
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class ActivitiesService {
+export class ActivityService {
 
   // Data
   public activity: UnitActivity | undefined
@@ -23,7 +26,12 @@ export class ActivitiesService {
     private http: HttpClient
   ) { }
 
-  getAll(): Observable<UnitActivity[]> {
+  /**
+   * Returns a list of activities
+   *
+   * @returns List of activities
+   */
+  list(): Observable<UnitActivity[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<UnitActivity[]>(urlTemp).pipe(
       tap((res: UnitActivity[]) => {
@@ -32,8 +40,15 @@ export class ActivitiesService {
       })
     )
   }
-
-  getOne(id: number): Observable<UnitActivity> {
+  
+  /**
+   * Returns a activity
+   * 
+   * @param id - activity ID
+   *
+   * @returns A activity
+   */
+  retrieve(id: number): Observable<UnitActivity> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<UnitActivity>(urlTemp).pipe(
       tap((res: UnitActivity) => {
@@ -43,6 +58,11 @@ export class ActivitiesService {
     )
   }
 
+  /**
+   * Returns an overview of unit activity
+   *
+   * @returns Overview of unit activity
+   */
   getOverview(): Observable<SingleSeries[]> {
     const urlTemp = `${ BASE_URL }overview/`
     return this.http.get<SingleSeries[]>(urlTemp).pipe(

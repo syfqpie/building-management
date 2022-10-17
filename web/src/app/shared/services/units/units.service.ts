@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Unit, UnitExtended } from './units.model';
 import { DetailResponse } from '../auth/auth.model';
-import { UnitActivityNested } from '../activities/activities.model';
+import { UnitActivityNested } from '../activity/activity.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/units/`
 

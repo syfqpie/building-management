@@ -5,7 +5,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { ActivityType, UnitActivityNested } from 'src/app/shared/services/activities/activities.model';
+import { ActivityType, UnitActivityNested } from 'src/app/shared/services/activity/activity.model';
 import { UnitExtended } from 'src/app/shared/services/units/units.model';
 import { UnitsService } from 'src/app/shared/services/units/units.service';
 
