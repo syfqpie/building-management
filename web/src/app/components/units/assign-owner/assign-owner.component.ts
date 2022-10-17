@@ -23,7 +23,7 @@ import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { Resident } from 'src/app/shared/services/resident/resident.model';
 import { ResidentService } from 'src/app/shared/services/resident/resident.service';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
 
 @Component({
   selector: 'app-assign-owner',
@@ -54,7 +54,7 @@ export class AssignOwnerComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private unitSvc: UnitsService,
+    private unitSvc: UnitService,
     private residentSvc: ResidentService
   ) { }
 

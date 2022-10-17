@@ -8,7 +8,7 @@ import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 import { Block } from 'src/app/shared/services/block/block.model';
 import { Floor } from 'src/app/shared/services/floor/floor.model';
 import { UnitNumber } from 'src/app/shared/services/unit-number/unit-number.model';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
 
 @Component({
   selector: 'app-unit-add',
@@ -59,7 +59,7 @@ export class UnitAddComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private unitSvc: UnitsService
+    private unitSvc: UnitService
   ) { }
 
   ngOnInit(): void {

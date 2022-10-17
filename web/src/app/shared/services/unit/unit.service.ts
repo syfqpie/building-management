@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Unit, UnitExtended } from './units.model';
+
+import { environment } from 'src/environments/environment';
 import { DetailResponse } from '../auth/auth.model';
 import { UnitActivityNested } from '../activity/activity.model';
 
+import { Unit, UnitExtended } from './unit.model';
+
 const BASE_URL = `${ environment.baseUrl }v1/units/`
 
+/**
+ * A service for Unit related methods
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class UnitsService {
+export class UnitService {
 
   // Data
   public unit: Unit | undefined
@@ -24,6 +29,16 @@ export class UnitsService {
     private http: HttpClient
   ) { }
 
+  /**
+   * Create new unit entry
+   *
+   * @param body - payload
+   * @param body.block - block ID
+   * @param body.floor - floor ID
+   * @param body.unitNumber - unit number ID
+   * 
+   * @returns New created unit entry
+   */
   create(body: any): Observable<Unit> {
     const urlTemp = `${ BASE_URL }`
     return this.http.post<Unit>(urlTemp, body).pipe(
@@ -34,7 +49,12 @@ export class UnitsService {
     )
   }
 
-  getAll(): Observable<Unit[]> {
+  /**
+   * Returns a list of units
+   *
+   * @returns List of units
+   */
+  list(): Observable<Unit[]> {
     const urlTemp = `${ BASE_URL }`
     return this.http.get<Unit[]>(urlTemp).pipe(
       tap((res: Unit[]) => {
@@ -44,7 +64,14 @@ export class UnitsService {
     )
   }
 
-  getOne(id: number): Observable<Unit> {
+  /**
+   * Returns a unit
+   * 
+   * @param id - unit ID
+   *
+   * @returns A unit
+   */
+  retrieve(id: number): Observable<Unit> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Unit>(urlTemp).pipe(
       tap((res: Unit) => {
@@ -54,7 +81,14 @@ export class UnitsService {
     )
   }
 
-  getOneExtended(id: number): Observable<UnitExtended> {
+  /**
+   * Returns an extended unit
+   * 
+   * @param id - unit ID
+   *
+   * @returns An extended unit
+   */
+   retrieveExtended(id: number): Observable<UnitExtended> {
     const urlTemp = `${ BASE_URL }${ id }/extended/`
     return this.http.get<UnitExtended>(urlTemp).pipe(
       tap((res: UnitExtended) => {
@@ -64,6 +98,13 @@ export class UnitsService {
     )
   }
 
+  /**
+   * Activate a unit
+   *
+   * @param id - unit ID
+   * 
+   * @returns Detail response message
+   */
   activate(id: number): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ id }/activate/`
     return this.http.get<DetailResponse>(urlTemp).pipe(
@@ -73,6 +114,13 @@ export class UnitsService {
     )
   }
 
+  /**
+   * Deactivate a unit
+   *
+   * @param id - unit ID
+   * 
+   * @returns Detail response message
+   */
   deactivate(id: number): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ id }/deactivate/`
     return this.http.get<DetailResponse>(urlTemp).pipe(
@@ -82,6 +130,13 @@ export class UnitsService {
     )
   }
 
+  /**
+   * Enable maintenance a unit
+   *
+   * @param id - unit ID
+   * 
+   * @returns Detail response message
+   */
   enableMaintenance(id: number): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ id }/enable-maintenance/`
     return this.http.get<DetailResponse>(urlTemp).pipe(
@@ -91,6 +146,13 @@ export class UnitsService {
     )
   }
 
+  /**
+   * Disable maintenance a unit
+   *
+   * @param id - unit ID
+   * 
+   * @returns Detail response message
+   */
   disableMaintenance(id: number): Observable<DetailResponse> {
     const urlTemp = `${ BASE_URL }${ id }/disable-maintenance/`
     return this.http.get<DetailResponse>(urlTemp).pipe(
@@ -100,7 +162,17 @@ export class UnitsService {
     )
   }
 
-  assignOwner(id: any, body: any): Observable<UnitExtended>  {
+  /**
+   * Assign owner to unit
+   * 
+   * @param id - unit ID
+   * @param body - payload
+   * @param body.resident - resident ID
+   * @param body.notes - [optional] notes
+   *
+   * @returns Updated extended unit
+   */
+  assignOwner(id: number, body: any): Observable<UnitExtended>  {
     const urlTemp = `${ BASE_URL }${ id }/assign-owner/`
     return this.http.post<UnitExtended>(urlTemp, body).pipe(
       tap((res: UnitExtended) => {
@@ -110,6 +182,13 @@ export class UnitsService {
     )
   }
 
+  /**
+   * Returns latest 5 unit activities list
+   *
+   * @param id - unit ID
+   * 
+   * @returns Latest 5 unit activities list
+   */
   getUnitActivities(id: number): Observable<UnitActivityNested[]> {
     const urlTemp = `${ BASE_URL }${ id }/activities/`
     return this.http.get<UnitActivityNested[]>(urlTemp).pipe(

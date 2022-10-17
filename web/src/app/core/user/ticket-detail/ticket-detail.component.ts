@@ -12,10 +12,10 @@ import {
   TicketExtended,
   TicketPriority,
   TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
-import { UnitNo } from 'src/app/shared/services/units/units.model';
+import { UnitNo } from 'src/app/shared/services/unit/unit.model';
 import { UserEmail } from 'src/app/shared/services/user/user.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { AddTicketComponent } from 'src/app/components/tickets/add-ticket/add-ticket.component';
 
@@ -87,7 +87,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private helper: HelpersService,
     private ticketSvc: TicketsService,
-    private unitSvc: UnitsService,
+    private unitSvc: UnitService,
     private userSvc: UserService
   ) { }
 
@@ -231,7 +231,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.isFetchingOpts = true
     
     this.svcSubscription.add(forkJoin([
-      this.unitSvc.getAll(),
+      this.unitSvc.list(),
       this.userSvc.filterSimplified('user_type=1')
     ]).subscribe({
       next: () => {

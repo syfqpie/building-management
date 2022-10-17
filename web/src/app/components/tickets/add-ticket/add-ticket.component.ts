@@ -8,10 +8,10 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { TicketCategory, TicketPriority } from 'src/app/shared/services/tickets/tickets.model';
-import { UnitNo } from 'src/app/shared/services/units/units.model';
+import { UnitNo } from 'src/app/shared/services/unit/unit.model';
 import { UserEmail } from 'src/app/shared/services/user/user.model';
 import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
@@ -74,7 +74,7 @@ export class AddTicketComponent implements OnInit, OnDestroy {
     private router: Router,
     private notifySvc: NotifyService,
     private ticketSvc: TicketsService,
-    private unitSvc: UnitsService,
+    private unitSvc: UnitService,
     private userSvc: UserService
   ) { }
 
@@ -200,7 +200,7 @@ export class AddTicketComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isFetchingOpts = true
     
-    this.subscription.add(this.unitSvc.getAll().subscribe({
+    this.subscription.add(this.unitSvc.list().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isFetchingOpts = false

@@ -1,4 +1,4 @@
-import { UnitNo } from '../units/units.model';
+import { UnitNo } from '../unit/unit.model';
 import { UserEmail } from '../user/user.model';
 
 export class Ticket {

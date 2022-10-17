@@ -7,11 +7,11 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { Block } from 'src/app/shared/services/block/block.model';
 import { Floor } from 'src/app/shared/services/floor/floor.model';
-import { Unit } from 'src/app/shared/services/units/units.model';
+import { Unit } from 'src/app/shared/services/unit/unit.model';
 import { UnitNumber } from 'src/app/shared/services/unit-number/unit-number.model';
 import { BlockService } from 'src/app/shared/services/block/block.service';
 import { FloorService } from 'src/app/shared/services/floor/floor.service';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
 import { UnitNumberService } from 'src/app/shared/services/unit-number/unit-number.service';
 import { UnitAddComponent } from 'src/app/components/units/unit-add/unit-add.component';
 
@@ -54,7 +54,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private router: Router,
-    private unitSvc: UnitsService,
+    private unitSvc: UnitService,
     private blockSvc: BlockService,
     private floorSvc: FloorService,
     private unitNumberSvc: UnitNumberService
@@ -76,7 +76,7 @@ export class UnitsComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.subscription = forkJoin([
-      this.unitSvc.getAll(),
+      this.unitSvc.list(),
       this.blockSvc.list(),
       this.floorSvc.list(),
       this.unitNumberSvc.list()
