@@ -63,7 +63,7 @@ export class UnitNumberService {
    *
    * @returns A unit number
    */
-  retrieve(id: string | undefined): Observable<UnitNumber> {
+  retrieve(id: number | undefined): Observable<UnitNumber> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<UnitNumber>(urlTemp).pipe(
       tap((res: UnitNumber) => {

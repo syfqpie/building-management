@@ -110,11 +110,11 @@ export class ParkingPass {
 }
 
 /**
- * A class that extends {@link ParkingPass | `ParkingPass`}.
+ * A custom class for the parking pass entity.
  */
 export class ParkingPassCurrent {
     /**
-     * The constructor of the `ParkingPassExtended` class.
+     * The constructor of the `ParkingPassCurrent` class.
      *
      * @param id the parking pass's database ID
      * @param accessCardNo the parking pass's access card no.

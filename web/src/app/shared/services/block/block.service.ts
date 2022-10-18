@@ -63,7 +63,7 @@ export class BlockService {
    *
    * @returns A block
    */
-  retrieve(id: string | undefined): Observable<Block> {
+  retrieve(id: number | undefined): Observable<Block> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Block>(urlTemp).pipe(
       tap((res: Block) => {

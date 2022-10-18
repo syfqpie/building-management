@@ -63,7 +63,7 @@ export class FloorService {
    *
    * @returns A floor
    */
-  retrieve(id: string | undefined): Observable<Floor> {
+  retrieve(id: number | undefined): Observable<Floor> {
     const urlTemp = `${ BASE_URL }${ id }/`
     return this.http.get<Floor>(urlTemp).pipe(
       tap((res: Floor) => {
