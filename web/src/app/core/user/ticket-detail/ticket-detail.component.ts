@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 
-import { HelpersService } from 'src/app/shared/services/helpers/helpers.service';
+import { HelperService } from 'src/app/shared/services/helper/helper.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
@@ -85,7 +85,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
-    private helper: HelpersService,
+    private helper: HelperService,
     private ticketSvc: TicketService,
     private unitSvc: UnitService,
     private userSvc: UserService

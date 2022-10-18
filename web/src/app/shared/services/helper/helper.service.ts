@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * A helper service for global use
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class HelpersService {
+export class HelperService {
 
   constructor() { }
 
   /**
    * Get a new object containing only the changed field values
+   * 
+   * @param obj1 - original object
+   * @param obj2 - updated object
+   * 
+   * @returns New object containing changed field values
    */
   getUpdatedObj(obj1: any, obj2: any) {
     let newForm: any = {}
@@ -28,7 +36,13 @@ export class HelpersService {
 
   /**
    * Check if two objects are equal 
+   * 
    * Copied from https://github.com/epoberezkin/fast-deep-equal/blob/master/src/index.jst
+   * 
+   * @param obj1 - first object to compare
+   * @param obj2 - second object to compare
+   * 
+   * @returns true or false
    */
   isEqual(obj1: any, obj2: any) {
     // Not object
