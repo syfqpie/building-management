@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TicketActivity, TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
+import { TicketActivity, TicketStatus } from 'src/app/shared/services/ticket/ticket.model';
 
 @Component({
   selector: 'app-activity-timeline',

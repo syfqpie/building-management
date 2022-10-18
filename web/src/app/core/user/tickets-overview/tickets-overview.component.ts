@@ -4,8 +4,8 @@ import { forkJoin, Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Color, colorSets, MultiSeries, SingleSeries } from '@swimlane/ngx-charts';
 
-import { TicketOverview } from 'src/app/shared/services/tickets/tickets.model';
-import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
+import { TicketOverview } from 'src/app/shared/services/ticket/ticket.model';
+import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
 
 @Component({
   selector: 'app-tickets-overview',
@@ -30,7 +30,7 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
 
   constructor(
     private loadingBar: LoadingBarService,
-    private ticketSvc: TicketsService
+    private ticketSvc: TicketService
   ) { }
 
   ngOnInit(): void {

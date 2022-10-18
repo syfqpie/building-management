@@ -7,10 +7,10 @@ import { collapsedAnimation } from 'src/app/shared/animations/animation';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { TicketCategory, TicketPriority } from 'src/app/shared/services/tickets/tickets.model';
+import { TicketCategory, TicketPriority } from 'src/app/shared/services/ticket/ticket.model';
 import { UnitNo } from 'src/app/shared/services/unit/unit.model';
 import { UserEmail } from 'src/app/shared/services/user/user.model';
-import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
+import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
 import { UnitService } from 'src/app/shared/services/unit/unit.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 
@@ -73,7 +73,7 @@ export class AddTicketComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private router: Router,
     private notifySvc: NotifyService,
-    private ticketSvc: TicketsService,
+    private ticketSvc: TicketService,
     private unitSvc: UnitService,
     private userSvc: UserService
   ) { }

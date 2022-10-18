@@ -11,10 +11,10 @@ import {
   TicketCategory,
   TicketExtended,
   TicketPriority,
-  TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
+  TicketStatus } from 'src/app/shared/services/ticket/ticket.model';
 import { UnitNo } from 'src/app/shared/services/unit/unit.model';
 import { UserEmail } from 'src/app/shared/services/user/user.model';
-import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
+import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
 import { UnitService } from 'src/app/shared/services/unit/unit.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { AddTicketComponent } from 'src/app/components/tickets/add-ticket/add-ticket.component';
@@ -86,7 +86,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
     private helper: HelpersService,
-    private ticketSvc: TicketsService,
+    private ticketSvc: TicketService,
     private unitSvc: UnitService,
     private userSvc: UserService
   ) { }
@@ -149,7 +149,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.svcSubscription.add(
-      this.ticketSvc.getOneExtended(id).subscribe({
+      this.ticketSvc.retrieveExtended(id).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
