@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
+import { environment } from 'src/environments/environment';
+
 import { Floor } from './floor.model';
 
 const BASE_URL = `${ environment.baseUrl }v1/floors/`
