@@ -1,78 +1,55 @@
 import { Injectable, isDevMode } from '@angular/core';
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
   HttpResponse,
-  HttpErrorResponse,
+  HttpStatusCode
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
+import { AuthService } from '../services/auth/auth.service';
+import { HttpErrorCode, HttpErrorDetail, HttpHeaderConfig  } from './http.error';
+
 import { JwtService } from '../handlers/jwt/jwt.service';
 import { NotifyService } from '../handlers/notify/notify.service';
-import { AuthService } from '../services/auth/auth.service';
 
+/**
+ * Intercepts a HTTP request to append header with bearer token.
+ * 
+ * Edit this class to add more error handling.
+ */
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
 
   constructor(
     private jwtSvc: JwtService,
     private notify: NotifyService,
-    private authSvc: AuthService,
-    private router: Router
+    private router: Router,
+    private authSvc: AuthService
   ) { }
 
-  private handleError(error: HttpErrorResponse) {
-    let data = {}
-    data = {
-      reason: error && error.error.reason ? error.error.reason : '',
-      status: error.status
-    }
-    if (error instanceof HttpErrorResponse) {
-      // Server or connection error happened
-      if (!navigator.onLine) {
-        // Handle offline error
-      } else {
-        // Handle Http Error (error.status === 403, 404...)
-        if (
-          error.status === 401 &&
-          error.error.code === 'token_not_valid'
-        ) {
-          this.notify.error('Session ended', 'Please try to login again')
-          this.authSvc.logout()
-        } else if (
-          error.status === 403 &&
-          error.error?.detail === 'You do not have permission to perform this action.'
-        ) {
-          this.router.navigate(['/not-authorized'])
-        }
-      }
-    } else {
-      // Handle Client Error (Angular Error, ReferenceError...)
-    }
-    if (isDevMode()) {
-      console.error('It happens: ', error);
-    }
-
-    return throwError(() => error)
-  }
-
+  /**
+   * Intercept requests
+   * 
+   * @param req http request
+   * @param next http handler
+   * @returns a http handler
+   */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let headers = req.headers
-    headers = headers.append('Accept', '*/*')
+    // Get token
+    const token = this.jwtSvc.getToken('accessToken')
 
     // Append token if available
-    const token = this.jwtSvc.getToken('accessToken');
-
     if (token) {
-      headers = headers.append('Authorization', `Bearer ${token}`);
+      req = this.appendHeader(req, token)
     }
 
-    const request = req.clone({ headers });
-    return next.handle(request).pipe(
+    return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           // console.log('Event: ', event);
@@ -82,4 +59,70 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       catchError(this.handleError.bind(this))
     );
   }
+
+  /**
+   * Append token to request
+   * 
+   * @param req http request
+   * @param token saved token
+   * @returns updated request
+   */
+  private appendHeader(req: HttpRequest<any>, token: string) {
+    return req.clone({
+      setHeaders: {
+        'accept': HttpHeaderConfig.ACCEPT_VALUE,
+        'Authorization': `${HttpHeaderConfig.TOKEN_PREFIX} ${token}`
+      }
+    })
+  }
+
+  /**
+   * Error handling
+   * 
+   * Customised error handling here
+   * 
+   * @param error http error
+   * @returns HttpErrorResponse
+   */
+  private handleError(error: HttpErrorResponse) {
+    if (!navigator.onLine) {
+      // Server or connection error happened
+      // Handle offline error
+      this.notify.info('Info', 'No internet connection')
+    } else {
+      if (error instanceof HttpErrorResponse) {
+        // Handle Http Error
+        // ie: error.status === 403, 404...
+        if (
+          error.status === HttpStatusCode.Unauthorized &&
+          error.error.code === HttpErrorCode.TOKEN_NOT_VALID
+        ) {
+          // token not valid: wrong token or expired
+          // show toastr and logout
+          this.notify.error('Session ended', 'Please try to login again')
+          this.authSvc.logout()
+        } 
+        
+        if (
+          error.status === HttpStatusCode.Forbidden &&
+          error.error?.detail === HttpErrorDetail.NO_PERMISSION
+        ) {
+          // user has no permission to access API
+          // navigated not not-authorized page
+          this.router.navigate(['/not-authorized'])
+        }
+      } else {
+        // Handle Client Error
+        // ie: Angular Error, ReferenceError...
+      }
+    }
+    
+    if (isDevMode()) {
+      // Debugging...
+      console.error('It happens: ', error);
+    }
+
+    return throwError(() => error)
+  }
+
 }
