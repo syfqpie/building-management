@@ -1,5 +1,8 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
+/**
+ * Validate 2 given password to confirm a password.
+ */
 export default class PasswordValidation {
     static match(controlName: string, checkControlName: string): ValidatorFn {
         return (controls: AbstractControl) => {
