@@ -13,7 +13,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth/auth.service';
-import { HttpErrorCode, HttpErrorDetail, HttpHeaderConfig  } from './http.error';
+import { HttpErrorCode, HttpErrorDetail, HttpHeaderConfig, HttpMethod  } from './http.error';
 
 import { JwtService } from '../handlers/jwt/jwt.service';
 import { NotifyService } from '../handlers/notify/notify.service';
@@ -57,7 +57,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError(this.handleError.bind(this))
-    );
+    )
   }
 
   /**
@@ -68,11 +68,23 @@ export class HttpTokenInterceptor implements HttpInterceptor {
    * @returns updated request
    */
   private appendHeader(req: HttpRequest<any>, token: string) {
+    let headerConfig: any = {
+      'accept': HttpHeaderConfig.ACCEPT_VALUE,
+      'Authorization': `${HttpHeaderConfig.TOKEN_PREFIX} ${token}`
+    }
+
+    // Append content type to header if 
+    // method is POST or PUT or PATCH
+    if (
+      req.method === HttpMethod.POST || 
+      req.method === HttpMethod.PUT || 
+      req.method === HttpMethod.PATCH
+    ) {
+      headerConfig[HttpHeaderConfig.CONTENT_TYPE] = HttpHeaderConfig.CONTENT_TYPE_JSON
+    }
+
     return req.clone({
-      setHeaders: {
-        'accept': HttpHeaderConfig.ACCEPT_VALUE,
-        'Authorization': `${HttpHeaderConfig.TOKEN_PREFIX} ${token}`
-      }
+      setHeaders: headerConfig
     })
   }
 
