@@ -27,7 +27,29 @@ export class VehicleService {
   ) { }
 
   /**
+   * Create a new vehicle entry
+   * 
+   * @param body - payload
+   * @param body.plateNo - vehicle plate no. 
+   * @param body.resident - resident owner ID
+   * @param body.vehicleType - [optional] vehicle type
+   *
+   * @returns New created vehicle entry
+   */
+   create(body: any): Observable<Vehicle> {
+    const urlTemp = `${ BASE_URL }`
+    return this.http.post<Vehicle>(urlTemp, body).pipe(
+      tap((res: Vehicle) => {
+        this.vehicle = res
+        // console.log('Vehicle:', this.vehicle)
+      })
+    )
+  }
+
+  /**
    * Returns a list of vehicles
+   * 
+   * @param filterStr - string filter
    *
    * @returns List of vehicles
    */
@@ -44,6 +66,8 @@ export class VehicleService {
 
   /**
    * Returns a specific vehicle
+   * 
+   * @param id - vehicle ID
    *
    * @returns A vehicle
    */
@@ -59,6 +83,8 @@ export class VehicleService {
 
   /**
    * Returns an extended specific vehicle
+   * 
+   * @param id - vehicle ID
    *
    * @returns An extended vehicle
    */
@@ -68,21 +94,6 @@ export class VehicleService {
       tap((res: VehicleExtended) => {
         this.vehicleExtended = res
         // console.log('Vehicle:', this.vehicleExtended)
-      })
-    )
-  }
-
-  /**
-   * Create a new vehicle entry
-   *
-   * @returns A vehicle
-   */
-  create(body: any): Observable<Vehicle> {
-    const urlTemp = `${ BASE_URL }`
-    return this.http.post<Vehicle>(urlTemp, body).pipe(
-      tap((res: Vehicle) => {
-        this.vehicle = res
-        // console.log('Vehicle:', this.vehicle)
       })
     )
   }

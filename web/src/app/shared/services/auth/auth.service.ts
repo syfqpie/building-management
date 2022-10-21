@@ -60,9 +60,9 @@ export class AuthService {
   /**
    * Logout of system
    * 
-   * Remove token from localStorage.
-   * Reset user variable
-   * Navigate to login page
+   * - Remove token from localStorage
+   * - Reset user variable
+   * - Navigate to login page
    *
    * @returns Nothing
    */
