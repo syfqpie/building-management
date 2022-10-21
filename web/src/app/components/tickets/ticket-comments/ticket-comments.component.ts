@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { TicketCommentExtended } from 'src/app/shared/services/tickets/tickets.model';
-import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
+import { TicketCommentExtended } from 'src/app/shared/services/ticket/ticket.model';
+import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
 
 @Component({
   selector: 'app-ticket-comments',
@@ -37,7 +37,7 @@ export class TicketCommentsComponent implements OnInit, OnDestroy, OnChanges {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private ticketSvc: TicketsService,
+    private ticketSvc: TicketService,
   ) { }
 
   ngOnInit(): void {

@@ -6,7 +6,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
-import { GenderType, TitleType } from 'src/app/shared/services/residents/residents.model';
+import { GenderType, TitleType } from 'src/app/shared/services/resident/resident.model';
 
 @Component({
   selector: 'app-resident-registration',

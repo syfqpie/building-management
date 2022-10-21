@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
+
 import { environment } from 'src/environments/environment';
 import { JwtService } from '../../handlers/jwt/jwt.service';
 
@@ -59,9 +60,9 @@ export class AuthService {
   /**
    * Logout of system
    * 
-   * Remove token from localStorage.
-   * Reset user variable
-   * Navigate to login page
+   * - Remove token from localStorage
+   * - Reset user variable
+   * - Navigate to login page
    *
    * @returns Nothing
    */

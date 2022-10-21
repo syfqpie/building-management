@@ -1,4 +1,4 @@
-import { Resident } from "../residents/residents.model";
+import { Resident } from "../resident/resident.model";
 
 /**
  * A base class for the vehicle entity.

@@ -9,8 +9,8 @@ import {
   Ticket,
   TicketCategory,
   TicketPriority,
-  TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
-import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
+  TicketStatus } from 'src/app/shared/services/ticket/ticket.model';
+import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
 
 @Component({
   selector: 'app-tickets',
@@ -51,7 +51,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private router: Router,
-    private ticketSvc: TicketsService
+    private ticketSvc: TicketService
   ) { }
 
   ngOnInit(): void {
@@ -68,7 +68,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
     
-    this.subscription = this.ticketSvc.getAll().subscribe({
+    this.subscription = this.ticketSvc.list().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false

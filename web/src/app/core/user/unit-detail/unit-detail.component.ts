@@ -5,9 +5,9 @@ import { forkJoin, Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { ActivityType, UnitActivityNested } from 'src/app/shared/services/activities/activities.model';
-import { UnitExtended } from 'src/app/shared/services/units/units.model';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
+import { ActivityType, UnitActivityNested } from 'src/app/shared/services/activity/activity.model';
+import { UnitExtended } from 'src/app/shared/services/unit/unit.model';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
 
 @Component({
   selector: 'app-unit-detail',
@@ -36,7 +36,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
     private router: Router,
-    private unitSvc: UnitsService
+    private unitSvc: UnitService
   ) { }
 
   ngOnInit(): void {
@@ -72,7 +72,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.svcSubscription.add(forkJoin([
-      this.unitSvc.getOneExtended(id),
+      this.unitSvc.retrieveExtended(id),
       this.unitSvc.getUnitActivities(id)
     ]).subscribe({
       next: () => {

@@ -6,8 +6,8 @@ import { Color, colorSets, SingleSeries } from '@swimlane/ngx-charts';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { ActivityType, UnitActivity } from 'src/app/shared/services/activities/activities.model';
-import { ActivitiesService } from 'src/app/shared/services/activities/activities.service';
+import { ActivityType, UnitActivity } from 'src/app/shared/services/activity/activity.model';
+import { ActivityService } from 'src/app/shared/services/activity/activity.service';
 
 @Component({
   selector: 'app-unit-activities',
@@ -50,7 +50,7 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private route: ActivatedRoute,
-    private activitySvc: ActivitiesService
+    private activitySvc: ActivityService
   ) { }
 
   ngOnInit(): void {
@@ -82,7 +82,7 @@ export class UnitActivitiesComponent implements OnInit, OnDestroy {
     this.isProcessing = true
     
     this.subscription = forkJoin([
-      this.activitySvc.getAll(),
+      this.activitySvc.list(),
       this.activitySvc.getOverview()
     ]).subscribe({
       next: () => {

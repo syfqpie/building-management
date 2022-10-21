@@ -176,7 +176,7 @@ export class ParkingService {
    *
    * @returns Updated extended parking
    */
-  assignResident(id: any, body: any): Observable<ParkingExtended>  {
+  assignResident(id: number, body: any): Observable<ParkingExtended>  {
     const urlTemp = `${ BASE_URL }${ id }/assign-resident/`
     return this.http.post<ParkingExtended>(urlTemp, body).pipe(
       tap((res: ParkingExtended) => {
@@ -193,7 +193,7 @@ export class ParkingService {
    * 
    * @returns Updated extended parking
    */
-  checkoutResident(id: any): Observable<ParkingExtended> {
+  checkoutResident(id: number): Observable<ParkingExtended> {
     const urlTemp = `${ BASE_URL }${ id }/checkout-resident/`
     return this.http.get<ParkingExtended>(urlTemp).pipe(
       tap((res: ParkingExtended) => {

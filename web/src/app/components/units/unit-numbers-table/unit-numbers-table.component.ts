@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
-import { UnitNumbersService } from 'src/app/shared/services/unit-numbers/unit-numbers.service';
+import { UnitNumber } from 'src/app/shared/services/unit-number/unit-number.model';
+import { UnitNumberService } from 'src/app/shared/services/unit-number/unit-number.service';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 @Component({
@@ -62,7 +62,7 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
      private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private unitNumberSvc: UnitNumbersService
+    private unitNumberSvc: UnitNumberService
   ) { }
 
   ngOnInit(): void {
@@ -81,7 +81,7 @@ export class UnitNumbersTableComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.unitNumberSvc.getAll().subscribe({
+    this.subscription.add(this.unitNumberSvc.list().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false

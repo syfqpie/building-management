@@ -6,7 +6,6 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 import PasswordValidation from 'src/app/shared/handlers/validators/password-match.validator';
 
-import { User } from 'src/app/shared/services/users/users.model';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({

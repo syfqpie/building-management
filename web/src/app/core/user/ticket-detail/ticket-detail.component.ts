@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 
-import { HelpersService } from 'src/app/shared/services/helpers/helpers.service';
+import { HelperService } from 'src/app/shared/services/helper/helper.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
@@ -11,12 +11,12 @@ import {
   TicketCategory,
   TicketExtended,
   TicketPriority,
-  TicketStatus } from 'src/app/shared/services/tickets/tickets.model';
-import { UnitNo } from 'src/app/shared/services/units/units.model';
-import { UserEmail } from 'src/app/shared/services/users/users.model';
-import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
-import { UsersService } from 'src/app/shared/services/users/users.service';
+  TicketStatus } from 'src/app/shared/services/ticket/ticket.model';
+import { UnitNo } from 'src/app/shared/services/unit/unit.model';
+import { UserEmail } from 'src/app/shared/services/user/user.model';
+import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 import { AddTicketComponent } from 'src/app/components/tickets/add-ticket/add-ticket.component';
 
 @Component({
@@ -85,10 +85,10 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
-    private helper: HelpersService,
-    private ticketSvc: TicketsService,
-    private unitSvc: UnitsService,
-    private userSvc: UsersService
+    private helper: HelperService,
+    private ticketSvc: TicketService,
+    private unitSvc: UnitService,
+    private userSvc: UserService
   ) { }
 
   ngOnInit(): void {
@@ -149,7 +149,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.svcSubscription.add(
-      this.ticketSvc.getOneExtended(id).subscribe({
+      this.ticketSvc.retrieveExtended(id).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
@@ -231,7 +231,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.isFetchingOpts = true
     
     this.svcSubscription.add(forkJoin([
-      this.unitSvc.getAll(),
+      this.unitSvc.list(),
       this.userSvc.filterSimplified('user_type=1')
     ]).subscribe({
       next: () => {
