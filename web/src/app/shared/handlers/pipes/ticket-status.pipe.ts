@@ -1,6 +1,22 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TicketStatus } from '../../services/tickets/tickets.model';
+import { TicketStatus } from '../../services/ticket/ticket.model';
 
+/**
+ * Transforms an integer to a string representative of TicketStatus
+ * @see `TicketStatus`
+ *
+ * ### Pre-defined options
+ *
+ * | Option                     | Value            | String representative |
+ * |----------------------------|------------------|-----------------------|
+ * | TicketStatus.OPENED        | 1                | Opened                |
+ * | TicketStatus.IN_PROGRESS   | 2                | In progress           |
+ * | TicketStatus.RESOLVED      | 3                | Resolved              |
+ * | TicketStatus.CLOSED        | 4                | Closed                |
+ * | TicketStatus.DUPLICATED    | 5                | Duplicated            |
+ * | Else                       | Other than above | N/A                   |
+ * 
+ */
 @Pipe({
   name: 'ticketStatus'
 })

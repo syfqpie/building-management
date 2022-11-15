@@ -19,6 +19,7 @@ import { UnitsComponent } from './units/units.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
+import { VehicleDetailComponent } from './vehicle-detail/vehicle-detail.component';
 
 // Child components
 import { AccountSettingsComponent } from 'src/app/components/settings/account-settings/account-settings.component';
@@ -75,6 +76,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     UnitsConfigurationComponent,
     UnitDetailComponent,
     VehiclesComponent,
+    VehicleDetailComponent,
     // Child components
     AccountSettingsComponent,
     AddParkingComponent,

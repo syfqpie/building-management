@@ -1,6 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TicketCategory } from '../../services/tickets/tickets.model';
+import { TicketCategory } from '../../services/ticket/ticket.model';
 
+/**
+ * Transforms an integer to a string representative of TicketCategory
+ * @see `TicketCategory`
+ *
+ * ### Pre-defined options
+ *
+ * | Option               | Value            | String representative |
+ * |----------------------|------------------|-----------------------|
+ * | TicketCategory.SYS   | 1                | System                |
+ * | TicketCategory.UNIT  | 2                | Unit                  |
+ * | TicketCategory.FACI  | 3                | Facility              |
+ * | Else                 | Other than above | N/A                   |
+ * 
+ */
 @Pipe({
   name: 'ticketCategory'
 })

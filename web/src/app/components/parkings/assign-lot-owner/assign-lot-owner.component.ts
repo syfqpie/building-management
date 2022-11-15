@@ -8,11 +8,11 @@ import { collapsedAnimation } from 'src/app/shared/animations/animation';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { Resident } from 'src/app/shared/services/residents/residents.model';
-import { Vehicle, VehicleType } from 'src/app/shared/services/vehicles/vehicles.model';
-import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
-import { ResidentsService } from 'src/app/shared/services/residents/residents.service';
-import { VehiclesService } from 'src/app/shared/services/vehicles/vehicles.service';
+import { Resident } from 'src/app/shared/services/resident/resident.model';
+import { Vehicle, VehicleType } from 'src/app/shared/services/vehicle/vehicle.model';
+import { ParkingService } from 'src/app/shared/services/parking/parking.service';
+import { ResidentService } from 'src/app/shared/services/resident/resident.service';
+import { VehicleService } from 'src/app/shared/services/vehicle/vehicle.service';
 
 @Component({
   selector: 'app-assign-lot-owner',
@@ -71,9 +71,9 @@ export class AssignLotOwnerComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private parkingSvc: ParkingsService,
-    private residentSvc: ResidentsService,
-    private vehicleSvc: VehiclesService
+    private parkingSvc: ParkingService,
+    private residentSvc: ResidentService,
+    private vehicleSvc: VehicleService
   ) { }
 
   ngOnInit(): void {

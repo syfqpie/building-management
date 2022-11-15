@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { User } from 'src/app/shared/services/users/users.model';
-import { UsersService } from 'src/app/shared/services/users/users.service';
+import { User } from 'src/app/shared/services/user/user.model';
+import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'app-account-settings',
@@ -40,7 +40,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private userSvc: UsersService
+    private userSvc: UserService
   ) { }
 
   ngOnInit(): void {

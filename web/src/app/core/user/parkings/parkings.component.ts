@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { ParkingExtended } from 'src/app/shared/services/parkings/parkings.model';
-import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
+import { ParkingExtended } from 'src/app/shared/services/parking/parking.model';
+import { ParkingService } from 'src/app/shared/services/parking/parking.service';
 
 @Component({
   selector: 'app-parkings',
@@ -43,7 +43,7 @@ export class ParkingsComponent implements OnInit, OnDestroy  {
   constructor(
     private loadingBar: LoadingBarService,
     private router: Router,
-    private parkingSvc: ParkingsService
+    private parkingSvc: ParkingService
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +61,7 @@ export class ParkingsComponent implements OnInit, OnDestroy  {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription = this.parkingSvc.getAllExtended().subscribe({
+    this.subscription = this.parkingSvc.listExtended().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false

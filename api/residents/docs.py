@@ -417,6 +417,20 @@ class DocuConfigResidentVehicle(enum.Enum):
         },
         tags=[VEHICLE_TAG]
     )
+    RETRIEVE_EXT = {
+        'operation_id': 'Retrieve a vehicle extended',
+        'operation_description': 'Retrieve a vehicle extended information',
+        'responses': {
+            status.HTTP_200_OK: openapi.Response(
+                description='Ok',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties=VEHICLE_OBJS
+                )
+            )
+        },
+        'tags': [VEHICLE_TAG]
+    }
     ACTIVATE = {
         'operation_id': 'Activate vehicle',
         'operation_description': 'Activate a vehicle',

@@ -5,11 +5,11 @@ import { forkJoin, Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { Block } from 'src/app/shared/services/blocks/blocks.model';
-import { Floor } from 'src/app/shared/services/floors/floors.model';
-import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
-import { FloorsService } from 'src/app/shared/services/floors/floors.service';
-import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
+import { Block } from 'src/app/shared/services/block/block.model';
+import { Floor } from 'src/app/shared/services/floor/floor.model';
+import { BlockService } from 'src/app/shared/services/block/block.service';
+import { FloorService } from 'src/app/shared/services/floor/floor.service';
+import { ParkingService } from 'src/app/shared/services/parking/parking.service';
 
 @Component({
   selector: 'app-add-parking',
@@ -51,9 +51,9 @@ export class AddParkingComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private blockSvc: BlocksService,
-    private floorSvc: FloorsService,
-    private parkingSvc: ParkingsService
+    private blockSvc: BlockService,
+    private floorSvc: FloorService,
+    private parkingSvc: ParkingService
   ) { }
 
   ngOnInit(): void {
@@ -81,8 +81,8 @@ export class AddParkingComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.subscription.add(forkJoin([
-      this.blockSvc.getAll(),
-      this.floorSvc.getAll()
+      this.blockSvc.list(),
+      this.floorSvc.list()
     ]).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()

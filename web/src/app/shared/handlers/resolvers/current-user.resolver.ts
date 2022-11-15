@@ -7,23 +7,28 @@ import {
 } from '@angular/router';
 import { catchError, EMPTY, Observable } from 'rxjs';
 
-import { JwtService } from 'src/app/shared/handlers/jwt/jwt.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { User } from '../../services/user/user.model';
+import { UserService } from '../../services/user/user.service';
 
-import { User } from '../../services/users/users.model';
-import { UsersService } from '../../services/users/users.service';
-
+/**
+ * A current user resolver
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class CurrentUserResolver implements Resolve<User> {
 
   constructor(
-    private userSvc: UsersService,
-    private jwtSvc: JwtService,
+    private userSvc: UserService,
     private router: Router
   ){}
 
+  /**
+   * Resolve
+   * 
+   * Will invoke a API call to get account information.
+   * If return 403, will navigate user to login page.
+   */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User> {
     // Return resolver
     return this.userSvc.getAccountInfo().pipe(

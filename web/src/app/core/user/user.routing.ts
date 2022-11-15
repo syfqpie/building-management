@@ -16,6 +16,7 @@ import { UnitActivitiesComponent } from './unit-activities/unit-activities.compo
 import { UnitDetailComponent } from './unit-detail/unit-detail.component';
 import { UnitsConfigurationComponent } from './units-configuration/units-configuration.component';
 import { UnitsComponent } from './units/units.component';
+import { VehicleDetailComponent } from './vehicle-detail/vehicle-detail.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 
 export const UserRoutes: Routes = [
@@ -137,12 +138,24 @@ export const UserRoutes: Routes = [
                         data: {
                             title: 'Parking detail'
                         }
-                    },
+                    }
+                ]
+            },
+            {
+                path: 'vehicles',
+                children: [
                     {
-                        path: 'vehicles',
+                        path: '',
                         component: VehiclesComponent,
                         data: {
                             title: 'Vehicles'
+                        }
+                    },
+                    {
+                        path: 'detail/:id',
+                        component: VehicleDetailComponent,
+                        data: {
+                            title: 'Vehicle detail'
                         }
                     }
                 ]

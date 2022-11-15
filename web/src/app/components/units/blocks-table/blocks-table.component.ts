@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { Block } from 'src/app/shared/services/blocks/blocks.model';
-import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
+import { Block } from 'src/app/shared/services/block/block.model';
+import { BlockService } from 'src/app/shared/services/block/block.service';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 @Component({
@@ -62,7 +62,7 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
-    private blockSvc: BlocksService
+    private blockSvc: BlockService
   ) { }
 
   ngOnInit(): void {
@@ -81,7 +81,7 @@ export class BlocksTableComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.blockSvc.getAll().subscribe({
+    this.subscription.add(this.blockSvc.list().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false

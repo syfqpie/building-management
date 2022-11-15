@@ -5,14 +5,14 @@ import { forkJoin, Subscription } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 
-import { Block } from 'src/app/shared/services/blocks/blocks.model';
-import { Floor } from 'src/app/shared/services/floors/floors.model';
-import { Unit } from 'src/app/shared/services/units/units.model';
-import { UnitNumber } from 'src/app/shared/services/unit-numbers/unit-numbers.model';
-import { BlocksService } from 'src/app/shared/services/blocks/blocks.service';
-import { FloorsService } from 'src/app/shared/services/floors/floors.service';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
-import { UnitNumbersService } from 'src/app/shared/services/unit-numbers/unit-numbers.service';
+import { Block } from 'src/app/shared/services/block/block.model';
+import { Floor } from 'src/app/shared/services/floor/floor.model';
+import { Unit } from 'src/app/shared/services/unit/unit.model';
+import { UnitNumber } from 'src/app/shared/services/unit-number/unit-number.model';
+import { BlockService } from 'src/app/shared/services/block/block.service';
+import { FloorService } from 'src/app/shared/services/floor/floor.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
+import { UnitNumberService } from 'src/app/shared/services/unit-number/unit-number.service';
 import { UnitAddComponent } from 'src/app/components/units/unit-add/unit-add.component';
 
 @Component({
@@ -54,10 +54,10 @@ export class UnitsComponent implements OnInit, OnDestroy {
   constructor(
     private loadingBar: LoadingBarService,
     private router: Router,
-    private unitSvc: UnitsService,
-    private blockSvc: BlocksService,
-    private floorSvc: FloorsService,
-    private unitNumberSvc: UnitNumbersService
+    private unitSvc: UnitService,
+    private blockSvc: BlockService,
+    private floorSvc: FloorService,
+    private unitNumberSvc: UnitNumberService
   ) { }
 
   ngOnInit(): void {
@@ -76,10 +76,10 @@ export class UnitsComponent implements OnInit, OnDestroy {
     this.isProcessing = true
 
     this.subscription = forkJoin([
-      this.unitSvc.getAll(),
-      this.blockSvc.getAll(),
-      this.floorSvc.getAll(),
-      this.unitNumberSvc.getAll()
+      this.unitSvc.list(),
+      this.blockSvc.list(),
+      this.floorSvc.list(),
+      this.unitNumberSvc.list()
     ]).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()

@@ -1,0 +1,111 @@
+<div class="container-fluid pt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Vehicle information
+                    </h5>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Plate no.:
+                        </label>
+                        <p class="text-muted small">
+                            {{ vehicle?.plateNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Vehicle type:
+                        </label>
+                        <p class="text-muted small">
+                            {{ vehicle?.vehicleType | vehicleType }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small d-block">
+                            Active:
+                        </label>
+                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
+                            border border-opacity-10 rounded-2 mt-1"
+                            [ngClass]="{
+                                'bg-success text-success \
+                                    border-success': vehicle?.isActive,
+                                'bg-danger text-danger \
+                                    border-danger': !vehicle?.isActive
+                            }">
+                            <span *ngIf="vehicle?.isActive; else isNotActiveVehicle">
+                                <i class="fa-regular fa-circle-check my-auto"></i>
+                                Active
+                            </span>
+                            <ng-template #isNotActiveVehicle>
+                                <span>
+                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
+                                    Inactive
+                                </span>
+                            </ng-template>
+                        </p>
+
+                        <div class="mb-2">
+                            <label class="fw-bold text-uppercase small">
+                                Added on
+                            </label>
+                            <p class="text-muted small">
+                                {{ vehicle?.createdAt | date: 'dd/MM/yyyy, h:mm a' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Resident information
+                    </h5>
+                    
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Resident no.:
+                        </label>
+                        <p class="text-muted small">
+                            {{ vehicle?.resident?.residentNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Name:
+                        </label>
+                        <p class="text-muted small">
+                            {{ vehicle?.resident?.name }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Phone no.:
+                        </label>
+                        <p class="text-muted small">
+                            {{ vehicle?.resident?.phoneNo }}
+                        </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="fw-bold text-uppercase small">
+                            Email:
+                        </label>
+                        <p class="text-muted small">
+                            {{ vehicle?.resident?.email }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

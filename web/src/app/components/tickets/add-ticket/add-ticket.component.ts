@@ -7,12 +7,12 @@ import { collapsedAnimation } from 'src/app/shared/animations/animation';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { TicketCategory, TicketPriority } from 'src/app/shared/services/tickets/tickets.model';
-import { UnitNo } from 'src/app/shared/services/units/units.model';
-import { UserEmail } from 'src/app/shared/services/users/users.model';
-import { TicketsService } from 'src/app/shared/services/tickets/tickets.service';
-import { UnitsService } from 'src/app/shared/services/units/units.service';
-import { UsersService } from 'src/app/shared/services/users/users.service';
+import { TicketCategory, TicketPriority } from 'src/app/shared/services/ticket/ticket.model';
+import { UnitNo } from 'src/app/shared/services/unit/unit.model';
+import { UserEmail } from 'src/app/shared/services/user/user.model';
+import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
+import { UnitService } from 'src/app/shared/services/unit/unit.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'app-add-ticket',
@@ -73,9 +73,9 @@ export class AddTicketComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private router: Router,
     private notifySvc: NotifyService,
-    private ticketSvc: TicketsService,
-    private unitSvc: UnitsService,
-    private userSvc: UsersService
+    private ticketSvc: TicketService,
+    private unitSvc: UnitService,
+    private userSvc: UserService
   ) { }
 
   ngOnInit(): void {
@@ -200,7 +200,7 @@ export class AddTicketComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isFetchingOpts = true
     
-    this.subscription.add(this.unitSvc.getAll().subscribe({
+    this.subscription.add(this.unitSvc.list().subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isFetchingOpts = false

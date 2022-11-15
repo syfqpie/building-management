@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
-import { ParkingExtended, ParkingPassCurrent } from 'src/app/shared/services/parkings/parkings.model';
-import { ParkingsService } from 'src/app/shared/services/parkings/parkings.service';
+import { ParkingExtended, ParkingPassCurrent } from 'src/app/shared/services/parking/parking.model';
+import { ParkingService } from 'src/app/shared/services/parking/parking.service';
 import { ModalSize } from 'src/app/components/reusables/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -36,7 +36,7 @@ export class ParkingDetailComponent implements OnInit, OnDestroy {
     private loadingBar: LoadingBarService,
     private notifySvc: NotifyService,
     private route: ActivatedRoute,
-    private parkingSvc: ParkingsService
+    private parkingSvc: ParkingService
   ) { }
 
   ngOnInit(): void {
@@ -65,7 +65,7 @@ export class ParkingDetailComponent implements OnInit, OnDestroy {
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.parkingSvc.getOneExtended(id).subscribe({
+    this.subscription.add(this.parkingSvc.retrieveExtended(id).subscribe({
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
