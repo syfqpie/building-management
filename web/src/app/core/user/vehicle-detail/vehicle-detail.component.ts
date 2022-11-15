@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Subscription } from 'rxjs';
-import { Vehicle } from 'src/app/shared/services/vehicle/vehicle.model';
+import { VehicleExtended } from 'src/app/shared/services/vehicle/vehicle.model';
 import { VehicleService } from 'src/app/shared/services/vehicle/vehicle.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { VehicleService } from 'src/app/shared/services/vehicle/vehicle.service'
 export class VehicleDetailComponent implements OnInit, OnDestroy {
 
   // Data
-  vehicle: Vehicle | undefined
+  vehicle: VehicleExtended | undefined
 
   // Subscription
   subscription: Subscription = new Subscription
@@ -53,7 +53,7 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
     this.isProcessing = true
     
     this.subscription.add(
-      this.vehicleSvc.retrieve(id).subscribe({
+      this.vehicleSvc.retrieveExtended(id).subscribe({
         next: () => {
           this.loadingBar.useRef('http').complete()
           this.isProcessing = false
@@ -63,7 +63,7 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
           this.isProcessing = false
         },
         complete: () => {
-          this.vehicle = this.vehicleSvc.vehicle
+          this.vehicle = this.vehicleSvc.vehicleExtended
         }
       })
     )
