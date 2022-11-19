@@ -58,7 +58,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-
 @NgModule({
   declarations: [
     AboutSystemComponent,
