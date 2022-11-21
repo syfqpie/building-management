@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Layout
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { UserNavbarComponent } from './components/navbars/user-navbar/user-navbar.component';
 import { UserSidebarComponent } from './components/sidebars/user-sidebar/user-sidebar.component';
 import { UserFooterComponent } from './components/footers/user-footer/user-footer.component';
@@ -24,6 +25,7 @@ import { HttpTokenInterceptor } from './shared/interceptors/http.token.intercept
 @NgModule({
   declarations: [
     AppComponent,
+    AuthLayoutComponent,
     UserNavbarComponent,
     UserSidebarComponent,
     UserFooterComponent,
