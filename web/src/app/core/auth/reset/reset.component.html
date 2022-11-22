@@ -1,208 +1,192 @@
-<div class="container-fluid bg-dark vh-100">
-    <div class="row h-100">
-        <div class="col-sm-12 col-md-4 d-flex align-items-center justify-content-center bg-white">
-            <!-- Confirm reset form -->
-            <div *ngIf="isConfirmReset; else isNotConfirmReset">
-                <form [formGroup]="confirmForm"
-                    class="need-validation row justify-content-center">
-                    <div class="col-10 col-md-7">
-                        <img src="assets/images/illustrations/reset-password.png"
-                            class="w-100 d-block d-md-none" />
-                        <img class="mx-auto d-none d-md-block mb-3"
-                            src="assets/images/default/logo-primary.png"
-                            style="height: 5rem; width: 5rem" />
-                        <p class="text-muted text-center">
-                            Confirm to reset password
-                        </p>
-                    </div>
-                    <div class="col-10 col-md-7 mb-3 position-relative">
-                        <label for="formNewPassword1" class="form-label">
-                            Password
-                        </label>
-                        <input id="formNewPassword1"
-                            type="password"
-                            class="form-control"
-                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                            formControlName="newPassword1"
-                            [ngClass]="{
-                                'is-invalid': confirmForm.controls['newPassword1'].touched &&
-                                confirmForm.controls['newPassword1'].errors,
-                                'is-valid': confirmForm.controls['newPassword1'].touched &&
-                                !confirmForm.controls['newPassword1'].errors
-                            }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
-                            *ngIf="confirmForm.controls['newPassword1'].errors &&
-                            (confirmForm.controls['newPassword1'].dirty ||
-                            confirmForm.controls['newPassword1'].touched)">
-                            <ng-container *ngFor="let message of formMessages['newPassword1']">
-                                <span *ngIf="confirmForm.controls['newPassword1'].hasError(message.type) &&
-                                    (confirmForm.controls['newPassword1'].dirty ||
-                                    confirmForm.controls['newPassword1'].touched)">
-                                    • {{ message.message }}
-                                </span>
-                            </ng-container>
-                        </div>
-                    </div>
+<div>
+    <!-- Confirm reset form -->
+    <form
+        *ngIf="isConfirmReset; else isNotConfirmReset"
+        [formGroup]="confirmForm"
+        class="need-validation row
+        justify-content-center">
+        <div class="col-10 col-md-8 mb-3 position-relative">
+            <label for="formNewPassword1" class="form-label">
+                Password
+            </label>
+            <input
+                id="formNewPassword1"
+                type="password"
+                class="form-control"
+                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                formControlName="newPassword1"
+                [ngClass]="{
+                    'is-invalid': confirmForm.controls['newPassword1'].touched &&
+                    confirmForm.controls['newPassword1'].errors,
+                    'is-valid': confirmForm.controls['newPassword1'].touched &&
+                    !confirmForm.controls['newPassword1'].errors
+                }" />
+            <div
+                *ngIf="confirmForm.controls['newPassword1'].errors &&
+                (confirmForm.controls['newPassword1'].dirty ||
+                confirmForm.controls['newPassword1'].touched)"
+                class="invalid-tooltip invalid-tooltip-right">
+                <ng-container *ngFor="let message of formMessages['newPassword1']">
+                    <span
+                        *ngIf="confirmForm.controls['newPassword1'].hasError(message.type) &&
+                        (confirmForm.controls['newPassword1'].dirty ||
+                        confirmForm.controls['newPassword1'].touched)">
+                        • {{ message.message }}
+                    </span>
+                </ng-container>
+            </div>
+        </div>
 
-                    <div class="col-10 col-md-7 mb-3 position-relative">
-                        <label for="formNewPassword2" class="form-label">
-                            Confirm password
-                        </label>
-                        <input id="formNewPassword2"
-                            type="password"
-                            class="form-control"
-                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                            formControlName="newPassword2"
-                            [ngClass]="{
-                                'is-invalid': confirmForm.controls['newPassword2'].touched &&
-                                confirmForm.controls['newPassword2'].errors,
-                                'is-valid': confirmForm.controls['newPassword2'].touched &&
-                                !confirmForm.controls['newPassword2'].errors
-                            }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
-                            *ngIf="confirmForm.controls['newPassword2'].errors &&
-                            (confirmForm.controls['newPassword2'].dirty ||
-                            confirmForm.controls['newPassword2'].touched)">
-                            <ng-container *ngFor="let message of formMessages['newPassword2']">
-                                <span *ngIf="confirmForm.controls['newPassword2'].hasError(message.type) &&
-                                    (confirmForm.controls['newPassword2'].dirty ||
-                                    confirmForm.controls['newPassword2'].touched)">
-                                    • {{ message.message }}
-                                </span>
-                            </ng-container>
-                        </div>
-                    </div>
+        <div class="col-10 col-md-8 mb-3 position-relative">
+            <label for="formNewPassword2" class="form-label">
+                Confirm password
+            </label>
+            <input
+                id="formNewPassword2"
+                type="password"
+                class="form-control"
+                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                formControlName="newPassword2"
+                [ngClass]="{
+                    'is-invalid': confirmForm.controls['newPassword2'].touched &&
+                    confirmForm.controls['newPassword2'].errors,
+                    'is-valid': confirmForm.controls['newPassword2'].touched &&
+                    !confirmForm.controls['newPassword2'].errors
+                }" />
+            <div
+                *ngIf="confirmForm.controls['newPassword2'].errors &&
+                (confirmForm.controls['newPassword2'].dirty ||
+                confirmForm.controls['newPassword2'].touched)"
+                class="invalid-tooltip invalid-tooltip-right">
+                <ng-container *ngFor="let message of formMessages['newPassword2']">
+                    <span
+                        *ngIf="confirmForm.controls['newPassword2'].hasError(message.type) &&
+                        (confirmForm.controls['newPassword2'].dirty ||
+                        confirmForm.controls['newPassword2'].touched)">
+                        • {{ message.message }}
+                    </span>
+                </ng-container>
+            </div>
+        </div>
 
-                    <div class="col-10 col-md-7 d-grid gap-0">
-                        <button class="btn btn-primary"
-                            type="button"
-                            (click)="reset()"
-                            [disabled]="isProcessing || !confirmForm.valid" >
-                            <span *ngIf="!isProcessing; else isLoading">
-                                Confirm
-                            </span>
-                            <ng-template #isLoading>
-                                <i class="fa-solid fa-circle-notch fa-spin"></i>
-                            </ng-template>
-                        </button>
+        <div class="col-10 col-md-8 d-grid gap-0">
+            <button
+                class="btn btn-primary"
+                type="button"
+                (click)="reset()"
+                [disabled]="isProcessing || !confirmForm.valid" >
+                <span *ngIf="!isProcessing; else isLoading">
+                    Confirm
+                </span>
 
-                        <hr class="my-3" />
+                <ng-template #isLoading>
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                </ng-template>
+            </button>
 
-                        <p class="mb-0 text-center">
-                            <small class="text-muted">
-                                Back to
-                                <a [routerLink]="'/auth/login'"
-                                    class="link-primary">
-                                    Login
-                                </a>
-                            </small>
-                        </p>
+            <hr class="my-3" />
 
-                        <p class="mb-3 text-center">
-                            <small class="text-muted">
-                                No verification email?
-                                <a [routerLink]="'/auth/resend-verification'"
-                                    class="link-primary">
-                                    Resend
-                                </a>
-                            </small>
-                        </p>
-                    </div>
-                </form>
+            <p class="mb-0 text-center">
+                <small class="text-muted">
+                    Back to
+                    <a
+                        class="link-primary"
+                        [routerLink]="'/auth/login'">
+                        Login
+                    </a>
+                </small>
+            </p>
+
+            <p class="mb-3 text-center">
+                <small class="text-muted">
+                    No verification email?
+                    <a
+                        class="link-primary"
+                        [routerLink]="'/auth/resend-verification'">
+                        Resend
+                    </a>
+                </small>
+            </p>
+        </div>
+    </form>
+
+    <!-- Reset form -->
+    <ng-template #isNotConfirmReset>
+        <form
+            [formGroup]="requestForm"
+            class="need-validation row
+            justify-content-center">
+            <div class="col-10 col-md-8 mb-3 position-relative">
+                <label for="formEmail" class="form-label">
+                    Email
+                </label>
+                <input
+                    id="formEmail"
+                    type="email"
+                    class="form-control"
+                    placeholder="example@test.com"
+                    formControlName="email"
+                    [ngClass]="{
+                        'is-invalid': requestForm.controls['email'].touched &&
+                        requestForm.controls['email'].errors,
+                        'is-valid': requestForm.controls['email'].touched &&
+                        !requestForm.controls['email'].errors
+                    }" />
+                <div
+                    *ngIf="requestForm.controls['email'].errors &&
+                    (requestForm.controls['email'].dirty ||
+                    requestForm.controls['email'].touched)"
+                    class="invalid-tooltip invalid-tooltip-right">
+                    <ng-container *ngFor="let message of formMessages['email']">
+                        <span
+                            *ngIf="requestForm.controls['email'].hasError(message.type) &&
+                            (requestForm.controls['email'].dirty ||
+                            requestForm.controls['email'].touched)">
+                            • {{ message.message }}
+                        </span>
+                    </ng-container>
+                </div>
             </div>
 
-            <!-- Reset form -->
-            <ng-template #isNotConfirmReset>
-                <form [formGroup]="requestForm"
-                    class="need-validation row justify-content-center">
-                    <div class="col-10 col-md-7">
-                        <img src="assets/images/illustrations/request-reset-password.png"
-                            class="w-100 d-block d-md-none" />
-                        <img class="mx-auto d-none d-md-block mb-3"
-                            src="assets/images/default/logo-primary.png"
-                            style="height: 5rem; width: 5rem" />
-                        <p class="text-muted text-center">
-                            Please enter the account that
-                            you want to reset the password
-                        </p>
-                    </div>
+            <div class="col-10 col-md-8 d-grid gap-0">
+                <button
+                    class="btn btn-primary"
+                    type="button"
+                    (click)="request()"
+                    [disabled]="isProcessing || !requestForm.valid" >
+                    <span *ngIf="!isProcessing; else isLoading">
+                        Request
+                    </span>
 
-                    <div class="col-10 col-md-7 mb-3 position-relative">
-                        <label for="formEmail" class="form-label">
-                            Email
-                        </label>
-                        <input id="formEmail"
-                            type="email"
-                            class="form-control"
-                            placeholder="example@test.com"
-                            formControlName="email"
-                            [ngClass]="{
-                                'is-invalid': requestForm.controls['email'].touched &&
-                                requestForm.controls['email'].errors,
-                                'is-valid': requestForm.controls['email'].touched &&
-                                !requestForm.controls['email'].errors
-                            }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
-                            *ngIf="requestForm.controls['email'].errors &&
-                            (requestForm.controls['email'].dirty || requestForm.controls['email'].touched)">
-                            <ng-container *ngFor="let message of formMessages['email']">
-                                <span *ngIf="requestForm.controls['email'].hasError(message.type) &&
-                                    (requestForm.controls['email'].dirty || requestForm.controls['email'].touched)">
-                                    • {{ message.message }}
-                                </span>
-                            </ng-container>
-                        </div>
-                    </div>
+                    <ng-template #isLoading>
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </ng-template>
+                </button>
 
-                    <div class="col-10 col-md-7 d-grid gap-0">
-                        <button class="btn btn-primary"
-                            type="button"
-                            (click)="request()"
-                            [disabled]="isProcessing || !requestForm.valid" >
-                            <span *ngIf="!isProcessing; else isLoading">
-                                Request
-                            </span>
-                            <ng-template #isLoading>
-                                <i class="fa-solid fa-circle-notch fa-spin"></i>
-                            </ng-template>
-                        </button>
+                <hr class="my-3" />
 
-                        <hr class="my-3" />
+                <p class="mb-0 text-center">
+                    <small class="text-muted">
+                        Back to
+                        <a
+                            class="link-primary"
+                            [routerLink]="'/auth/login'">
+                            Login
+                        </a>
+                    </small>
+                </p>
 
-                        <p class="mb-0 text-center">
-                            <small class="text-muted">
-                                Back to
-                                <a [routerLink]="'/auth/login'"
-                                    class="link-primary">
-                                    Login
-                                </a>
-                            </small>
-                        </p>
-
-                        <p class="mb-3 text-center">
-                            <small class="text-muted">
-                                No verification email?
-                                <a [routerLink]="'/auth/resend-verification'"
-                                    class="link-primary">
-                                    Resend
-                                </a>
-                            </small>
-                        </p>
-                    </div>
-                </form>
-            </ng-template>
-        </div>
-
-        <div class="col-md-8 d-md-flex align-items-center justify-content-center d-none">
-            <!-- Image -->
-            <img *ngIf="isConfirmReset; else isNotConfirmResetImg"
-                src="assets/images/illustrations/reset-password.png"
-                style="height: 25rem;" />
-                
-            <ng-template #isNotConfirmResetImg>
-                <img src="assets/images/illustrations/request-reset-password.png"
-                    style="height: 25rem;" />
-            </ng-template>
-        </div>
-    </div>
+                <p class="mb-3 text-center">
+                    <small class="text-muted">
+                        No verification email?
+                        <a
+                            class="link-primary"
+                            [routerLink]="'/auth/resend-verification'">
+                            Resend
+                        </a>
+                    </small>
+                </p>
+            </div>
+        </form>
+    </ng-template>
 </div>
