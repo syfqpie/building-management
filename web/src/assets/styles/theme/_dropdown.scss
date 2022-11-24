@@ -4,7 +4,7 @@
         button.dropdown-item {
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
-            color: rgba(33, 37, 41, 0.75)
+            color: rgba(33, 37, 41, 0.75);
         }
         button.dropdown-item:active {
             padding-top: 0.5rem;
@@ -19,5 +19,27 @@
             border-bottom-left-radius: 0.25rem !important;
             border-bottom-right-radius: 0.25rem !important;
         }
+    }
+}
+
+.dropdown ul.dropdown-menu.dropdown-menu-profile li {
+    a.dropdown-item {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        color: rgba(33, 37, 41, 0.75) !important;
+    }
+    a.dropdown-item.active {
+        color: #fff !important;
+    }
+    a.dropdown-item:not(.active):hover {
+        background-color: #e9ecef;
+    }
+    &:first-child a.dropdown-item {
+        border-top-left-radius: 0.25rem !important;
+        border-top-right-radius: 0.25rem !important;
+    }
+    &:last-child a.dropdown-item {
+        border-bottom-left-radius: 0.25rem !important;
+        border-bottom-right-radius: 0.25rem !important;
     }
 }
