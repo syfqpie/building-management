@@ -1,28 +1,30 @@
 <div class="container-fluid pt-5">
 	<div class="row g-3">
 		<div class="col-sm-12 col-md-2">
-			<div class="card shadow-sm border-0">
-				<ul class="nav nav-pills flex-column">
+			<div class="card shadow-none border-0 bg-transparent">
+				<ul class="nav nav-custom flex-column">
 					<li class="nav-item">
-						<button class="nav-link w-100 rounded-0 rounded-top"
+						<button
+							class="nav-link w-100"
 							type="button"
 							role="tab"
 							[ngClass]="{
-                                'active': currentTab === 'details'
+                                'active': currentTab === TabChoice.DETAILS
                             }"
-                            (click)="changeTab('details')">
+                            (click)="changeTab(TabChoice.DETAILS)">
 							Account
 						</button>
 					</li>
 					
 					<li class="nav-item">
-						<button class="nav-link w-100 rounded-0 rounded-bottom"
+						<button
+							class="nav-link w-100"
 							type="button"
 							role="tab"
 							[ngClass]="{
-                                'active': currentTab === 'password'
+                                'active': currentTab === TabChoice.PASSWORD
                             }"
-                            (click)="changeTab('password')">
+                            (click)="changeTab(TabChoice.PASSWORD)">
 							Password
 						</button>
 					</li>
@@ -32,19 +34,17 @@
 
 		<div class="col-sm-12 col-md-10">
             <div class="tab-content">
-                <div class="tab-pane fade"
-                    role="tabpanel"
-                    [ngClass]="{
-                        'show active': currentTab === 'details'
-                    }">
+				<div
+					*ngIf="currentTab === TabChoice.DETAILS"
+					class="tab-pane fade show active"
+                    role="tabpanel">
                     <app-account-settings></app-account-settings>
                 </div>
 
-                <div class="tab-pane fade"
-                    role="tabpanel"
-                    [ngClass]="{
-                        'show active': currentTab === 'password'
-                    }">
+				<div
+					*ngIf="currentTab === TabChoice.PASSWORD"
+					class="tab-pane fade show active"
+                    role="tabpanel">
                     <app-password-settings></app-password-settings>
                 </div>
             </div>
