@@ -3,6 +3,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/services/user/user.model';
 import { UserService } from 'src/app/shared/services/user/user.service';
 
+enum TabChoice {
+  DETAILS = 'details',
+  PASSWORD = 'password'
+}
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -11,8 +16,11 @@ import { UserService } from 'src/app/shared/services/user/user.service';
 export class SettingsComponent implements OnInit, OnDestroy {
 
   // Data
-  currentTab: string = 'details' // details | password
+  currentTab: TabChoice = TabChoice.DETAILS
   accountInfo: User | undefined
+
+  // Predefined
+  readonly TabChoice = TabChoice
 
   constructor(
     private userSvc: UserService
@@ -24,7 +32,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void { }
 
-  changeTab(tab: string) {
+  changeTab(tab: TabChoice) {
     this.currentTab = tab
   }
 
