@@ -164,3 +164,29 @@ a[aria-expanded="true"] {
     width: 5rem;
     height: 5rem;
 }
+
+// Nav
+.nav-custom {
+    --bs-nav-custom-border-radius: 0.375rem;
+    --bs-nav-custom-link-active-color: #5660d9;
+    --bs-nav-custom-link-active-bg: #f8f9fa;
+}
+
+.nav-custom .nav-link {
+    background: none;
+    border: 0;
+    border-left: 0.21rem solid transparent;
+    border-radius: 0.15rem var(--bs-nav-custom-border-radius) var(--bs-nav-custom-border-radius) 0.15rem;
+    text-align: left;
+
+}
+.nav-custom .nav-link:disabled {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--bs-nav-link-disabled-color);
+}
+.nav-custom .nav-link.active {
+    background-color: var(--bs-nav-custom-link-active-bg);
+    border-left-color: var(--bs-nav-custom-link-active-color);
+    color: var(--bs-nav-custom-link-active-color);
+}
