@@ -34,7 +34,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
   isProcessing: boolean = false
 
   // Subscriber
-  subscription: Subscription | undefined
+  subscription: Subscription = new Subscription
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +55,10 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Initialize form with current data
+   * and validators
+   */
   initForm() {
     this.informationForm = this.fb.group({
       fullName: new FormControl(this.accountInfo?.fullName, Validators.compose([
@@ -65,33 +69,43 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
     })
   }
 
+  /**
+   * Trigger http request to apply
+   * changes
+   */
   submitChange() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription = this.userSvc.patchAccount(this.informationForm.value, this.accountInfo?.id!).subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isProcessing = false
-        
-        this.notifySvc.success('Success', 'Information updated')
-      },
-      error: (err) => {
-        this.loadingBar.useRef('http').stop()
-        this.isProcessing = false
-        
-        let errorMsg = ''
-        
-        if (err.status !== 0) {
-          if ('nonFieldErrors' in err.error) {
-            errorMsg = err.error.nonFieldErrors[0]
-          }
-        }
+    this.subscription.add(
+      this.userSvc.patchAccount(this.informationForm.value, this.accountInfo?.id!)
+          .subscribe({
+            next: () => {
+              // Update loading status and show toastr
+              this.loadingBar.useRef('http').complete()
+              this.isProcessing = false
+              this.notifySvc.success('Success', 'Information updated')
+            },
+            error: (err) => {
+              // Update loading status
+              this.loadingBar.useRef('http').stop()
+              this.isProcessing = false
 
-        this.notifySvc.error('Error', errorMsg)
-      },
-      complete: () => {}
-    })
+              let errorMsg = ''
+
+              // Get error message from response
+              if (err.status !== 0) {
+                if ('nonFieldErrors' in err.error) {
+                  errorMsg = err.error.nonFieldErrors[0]
+                }
+              }
+
+              // Show toastr
+              this.notifySvc.error('Error', errorMsg)
+            },
+            complete: () => { }
+          }))
   }
 
 }
