@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
+import { SharedModule } from 'src/app/shared/shared.module';
 
 // Components
 import { AuthRoutes } from './auth.routing';
@@ -20,9 +20,8 @@ import { ResendVerificationComponent } from './resend-verification/resend-verifi
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(AuthRoutes)
+    RouterModule.forChild(AuthRoutes),
+    SharedModule
   ]
 })
 export class AuthModule { }

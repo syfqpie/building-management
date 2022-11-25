@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-// Components
+import { SharedModule } from 'src/app/shared/shared.module';
 import { UserRoutes } from './user.routing';
+
+// Components
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -108,9 +109,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     RouterModule.forChild(UserRoutes),
+    SharedModule,
     // 3rd party
     NgxChartsModule,
     NgxDatatableModule,
