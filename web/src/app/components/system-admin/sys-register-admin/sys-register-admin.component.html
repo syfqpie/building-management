@@ -1,20 +1,21 @@
-<div class="modal fade show d-block"
+<div
+    *ngIf="isModalOpen"
     role="dialog"
-    *ngIf="isModalOpen">
+    class="modal fade show d-block">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
+            <div class="modal-body">
+                <h5 class="mb-4">
                     Register admin
                 </h5>
-            </div>
-            <div class="modal-body">
+
                 <form [formGroup]="registerForm">
                     <div class="mb-3 position-relative">
                         <label class="form-label">
                             Email
                         </label>
-                        <input type="email"
+                        <input
+                            type="email"
                             class="form-control"
                             formControlName="username"
                             placeholder="example@test.com"
@@ -24,12 +25,16 @@
                                 'is-valid': registerForm.controls['username'].touched &&
                                 !registerForm.controls['username'].errors
                             }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
+                        <div
                             *ngIf="registerForm.controls['username'].errors &&
-                            (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
+                            (registerForm.controls['username'].dirty ||
+                            registerForm.controls['username'].touched)"
+                            class="invalid-tooltip invalid-tooltip-right">
                             <ng-container *ngFor="let message of formMessages['username']">
-                                <span *ngIf="registerForm.controls['username'].hasError(message.type) &&
-                                    (registerForm.controls['username'].dirty || registerForm.controls['username'].touched)">
+                                <span
+                                    *ngIf="registerForm.controls['username'].hasError(message.type) &&
+                                    (registerForm.controls['username'].dirty ||
+                                    registerForm.controls['username'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -40,7 +45,8 @@
                         <label class="form-label">
                             Full name
                         </label>
-                        <input type="email"
+                        <input
+                            type="email"
                             class="form-control"
                             formControlName="fullName"
                             placeholder="John Doe"
@@ -50,12 +56,16 @@
                                 'is-valid': registerForm.controls['fullName'].touched &&
                                 !registerForm.controls['fullName'].errors
                             }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
+                        <div
                             *ngIf="registerForm.controls['fullName'].errors &&
-                            (registerForm.controls['fullName'].dirty || registerForm.controls['fullName'].touched)">
+                            (registerForm.controls['fullName'].dirty ||
+                            registerForm.controls['fullName'].touched)"
+                            class="invalid-tooltip invalid-tooltip-right">
                             <ng-container *ngFor="let message of formMessages['fullName']">
-                                <span *ngIf="registerForm.controls['fullName'].hasError(message.type) &&
-                                    (registerForm.controls['fullName'].dirty || registerForm.controls['fullName'].touched)">
+                                <span
+                                    *ngIf="registerForm.controls['fullName'].hasError(message.type) &&
+                                    (registerForm.controls['fullName'].dirty ||
+                                    registerForm.controls['fullName'].touched)">
                                     • {{ message.message }}
                                 </span>
                             </ng-container>
@@ -68,22 +78,26 @@
                         </label>
                         <div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input"
-                                    type="checkbox"
+                                <input
                                     id="checkboxAdmin"
+                                    class="form-check-input"
+                                    type="checkbox"
                                     formControlName="isStaff">
-                                <label class="form-check-label"
+                                <label
+                                    class="form-check-label"
                                     for="checkboxAdmin">
                                     Staff
                                 </label>
                             </div>
 
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" 
-                                    type="checkbox"
+                                <input
                                     id="checkboxSuperadmin" 
+                                    class="form-check-input" 
+                                    type="checkbox"
                                     formControlName="isSuperuser">
-                                <label class="form-check-label" 
+                                <label
+                                    class="form-check-label" 
                                     for="checkboxSuperadmin">
                                     Superadmin
                                 </label>
@@ -91,32 +105,36 @@
                         </div>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button"
-                    class="btn btn-primary"
-                    (click)="registerAdmin()"
-                    [disabled]="isProcessing || !registerForm.valid" >
-                    <span *ngIf="!isProcessing; else isLoading">
-                        Register
-                    </span>
 
-                    <ng-template #isLoading>
-                        <i class="fa-solid fa-circle-notch fa-spin"></i>
-                    </ng-template>
-                </button>
-                
-                <button type="button"
-                    class="btn btn-outline-primary"
-                    (click)="toggleModal()">
-                    Close
-                </button>
+                <div class="text-end">
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary btn-sm me-2"
+                        (click)="toggleModal()">
+                        Close
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="registerAdmin()"
+                        [disabled]="isProcessing || !registerForm.valid" >
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Register
+                        </span>
+
+                        <ng-template #isLoading>
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        </ng-template>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal-backdrop show d-block"
+<div 
+    *ngIf="isModalOpen"
     role="dialog"
-    *ngIf="isModalOpen">
+    class="modal-backdrop show d-block">
 </div>
