@@ -1,15 +1,19 @@
 <div class="container-fluid">
     <app-sys-register-admin
-        (changedEvent)="getData()"></app-sys-register-admin>
+        (changedEvent)="getData()">
+    </app-sys-register-admin>
+
     <div class="row mb-3">
         <div class="col text-end">
-            <button class="btn btn-outline-primary btn-sm"
-            (click)="toggleModal()">
+            <button
+                class="btn btn-outline-primary btn-sm"
+                (click)="toggleModal()">
                 <i class="fa-solid fa-user-plus"></i>
                 Admin
             </button>
         </div>
     </div>
+
     <div class="card shadow-sm border-0">
         <div class="card-body">
             <h5 class="card-title">
@@ -28,7 +32,8 @@
                     [footerHeight]="50"
                     [messages]="tableMessages"
                     [cssClasses]="tableClass">
-                    <ngx-datatable-column name="Id"
+                    <ngx-datatable-column
+                        name="ID"
                         prop="user.id"
                         [flexGrow]="1"
                         [draggable]="false"
@@ -41,7 +46,8 @@
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Email"
+                    <ngx-datatable-column
+                        name="Email"
                         prop="email"
                         [flexGrow]="4"
                         [draggable]="false"
@@ -53,7 +59,8 @@
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="User type"
+                    <ngx-datatable-column
+                        name="User type"
                         prop="user"
                         [comparator]="userTypeComparator"
                         [flexGrow]="2"
@@ -61,16 +68,20 @@
                         [resizeable]="false">
                         <ng-template let-value="value" ngx-datatable-cell-template>
                             <p class="mb-0">
-                                <small [ngClass]="{
-                                        'bg-primary text-primary
-                                            border-primary': value.userType === 1 && value.isStaff && value.isSuperuser,
-                                        'bg-info text-info
-                                            border-info': value.userType === 1 && value.isStaff && !value.isSuperuser,
-                                        'bg-secondary text-secondary
-                                            border-secondary': value.userType === 2 && !value.isStaff && !value.isSuperuser
+                                <small
+                                    [ngClass]="{
+                                        'bg-primary text-primary \
+                                        border-primary': value.userType === 1 &&
+                                            value.isStaff && value.isSuperuser,
+                                        'bg-info text-info \
+                                        border-info': value.userType === 1 &&
+                                            value.isStaff && !value.isSuperuser,
+                                        'bg-secondary text-secondary \
+                                        border-secondary': value.userType === 2 &&
+                                            !value.isStaff && !value.isSuperuser
                                     }"
                                     class="d-inline-flex px-2 py-1 bg-opacity-10
-                                        border border-opacity-10 rounded-2">
+                                    border border-opacity-10 rounded-2">
                                     <span *ngIf="value.userType === 1; else isNotAdmin">
                                         <span *ngIf="value.isStaff && value.isSuperuser; else isNotSuperuser">
                                             <i class="fa-solid fa-user-astronaut my-auto"></i>
@@ -94,19 +105,21 @@
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Verified"
+                    <ngx-datatable-column
+                        name="Verified"
                         prop="verified"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
                         <ng-template let-value="value" ngx-datatable-cell-template>
                             <p class="mb-0">
-                                <small [ngClass]="{
-                                    'bg-success text-success border-success':  value === true,
-                                    'bg-danger text-danger border-danger': value === false
-                                }"
+                                <small 
+                                    [ngClass]="{
+                                        'bg-success text-success border-success':  value === true,
+                                        'bg-danger text-danger border-danger': value === false
+                                    }"
                                     class="d-inline-flex px-2 py-1 bg-opacity-10
-                                        border border-opacity-10 rounded-2">
+                                    border border-opacity-10 rounded-2">
                                     <span *ngIf="value; else isNoVerification">
                                         <i class="fa-regular fa-circle-check my-auto"></i>
                                         Verified
@@ -122,7 +135,8 @@
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Joined at"
+                    <ngx-datatable-column
+                        name="Joined at"
                         prop="user.dateJoined"
                         [flexGrow]="2"
                         [draggable]="false"
@@ -134,7 +148,8 @@
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Last login at"
+                    <ngx-datatable-column
+                        name="Last login at"
                         prop="user.lastLogin"
                         [flexGrow]="2"
                         [draggable]="false"
@@ -147,6 +162,7 @@
                     </ngx-datatable-column>
                 </ngx-datatable>
             </div>
+
             <ng-template #isNoRowData>
                 <div *ngIf="!isProcessing;">
                     <div class="text-center">
