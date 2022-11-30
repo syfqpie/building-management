@@ -2,9 +2,10 @@
     <div class="col-sm-12 col-md-8">
         <div class="card shadow-sm border-0">
             <div class="card-body">
-                <h5 class="card-title fw-bold">
+                <h5 class="card-title">
                     New ticket
                 </h5>
+
                 <form [formGroup]="addForm">
                     <div class="mb-3 position-relative">
                         <label class="form-label">
@@ -125,9 +126,10 @@
             class="card shadow-sm border-0 mb-3"
             [@collapsed]="isUnitRelated">
             <div class="card-body">
-                <h6 class="card-title bg-white">
+                <h6 class="card-title">
                     Related to
                 </h6>
+
                 <form [formGroup]="addForm">
                     <div class="position-relative">
                         <label class="form-label">
@@ -160,7 +162,7 @@
             class="card shadow-sm border-0 mb-3"
             [@collapsed]="isAssigning">
             <div class="card-body">
-                <h6 class="card-title bg-white">
+                <h6 class="card-title">
                     Assign
                 </h6>
 
@@ -194,7 +196,7 @@
 
         <div class="card shadow-sm border-0">
             <div class="card-body">
-                <h6 class="card-title bg-white">
+                <h6 class="card-title">
                     Classification
                 </h6>
 
