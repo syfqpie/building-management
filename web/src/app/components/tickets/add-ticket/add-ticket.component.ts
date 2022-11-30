@@ -3,13 +3,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
-import { collapsedAnimation } from 'src/app/shared/animations/animation';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
+import { collapsedAnimation } from 'src/app/shared/animations/animation';
 import { TicketCategory, TicketPriority } from 'src/app/shared/services/ticket/ticket.model';
 import { UnitNo } from 'src/app/shared/services/unit/unit.model';
 import { UserEmail } from 'src/app/shared/services/user/user.model';
+import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
 import { UnitService } from 'src/app/shared/services/unit/unit.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
@@ -88,7 +88,7 @@ export class AddTicketComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe()
     }
   }
-
+  
   initForm() {
     this.addForm = this.fb.group({
       title: new FormControl(null, Validators.compose([
@@ -112,31 +112,36 @@ export class AddTicketComponent implements OnInit, OnDestroy {
   }
 
   addTicket() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.ticketSvc.create(this.addForm.value).subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isProcessing = false
-        this.notifySvc.success(
-          'Success', 
-          'Ticket created'
-        )
-      },
-      error: () => {
-        this.loadingBar.useRef('http').stop()
-        this.isProcessing = false
-      },
-      complete: () => {
-        // Reset and re-init form
-        this.addForm.reset()
-        this.initForm()
-        
-        // Navigate to new ticket
-        this.router.navigate(['/management/tickets/detail', this.ticketSvc.ticket?.id])
-      }
-    }))
+    this.subscription.add(
+      this.ticketSvc.create(this.addForm.value).subscribe({
+        next: () => {
+          // Update loading status and show toastr
+          this.loadingBar.useRef('http').complete()
+          this.isProcessing = false
+          this.notifySvc.success(
+            'Success', 
+            'Ticket created'
+          )
+        },
+        error: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').stop()
+          this.isProcessing = false
+        },
+        complete: () => {
+          // Reset and re-init form
+          this.addForm.reset()
+          this.initForm()
+          
+          // Navigate to new ticket
+          this.router.navigate(['/management/tickets/detail', this.ticketSvc.ticket?.id])
+        }
+      })
+    )
   }
 
   toggleAssigning() {
@@ -178,41 +183,53 @@ export class AddTicketComponent implements OnInit, OnDestroy {
   }
 
   getAssignees() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isFetchingOpts = true
 
-    this.subscription.add(this.userSvc.filterSimplified('user_type=1').subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isFetchingOpts = false
-      },
-      error: () => {
-        this.loadingBar.useRef('http').stop()
-        this.isFetchingOpts = false
-      },
-      complete: () => {
-        this.assignees = this.userSvc.usersChoice
-      }
-    }))
+    this.subscription.add(
+      this.userSvc.filterSimplified('user_type=1').subscribe({
+        next: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').complete()
+          this.isFetchingOpts = false
+        },
+        error: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').stop()
+          this.isFetchingOpts = false
+        },
+        complete: () => {
+          // Assign values
+          this.assignees = this.userSvc.usersChoice
+        }
+      })
+    )
   }
 
   getUnits() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isFetchingOpts = true
     
-    this.subscription.add(this.unitSvc.list().subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isFetchingOpts = false
-      },
-      error: () => {
-        this.loadingBar.useRef('http').stop()
-        this.isFetchingOpts = false
-      },
-      complete: () => {
-        this.units = this.unitSvc.units
-      }
-    }))
+    this.subscription.add(
+      this.unitSvc.list().subscribe({
+        next: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').complete()
+          this.isFetchingOpts = false
+        },
+        error: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').stop()
+          this.isFetchingOpts = false
+        },
+        complete: () => {
+          // Assign values
+          this.units = this.unitSvc.units
+        }
+      })
+    )
   }
 
 }

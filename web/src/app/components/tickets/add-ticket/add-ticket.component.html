@@ -10,7 +10,8 @@
                         <label class="form-label">
                             Title
                         </label>
-                        <input type="text"
+                        <input
+                            type="text"
                             class="form-control"
                             formControlName="title"
                             placeholder="Eg: Error in Dashboard"
@@ -20,12 +21,14 @@
                                 'is-valid': addForm.controls['title'].touched &&
                                 !addForm.controls['title'].errors
                             }" />
-                        <div class="invalid-tooltip invalid-tooltip-right"
+                        <div
                             *ngIf="addForm.controls['title'].errors &&
                             (addForm.controls['title'].dirty ||
-                            addForm.controls['title'].touched)" >
+                            addForm.controls['title'].touched)"
+                            class="invalid-tooltip invalid-tooltip-right">
                             <ng-container *ngFor="let message of formMessages['title']">
-                                <span *ngIf="addForm.controls['title'].hasError(message.type) &&
+                                <span
+                                    *ngIf="addForm.controls['title'].hasError(message.type) &&
                                     (addForm.controls['title'].dirty ||
                                     addForm.controls['title'].touched)">
                                     • {{ message.message }}
@@ -52,12 +55,14 @@
                                 'is-valid': addForm.controls['description'].touched &&
                                 !addForm.controls['description'].errors
                             }"></textarea>
-                        <div class="invalid-tooltip invalid-tooltip-right"
+                        <div
                             *ngIf="addForm.controls['description'].errors &&
                             (addForm.controls['description'].dirty ||
-                            addForm.controls['description'].touched)" >
+                            addForm.controls['description'].touched)"
+                            class="invalid-tooltip invalid-tooltip-right">
                             <ng-container *ngFor="let message of formMessages['description']">
-                                <span *ngIf="addForm.controls['description'].hasError(message.type) &&
+                                <span
+                                    *ngIf="addForm.controls['description'].hasError(message.type) &&
                                     (addForm.controls['description'].dirty ||
                                     addForm.controls['description'].touched)">
                                     • {{ message.message }}
@@ -69,59 +74,68 @@
                             {{ addForm.controls['description'].value ? addForm.controls['description'].value.length : 0 }} / 512
                         </p>
                     </div>
-        
-                    <hr class="my-4" *ngIf="!isAssigning || !isUnitRelated" />
 
-                    <button class="btn btn-outline-primary btn-sm"
+                    <button
+                        *ngIf="!isUnitRelated"
+                        class="btn btn-outline-primary btn-sm"
                         [ngClass]="{
                             'me-2': !isAssigning
                         }"
-                        *ngIf="!isUnitRelated"
                         (click)="toggleUnitRelated()">
                         Add unit related?
                     </button>
-                    <button class="btn btn-outline-primary btn-sm"
+
+                    <button
                         *ngIf="!isAssigning"
+                        class="btn btn-outline-primary btn-sm"
                         (click)="toggleAssigning()">
                         Assign?
                     </button>
                 </form>
-            </div>
-            <div class="card-footer bg-white text-end py-3">
-                <button type="button"
-                    class="btn btn-primary me-2"
-                    (click)="addTicket()"
-                    [disabled]="isProcessing || !addForm.valid">
-                    <span *ngIf="!isProcessing; else isLoading">
-                        Create
-                    </span>
-                    <ng-template #isLoading>
-                        <i class="fa-solid fa-circle-notch fa-spin"></i>
-                    </ng-template>
-                </button>
-                <button type="button"
-                    class="btn btn-outline-primary"
-                    [routerLink]="'/management/tickets'">
-                    Cancel
-                </button>
-            </div>            
+
+                <div class="text-end mt-4">
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-sm me-2"
+                        (click)="addTicket()"
+                        [disabled]="isProcessing || !addForm.valid">
+                        <span *ngIf="!isProcessing; else isLoading">
+                            Create
+                        </span>
+
+                        <ng-template #isLoading>
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        </ng-template>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        [routerLink]="'/management/tickets'">
+                        Cancel
+                    </button>
+                </div>
+            </div>          
         </div>
     </div>
     
     <div class="col-sm-12 col-md-4">
-        <div *ngIf="isUnitRelated"
-            [@collapsed]="isUnitRelated"
-            class="card shadow-sm border-0 mb-3">
-            <h6 class="card-header bg-white mb-0">
-                Related to
-            </h6>
+        <div
+            *ngIf="isUnitRelated"
+            class="card shadow-sm border-0 mb-3"
+            [@collapsed]="isUnitRelated">
             <div class="card-body">
+                <h6 class="card-title bg-white">
+                    Related to
+                </h6>
                 <form [formGroup]="addForm">
                     <div class="position-relative">
                         <label class="form-label">
                             Unit
                         </label>
-                        <ng-select [items]="units" 
+
+                        <ng-select
+                            [items]="units" 
                             [loading]="isFetchingOpts"
                             bindLabel="unitNo" 
                             bindValue="id"
@@ -132,7 +146,8 @@
                 </form>
 
                 <div class="mt-2 text-end">
-                    <a class="link-secondary cursor-pointer mb-0 small" 
+                    <a
+                        class="link-secondary cursor-pointer mb-0 small" 
                         (click)="toggleUnitRelated()" >
                         Remove
                     </a>
@@ -140,19 +155,23 @@
             </div>
         </div>
 
-        <div *ngIf="isAssigning"
-            [@collapsed]="isAssigning"
-            class="card shadow-sm border-0 mb-3">
-            <h6 class="card-header bg-white mb-0">
-                Assign
-            </h6>
+        <div
+            *ngIf="isAssigning"
+            class="card shadow-sm border-0 mb-3"
+            [@collapsed]="isAssigning">
             <div class="card-body">
+                <h6 class="card-title bg-white">
+                    Assign
+                </h6>
+
                 <form [formGroup]="addForm">
                     <div class="position-relative">
                         <label class="form-label">
                             Assignee
                         </label>
-                        <ng-select [items]="assignees" 
+
+                        <ng-select
+                            [items]="assignees" 
                             [loading]="isFetchingOpts"
                             bindLabel="email" 
                             bindValue="id" 
@@ -163,7 +182,8 @@
                 </form>
 
                 <div class="mt-2 text-end">
-                    <a class="link-secondary cursor-pointer mb-0 small" 
+                    <a
+                        class="link-secondary cursor-pointer mb-0 small" 
                         (click)="toggleAssigning()" >
                         Remove
                     </a>
@@ -173,16 +193,18 @@
         
 
         <div class="card shadow-sm border-0">
-            <h6 class="card-header bg-white mb-0">
-                Classification
-            </h6>
             <div class="card-body">
+                <h6 class="card-title bg-white">
+                    Classification
+                </h6>
+
                 <form [formGroup]="addForm">
                     <div class="mb-3 position-relative">
                         <label class="form-label">
                             Priority
                         </label>
-                        <select class="form-select"
+                        <select
+                            class="form-select"
                             formControlName="priority"
                             [ngClass]="{
                                 'is-invalid': addForm.controls['priority'].touched &&
@@ -212,12 +234,14 @@
                             </option>
                         </select>
 
-                        <div class="invalid-tooltip invalid-tooltip-right"
+                        <div
                             *ngIf="addForm.controls['priority'].errors &&
                             (addForm.controls['priority'].dirty ||
-                            addForm.controls['priority'].touched)" >
+                            addForm.controls['priority'].touched)"
+                            class="invalid-tooltip invalid-tooltip-right">
                             <ng-container *ngFor="let message of formMessages['priority']">
-                                <span *ngIf="addForm.controls['priority'].hasError(message.type) &&
+                                <span
+                                    *ngIf="addForm.controls['priority'].hasError(message.type) &&
                                     (addForm.controls['priority'].dirty ||
                                     addForm.controls['priority'].touched)">
                                     • {{ message.message }}
@@ -230,7 +254,8 @@
                         <label class="form-label">
                             Category
                         </label>
-                        <select class="form-select"
+                        <select
+                            class="form-select"
                             formControlName="category"
                             [ngClass]="{
                                 'is-invalid': addForm.controls['category'].touched &&
@@ -254,12 +279,14 @@
                             </option>
                         </select>
 
-                        <div class="invalid-tooltip invalid-tooltip-right"
+                        <div
                             *ngIf="addForm.controls['category'].errors &&
                             (addForm.controls['category'].dirty ||
-                            addForm.controls['category'].touched)" >
+                            addForm.controls['category'].touched)"
+                            class="invalid-tooltip invalid-tooltip-right">
                             <ng-container *ngFor="let message of formMessages['category']">
-                                <span *ngIf="addForm.controls['category'].hasError(message.type) &&
+                                <span
+                                    *ngIf="addForm.controls['category'].hasError(message.type) &&
                                     (addForm.controls['category'].dirty ||
                                     addForm.controls['category'].touched)">
                                     • {{ message.message }}
