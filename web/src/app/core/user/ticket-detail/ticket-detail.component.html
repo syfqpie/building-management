@@ -15,31 +15,36 @@
 
         <div class="row g-3">
             <div class="col-12 text-end">
-                <div class="btn-toolbar justify-content-end"
+                <div
+                    class="btn-toolbar justify-content-end"
                     role="toolbar">
-                    <button *ngIf="isUpdateInfo"
+                    <button
+                        *ngIf="isUpdateInfo"
                         class="btn btn-primary btn-sm"
                         [disabled]="isProcessing || !patchForm.valid || !isFormUpdated"
                         (click)="saveEdit()">
                         Save
                     </button>
 
-                    <div *ngIf="!isUpdateInfo && 
-                        !isCompleted"
+                    <div
+                        *ngIf="!isUpdateInfo && !isCompleted"
                         class="btn-group btn-group-sm"
                         role="group">
-                        <button type="button"
+                        <button
+                            type="button"
                             class="btn btn-outline-primary"
                             (click)="toggleStatusModal()">
                             Update to 
-                            <span class="fst-italic">
+                            <span class="fw-semibold">
                                 {{ nextStatus | ticketStatus }}
                             </span>
                         </button>
                     
-                        <div class="btn-group btn-group-sm"
+                        <div
+                            class="btn-group btn-group-sm"
                             role="group">
-                            <button type="button"
+                            <button
+                                type="button"
                                 class="btn btn-outline-primary
                                 dropdown-toggle"
                                 data-bs-toggle="dropdown"
@@ -47,11 +52,13 @@
                             </button>
 
                             <ul class="dropdown-menu dropdown-menu-custom p-0">
-                                <ng-template ngFor
+                                <ng-template
+                                    ngFor
                                     let-status
                                     [ngForOf]="[2, 3, 4, 5]">
                                     <li *ngIf="this.currentTicket?.status !== status">
-                                        <button class="dropdown-item"
+                                        <button
+                                            class="dropdown-item"
                                             (click)="onSelectNextStatus(status)">
                                             {{ status | ticketStatus }}
                                         </button>
@@ -62,7 +69,8 @@
                     </div>
 
                     <div class="dropdown ms-2">
-                        <button class="btn btn-outline-primary dropdown-toggle btn-sm"
+                        <button
+                            class="btn btn-outline-primary dropdown-toggle btn-sm"
                             type="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -71,7 +79,8 @@
 
                         <ul class="dropdown-menu dropdown-menu-custom p-0">
                             <li *ngIf="currentTicket">
-                                <button class="dropdown-item"
+                                <button
+                                    class="dropdown-item"
                                     [disabled]="isProcessing"
                                     (click)="toggleEdit()"
                                     [disabled]="isProcessing">
@@ -91,7 +100,8 @@
                         </h5>
 
                         <div class="mb-3">
-                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                            <p
+                                class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
                                 border border-opacity-10 rounded-2"
                                 [ngClass]="{
                                     'bg-primary text-primary': currentTicket?.status === ticketStatus.OPENED,
@@ -113,7 +123,8 @@
                                 </span>
                             </p>
 
-                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
+                            <p
+                                class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
                                 border border-opacity-10 rounded-2 ms-2"
                                 [ngClass]="{
                                     'bg-danger text-danger': currentTicket?.priority === ticketPriority.CRIT,
@@ -134,7 +145,8 @@
                                 <label class="form-label">
                                     Title
                                 </label>
-                                <input type="text"
+                                <input
+                                    type="text"
                                     class="form-control"
                                     formControlName="title"
                                     placeholder="Eg: Error in Dashboard"
@@ -146,12 +158,14 @@
                                         !patchForm.controls['title'].errors &&
                                         originalForm['title'] !== patchForm.value['title']
                                     }" />
-                                <div class="invalid-tooltip invalid-tooltip-right"
+                                <div
                                     *ngIf="patchForm.controls['title'].errors &&
                                     (patchForm.controls['title'].dirty ||
-                                    patchForm.controls['title'].touched)" >
+                                    patchForm.controls['title'].touched)"
+                                    class="invalid-tooltip invalid-tooltip-right">
                                     <ng-container *ngFor="let message of formMessages['title']">
-                                        <span *ngIf="patchForm.controls['title'].hasError(message.type) &&
+                                        <span
+                                            *ngIf="patchForm.controls['title'].hasError(message.type) &&
                                             (patchForm.controls['title'].dirty ||
                                             patchForm.controls['title'].touched)">
                                             • {{ message.message }}
@@ -180,12 +194,14 @@
                                         !patchForm.controls['description'].errors &&
                                         originalForm['description'] !== patchForm.value['description']
                                     }"></textarea>
-                                <div class="invalid-tooltip invalid-tooltip-right"
+                                <div
                                     *ngIf="patchForm.controls['description'].errors &&
                                     (patchForm.controls['description'].dirty ||
-                                    patchForm.controls['description'].touched)" >
+                                    patchForm.controls['description'].touched)"
+                                    class="invalid-tooltip invalid-tooltip-right">
                                     <ng-container *ngFor="let message of formMessages['description']">
-                                        <span *ngIf="patchForm.controls['description'].hasError(message.type) &&
+                                        <span
+                                            *ngIf="patchForm.controls['description'].hasError(message.type) &&
                                             (patchForm.controls['description'].dirty ||
                                             patchForm.controls['description'].touched)">
                                             • {{ message.message }}
@@ -213,16 +229,18 @@
                 </app-activity-timeline>
 
                 <div class="card shadow-sm border-0 mb-3">
-                    <h6 class="card-header bg-white mb-0">
-                        Related to
-                    </h6>
                     <div class="card-body">
+                        <h6 class="card-title">
+                            Related to
+                        </h6>
+
                         <form [formGroup]="patchForm">
                             <div class="position-relative">
                                 <label class="form-label">
                                     Unit
                                 </label>
-                                <ng-select [items]="units" 
+                                <ng-select
+                                    [items]="units" 
                                     [loading]="isFetchingOpts"
                                     bindLabel="unitNo" 
                                     bindValue="id"
@@ -232,10 +250,15 @@
                             </div>
                         </form>
 
-                        <div *ngIf="this.currentTicket?.unit"
+                        <div
+                            *ngIf="this.currentTicket?.unit"
                             class="mt-2 text-end">
-                            <a class="link-secondary cursor-pointer mb-0 small" 
-                                [routerLink]="['/management/units/detail', this.currentTicket?.unit?.id]" >
+                            <a
+                                class="link-secondary cursor-pointer mb-0 small" 
+                                [routerLink]="[
+                                    '/management/units/detail',
+                                    this.currentTicket?.unit?.id
+                                ]" >
                                 View
                                 <i class="fa-solid fa-arrow-right"></i>
                             </a>
@@ -244,16 +267,18 @@
                 </div>
 
                 <div class="card shadow-sm border-0 mb-3">
-                    <h6 class="card-header bg-white mb-0">
-                        Assign
-                    </h6>
                     <div class="card-body">
+                        <h6 class="card-title">
+                            Assign
+                        </h6>
+
                         <form [formGroup]="patchForm">
                             <div class="position-relative">
                                 <label class="form-label">
                                     Assignee
                                 </label>
-                                <ng-select [items]="assignees" 
+                                <ng-select
+                                    [items]="assignees" 
                                     [loading]="isFetchingOpts"
                                     bindLabel="email" 
                                     bindValue="id" 
@@ -267,16 +292,18 @@
                 
 
                 <div class="card shadow-sm border-0">
-                    <h6 class="card-header bg-white mb-0">
-                        Classification
-                    </h6>
                     <div class="card-body">
+                        <h6 class="card-title">
+                            Classification
+                        </h6>
+
                         <form [formGroup]="patchForm">
                             <div class="mb-3 position-relative">
                                 <label class="form-label">
                                     Priority
                                 </label>
-                                <select class="form-select"
+                                <select
+                                    class="form-select"
                                     formControlName="priority"
                                     [ngClass]="{
                                         'is-invalid': patchForm.controls['priority'].touched &&
@@ -290,7 +317,8 @@
                                         -
                                     </option>
 
-                                    <ng-template ngFor
+                                    <ng-template
+                                        ngFor
                                         let-choice
                                         [ngForOf]="[1, 2, 3, 4, 5]">
                                         <option [ngValue]="choice">
@@ -299,12 +327,14 @@
                                     </ng-template>
                                 </select>
 
-                                <div class="invalid-tooltip invalid-tooltip-right"
+                                <div
                                     *ngIf="patchForm.controls['priority'].errors &&
                                     (patchForm.controls['priority'].dirty ||
-                                    patchForm.controls['priority'].touched)" >
+                                    patchForm.controls['priority'].touched)"
+                                    class="invalid-tooltip invalid-tooltip-right">
                                     <ng-container *ngFor="let message of formMessages['priority']">
-                                        <span *ngIf="patchForm.controls['priority'].hasError(message.type) &&
+                                        <span
+                                            *ngIf="patchForm.controls['priority'].hasError(message.type) &&
                                             (patchForm.controls['priority'].dirty ||
                                             patchForm.controls['priority'].touched)">
                                             • {{ message.message }}
@@ -317,7 +347,8 @@
                                 <label class="form-label">
                                     Category
                                 </label>
-                                <select class="form-select"
+                                <select
+                                    class="form-select"
                                     formControlName="category"
                                     [ngClass]="{
                                         'is-invalid': patchForm.controls['category'].touched &&
@@ -332,7 +363,9 @@
                                             -
                                         </span>
                                     </option>
-                                    <ng-template ngFor
+                                    
+                                    <ng-template
+                                        ngFor
                                         let-choice
                                         [ngForOf]="[1, 2, 3]">
                                         <option [ngValue]="choice">
@@ -341,12 +374,14 @@
                                     </ng-template>
                                 </select>
 
-                                <div class="invalid-tooltip invalid-tooltip-right"
+                                <div
                                     *ngIf="patchForm.controls['category'].errors &&
                                     (patchForm.controls['category'].dirty ||
-                                    patchForm.controls['category'].touched)" >
+                                    patchForm.controls['category'].touched)"
+                                    class="invalid-tooltip invalid-tooltip-right">
                                     <ng-container *ngFor="let message of formMessages['category']">
-                                        <span *ngIf="patchForm.controls['category'].hasError(message.type) &&
+                                        <span
+                                            *ngIf="patchForm.controls['category'].hasError(message.type) &&
                                             (patchForm.controls['category'].dirty ||
                                             patchForm.controls['category'].touched)">
                                             • {{ message.message }}
