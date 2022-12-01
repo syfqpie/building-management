@@ -11,6 +11,7 @@ import {
   TicketPriority,
   TicketStatus } from 'src/app/shared/services/ticket/ticket.model';
 import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
+import { TABLE_CLASS, TABLE_MESSAGES } from 'src/app/shared/constants/datatable.constant';
 
 @Component({
   selector: 'app-tickets',
@@ -30,23 +31,14 @@ export class TicketsComponent implements OnInit, OnDestroy {
   // Table
   ColumnMode = ColumnMode
   tableRows: Ticket[] = []
-  tableMessages = {
-    totalMessage: 'total of records'
-  }
-  tableClass = {
-    sortAscending: 'fa-solid fa-angle-up ms-1 small',
-    sortDescending: 'fa-solid fa-angle-down ms-1 small',
-    pagerLeftArrow: 'fa-solid fa-angle-left small',
-    pagerRightArrow: 'fa-solid fa-angle-right small',
-    pagerPrevious: 'fa-solid fa-angles-left small',
-    pagerNext: 'fa-solid fa-angles-right small'
-  }
+  tableMessages = TABLE_MESSAGES
+  tableClass = TABLE_CLASS
 
   // Checker
   isProcessing: boolean = false
   
   // Subscription
-  subscription: Subscription | undefined
+  subscription: Subscription = new Subscription
 
   constructor(
     private loadingBar: LoadingBarService,
@@ -59,25 +51,30 @@ export class TicketsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
   }
 
   getData() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
     
     this.subscription = this.ticketSvc.list().subscribe({
       next: () => {
+        // Update loading status
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
       },
       error: () => {
+        // Update loading status
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
       },
       complete: () => {
+        // Assign balues
         this.tickets = this.ticketSvc.tickets
         this.tableRows = [...this.tickets]
       }
