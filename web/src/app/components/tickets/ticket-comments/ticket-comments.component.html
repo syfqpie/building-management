@@ -1,21 +1,26 @@
 <div class="card shadow-sm border-0">
-    <h6 class="card-header bg-white mb-0">
-        Comments
-    </h6>
     <div class="card-body">
-        <ng-template ngFor
+        <h6 class="card-title">
+            Comments
+        </h6>
+
+        <ng-template
+            ngFor
             let-comment
             let-index="index"
             let-last ="last"
             [ngForOf]="comments">
-            <div class="row"
+            <div
+                class="row"
                 [ngClass]="{ 'mb-3': last }">
                 <div class="col">
-                    <div class="d-flex flex-start py-2"
+                    <div
+                        class="d-flex flex-start py-2"
                         [ngClass]="{ 
                             'border-1 border-bottom border-secondary border-opacity-25': !last
                         }">
-                        <img class="rounded-circle shadow-1-strong bg-dark bg-opacity-10 me-3"
+                        <img
+                            class="rounded-circle shadow-1-strong bg-dark bg-opacity-10 me-3"
                             src="assets/images/default/avatar-ninja.png"
                             alt="avatar" 
                             style="width: 2.5rem; height: 2.5rem" />
@@ -28,6 +33,7 @@
                                     </span>
                                 </p>
                             </div>
+
                             <p class="small mb-0">
                                 {{ comment.comment }}
                             </p>
@@ -40,18 +46,21 @@
         <form [formGroup]="commentForm">
             <div class="mb-3">
                 <label class="form-label">Leave a comment</label>
-                <textarea class="form-control"
+                <textarea
+                    class="form-control"
                     formControlName="comment"
                     placeholder="Enter your comment..."></textarea>
             </div>
 
             <div class="text-end">
-                <button class="btn btn-primary"
+                <button
+                    class="btn btn-primary btn-sm"
                     [disabled]="!commentForm.valid || isProcessing"
                     (click)="postComment()">
                     <span *ngIf="!isProcessing; else isLoading">
                         Post comment
                     </span>
+                    
                     <ng-template #isLoading>
                         <i class="fa-solid fa-circle-notch fa-spin"></i>
                     </ng-template>

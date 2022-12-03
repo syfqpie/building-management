@@ -3,9 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 
-import { HelperService } from 'src/app/shared/services/helper/helper.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import {
   TicketCategory,
@@ -14,9 +12,11 @@ import {
   TicketStatus } from 'src/app/shared/services/ticket/ticket.model';
 import { UnitNo } from 'src/app/shared/services/unit/unit.model';
 import { UserEmail } from 'src/app/shared/services/user/user.model';
+import { HelperService } from 'src/app/shared/services/helper/helper.service';
 import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
 import { UnitService } from 'src/app/shared/services/unit/unit.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
+import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 import { AddTicketComponent } from 'src/app/components/tickets/add-ticket/add-ticket.component';
 
 @Component({
@@ -83,8 +83,8 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private loadingBar: LoadingBarService,
-    private notifySvc: NotifyService,
     private route: ActivatedRoute,
+    private notifySvc: NotifyService,
     private helper: HelperService,
     private ticketSvc: TicketService,
     private unitSvc: UnitService,
@@ -92,6 +92,18 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.getRouteParam()
+  }
+
+  /**
+   * Get route param (id)
+   * 
+   * If id === NAN (no id or not valid value),
+   * then view should be changed to new ticket,
+   * else would trigger to getData and view would
+   * changed to ticket detail.
+   */
+  getRouteParam() {
     this.routeSubscription = this.route.paramMap.subscribe(
       (params) => {
         // Check if id is supplied
@@ -145,20 +157,24 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
 
   getData(id: number) {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
     this.svcSubscription.add(
       this.ticketSvc.retrieveExtended(id).subscribe({
       next: () => {
+        // Update loading status
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
       },
       error: () => {
+        // Update loading status
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
       },
       complete: () => {
+        // Assign value and init form
         this.currentTicket = this.ticketSvc.ticketExtended
         this.initForm()
 
@@ -221,12 +237,12 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         this.patchForm.disable()
       }
     } else {
-      // Noop
       this.notifySvc.info('Info', 'Ticket already completed')
     }
   }
 
   getOpts() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isFetchingOpts = true
     
@@ -235,14 +251,17 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       this.userSvc.filterSimplified('user_type=1')
     ]).subscribe({
       next: () => {
+        // Update loading status
         this.loadingBar.useRef('http').complete()
         this.isFetchingOpts = false
       },
       error: () => {
+        // Update loading status
         this.loadingBar.useRef('http').stop()
         this.isFetchingOpts = false
       },
       complete: () => {
+        // Assign balues and listen form
         this.units = this.unitSvc.units
         this.assignees = this.userSvc.usersChoice
         this.listenToForm()
@@ -260,6 +279,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
 
   saveEdit() {
+    // For loading status
     const updatedForm = this.helper.getUpdatedObj(this.originalForm, this.patchForm.value)
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
@@ -267,15 +287,16 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.svcSubscription.add(
       this.ticketSvc.patch(this.currentTicket!.id, updatedForm).subscribe({
       next: () => {
+        // Update loading status and show toastr
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
-        
         this.notifySvc.success(
           'Success', 
           'Ticket updated'
         )
       },
       error: () => {
+        // Update loading status and show toastr
         this.loadingBar.useRef('http').stop()
         this.isFetchingOpts = false
         this.notifySvc.success(
@@ -284,6 +305,12 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         )
       },
       complete: () => {
+        /**
+         * TODO:
+         *      1. Refactor code to reduce API calls.
+         *      2. Using state management?
+         */
+        
         this.getData(this.currentTicket!.id)
         this.toggleEdit()
       }
