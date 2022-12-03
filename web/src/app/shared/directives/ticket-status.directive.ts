@@ -2,63 +2,50 @@ import {
   Directive,
   ElementRef,
   Input,
-  OnChanges,
   Renderer2,
   SimpleChanges } from '@angular/core';
 
+import { BadgeDirective } from './base/badge.directive';
 import { TicketStatus } from '../services/ticket/ticket.model';
 import { TicketStatusPipe } from '../handlers/pipes/ticket-status.pipe';
 
 @Directive({
-  selector: '[tixStatus]'
+  selector: '[badgeTicketStatus]'
 })
-export class TicketStatusDirective implements OnChanges {
+export class TicketStatusDirective extends BadgeDirective {
 
   @Input()
-  tixStatus: TicketStatus | undefined
-
-  spanRef: ElementRef | undefined
-  spanText: ElementRef | undefined
-  iconRef: ElementRef | undefined
+  badgeTicketStatus: TicketStatus | undefined
 
   constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
+    el: ElementRef,
+    renderer: Renderer2,
     private statusPipe: TicketStatusPipe
   ) {
+    super(el, renderer)
     this.setBaseClass()
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  override ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes['tixStatus'].currentValue !== null &&
-      (changes['tixStatus'].previousValue === null ||
-      changes['tixStatus'].previousValue === undefined)
+      changes['badgeTicketStatus'].currentValue !== null &&
+      (changes['badgeTicketStatus'].previousValue === null ||
+      changes['badgeTicketStatus'].previousValue === undefined)
     ) {
-      this.initDirective(Number(changes['tixStatus'].currentValue))
+      this.initDirective(Number(changes['badgeTicketStatus'].currentValue))
     } else if (
-      changes['tixStatus'].currentValue !== null &&
-      changes['tixStatus'].previousValue !== null &&
-      changes['tixStatus'].currentValue !== undefined
+      changes['badgeTicketStatus'].currentValue !== null &&
+      changes['badgeTicketStatus'].previousValue !== null &&
+      changes['badgeTicketStatus'].currentValue !== undefined
     ) {
       this.updateDirective(
-        Number(changes['tixStatus'].previousValue),
-        Number(changes['tixStatus'].currentValue)
+        Number(changes['badgeTicketStatus'].previousValue),
+        Number(changes['badgeTicketStatus'].currentValue)
       )
     }
   }
 
-  setBaseClass() {
-    const defaultClass = 'mb-0 small d-inline-flex \
-      px-2 py-1 bg-opacity-10 border border-opacity-10 rounded-2'
-    if (this.el.nativeElement.className === '') {
-      this.el.nativeElement.className = defaultClass
-    } else {
-      this.el.nativeElement.className = `${ defaultClass } ${ this.el.nativeElement.className }`
-    }
-  }
-
-  getThemeName(stat: TicketStatus) {
+  override getThemeName(stat: TicketStatus) {
     if (stat === TicketStatus.OPENED) return 'primary'
     else if (stat === TicketStatus.IN_PROGRESS) return 'warning'
     else if (stat === TicketStatus.RESOLVED) return 'success'
@@ -67,25 +54,13 @@ export class TicketStatusDirective implements OnChanges {
     else return 'primary'
   }
 
-  getThemeIcon(stat: TicketStatus) {
+  override getThemeIcon(stat: TicketStatus) {
     if (stat === TicketStatus.OPENED) return 'fa-circle-exclamation'
     else if (stat === TicketStatus.IN_PROGRESS) return 'fa-circle-exclamation'
     else if (stat === TicketStatus.RESOLVED) return 'fa-circle-check'
     else if (stat === TicketStatus.CLOSED) return 'fa-circle-xmark'
     else if (stat === TicketStatus.DUPLICATED) return 'fa-triangle-exclamation'
     else return 'fa-circle-exclamation'
-  }
-
-  addColorClass(stat: TicketStatus) {
-    const theme = this.getThemeName(stat)
-    this.renderer.addClass(this.el.nativeElement, `bg-${ theme }`)
-    this.renderer.addClass(this.el.nativeElement, `text-${ theme }`)
-  }
-
-  removeColorClass(stat: TicketStatus) {
-    const theme = this.getThemeName(stat)
-    this.renderer.removeClass(this.el.nativeElement, `bg-${ theme }`)
-    this.renderer.removeClass(this.el.nativeElement, `text-${ theme }`)
   }
 
   initDirective(current: TicketStatus) {
