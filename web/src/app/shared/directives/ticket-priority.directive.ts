@@ -2,81 +2,56 @@ import {
   Directive,
   ElementRef,
   Input,
-  OnChanges,
   Renderer2,
   SimpleChanges } from '@angular/core';
 
+import { BadgeDirective } from './base/badge.directive';
 import { TicketPriority } from '../services/ticket/ticket.model';
 import { TicketPriorityPipe } from '../handlers/pipes/ticket-priority.pipe';
 
 @Directive({
-  selector: '[tixPriority]'
+  selector: '[badgeTicketPriority]'
 })
-export class TicketPriorityDirective implements OnChanges {
+export class TicketPriorityDirective extends BadgeDirective {
 
   @Input()
-  tixPriority: TicketPriority | undefined
-
-  spanRef: ElementRef | undefined
-  spanText: ElementRef | undefined
-  iconRef: ElementRef | undefined
+  badgeTicketPriority: TicketPriority | undefined
 
   constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
+    el: ElementRef,
+    renderer: Renderer2,
     private priorityPipe: TicketPriorityPipe
   ) {
+    super(el, renderer)
     this.setBaseClass()
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  override ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes['tixPriority'].currentValue !== null &&
-      (changes['tixPriority'].previousValue === null ||
-      changes['tixPriority'].previousValue === undefined)
+      changes['badgeTicketPriority'].currentValue !== null &&
+      (changes['badgeTicketPriority'].previousValue === null ||
+      changes['badgeTicketPriority'].previousValue === undefined)
     ) {
-      this.initDirective(Number(changes['tixPriority'].currentValue))
+      this.initDirective(Number(changes['badgeTicketPriority'].currentValue))
     } else if (
-      changes['tixPriority'].currentValue !== null &&
-      changes['tixPriority'].previousValue !== null &&
-      changes['tixPriority'].currentValue !== undefined
+      changes['badgeTicketPriority'].currentValue !== null &&
+      changes['badgeTicketPriority'].previousValue !== null &&
+      changes['badgeTicketPriority'].currentValue !== undefined
     ) {
       this.updateDirective(
-        Number(changes['tixPriority'].previousValue),
-        Number(changes['tixPriority'].currentValue)
+        Number(changes['badgeTicketPriority'].previousValue),
+        Number(changes['badgeTicketPriority'].currentValue)
       )
     }
   }
 
-  setBaseClass() {
-    const defaultClass = 'mb-0 small d-inline-flex \
-      px-2 py-1 bg-opacity-10 border border-opacity-10 rounded-2'
-    if (this.el.nativeElement.className === '') {
-      this.el.nativeElement.className = defaultClass
-    } else {
-      this.el.nativeElement.className = `${ defaultClass } ${ this.el.nativeElement.className }`
-    }
-  }
-
-  getThemeName(stat: TicketPriority) {
+  override getThemeName(stat: TicketPriority) {
     if (stat === TicketPriority.CRIT) return 'danger'
     else if (stat === TicketPriority.HIGH) return 'warning'
     else if (stat === TicketPriority.NORMAL) return 'primary'
     else if (stat === TicketPriority.LOW) return 'info'
     else if (stat === TicketPriority.VLOW) return 'secondary'
     else return 'primary'
-  }
-
-  addColorClass(stat: TicketPriority) {
-    const theme = this.getThemeName(stat)
-    this.renderer.addClass(this.el.nativeElement, `bg-${ theme }`)
-    this.renderer.addClass(this.el.nativeElement, `text-${ theme }`)
-  }
-
-  removeColorClass(stat: TicketPriority) {
-    const theme = this.getThemeName(stat)
-    this.renderer.removeClass(this.el.nativeElement, `bg-${ theme }`)
-    this.renderer.removeClass(this.el.nativeElement, `text-${ theme }`)
   }
 
   initDirective(current: TicketPriority) {
