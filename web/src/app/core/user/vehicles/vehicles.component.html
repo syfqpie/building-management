@@ -4,9 +4,11 @@
             <h5 class="card-title">
                 List of vehicles
             </h5>
+
             <h6 class="card-subtitle mb-3 text-muted">
                 Manage vehicles here
             </h6>
+
             <div *ngIf="tableRows.length > 0; else isNoRowData">
                 <ngx-datatable
                     class="bootstrap rounded-2"
@@ -17,105 +19,89 @@
                     [footerHeight]="50"
                     [messages]="tableMessages"
                     [cssClasses]="tableClass">
-                    <ngx-datatable-column name="Id"
+                    <ngx-datatable-column
+                        name="ID"
                         prop="id"
                         [flexGrow]="1"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Plate no."
+                    <ngx-datatable-column
+                        name="Plate no."
                         prop="plateNo"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Type"
+                    <ngx-datatable-column
+                        name="Type"
                         prop="vehicleType"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
-                                border border-opacity-10 rounded-2"
-                                [ngClass]="{
-                                    'bg-primary text-primary border-primary': 
-                                        value === vehicleType.CAR,
-                                    'bg-info text-info border-info':
-                                        value === vehicleType.MOTOR,
-                                    'bg-warning text-warning border-warning':
-                                        value === vehicleType.LORRY
-                                }">
-                                <span>
-                                    <i class="fa-solid my-auto" 
-                                        [ngClass]="{
-                                            'fa-car-side': value === vehicleType.CAR,
-                                            'fa-motorcycle': value === vehicleType.MOTOR,
-                                            'fa-truck': value === vehicleType.LORRY
-                                        }"></i>
-                                    {{ value | vehicleType }}
-                                </span>
-                            </p>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
+                            <p [badgeVehicleType]="value"></p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Active"
+                    <ngx-datatable-column
+                        name="Active"
                         prop="isActive"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
-                                border border-opacity-10 rounded-2"
-                                [ngClass]="{
-                                    'bg-success text-success border-success': value,
-                                    'bg-danger text-danger border-danger': !value
-                                }">
-                                <span *ngIf="value; else isNotActive">
-                                    <i class="fa-regular fa-circle-check my-auto"></i>
-                                    Active
-                                </span>
-                                <ng-template #isNotActive>
-                                    <span>
-                                        <i class="fa-regular fa-circle-xmark my-auto"></i>
-                                        Inactive
-                                    </span>
-                                </ng-template>
-                            </p>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
+                            <p [badgeIsActive]="value"></p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Created at"
+                    <ngx-datatable-column
+                        name="Created at"
                         prop="createdAt"
                         [flexGrow]="3"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value | date : 'dd/MM/yyyy' }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
                     
-                    <ngx-datatable-column name="Action"
+                    <ngx-datatable-column
+                        name="Action"
                         prop="id"
                         [flexGrow]="2"
                         [sortable]="false"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            <button class="btn btn-outline-primary btn-sm"
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
+                            <button
+                                class="btn btn-outline-primary btn-sm"
                                 (click)="onSelect(value)">
                                 View
                             </button>
