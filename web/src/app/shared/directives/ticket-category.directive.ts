@@ -5,7 +5,7 @@ import {
   Renderer2,
   SimpleChanges } from '@angular/core';
 
-  import { BadgeDirective } from './base/badge.directive';
+import { BadgeDirective } from './base/badge.directive';
 import { TicketCategory } from '../services/ticket/ticket.model';
 import { TicketCategoryPipe } from '../handlers/pipes/ticket-category.pipe';
 
