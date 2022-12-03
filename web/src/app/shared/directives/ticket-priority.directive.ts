@@ -26,24 +26,35 @@ export class TicketPriorityDirective implements OnChanges {
     private renderer: Renderer2,
     private priorityPipe: TicketPriorityPipe
   ) {
-    this.el.nativeElement.className = 'mb-0 ms-2 small d-inline-flex \
-      px-2 py-1 bg-opacity-10 border border-opacity-10 rounded-2'
+    this.setBaseClass()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes['tixPriority'].previousValue === null &&
-      changes['tixPriority'].currentValue !== null
+      changes['tixPriority'].currentValue !== null &&
+      (changes['tixPriority'].previousValue === null ||
+      changes['tixPriority'].previousValue === undefined)
     ) {
       this.initDirective(Number(changes['tixPriority'].currentValue))
     } else if (
+      changes['tixPriority'].currentValue !== null &&
       changes['tixPriority'].previousValue !== null &&
-      changes['tixPriority'].currentValue !== null
+      changes['tixPriority'].currentValue !== undefined
     ) {
       this.updateDirective(
         Number(changes['tixPriority'].previousValue),
         Number(changes['tixPriority'].currentValue)
       )
+    }
+  }
+
+  setBaseClass() {
+    const defaultClass = 'mb-0 small d-inline-flex \
+      px-2 py-1 bg-opacity-10 border border-opacity-10 rounded-2'
+    if (this.el.nativeElement.className === '') {
+      this.el.nativeElement.className = defaultClass
+    } else {
+      this.el.nativeElement.className = `${ defaultClass } ${ this.el.nativeElement.className }`
     }
   }
 
