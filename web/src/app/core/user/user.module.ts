@@ -59,6 +59,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+// Directives
+import { TicketPriorityDirective } from '../../shared/directives/ticket-priority.directive';
+import { TicketStatusDirective } from 'src/app/shared/directives/ticket-status.directive';
+
 @NgModule({
   declarations: [
     AboutSystemComponent,
@@ -105,7 +109,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TicketCategoryPipe,
     TitleTypePipe,
     VehicleTypePipe,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    // Directives
+    TicketPriorityDirective,
+    TicketStatusDirective
   ],
   imports: [
     CommonModule,
@@ -115,6 +122,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgxChartsModule,
     NgxDatatableModule,
     NgSelectModule
+  ],
+  providers: [
+    TicketPriorityPipe,
+    TicketStatusPipe
   ]
 })
 export class UserModule { }
