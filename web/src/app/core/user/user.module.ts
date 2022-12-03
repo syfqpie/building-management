@@ -62,6 +62,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 // Directives
 import { TicketPriorityDirective } from '../../shared/directives/ticket-priority.directive';
 import { TicketStatusDirective } from 'src/app/shared/directives/ticket-status.directive';
+import { TicketCategoryDirective } from '../../shared/directives/ticket-category.directive';
 
 @NgModule({
   declarations: [
@@ -111,6 +112,7 @@ import { TicketStatusDirective } from 'src/app/shared/directives/ticket-status.d
     VehicleTypePipe,
     ConfirmDialogComponent,
     // Directives
+    TicketCategoryDirective,
     TicketPriorityDirective,
     TicketStatusDirective
   ],
@@ -124,6 +126,7 @@ import { TicketStatusDirective } from 'src/app/shared/directives/ticket-status.d
     NgSelectModule
   ],
   providers: [
+    TicketCategoryPipe,
     TicketPriorityPipe,
     TicketStatusPipe
   ]
