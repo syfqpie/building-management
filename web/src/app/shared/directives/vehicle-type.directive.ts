@@ -5,22 +5,22 @@ import {
   Renderer2,
   SimpleChanges } from '@angular/core';
 
+import { VehicleType } from '../services/vehicle/vehicle.model';
+import { VehicleTypePipe } from '../handlers/pipes/vehicle-type.pipe';
 import { BadgeDirective } from './base/badge.directive';
-import { TicketCategory } from '../services/ticket/ticket.model';
-import { TicketCategoryPipe } from '../handlers/pipes/ticket-category.pipe';
 
 @Directive({
-  selector: '[badgeTicketCategory]'
+  selector: '[badgeVehicleType]'
 })
-export class TicketCategoryDirective extends BadgeDirective {
+export class VehicleTypeDirective extends BadgeDirective {
 
   @Input()
-  badgeTicketCategory: TicketCategory | undefined
+  badgeVehicleType: VehicleType | undefined
 
   constructor(
     el: ElementRef,
     renderer: Renderer2,
-    private categoryPipe: TicketCategoryPipe
+    private categoryPipe: VehicleTypePipe
   ) {
     super(el, renderer)
     this.setBaseClass()
@@ -28,31 +28,31 @@ export class TicketCategoryDirective extends BadgeDirective {
 
   override ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes['badgeTicketCategory'].currentValue !== null &&
-      (changes['badgeTicketCategory'].previousValue === null ||
-      changes['badgeTicketCategory'].previousValue === undefined)
+      changes['badgeVehicleType'].currentValue !== null &&
+      (changes['badgeVehicleType'].previousValue === null ||
+      changes['badgeVehicleType'].previousValue === undefined)
     ) {
-      this.initDirective(Number(changes['badgeTicketCategory'].currentValue))
+      this.initDirective(Number(changes['badgeVehicleType'].currentValue))
     } else if (
-      changes['badgeTicketCategory'].currentValue !== null &&
-      changes['badgeTicketCategory'].previousValue !== null &&
-      changes['badgeTicketCategory'].currentValue !== undefined
+      changes['badgeVehicleType'].currentValue !== null &&
+      changes['badgeVehicleType'].previousValue !== null &&
+      changes['badgeVehicleType'].currentValue !== undefined
     ) {
       this.updateDirective(
-        Number(changes['badgeTicketCategory'].previousValue),
-        Number(changes['badgeTicketCategory'].currentValue)
+        Number(changes['badgeVehicleType'].previousValue),
+        Number(changes['badgeVehicleType'].currentValue)
       )
     }
   }
 
-  override getThemeName(stat: TicketCategory) {
-    if (stat === TicketCategory.SYS) return 'primary'
-    else if (stat === TicketCategory.UNIT) return 'info'
-    else if (stat === TicketCategory.FACI) return 'dark'
+  override getThemeName(vehicleType: VehicleType) {
+    if (vehicleType === VehicleType.CAR) return 'primary'
+    else if (vehicleType === VehicleType.MOTOR) return 'info'
+    else if (vehicleType === VehicleType.LORRY) return 'warning'
     else return 'primary'
   }
 
-  initDirective(current: TicketCategory) {
+  initDirective(current: VehicleType) {
     this.addColorClass(current)
 
     // Create span related text and elements
@@ -71,7 +71,7 @@ export class TicketCategoryDirective extends BadgeDirective {
     this.renderer.appendChild(this.el.nativeElement, this.spanRef)
   }
 
-  updateDirective(previous: TicketCategory, current: TicketCategory) {
+  updateDirective(previous: VehicleType, current: VehicleType) {
     // Remove previous
     this.removeColorClass(previous)
     this.renderer.removeChild(this.spanRef , this.spanText)
@@ -81,4 +81,5 @@ export class TicketCategoryDirective extends BadgeDirective {
     this.spanText = this.renderer.createText(this.categoryPipe.transform(current))
     this.renderer.appendChild(this.spanRef , this.spanText)
   }
+
 }

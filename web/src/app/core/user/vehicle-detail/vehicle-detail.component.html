@@ -29,24 +29,9 @@
                         <label class="fw-bold text-uppercase small d-block">
                             Active:
                         </label>
-                        <p class="small d-inline-flex px-2 py-1 bg-opacity-10
-                            border border-opacity-10 rounded-2 mt-1"
-                            [ngClass]="{
-                                'bg-success text-success \
-                                    border-success': vehicle?.isActive,
-                                'bg-danger text-danger \
-                                    border-danger': !vehicle?.isActive
-                            }">
-                            <span *ngIf="vehicle?.isActive; else isNotActiveVehicle">
-                                <i class="fa-regular fa-circle-check my-auto"></i>
-                                Active
-                            </span>
-                            <ng-template #isNotActiveVehicle>
-                                <span>
-                                    <i class="fa-regular fa-circle-xmark my-auto"></i>
-                                    Inactive
-                                </span>
-                            </ng-template>
+                        <p 
+                            [badgeIsActive]="vehicle ?
+                                vehicle.isActive : false">
                         </p>
 
                         <div class="mb-2">

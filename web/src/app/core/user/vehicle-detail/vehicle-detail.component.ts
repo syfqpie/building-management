@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Subscription } from 'rxjs';
+
+import { LoadingBarService } from '@ngx-loading-bar/core';
+
 import { VehicleExtended } from 'src/app/shared/services/vehicle/vehicle.model';
 import { VehicleService } from 'src/app/shared/services/vehicle/vehicle.service';
 
@@ -49,25 +51,28 @@ export class VehicleDetailComponent implements OnInit, OnDestroy {
   }
 
   getData(id: number) {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
     
     this.subscription.add(
       this.vehicleSvc.retrieveExtended(id).subscribe({
         next: () => {
+          // Update loading status
           this.loadingBar.useRef('http').complete()
           this.isProcessing = false
         },
         error: () => {
+          // Update loading status
           this.loadingBar.useRef('http').stop()
           this.isProcessing = false
         },
         complete: () => {
+          // Assign value
           this.vehicle = this.vehicleSvc.vehicleExtended
         }
       })
     )
   }
-  
   
 }
