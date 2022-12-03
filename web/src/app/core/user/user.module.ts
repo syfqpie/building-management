@@ -47,6 +47,7 @@ import { UpdateTicketStatusComponent } from '../../components/tickets/update-tic
 // Reusable
 import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
+import { IsActivePipe } from 'src/app/shared/handlers/pipes/is-active.pipe';
 import { TicketStatusPipe } from '../../shared/handlers/pipes/ticket-status.pipe';
 import { TicketPriorityPipe } from '../../shared/handlers/pipes/ticket-priority.pipe';
 import { TicketCategoryPipe } from '../../shared/handlers/pipes/ticket-category.pipe';
@@ -54,15 +55,18 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 import { VehicleTypePipe } from '../../shared/handlers/pipes/vehicle-type.pipe';
 import { ConfirmDialogComponent } from '../../components/reusables/confirm-dialog/confirm-dialog.component';
 
+// Directives
+import { BadgeDirective } from '../../shared/directives/base/badge.directive';
+import { IsActiveDirective } from '../../shared/directives/is-active.directive';
+import { TicketPriorityDirective } from '../../shared/directives/ticket-priority.directive';
+import { TicketStatusDirective } from 'src/app/shared/directives/ticket-status.directive';
+import { TicketCategoryDirective } from '../../shared/directives/ticket-category.directive';
+import { VehicleTypeDirective } from '../../shared/directives/vehicle-type.directive';
+
 // 3rd party
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
-
-// Directives
-import { TicketPriorityDirective } from '../../shared/directives/ticket-priority.directive';
-import { TicketStatusDirective } from 'src/app/shared/directives/ticket-status.directive';
-import { TicketCategoryDirective } from '../../shared/directives/ticket-category.directive';
 
 @NgModule({
   declarations: [
@@ -112,9 +116,12 @@ import { TicketCategoryDirective } from '../../shared/directives/ticket-category
     VehicleTypePipe,
     ConfirmDialogComponent,
     // Directives
+    BadgeDirective,
+    IsActiveDirective,
     TicketCategoryDirective,
     TicketPriorityDirective,
-    TicketStatusDirective
+    TicketStatusDirective,
+    VehicleTypeDirective
   ],
   imports: [
     CommonModule,
@@ -126,9 +133,11 @@ import { TicketCategoryDirective } from '../../shared/directives/ticket-category
     NgSelectModule
   ],
   providers: [
+    IsActivePipe,
     TicketCategoryPipe,
     TicketPriorityPipe,
-    TicketStatusPipe
+    TicketStatusPipe,
+    VehicleTypePipe
   ]
 })
 export class UserModule { }
