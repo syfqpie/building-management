@@ -100,43 +100,11 @@
                         </h5>
 
                         <div class="mb-3">
-                            <p
-                                class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
-                                border border-opacity-10 rounded-2"
-                                [ngClass]="{
-                                    'bg-primary text-primary': currentTicket?.status === ticketStatus.OPENED,
-                                    'bg-warning text-warning': currentTicket?.status === ticketStatus.IN_PROGRESS,
-                                    'bg-success text-success': currentTicket?.status === ticketStatus.RESOLVED,
-                                    'bg-danger text-danger': currentTicket?.status === ticketStatus.CLOSED,
-                                    'bg-info text-info': currentTicket?.status === ticketStatus.DUPLICATED
-                                }">
-                                <span>
-                                    <i class="fa-solid"
-                                        [ngClass]="{
-                                            'fa-circle-exclamation': currentTicket?.status === ticketStatus.OPENED ||
-                                                currentTicket?.status === ticketStatus.IN_PROGRESS,
-                                            'fa-circle-check': currentTicket?.status === ticketStatus.RESOLVED,
-                                            'fa-circle-xmark': currentTicket?.status === ticketStatus.CLOSED,
-                                            'fa-triangle-exclamation': currentTicket?.status === ticketStatus.DUPLICATED
-                                        }"></i>
-                                    {{ currentTicket?.status | ticketStatus }}
-                                </span>
-                            </p>
+                            <p [tixStatus]="currentTicket?.status"></p>
 
-                            <p
-                                class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
-                                border border-opacity-10 rounded-2 ms-2"
-                                [ngClass]="{
-                                    'bg-danger text-danger': currentTicket?.priority === ticketPriority.CRIT,
-                                    'bg-warning text-warning': currentTicket?.priority === ticketPriority.HIGH,
-                                    'bg-primary text-primary': currentTicket?.priority === ticketPriority.NORMAL,
-                                    'bg-info text-info': currentTicket?.priority === ticketPriority.LOW,
-                                    'bg-secondary text-secondary': currentTicket?.priority === ticketPriority.VLOW
-                                }">
-                                <span>
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ currentTicket?.priority | ticketPriority }}
-                                </span>
+                            <p 
+                                class="ms-2"
+                                [tixPriority]="currentTicket?.priority">
                             </p>
                         </div>
                         
