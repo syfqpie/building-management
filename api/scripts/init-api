@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Setup virtual environment and install dependencies
+virtualenv env --python=python3 --copies
+pipenv install
