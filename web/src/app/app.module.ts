@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SharedModule } from './shared/shared.module';
 
 // Layout
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { UserNavbarComponent } from './components/navbars/user-navbar/user-navbar.component';
 import { UserSidebarComponent } from './components/sidebars/user-sidebar/user-sidebar.component';
 import { UserFooterComponent } from './components/footers/user-footer/user-footer.component';
@@ -24,6 +25,7 @@ import { HttpTokenInterceptor } from './shared/interceptors/http.token.intercept
 @NgModule({
   declarations: [
     AppComponent,
+    AuthLayoutComponent,
     UserNavbarComponent,
     UserSidebarComponent,
     UserFooterComponent,
@@ -35,10 +37,9 @@ import { HttpTokenInterceptor } from './shared/interceptors/http.token.intercept
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
     HttpClientModule,
-    ReactiveFormsModule,
     RouterModule,
+    SharedModule,
     // 3rd
     LoadingBarModule,
     ToastrModule.forRoot()

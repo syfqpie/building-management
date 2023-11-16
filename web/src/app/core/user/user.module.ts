@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-// Components
+import { SharedModule } from 'src/app/shared/shared.module';
 import { UserRoutes } from './user.routing';
+
+// Components
 import { AboutSystemComponent } from './about-system/about-system.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -46,6 +47,7 @@ import { UpdateTicketStatusComponent } from '../../components/tickets/update-tic
 // Reusable
 import { ActivityTypePipe } from 'src/app/shared/handlers/pipes/activity-type.pipe';
 import { GenderTypePipe } from 'src/app/shared/handlers/pipes/gender-type.pipe';
+import { IsActivePipe } from 'src/app/shared/handlers/pipes/is-active.pipe';
 import { TicketStatusPipe } from '../../shared/handlers/pipes/ticket-status.pipe';
 import { TicketPriorityPipe } from '../../shared/handlers/pipes/ticket-priority.pipe';
 import { TicketCategoryPipe } from '../../shared/handlers/pipes/ticket-category.pipe';
@@ -53,11 +55,19 @@ import { TitleTypePipe } from 'src/app/shared/handlers/pipes/title-type.pipe';
 import { VehicleTypePipe } from '../../shared/handlers/pipes/vehicle-type.pipe';
 import { ConfirmDialogComponent } from '../../components/reusables/confirm-dialog/confirm-dialog.component';
 
+// Directives
+import { BadgeDirective } from '../../shared/directives/base/badge.directive';
+import { IsActiveDirective } from '../../shared/directives/is-active.directive';
+import { TicketPriorityDirective } from '../../shared/directives/ticket-priority.directive';
+import { TicketStatusDirective } from 'src/app/shared/directives/ticket-status.directive';
+import { TicketCategoryDirective } from '../../shared/directives/ticket-category.directive';
+import { VehicleTypeDirective } from '../../shared/directives/vehicle-type.directive';
+
 // 3rd party
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { ResidentActiveDirective } from '../../shared/directives/resident-active.directive';
 
 @NgModule({
   declarations: [
@@ -105,17 +115,31 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TicketCategoryPipe,
     TitleTypePipe,
     VehicleTypePipe,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    // Directives
+    BadgeDirective,
+    IsActiveDirective,
+    TicketCategoryDirective,
+    TicketPriorityDirective,
+    TicketStatusDirective,
+    VehicleTypeDirective,
+    ResidentActiveDirective
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     RouterModule.forChild(UserRoutes),
+    SharedModule,
     // 3rd party
     NgxChartsModule,
     NgxDatatableModule,
     NgSelectModule
+  ],
+  providers: [
+    IsActivePipe,
+    TicketCategoryPipe,
+    TicketPriorityPipe,
+    TicketStatusPipe,
+    VehicleTypePipe
   ]
 })
 export class UserModule { }

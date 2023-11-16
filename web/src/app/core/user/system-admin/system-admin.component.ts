@@ -6,6 +6,7 @@ import { ColumnMode } from '@swimlane/ngx-datatable';
 
 import { EmailVerification } from 'src/app/shared/services/user/user.model';
 import { SysRegisterAdminComponent } from 'src/app/components/system-admin/sys-register-admin/sys-register-admin.component';
+import { TABLE_CLASS, TABLE_MESSAGES } from 'src/app/shared/constants/datatable.constant';
 import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
@@ -21,23 +22,14 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   // Table
   ColumnMode = ColumnMode
   tableRows: EmailVerification[] = []
-  tableMessages = {
-    totalMessage: 'total of records'
-  }
-  tableClass = {
-    sortAscending: 'fa-solid fa-angle-up ms-2 small',
-    sortDescending: 'fa-solid fa-angle-down ms-2 small',
-    pagerLeftArrow: 'fa-solid fa-angle-left small',
-    pagerRightArrow: 'fa-solid fa-angle-right small',
-    pagerPrevious: 'fa-solid fa-angles-left small',
-    pagerNext: 'fa-solid fa-angles-right small'
-  }
+  tableMessages = TABLE_MESSAGES
+  tableClass = TABLE_CLASS
 
   // Checker
   isProcessing: boolean = false
 
   // Subscription
-  subscription: Subscription | undefined
+  subscription: Subscription = new Subscription
 
   // Event
   @ViewChild(SysRegisterAdminComponent) registerModal: SysRegisterAdminComponent | undefined
@@ -59,23 +51,29 @@ export class SystemAdminComponent implements OnInit, OnDestroy {
   }
 
   getData() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription = this.userSvc.getAllVerification().subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isProcessing = false
-      },
-      error: () => {
-        this.loadingBar.useRef('http').stop()
-        this.isProcessing = false
-      },
-      complete: () => {
-        this.verifications = this.userSvc.emailVerifications
-        this.tableRows = [...this.verifications]
-      }
-    })
+    this.subscription.add(
+      this.userSvc.getAllVerification().subscribe({
+        next: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').complete()
+          this.isProcessing = false
+        },
+        error: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').stop()
+          this.isProcessing = false
+        },
+        complete: () => {
+          // Assign data to table
+          this.verifications = this.userSvc.emailVerifications
+          this.tableRows = [...this.verifications]
+        }
+      })
+    )
   }
 
   // Sort by user type

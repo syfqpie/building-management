@@ -42,7 +42,7 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
   isModalOpen: boolean = false
 
   // Subscription
-  subscription: Subscription | undefined
+  subscription: Subscription = new Subscription
 
   // Event
   @Output() changedEvent: EventEmitter<boolean> = new EventEmitter()
@@ -65,6 +65,10 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Initialize form with current data
+   * and validators
+   */
   initForm() {
     this.registerForm = this.fb.group({
       username: new FormControl(null, Validators.compose([
@@ -84,44 +88,50 @@ export class SysRegisterAdminComponent implements OnInit, OnDestroy {
   }
 
   registerAdmin() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription = this.authSvc.registerAdmin(this.registerForm.value).subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isProcessing = false
-        
-        this.notifySvc.success(
-          'Success', 
-          `A verification has been sent to ${this.registerForm.value.username}`
-        )
-      },
-      error: (err) => {
-        this.loadingBar.useRef('http').stop()
-        this.isProcessing = false
-        
-        let errorTitle = 'Error'
-        let errorMsg = ''
-        if (err.status !== 0) {
-          if (err.status === 404) {
-            errorTitle = String(err.status)
-            errorMsg = 'Not found'
-          } else if ('nonFieldErrors' in err.error) {
-            errorMsg = err.error.nonFieldErrors[0]
-          } else if ('username' in err.error) {
-            errorMsg = err.error.username[0]
-          }
-        }
-        this.notifySvc.error(errorTitle, errorMsg)
-      },
-      complete: () => {
-        this.registerForm.reset()
-        this.initForm()
-        this.toggleModal()
-        this.changedEvent.emit(true)
-      }
-    })
+    this.subscription.add(
+      this.authSvc.registerAdmin(this.registerForm.value)
+          .subscribe({
+            next: () => {
+              // Update loading status and show toastr
+              this.loadingBar.useRef('http').complete()
+              this.isProcessing = false
+              this.notifySvc.success(
+                'Success', 
+                `A verification has been sent to \
+                ${this.registerForm.value.username}`
+              )
+            },
+            error: (err) => {
+              // Update loading status
+              this.loadingBar.useRef('http').stop()
+              this.isProcessing = false
+              
+              // Get error message and show toastr
+              let errorTitle = 'Error'
+              let errorMsg = ''
+              if (err.status !== 0) {
+                if (err.status === 404) {
+                  errorTitle = String(err.status)
+                  errorMsg = 'Not found'
+                } else if ('nonFieldErrors' in err.error) {
+                  errorMsg = err.error.nonFieldErrors[0]
+                } else if ('username' in err.error) {
+                  errorMsg = err.error.username[0]
+                }
+              }
+              this.notifySvc.error(errorTitle, errorMsg)
+            },
+            complete: () => {
+              this.registerForm.reset()
+              this.initForm()
+              this.toggleModal()
+              this.changedEvent.emit(true)
+            }
+          }))
   }
 
   toggleModal() {

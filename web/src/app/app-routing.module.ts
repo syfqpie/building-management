@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './shared/handlers/guards/auth.guard';
 import { CurrentUserResolver } from './shared/handlers/resolvers/current-user.resolver';
 
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 import { NotFoundComponent } from './components/errors/not-found/not-found.component';
 
@@ -25,6 +26,7 @@ const routes: Routes = [
   },
   {
     path: 'auth',
+    component: AuthLayoutComponent,
     children: [
       {
         path: '',

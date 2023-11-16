@@ -3,10 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 import { TicketCommentExtended } from 'src/app/shared/services/ticket/ticket.model';
 import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
+import { NotifyService } from 'src/app/shared/handlers/notify/notify.service';
 
 @Component({
   selector: 'app-ticket-comments',
@@ -62,16 +62,19 @@ export class TicketCommentsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getData() {
+    // For loading status
     this.isProcessing = true
     this.loadingBar.useRef('http').start()
 
     this.svcSubscription.add(
       this.ticketSvc.getComments(this.ticketId!).subscribe({
         next: () => {
+          // Update loading status
           this.isProcessing = false
           this.loadingBar.useRef('http').complete()
         },
         error: () => {
+          // Update loading status
           this.isProcessing = false
           this.loadingBar.useRef('http').stop()
         },
@@ -92,17 +95,20 @@ export class TicketCommentsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   postComment() {
+    // For loading status
     this.isProcessing = true
     this.loadingBar.useRef('http').start()
 
     this.svcSubscription.add(
       this.ticketSvc.postComment(this.ticketId!, this.commentForm.value).subscribe({
         next: () => {
+          // Update loading status and show tostr
           this.isProcessing = false
           this.loadingBar.useRef('http').complete()
           this.notifySvc.success('Success', 'Comment added')
         },
         error: () => {
+          // Update loading status
           this.isProcessing = false
           this.loadingBar.useRef('http').stop()
         },

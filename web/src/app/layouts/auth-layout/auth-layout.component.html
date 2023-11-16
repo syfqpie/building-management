@@ -1,0 +1,25 @@
+<div class="container-fluid bg-dark vh-100">
+    <div class="row h-100">
+        <div
+            class="col-sm-12 col-md-4 d-flex bg-white flex-column
+            align-items-center justify-content-center">
+            <img
+                [src]="currentImg"
+                class="w-100 d-block d-md-none" />
+            <img
+                class="mx-auto d-none d-md-block mb-3"
+                src="assets/images/default/logo-primary.png"
+                style="height: 5rem; width: 5rem" />
+
+            <router-outlet></router-outlet>
+        </div>
+
+        <div
+            class="col-md-8 d-md-flex align-items-center
+            justify-content-center d-none">
+            <img
+                [src]="currentImg"
+                style="height: 25rem;" />
+        </div>
+    </div>
+</div>

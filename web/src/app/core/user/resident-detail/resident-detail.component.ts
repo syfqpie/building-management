@@ -53,60 +53,75 @@ export class ResidentDetailComponent implements OnInit, OnDestroy {
   }
 
   getData(id: number) {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.residentSvc.retrieve(id).subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isProcessing = false
-      },
-      error: () => {
-        this.loadingBar.useRef('http').stop()
-        this.isProcessing = false
-      },
-      complete: () => {
-        this.currentResident = this.residentSvc.resident
-      }
-    }))
+    this.subscription.add(
+      this.residentSvc.retrieve(id).subscribe({
+        next: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').complete()
+          this.isProcessing = false
+        },
+        error: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').stop()
+          this.isProcessing = false
+        },
+        complete: () => {
+          // Update data
+          this.currentResident = this.residentSvc.resident
+        }
+      }))
   }
 
   activate() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.residentSvc.activate(this.currentResident?.id!).subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isProcessing = false
-      },
-      error: () => {
-        this.loadingBar.useRef('http').stop()
-        this.isProcessing = false
-      },
-      complete: () => {
-        this.currentResident = this.residentSvc.resident
-      }
-    }))
+    this.subscription.add(
+      this.residentSvc.activate(this.currentResident?.id!).subscribe({
+        next: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').complete()
+          this.isProcessing = false
+        },
+        error: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').stop()
+          this.isProcessing = false
+        },
+        complete: () => {
+          // Update data
+          this.currentResident = this.residentSvc.resident
+        }
+      }))
   }
 
   deactivate() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
-    this.subscription.add(this.residentSvc.deactivate(this.currentResident?.id!).subscribe({
-      next: () => {
-        this.loadingBar.useRef('http').complete()
-        this.isProcessing = false
-      },
-      error: () => {
-        this.loadingBar.useRef('http').stop()
-        this.isProcessing = false
-      },
-      complete: () => {
-        this.currentResident = this.residentSvc.resident
-      }
-    }))
+    this.subscription.add(
+      this.residentSvc.deactivate(this.currentResident?.id!).subscribe({
+        next: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').complete()
+          this.isProcessing = false
+        },
+        error: () => {
+          // Update loading status
+          this.loadingBar.useRef('http').stop()
+          this.isProcessing = false
+        },
+        complete: () => {
+          // Update data
+          this.currentResident = this.residentSvc.resident
+        }
+      }))
   }
 
 }

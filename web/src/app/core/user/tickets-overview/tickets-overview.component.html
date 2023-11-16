@@ -5,35 +5,47 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 me-3">
-                            <h6 class="card-subtitle text-muted text-uppercase small fw-semibold">
+                            <h6 
+                                class="card-subtitle small text-muted
+                                text-uppercase fw-semibold">
                                 Total tickets
                             </h6>
+
                             <h2 class="text-muted mb-0">
                                 {{ overview?.tickets?.count }}
                             </h2>
-                            <span class="badge bg-opacity-10 text-opacity-75 mb-0"
+
+                            <span
+                                class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overview?.tickets?.percentage !== null &&
+                                    'bg-danger text-danger':
+                                        overview?.tickets?.percentage !== null &&
                                         overview?.tickets?.percentage! < 0,
-                                    'bg-success text-success': overview?.tickets?.percentage === null ||
+                                    'bg-success text-success':
+                                        overview?.tickets?.percentage === null ||
                                         overview?.tickets?.percentage! > 0
-                                         
                                 }">
-                                <i class="fa-solid"
+                                <i
+                                    class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overview?.tickets?.percentage !== null &&
+                                        'fa-caret-down':
+                                            overview?.tickets?.percentage !== null &&
                                             overview?.tickets?.percentage! < 0,
-                                        'fa-caret-up':  overview?.tickets?.percentage === null ||
+                                        'fa-caret-up':
+                                            overview?.tickets?.percentage === null ||
                                             overview?.tickets?.percentage! > 0
                                     }"></i>
-                                {{  overview?.tickets?.percentage !== null ?
-                                    overview?.tickets?.percentage :
-                                    '∞' }} %
+                                {{ overview?.tickets?.percentage !== null ?
+                                   overview?.tickets?.percentage :
+                                   '∞' }} %
                             </span>
                         </div>
-                        <div class="flex-shrink-0"
+
+                        <div
+                            class="flex-shrink-0"
                             style="height: 3rem; width: 3rem">
-                            <span class="d-flex align-items-center 
+                            <span
+                                class="d-flex align-items-center 
                                 justify-content-center bg-primary 
                                 text-primary rounded-circle fs-5
                                 bg-opacity-25 h-100">
@@ -50,35 +62,46 @@
                 <div class="card-body min-h-50px">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 me-3">
-                            <h6 class="card-subtitle text-muted text-uppercase small fw-semibold">
+                            <h6
+                                class="card-subtitle small text-muted
+                                text-uppercase fw-semibold">
                                 Total opened
                             </h6>
+
                             <h2 class="text-muted mb-0">
                                 {{ overview?.opened?.count }}
                             </h2>
-                            <span class="badge bg-opacity-10 text-opacity-75 mb-0"
+
+                            <span
+                                class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overview?.opened?.percentage !== null &&
+                                    'bg-danger text-danger':
+                                        overview?.opened?.percentage !== null &&
                                         overview?.opened?.percentage! < 0,
-                                    'bg-success text-success': overview?.opened?.percentage === null ||
+                                    'bg-success text-success':
+                                        overview?.opened?.percentage === null ||
                                         overview?.opened?.percentage! > 0
-                                         
                                 }">
                                 <i class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overview?.opened?.percentage !== null &&
+                                        'fa-caret-down':
+                                            overview?.opened?.percentage !== null &&
                                             overview?.opened?.percentage! < 0,
-                                        'fa-caret-up':  overview?.opened?.percentage === null ||
+                                        'fa-caret-up':
+                                            overview?.opened?.percentage === null ||
                                             overview?.opened?.percentage! > 0
                                     }"></i>
-                                {{  overview?.opened?.percentage !== null ?
-                                    overview?.opened?.percentage :
-                                    '∞' }} %
+                                {{ overview?.opened?.percentage !== null ?
+                                   overview?.opened?.percentage :
+                                   '∞' }} %
                             </span>
                         </div>
-                        <div class="flex-shrink-0"
+
+                        <div
+                            class="flex-shrink-0"
                             style="height: 3rem; width: 3rem">
-                            <span class="d-flex align-items-center 
+                            <span
+                                class="d-flex align-items-center 
                                 justify-content-center bg-info 
                                 text-info rounded-circle fs-5
                                 bg-opacity-25 h-100">
@@ -95,35 +118,47 @@
                 <div class="card-body min-h-50px">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 me-3">
-                            <h6 class="card-subtitle text-muted text-uppercase small fw-semibold">
+                            <h6
+                                class="card-subtitle small text-muted
+                                text-uppercase fw-semibold">
                                 Total in progress
                             </h6>
+
                             <h2 class="text-muted mb-0">
                                 {{ overview?.inProgress?.count }}
                             </h2>
-                            <span class="badge bg-opacity-10 text-opacity-75 mb-0"
+
+                            <span
+                                class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overview?.inProgress?.percentage !== null &&
+                                    'bg-danger text-danger':
+                                        overview?.inProgress?.percentage !== null &&
                                         overview?.inProgress?.percentage! < 0,
-                                    'bg-success text-success': overview?.inProgress?.percentage === null ||
+                                    'bg-success text-success':
+                                        overview?.inProgress?.percentage === null ||
                                         overview?.inProgress?.percentage! > 0
-                                         
                                 }">
-                                <i class="fa-solid"
+                                <i
+                                    class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overview?.inProgress?.percentage !== null &&
+                                        'fa-caret-down':
+                                            overview?.inProgress?.percentage !== null &&
                                             overview?.inProgress?.percentage! < 0,
-                                        'fa-caret-up':  overview?.inProgress?.percentage === null ||
+                                        'fa-caret-up':
+                                            overview?.inProgress?.percentage === null ||
                                             overview?.inProgress?.percentage! > 0
                                     }"></i>
-                                {{  overview?.inProgress?.percentage !== null ?
-                                    overview?.inProgress?.percentage :
-                                    '∞' }} %
+                                {{ overview?.inProgress?.percentage !== null ?
+                                   overview?.inProgress?.percentage :
+                                   '∞' }} %
                             </span>
                         </div>
-                        <div class="flex-shrink-0"
+
+                        <div
+                            class="flex-shrink-0"
                             style="height: 3rem; width: 3rem">
-                            <span class="d-flex align-items-center 
+                            <span
+                                class="d-flex align-items-center 
                                 justify-content-center bg-warning 
                                 text-warning rounded-circle fs-5
                                 bg-opacity-25 h-100">
@@ -140,35 +175,47 @@
                 <div class="card-body min-h-50px">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 me-3">
-                            <h6 class="card-subtitle text-muted text-uppercase small fw-semibold">
+                            <h6
+                                class="card-subtitle small text-muted
+                                text-uppercase fw-semibold">
                                 Total completed
                             </h6>
+
                             <h2 class="text-muted mb-0">
                                 {{ overview?.completed?.count }}
                             </h2>
-                            <span class="badge bg-opacity-10 text-opacity-75 mb-0"
+
+                            <span
+                                class="badge bg-opacity-10 text-opacity-75 mb-0"
                                 [ngClass]="{
-                                    'bg-danger text-danger': overview?.completed?.percentage !== null &&
+                                    'bg-danger text-danger':
+                                        overview?.completed?.percentage !== null &&
                                         overview?.completed?.percentage! < 0,
-                                    'bg-success text-success': overview?.completed?.percentage === null ||
+                                    'bg-success text-success':
+                                        overview?.completed?.percentage === null ||
                                         overview?.completed?.percentage! > 0
-                                         
                                 }">
-                                <i class="fa-solid"
+                                <i
+                                    class="fa-solid"
                                     [ngClass]="{
-                                        'fa-caret-down': overview?.completed?.percentage !== null &&
+                                        'fa-caret-down':
+                                            overview?.completed?.percentage !== null &&
                                             overview?.completed?.percentage! < 0,
-                                        'fa-caret-up':  overview?.completed?.percentage === null ||
+                                        'fa-caret-up':
+                                            overview?.completed?.percentage === null ||
                                             overview?.completed?.percentage! > 0
                                     }"></i>
-                                {{  overview?.completed?.percentage !== null ?
-                                    overview?.completed?.percentage :
-                                    '∞' }} %
+                                {{ overview?.completed?.percentage !== null ?
+                                   overview?.completed?.percentage :
+                                   '∞' }} %
                             </span>
                         </div>
-                        <div class="flex-shrink-0"
+                        
+                        <div
+                            class="flex-shrink-0"
                             style="height: 3rem; width: 3rem">
-                            <span class="d-flex align-items-center 
+                            <span
+                                class="d-flex align-items-center 
                                 justify-content-center bg-success 
                                 text-success rounded-circle fs-5
                                 bg-opacity-25 h-100">
@@ -188,11 +235,14 @@
                     <h6 class="card-subtitle text-muted">
                         Overview
                     </h6>
+
                     <h5 class="card-title mb-2">
                         Ticket status
                     </h5>
 
-                    <div class="w-100" style="height: 23rem">
+                    <div
+                        class="w-100"
+                        style="height: 23rem">
                         <ngx-charts-area-chart
                             [scheme]="colorScheme"
                             [results]="statusOverview"
@@ -215,11 +265,14 @@
                     <h6 class="card-subtitle text-muted">
                         Overview
                     </h6>
+
                     <h5 class="card-title mb-2">
                         Ticket priority
                     </h5>
 
-                    <div class="w-100" style="height: 23rem">
+                    <div
+                        class="w-100"
+                        style="height: 23rem">
                         <ngx-charts-pie-chart
                             [scheme]="colorScheme"
                             [results]="priorityOverview"

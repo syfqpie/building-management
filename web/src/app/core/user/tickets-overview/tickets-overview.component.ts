@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, Subscription } from 'rxjs';
 
-import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Color, colorSets, MultiSeries, SingleSeries } from '@swimlane/ngx-charts';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 import { TicketOverview } from 'src/app/shared/services/ticket/ticket.model';
 import { TicketService } from 'src/app/shared/services/ticket/ticket.service';
@@ -45,6 +45,7 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
   }
 
   getData() {
+    // For loading status
     this.loadingBar.useRef('http').start()
     this.isProcessing = true
 
@@ -55,14 +56,17 @@ export class TicketsOverviewComponent implements OnInit, OnDestroy {
         this.ticketSvc.getPriorityOverview()
       ]).subscribe({
         next: () => {
+          // Update loading status
           this.loadingBar.useRef('http').complete()
           this.isProcessing = false
         },
         error: () => {
+          // Update loading status
           this.loadingBar.useRef('http').stop()
           this.isProcessing = false
         },
         complete: () => {
+          // Assign values
           this.overview = this.ticketSvc.overview
           this.statusOverview = this.ticketSvc.statusOverview
           this.priorityOverview = this.ticketSvc.priorityOverview

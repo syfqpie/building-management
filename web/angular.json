@@ -35,7 +35,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/assets/styles/styles.scss"
+              "src/assets/styles/styles.scss",
+              "./node_modules/@swimlane/ngx-datatable/themes/bootstrap.scss"
             ],
             "scripts": [
               "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"

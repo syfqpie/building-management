@@ -1,15 +1,17 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 text-end">
-            <button class="btn btn-outline-primary btn-sm"
+            <button
                 *ngIf="currentResident?.isActive; else isNotActive"
+                class="btn btn-outline-primary btn-sm"
                 (click)="deactivate()">
                 <i class="fa-solid fa-lock"></i>
                 Deactivate
             </button>
             
             <ng-template #isNotActive>
-                <button class="btn btn-outline-primary btn-sm"
+                <button
+                    class="btn btn-outline-primary btn-sm"
                     (click)="activate()">         
                     <i class="fa-solid fa-lock-open"></i>
                     Activate
@@ -23,6 +25,7 @@
                     <h5 class="card-title">
                         Personal information
                     </h5>
+                    
                     <div class="mb-2">
                         <label class="fw-bold text-uppercase small">
                             Name: 
