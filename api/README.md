@@ -2,34 +2,26 @@
 
 Manage building with ease
 
-## Preview
+## Requirements
 
-To be updated
+* Python 3.10+
+* pipenv
 
 ## Installation
 
-Create virtual environment
+Install dependencies
 
 ```bash
-  virtualenv env --python=python3 --copies
+  # only on mac / linux, run this to make it executable
+  chmod +x ./scripts/init-api
+  # install
+  ./scripts/init-api
 ```
 
-Get into your created virtual environment - Windows
+Get into your created virtual environment
 
 ```bash
-  env\Scripts\activate
-```
-
-Get into your created virtual environment - Mac / Ubuntu
-
-```bash
-  source env/bin/activate
-```
-
-Install all packages from requirements.txt
-
-```bash
-  pip install -r requirements.txt
+  pipenv shell
 ```
 
 Make migrations

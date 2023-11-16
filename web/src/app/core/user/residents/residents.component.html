@@ -5,7 +5,8 @@
 
     <div class="row mb-3">
         <div class="col text-end">
-            <button class="btn btn-outline-primary btn-sm"
+            <button
+                class="btn btn-outline-primary btn-sm"
                 (click)="toggleModal()">
                 <i class="fa-solid fa-user-plus"></i>
                 Register new
@@ -18,9 +19,11 @@
             <h5 class="card-title">
                 List of residents
             </h5>
+
             <h6 class="card-subtitle mb-3 text-muted">
                 Manage residents here
             </h6>
+
             <div *ngIf="tableRows.length > 0; else isNoRowData">
                 <ngx-datatable
                     class="bootstrap rounded-2"
@@ -31,102 +34,108 @@
                     [footerHeight]="50"
                     [messages]="tableMessages"
                     [cssClasses]="tableClass">
-                    <ngx-datatable-column name="Id"
+                    <ngx-datatable-column
+                        name="ID"
                         prop="residentNo"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Name"
+                    <ngx-datatable-column
+                        name="Name"
                         prop="name"
                         [flexGrow]="5"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Phone no."
+                    <ngx-datatable-column
+                        name="Phone no."
                         prop="phoneNo"
                         [flexGrow]="3"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Email"
+                    <ngx-datatable-column
+                        name="Email"
                         prop="email"
                         [flexGrow]="3"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Active"
+                    <ngx-datatable-column
+                        name="Active"
                         prop="isActive"
                         [flexGrow]="2"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            <p class="mb-0 small d-inline-flex px-2 py-1 bg-opacity-10
-                                border border-opacity-10 rounded-2"
-                                [ngClass]="{
-                                    'bg-success text-success
-                                        border-success': value,
-                                    'bg-danger text-danger
-                                        border-danger': !value
-                                }">
-                                <span *ngIf="value; else isNotActive">
-                                    <i class="fa-solid fa-user-astronaut my-auto"></i>
-                                    Active
-                                </span>
-                                <ng-template #isNotActive>
-                                    <span>
-                                        <i class="fa-solid fa-user-xmark my-auto"></i>
-                                        Inactive
-                                    </span>
-                                </ng-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
+                            <p
+                                [badgeResidentActive]="value">
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Created at"
+                    <ngx-datatable-column
+                        name="Created at"
                         prop="createdAt"
                         [flexGrow]="3"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
                             <p class="mb-0">
                                 {{ value | date : 'dd/MM/yyyy' }}
                             </p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Action"
+                    <ngx-datatable-column
+                        name="Action"
                         prop="id"
                         [flexGrow]="2"
                         [sortable]="false"
                         [draggable]="false"
                         [resizeable]="false">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            <button class="btn btn-outline-primary btn-sm"
+                        <ng-template
+                            let-value="value"
+                            ngx-datatable-cell-template>
+                            <button
+                                class="btn btn-outline-primary btn-sm"
                                 (click)="onSelect(value)">
                                 View
                             </button>
@@ -138,7 +147,8 @@
             <ng-template #isNoRowData>
                 <div *ngIf="!isProcessing;">
                     <div class="text-center">
-                        <img src="assets/images/illustrations/empty.png"
+                        <img
+                            src="assets/images/illustrations/empty.png"
                             style="height: 14rem;">
                         <p class="text-muted">Empty data</p>
                     </div>
