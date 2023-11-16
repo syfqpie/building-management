@@ -67,6 +67,7 @@ import { VehicleTypeDirective } from '../../shared/directives/vehicle-type.direc
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ResidentActiveDirective } from '../../shared/directives/resident-active.directive';
 
 @NgModule({
   declarations: [
@@ -121,7 +122,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TicketCategoryDirective,
     TicketPriorityDirective,
     TicketStatusDirective,
-    VehicleTypeDirective
+    VehicleTypeDirective,
+    ResidentActiveDirective
   ],
   imports: [
     CommonModule,
