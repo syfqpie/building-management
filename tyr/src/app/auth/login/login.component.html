@@ -29,7 +29,7 @@
                     'is-valid': form.controls['username'].touched &&
                     !form.controls['username'].errors
                 }" />
-			<!-- <div
+			<div
 				*ngIf="form.controls['username'].errors &&
                 (form.controls['username'].dirty || form.controls['username'].touched)"
 				class="invalid-tooltip invalid-tooltip-right">
@@ -40,7 +40,7 @@
 						• {{ message.message }}
 					</span>
 				</ng-container>
-			</div> -->
+			</div>
 		</div>
 
 		<div class="col-10 col-md-8 mb-3 position-relative">
@@ -58,7 +58,7 @@
                     'is-valid': form.controls['password'].touched &&
                     !form.controls['password'].errors
                 }" />
-			<!-- <div *ngIf="form.controls['password'].errors &&
+			<div *ngIf="form.controls['password'].errors &&
                 (form.controls['password'].dirty ||
                 form.controls['password'].touched)" class="invalid-tooltip invalid-tooltip-right">
 				<ng-container *ngFor="let message of formMessages['password']">
@@ -68,7 +68,7 @@
 						• {{ message.message }}
 					</span>
 				</ng-container>
-			</div> -->
+			</div>
 		</div>
 
 		<div class="col-10 col-md-8 d-grid gap-0">
@@ -77,11 +77,11 @@
 				type="button"
 				(click)="doPreLogin()"
 				[disabled]="isLoading || !form.valid">
-				<span *ngIf="!isLoading; else loaderTemplate">
+				<span *ngIf="!isLoading; else spinnerTpl">
 					Login
 				</span>
 
-				<ng-template #loaderTemplate>
+				<ng-template #spinnerTpl>
 					<i class="fa-solid fa-circle-notch fa-spin"></i>
 				</ng-template>
 			</button>
