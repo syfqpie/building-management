@@ -1,0 +1,84 @@
+<div>
+    <form
+        [formGroup]="form"
+        class="need-validation row
+        justify-content-center">
+        <div class="col-10 col-md-8">
+            <p class="text-muted text-center">
+                Resend verification email
+            </p>
+        </div>
+        
+        <div class="col-10 col-md-8 mb-3 position-relative">
+            <label for="formEmail" class="form-label">
+                Email
+            </label>
+            <input
+                id="formEmail"
+                type="email"
+                class="form-control"
+                placeholder="example@test.com"
+                formControlName="email"
+                [ngClass]="{
+                    'is-invalid': form.controls['email'].touched &&
+                    form.controls['email'].errors,
+                    'is-valid': form.controls['email'].touched &&
+                    !form.controls['email'].errors
+                }" />
+            <div
+                *ngIf="form.controls['email'].errors &&
+                (form.controls['email'].dirty ||
+                form.controls['email'].touched)"
+                class="invalid-tooltip invalid-tooltip-right">
+                <ng-container *ngFor="let message of formMessages['email']">
+                    <span
+                        *ngIf="form.controls['email'].hasError(message.type) &&
+                        (form.controls['email'].dirty ||
+                        form.controls['email'].touched)">
+                        • {{ message.message }}
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="col-10 col-md-8 d-grid gap-0">
+            <button
+                class="btn btn-primary"
+                type="button"
+                (click)="doPreResend()"
+                [disabled]="isLoading || !form.valid" >
+                <span *ngIf="!isLoading; else loaderTemplate">
+                    Resend
+                </span>
+
+                <ng-template #loaderTemplate>
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                </ng-template>
+            </button>
+
+            <hr class="my-3" />
+
+            <p class="mb-0 text-center">
+                <small class="text-muted">
+                    Back to
+                    <a
+                        class="link-primary"
+                        [routerLink]="'/auth/login'">
+                        Login
+                    </a>
+                </small>
+            </p>
+            
+            <p class="mb-3 text-center">
+                <small class="text-muted">
+                    Forgot password?
+                    <a
+                        class="link-primary"
+                        [routerLink]="'/auth/reset'">
+                        Reset
+                    </a>
+                </small>
+            </p>
+        </div>
+    </form>
+</div>

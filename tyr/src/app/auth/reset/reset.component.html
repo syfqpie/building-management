@@ -1,0 +1,12 @@
+<div>
+    <ng-container *ngIf="isRequest; else confirmTpl">
+        <app-reset-request></app-reset-request>
+    </ng-container>
+
+    <ng-template #confirmTpl>
+        <app-reset-confirm
+            [uid]="uid"
+            [token]="token">
+        </app-reset-confirm>
+    </ng-template>
+</div>
