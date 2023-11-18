@@ -4,7 +4,7 @@
  * @category Constant
  */
 export const HttpErrorCode = {
-    'TOKEN_NOT_VALID': 'token_not_valid'
+	'TOKEN_NOT_VALID': 'token_not_valid'
 }
 
 /**
@@ -13,7 +13,7 @@ export const HttpErrorCode = {
  * @category Constant
  */
 export const HttpErrorDetail = {
-    'NO_PERMISSION': 'You do not have permission to perform this action.'
+	'NO_PERMISSION': 'You do not have permission to perform this action.'
 }
 
 /**
@@ -22,12 +22,12 @@ export const HttpErrorDetail = {
  * @category Constant
  */
 export const HttpHeaderConfig = {
-    'ACCEPT': 'Accept',
-    'AUTHORIZATION': 'Authorization',
-    'ACCEPT_VALUE': '*/*',
-    'TOKEN_PREFIX': 'Bearer',
-    'CONTENT_TYPE': 'Content-Type',
-    'CONTENT_TYPE_JSON': 'application/json'
+	'ACCEPT': 'Accept',
+	'AUTHORIZATION': 'Authorization',
+	'ACCEPT_VALUE': '*/*',
+	'TOKEN_PREFIX': 'Bearer',
+	'CONTENT_TYPE': 'Content-Type',
+	'CONTENT_TYPE_JSON': 'application/json'
 }
 
 /**
@@ -36,12 +36,12 @@ export const HttpHeaderConfig = {
  * @category Constant
  */
 export const HttpMethod = {
-    'GET': 'GET',
-    'POST': 'POST',
-    'PUT': 'PUT',
-    'PATCH': 'PATCH',
-    'DESTROY': 'DESTROY',
-    'HEAD': 'HEAD',
-    'JSONP': 'JSONP',
-    'OPTIONS': 'OPTIONS'
+	'GET': 'GET',
+	'POST': 'POST',
+	'PUT': 'PUT',
+	'PATCH': 'PATCH',
+	'DESTROY': 'DESTROY',
+	'HEAD': 'HEAD',
+	'JSONP': 'JSONP',
+	'OPTIONS': 'OPTIONS'
 }
