@@ -43,6 +43,7 @@ web_old
 */dist
 */tmp
 */out-tsc
+*/.angular
 
 # Only exists if Bazel was run
 */bazel-out
