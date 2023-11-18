@@ -1,0 +1,110 @@
+<div>
+	<form
+		[formGroup]="form"
+		class="need-validation row justify-content-center">
+		<div class="col-10 col-md-8">
+			<p class="text-muted mb-0 text-center">
+				Welcome back!
+			</p>
+
+			<p class="text-muted text-center">
+				Log in to your account
+			</p>
+		</div>
+
+		<div class="col-10 col-md-8 mb-3 position-relative">
+			<label for="formEmail" class="form-label">
+				Email
+			</label>
+			<input
+				id="formEmail"
+				type="email"
+				class="form-control"
+				placeholder="example@test.com"
+				formControlName="username"
+				(keyup.enter)="doPreLogin()"
+				[ngClass]="{
+                    'is-invalid': form.controls['username'].touched &&
+                    form.controls['username'].errors,
+                    'is-valid': form.controls['username'].touched &&
+                    !form.controls['username'].errors
+                }" />
+			<!-- <div
+				*ngIf="form.controls['username'].errors &&
+                (form.controls['username'].dirty || form.controls['username'].touched)"
+				class="invalid-tooltip invalid-tooltip-right">
+				<ng-container *ngFor="let message of formMessages['username']">
+					<span *ngIf="form.controls['username'].hasError(message.type) &&
+                        (form.controls['username'].dirty ||
+                        form.controls['username'].touched)">
+						• {{ message.message }}
+					</span>
+				</ng-container>
+			</div> -->
+		</div>
+
+		<div class="col-10 col-md-8 mb-3 position-relative">
+			<label for="formPassword" class="form-label">
+				Password
+			</label>
+			<input
+				id="formPassword" type="password" class="form-control"
+				placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+				formControlName="password"
+				(keyup.enter)="doPreLogin()"
+				[ngClass]="{
+                    'is-invalid': form.controls['password'].touched &&
+                    form.controls['password'].errors,
+                    'is-valid': form.controls['password'].touched &&
+                    !form.controls['password'].errors
+                }" />
+			<!-- <div *ngIf="form.controls['password'].errors &&
+                (form.controls['password'].dirty ||
+                form.controls['password'].touched)" class="invalid-tooltip invalid-tooltip-right">
+				<ng-container *ngFor="let message of formMessages['password']">
+					<span *ngIf="form.controls['password'].hasError(message.type) &&
+                        (form.controls['password'].dirty ||
+                        form.controls['password'].touched)">
+						• {{ message.message }}
+					</span>
+				</ng-container>
+			</div> -->
+		</div>
+
+		<div class="col-10 col-md-8 d-grid gap-0">
+			<button
+				class="btn btn-primary"
+				type="button"
+				(click)="doPreLogin()"
+				[disabled]="isLoading || !form.valid">
+				<span *ngIf="!isLoading; else loaderTemplate">
+					Login
+				</span>
+
+				<ng-template #loaderTemplate>
+					<i class="fa-solid fa-circle-notch fa-spin"></i>
+				</ng-template>
+			</button>
+
+			<hr class="my-3" />
+
+			<p class="mb-0 text-center">
+				<small class="text-muted">
+					Forgot password?
+					<a class="link-primary" [routerLink]="'/auth/reset'">
+						Reset
+					</a>
+				</small>
+			</p>
+
+			<p class="mb-3 text-center">
+				<small class="text-muted">
+					No verification email?
+					<a class="link-primary" [routerLink]="'/auth/resend-verification'">
+						Resend
+					</a>
+				</small>
+			</p>
+		</div>
+	</form>
+</div>
