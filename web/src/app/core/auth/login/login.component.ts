@@ -83,13 +83,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadingBar.useRef('http').complete()
         this.isProcessing = false
-        
+
         this.notifySvc.success('Success', 'Successfully login')
       },
       error: (err) => {
         this.loadingBar.useRef('http').stop()
         this.isProcessing = false
-        
+
         if (err.status !== 0) {
           let errorMsg = ''
           errorMsg = err.error.nonFieldErrors[0]
@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       },
       complete: () => {
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['/management/units'])
       }
     })
   }

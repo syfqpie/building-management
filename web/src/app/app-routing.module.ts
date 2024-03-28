@@ -10,7 +10,7 @@ import { NotFoundComponent } from './components/errors/not-found/not-found.compo
 
 const routes: Routes = [
   // Default
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/management/units', pathMatch: 'full' },
   {
     path: '',
     component: UserLayoutComponent,
