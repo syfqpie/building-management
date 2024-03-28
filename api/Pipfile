@@ -16,6 +16,8 @@ drf-extensions = "==0.7.1"
 drf-yasg = "==1.21.4"
 django-allauth = "==0.50.0"
 django-cors-headers = "==3.11.0"
+gunicorn = "*"
+uvicorn = "*"
 
 [dev-packages]
 
