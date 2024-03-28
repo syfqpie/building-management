@@ -9,20 +9,20 @@ import { NavItem } from './nav-item.model';
 export class UserSidebarComponent implements OnInit {
 
   menus: NavItem[] = [
-    { 
-      path: ['/dashboard'], 
-      title: 'Dashboard',
-      type: 'link',
-      icon: 'fa-solid fa-house-user'
-    },
-    { 
-      path: ['/test'], 
-      title: 'Test',
-      type: 'link',
-      icon: 'fa-solid fa-flask'
-    },
+    // {
+    //   path: ['/dashboard'],
+    //   title: 'Dashboard',
+    //   type: 'link',
+    //   icon: 'fa-solid fa-house-user'
+    // },
+    // {
+    //   path: ['/test'],
+    //   title: 'Test',
+    //   type: 'link',
+    //   icon: 'fa-solid fa-flask'
+    // },
     {
-      path: ['/management', 'units'], 
+      path: ['/management', 'units'],
       title: 'Units',
       type: 'sub',
       icon: 'fa-solid fa-building',
@@ -41,27 +41,27 @@ export class UserSidebarComponent implements OnInit {
         }
       ]
     },
-    { 
-      path: ['/management', 'residents'], 
+    {
+      path: ['/management', 'residents'],
       title: 'Residents',
       type: 'link',
       icon: 'fa-solid fa-building-user'
     },
-    { 
-      path: ['/management', 'parkings'], 
+    {
+      path: ['/management', 'parkings'],
       title: 'Parkings',
       type: 'link',
       icon: 'fa-solid fa-square-parking'
     },
-    
-    { 
-      path: ['/management', 'vehicles'], 
+
+    {
+      path: ['/management', 'vehicles'],
       title: 'Vehicles',
       type: 'link',
       icon: 'fa-solid fa-car'
     },
-    { 
-      path: ['/management', 'tickets'], 
+    {
+      path: ['/management', 'tickets'],
       title: 'Tickets',
       type: 'sub',
       icon: 'fa-solid fa-bug',
@@ -76,20 +76,20 @@ export class UserSidebarComponent implements OnInit {
         }
       ]
     },
-    { 
-      path: ['/settings'], 
+    {
+      path: ['/settings'],
       title: 'Settings',
       type: 'link',
       icon: 'fa-solid fa-cogs'
     },
-    { 
-      path: ['/system-admin'], 
+    {
+      path: ['/system-admin'],
       title: 'System Admin',
       type: 'link',
       icon: 'fa-solid fa-user-shield'
     },
-    { 
-      path: ['/about-system'], 
+    {
+      path: ['/about-system'],
       title: 'About',
       type: 'link',
       icon: 'fa-solid fa-circle-info'

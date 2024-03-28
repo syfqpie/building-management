@@ -218,7 +218,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 ACCOUNT_ADAPTER = 'utils.auth.adapters.MyAccountAdapter'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 # Dj Rest Auth
 # https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
