@@ -29,7 +29,8 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'localhost'
+    'localhost',
+    'building-management-qe63.onrender.com'
 ]
 
 # Application definition
